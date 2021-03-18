@@ -70,7 +70,7 @@
                             log.Add($"{e.StackTrace}");
 
                             var location = Location.Create(file.Path, new TextSpan(), new LinePositionSpan());
-                            var diagnostic = Diagnostic.Create(PlantUmlStateMachineProcessingThrowsExceptionRule, location, e.Message, e.StackTrace);
+                            var diagnostic = Diagnostic.Create(_plantUmlStateMachineProcessingThrowsExceptionRule, location, e.Message, e.StackTrace);
                             diagnostics.Add(diagnostic);
                         }
                     }

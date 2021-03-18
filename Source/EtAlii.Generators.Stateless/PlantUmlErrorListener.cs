@@ -10,13 +10,15 @@ namespace EtAlii.Generators.Stateless
     internal class PlantUmlErrorListener : IAntlrErrorListener<object>
     {
         private readonly string _fileName;
+        private readonly DiagnosticDescriptor _invalidPlantUmlStateMachineRule;
         private readonly List<Diagnostic> _diagnostics;
         public IReadOnlyCollection<Diagnostic> Diagnostics { get; }
 
-        public PlantUmlErrorListener(string fileName)
+        public PlantUmlErrorListener(string fileName, DiagnosticDescriptor invalidPlantUmlStateMachineRule)
         {
             _fileName = fileName;
-            _diagnostics = new();
+            _invalidPlantUmlStateMachineRule = invalidPlantUmlStateMachineRule;
+            _diagnostics = new List<Diagnostic>();
             Diagnostics = new ReadOnlyCollection<Diagnostic>(_diagnostics);
         }
         public void SyntaxError(TextWriter output, IRecognizer recognizer, object offendingSymbol, int line, int charPositionInLine,
@@ -33,7 +35,7 @@ namespace EtAlii.Generators.Stateless
             var location = Location.Create(_fileName, textSpan, linePositionSpan);
 
 
-            var diagnostic = Diagnostic.Create(SourceGenerator.InvalidPlantUmlStateMachineRule, location, msg);
+            var diagnostic = Diagnostic.Create(_invalidPlantUmlStateMachineRule, location, msg);
 
             _diagnostics.Add(diagnostic);
             output.WriteLine($"line {line}:{charPositionInLine} {msg}");

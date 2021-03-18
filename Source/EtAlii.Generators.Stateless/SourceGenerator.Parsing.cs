@@ -9,7 +9,7 @@
 
     public partial class SourceGenerator
     {
-        public static readonly DiagnosticDescriptor InvalidPlantUmlStateMachineRule = new
+        private static readonly DiagnosticDescriptor _invalidPlantUmlStateMachineRule = new
         (
             id: "SL1001",
             title: "PlantUml file is invalid",
@@ -49,7 +49,7 @@
             isEnabledByDefault: true
         );
 
-        private static readonly DiagnosticDescriptor PlantUmlStateMachineProcessingThrowsExceptionRule = new
+        private static readonly DiagnosticDescriptor _plantUmlStateMachineProcessingThrowsExceptionRule = new
         (
             id: "SL1005",
             title: "PlantUml processing throws exception",
@@ -75,7 +75,7 @@
                 var lexer = new PlantUmlLexer(inputStream);
                 var commonTokenStream = new CommonTokenStream(lexer);
                 var parser = new PlantUmlParser(commonTokenStream);
-                var errorListener = new PlantUmlErrorListener(file.Path);
+                var errorListener = new PlantUmlErrorListener(file.Path, _invalidPlantUmlStateMachineRule);
                 parser.RemoveErrorListeners();
                 parser.AddErrorListener(errorListener);
                 var parsingContext = parser.state_machine();
