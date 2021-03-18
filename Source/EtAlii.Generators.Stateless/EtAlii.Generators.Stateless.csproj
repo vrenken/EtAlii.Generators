@@ -1,0 +1,66 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>EtAlii.Generators.Stateless</RootNamespace>
+    <LangVersion>9</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild> <!-- Generates a package at build -->
+    <IncludeBuildOutput>false</IncludeBuildOutput> <!-- Do not include the generator as a lib dependency -->
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+  </PropertyGroup>
+
+  <ItemGroup>
+  <!-- Package the generator in the analyzer directory of the nuget package -->
+  <None Include="$(OutputPath)\$(AssemblyName).dll" Visible="false" >
+    <Pack>true</Pack>
+    <PackagePath>analyzers/dotnet/cs</PackagePath>
+  </None>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Antlr4 Include="PlantUmlLexer.g4">
+      <Listener>false</Listener>
+      <Visitor>false</Visitor>
+      <Package>$(RootNamespace)</Package>
+      <Error>true</Error>
+    </Antlr4>
+    <Antlr4 Include="PlantUmlParser.g4">
+      <Listener>false</Listener>
+      <Visitor>true</Visitor>
+      <Package>$(RootNamespace)</Package>
+      <Error>true</Error>
+    </Antlr4>
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="AnalyzerReleases.Shipped.md" />
+    <AdditionalFiles Include="AnalyzerReleases.Unshipped.md" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Update="NETStandard.Library" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.9.0" PrivateAssets="all" />
+    <PackageReference Include="Antlr4BuildTasks" Version="8.14.0" PrivateAssets="all" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetPackageDependencyTargetPaths</GetTargetPathDependsOn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Generator dependencies -->
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.2" PrivateAssets="all">
+      <GeneratePathProperty>true</GeneratePathProperty>
+    </PackageReference>
+  </ItemGroup>
+
+  <Target Name="GetPackageDependencyTargetPaths">
+    <ItemGroup>
+      <TargetPathWithTargetPlatformMoniker Include="$(PkgAntlr4_Runtime_Standard)\lib\netstandard2.0\*.dll" IncludeRuntimeDependency="false" />
+    </ItemGroup>
+  </Target>
+
+</Project>

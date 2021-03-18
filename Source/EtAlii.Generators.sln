@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Globals", "_Globals", "{B3466FE1-1D97-4D21-8F6C-A0D146732BC6}"
+ProjectSection(SolutionItems) = preProject
+	Global.json = Global.json
+	..\.editorconfig = ..\.editorconfig
+	..\.gitignore = ..\.gitignore
+	EtAlii.Generators.sln.DotSettings = EtAlii.Generators.sln.DotSettings
+EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EtAlii.Generators.Stateless", "EtAlii.Generators.Stateless\EtAlii.Generators.Stateless.csproj", "{ECDC1798-7EF9-4179-BB4F-891F0F1E2175}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EtAlii.Generators.Stateless.Tests", "EtAlii.Generators.Stateless.Tests\EtAlii.Generators.Stateless.Tests.csproj", "{7A7E5272-B0D8-402A-9F89-D38515CFF376}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ECDC1798-7EF9-4179-BB4F-891F0F1E2175}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECDC1798-7EF9-4179-BB4F-891F0F1E2175}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECDC1798-7EF9-4179-BB4F-891F0F1E2175}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECDC1798-7EF9-4179-BB4F-891F0F1E2175}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A7E5272-B0D8-402A-9F89-D38515CFF376}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A7E5272-B0D8-402A-9F89-D38515CFF376}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A7E5272-B0D8-402A-9F89-D38515CFF376}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A7E5272-B0D8-402A-9F89-D38515CFF376}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
