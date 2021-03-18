@@ -14,7 +14,7 @@
 
   <ItemGroup>
   <!-- Package the generator in the analyzer directory of the nuget package -->
-  <None Include="$(OutputPath)\$(AssemblyName).dll" Visible="false" >
+  <None Include="$(OutputPath)\$(AssemblyName).dll" Visible="false">
     <Pack>true</Pack>
     <PackagePath>analyzers/dotnet/cs</PackagePath>
   </None>
@@ -55,6 +55,30 @@
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.2" PrivateAssets="all">
       <GeneratePathProperty>true</GeneratePathProperty>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="SourceGenerator.Converters.cs">
+      <DependentUpon>SourceGenerator.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SourceGenerator.Enums.cs">
+      <DependentUpon>SourceGenerator.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SourceGenerator.Fields.cs">
+      <DependentUpon>SourceGenerator.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SourceGenerator.Instantiation.cs">
+      <DependentUpon>SourceGenerator.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SourceGenerator.Methods.cs">
+      <DependentUpon>SourceGenerator.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SourceGenerator.Parsing.cs">
+      <DependentUpon>SourceGenerator.cs</DependentUpon>
+    </Compile>
+    <Compile Update="SourceGenerator.Writing.cs">
+      <DependentUpon>SourceGenerator.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <Target Name="GetPackageDependencyTargetPaths">

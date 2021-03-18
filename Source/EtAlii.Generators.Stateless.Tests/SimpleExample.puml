@@ -1,16 +1,12 @@
 @startuml
-
 'stateless namespace EtAlii.Generators.Stateless.Tests
 'stateless class SimpleExample
 'stateless generate partial
-
 [*] --> State1 : Start
-[*] --> State2 : Start2
 State1 --> [*]
 State1 : this is a string
 State1 : this is another string
-
-State1 -> State2 : Trigger1
+State1 -> State2 : Continue
 State2 --> [*]
 
 State2 -> State3 : DoState3
