@@ -23,7 +23,7 @@
             {
                 switch (header)
                 {
-                    case RoslynSetting roslynSetting: stateMachine.Settings.Add(roslynSetting); break;
+                    case Setting roslynSetting: stateMachine.Settings.Add(roslynSetting); break;
                     case Header realHeader: stateMachine.Headers.Add(realHeader); break;
                 }
             }
@@ -36,9 +36,9 @@
             return stateMachine;
         }
 
-        public override object VisitStateless_setting_class(PlantUmlParser.Stateless_setting_classContext context) => new ClassRoslynSetting(context.name.Text);
-        public override object VisitStateless_setting_generate_partial(PlantUmlParser.Stateless_setting_generate_partialContext context) => new GeneratePartialNamespaceRoslynSetting(true);
-        public override object VisitStateless_setting_namespace(PlantUmlParser.Stateless_setting_namespaceContext context) => new NamespaceRoslynSetting(context.@namespace().GetText());
+        public override object VisitStateless_setting_class(PlantUmlParser.Stateless_setting_classContext context) => new ClassStatelessSetting(context.name.Text);
+        public override object VisitStateless_setting_generate_partial(PlantUmlParser.Stateless_setting_generate_partialContext context) => new GeneratePartialClassSetting(true);
+        public override object VisitStateless_setting_namespace(PlantUmlParser.Stateless_setting_namespaceContext context) => new NamespaceSetting(context.@namespace().GetText());
 
         public override object VisitNote_line(PlantUmlParser.Note_lineContext context) => new Header(context.GetText());
 

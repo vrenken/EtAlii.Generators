@@ -1,6 +1,6 @@
 namespace EtAlii.Generators.Stateless
 {
-    public class StateFragment
+    public abstract class StateFragment
     {
 
     }
