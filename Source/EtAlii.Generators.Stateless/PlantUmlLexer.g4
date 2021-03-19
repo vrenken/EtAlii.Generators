@@ -11,6 +11,7 @@
 START                                               : '@startuml';
 END                                                 : '@enduml';
 NOTE                                                : 'note';
+TITLE                                               : 'title';
 ASYNC                                               : 'async';
 AS                                                  : 'as';
 STATE                                               : 'state';

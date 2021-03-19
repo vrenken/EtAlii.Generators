@@ -19,11 +19,13 @@ state_machine:
     END NEWLINE?
     EOF;
 
+header_title                       : TITLE (~NEWLINE)* ;
 header_lines
     : HIDE_EMPTY_DESCRIPTION
     | note_line
     | stateless_setting
     | comment_line
+    | header_title
     ;
 
 namespace                          : ID (DOT ID)*;
