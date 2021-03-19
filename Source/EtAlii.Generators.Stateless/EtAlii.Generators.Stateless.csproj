@@ -13,11 +13,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-  <!-- Package the generator in the analyzer directory of the nuget package -->
-  <None Include="$(OutputPath)\$(AssemblyName).dll" Visible="false">
-    <Pack>true</Pack>
-    <PackagePath>analyzers/dotnet/cs</PackagePath>
-  </None>
+    <!-- Package the generator in the analyzer directory of the nuget package -->
+    <None Include="$(OutputPath)\$(AssemblyName).dll" Visible="false">
+      <Pack>true</Pack>
+      <PackagePath>analyzers/dotnet/cs</PackagePath>
+    </None>
+    <Content Include="Build\*">
+      <PackagePath>build\</PackagePath>
+    </Content>
   </ItemGroup>
   
   <ItemGroup>
@@ -42,7 +45,7 @@
   
   <ItemGroup>
     <PackageReference Update="NETStandard.Library" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.9.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" PrivateAssets="all" />
     <PackageReference Include="Antlr4BuildTasks" Version="8.14.0" PrivateAssets="all" />
   </ItemGroup>
 

@@ -30,58 +30,59 @@
             // For actual troubleshooting of the source diagrams we use the Roslyn specific Diagnostics pattern.
             var diagnostics = new List<Diagnostic>();
 
-            foreach (var file in context.AdditionalFiles)
+            // This code generator is only able to understand and parse PlantUml files.
+            // Because of that we ignore everything except files with the .puml extension.
+            var plantUmlFiles = context.AdditionalFiles
+                .Where(file => Path.GetExtension(file.Path).Equals(".puml", StringComparison.OrdinalIgnoreCase))
+                .ToArray();
+
+            foreach(var file in plantUmlFiles)
             {
-                // This code generator is only able to understand and parse PlantUml files.
-                // Because of that we ignore everything except files with the .puml extension.
-                if (Path.GetExtension(file.Path).Equals(".puml", StringComparison.OrdinalIgnoreCase))
+                // First thing to do is parse the .puml file and build an in-memory model.
+                if (TryParsePlantUml(file, log, out var stateMachine, out var parseDiagnostics))
                 {
-                    // First thing to do is parse the .puml file and build an in-memory model.
-                    if (TryParsePlantUml(file, log, out var stateMachine, out var parseDiagnostics))
+                    try
                     {
-                        try
+                        var originalFileName = Path.GetFileName(file.Path);
+
+                        // If there is no classname defined in the diagram we'll need to come up with one ourselves.
+                        if (!stateMachine.Settings.OfType<ClassStatelessSetting>().Any())
                         {
-                            var originalFileName = Path.GetFileName(file.Path);
-
-                            // If there is no classname defined in the diagram we'll need to come up with one ourselves.
-                            if (!stateMachine.Settings.OfType<ClassStatelessSetting>().Any())
-                            {
-                                // Let's use a C# safe subset of the characters in the filename.
-                                var classNameFromFileName = Regex.Replace(Path.GetFileNameWithoutExtension(originalFileName), "[^a-zA-Z0-9_]", "");
-                                stateMachine.Settings.Add(new ClassStatelessSetting(classNameFromFileName));
-                            }
-
-                            var fileName = Path.ChangeExtension(originalFileName, "Generated.cs");
-
-                            using var stringWriter = new StringWriter();
-                            using var writer = new IndentedTextWriter(stringWriter);
-                            var writeContext = CreateWriteContext(writer, originalFileName, log, diagnostics, stateMachine);
-
-                            ValidateStateMachine(writeContext);
-
-                            WriteNamespace(writeContext);
-
-                            var content = stringWriter.ToString();
-                            context.AddSource(fileName, content);
+                            // Let's use a C# safe subset of the characters in the filename.
+                            var classNameFromFileName = Regex.Replace(Path.GetFileNameWithoutExtension(originalFileName), "[^a-zA-Z0-9_]", "");
+                            stateMachine.Settings.Add(new ClassStatelessSetting(classNameFromFileName));
                         }
-                        catch (Exception e)
-                        {
-                            log.Add($"File writing throws exception: {e.Message}");
-                            log.Add($"{e.StackTrace}");
 
-                            var location = Location.Create(file.Path, new TextSpan(), new LinePositionSpan());
-                            var diagnostic = Diagnostic.Create(_plantUmlStateMachineProcessingThrowsExceptionRule, location, e.Message, e.StackTrace);
-                            diagnostics.Add(diagnostic);
-                        }
+                        var fileName = Path.ChangeExtension(originalFileName, "Generated.cs");
+
+                        using var stringWriter = new StringWriter();
+                        using var writer = new IndentedTextWriter(stringWriter);
+                        var writeContext = CreateWriteContext(writer, originalFileName, log, diagnostics, stateMachine);
+
+                        ValidateStateMachine(writeContext);
+
+                        WriteNamespace(writeContext);
+
+                        var content = stringWriter.ToString();
+                        context.AddSource(fileName, content);
                     }
-
-                    diagnostics.AddRange(parseDiagnostics);
-
-                    // Report any error/info, warning etc.
-                    foreach (var diagnostic in diagnostics)
+                    catch (Exception e)
                     {
-                        context.ReportDiagnostic(diagnostic);
+                        log.Add($"File writing throws exception: {e.Message}");
+                        log.Add($"{e.StackTrace}");
+
+                        var location = Location.Create(file.Path, new TextSpan(), new LinePositionSpan());
+                        var diagnostic = Diagnostic.Create(_plantUmlStateMachineProcessingThrowsExceptionRule, location, e.Message, e.StackTrace);
+                        diagnostics.Add(diagnostic);
                     }
+                }
+
+                diagnostics.AddRange(parseDiagnostics);
+
+                // Report any error/info, warning etc.
+                foreach (var diagnostic in diagnostics)
+                {
+                    context.ReportDiagnostic(diagnostic);
                 }
             }
 

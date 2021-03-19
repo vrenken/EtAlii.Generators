@@ -69,10 +69,7 @@
                 var name = parameters[i].Name ?? $"@{ToCamelCase(parameters[i].Type)}{i}";
                 result.Add($"{name}");
             }
-
-            return result.Count > 0
-                ? $", {string.Join(", ", result)}"
-                : string.Empty;
+            return string.Join(", ", result);
         }
     }
 }

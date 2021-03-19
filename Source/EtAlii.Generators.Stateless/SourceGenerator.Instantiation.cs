@@ -5,6 +5,8 @@
 
     public partial class SourceGenerator
     {
+        private const string StateMachineType = "global::Stateless.StateMachine<State, Trigger>";
+
         private void WriteTriggerConstructions(WriteContext context)
         {
             // We only need to write a trigger construction calls for all relations that have parameters.
@@ -22,7 +24,12 @@
                 var genericParameters = ToGenericParameters(uniqueTransition.Parameters);
                 var triggerMemberName = ToTriggerMemberName(uniqueTransition);
 
-                context.Writer.WriteLine($"{triggerMemberName} = stateMachine.SetTriggerParameters{genericParameters}(Trigger.{uniqueTransition.Trigger});");
+                context.Writer.WriteLine($"{triggerMemberName} = _stateMachine.SetTriggerParameters{genericParameters}(Trigger.{uniqueTransition.Trigger});");
+            }
+
+            if (uniqueTransitions.Any())
+            {
+                context.Writer.WriteLine();
             }
         }
 
@@ -37,7 +44,7 @@
         }
         private void WriteStateConstruction(WriteContext context, string state)
         {
-            context.Writer.WriteLine($"stateMachine.Configure(State.{state})");
+            context.Writer.WriteLine($"_stateMachine.Configure(State.{state})");
 
             var stateConfiguration = new List<string>();
 
@@ -78,8 +85,9 @@
                         var triggerParameter = ToTriggerParameter(transition);
                         var genericParameters = ToGenericParameters(transition.Parameters);
                         var transitionMethodName = ToTransitionMethodName(transition);
-                        return $"\t.InternalTransition{(transition.IsAsync ? "Async" : "")}{genericParameters}({triggerParameter}, {transitionMethodName})";
-
+                        var triggerParameterTypes = string.Join(", ", transition.Parameters.Select(p => p.Type));
+                        triggerParameterTypes = transition.Parameters.Any() ? $"{triggerParameterTypes}, " : "";
+                        return $"\t.InternalTransition{(transition.IsAsync ? "Async" : "")}{genericParameters}({triggerParameter}, (Action<{triggerParameterTypes}{StateMachineType}.Transition>){transitionMethodName})";
                     }
                     else
                     {

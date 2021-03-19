@@ -20,6 +20,7 @@ ID                                                  : ('A'..'Z' | 'a'..'z' | '1'
 
 STATELESS_SETTING_NAMESPACE                         : '\'stateless namespace';
 STATELESS_SETTING_CLASS                             : '\'stateless class';
+STATELESS_SETTING_USING                             : '\'stateless using';
 STATELESS_SETTING_GENERATE_PARTIAL                  : '\'stateless generate partial';
 BOUNDARY_NODE                                       : '[*]';
 

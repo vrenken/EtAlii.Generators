@@ -26,7 +26,7 @@
 
                         var typedParameters = ToTypedNamedVariables(parameters);
                         var genericParameters = ToGenericParameters(parameters);
-                        var namedParameters = ToNamedVariables(parameters);
+                        var namedParameters = transition.Parameters.Any() ? $", {ToNamedVariables(parameters)}" : string.Empty;
                         var triggerParameter = ToTriggerParameter(transition);
 
                         WriteComment(context, transition, "Call this method to trigger the transition below:");
@@ -45,9 +45,9 @@
                     {
                         var parameters = transition.Parameters;
 
-                        var typedParameters = ToTypedNamedVariables(parameters);
-                        var genericParameters = ToGenericParameters(parameters);
-                        var namedParameters = ToNamedVariables(parameters);
+                        var typedParameters = ToTypedNamedVariables(transition.Parameters);
+                        var genericParameters = ToGenericParameters(transition.Parameters);
+                        var namedParameters = transition.Parameters.Any() ? $", {ToNamedVariables(transition.Parameters)}" : string.Empty;
                         var triggerParameter = ToTriggerParameter(transition);
 
                         WriteComment(context, transition, "Call this method to trigger the transition below:");
@@ -69,7 +69,7 @@
                 context.Writer.WriteLine("/// <summary>");
                 context.Writer.WriteLine($"/// Implement this method to handle the entry of the '{state}' state.");
                 context.Writer.WriteLine("/// </summary>");
-                context.Writer.WriteLine($"protected virtual void On{state}Entered(StateMachine<State, Trigger>.Transition transition)");
+                context.Writer.WriteLine($"protected virtual void On{state}Entered()");
                 context.Writer.WriteLine("{");
                 context.Writer.Indent += 1;
                 context.Writer.Indent -= 1;
@@ -79,7 +79,7 @@
                 context.Writer.WriteLine("/// <summary>");
                 context.Writer.WriteLine($"/// Implement this method to handle the exit of the '{state}' state.");
                 context.Writer.WriteLine("/// </summary>");
-                context.Writer.WriteLine($"protected virtual void On{state}Exited(StateMachine<State, Trigger>.Transition transition)");
+                context.Writer.WriteLine($"protected virtual void On{state}Exited()");
                 context.Writer.WriteLine("{");
                 context.Writer.Indent += 1;
                 context.Writer.Indent -= 1;
@@ -101,8 +101,12 @@
                 foreach (var transition in internalTransitions)
                 {
                     var transitionMethodName = ToTransitionMethodName(transition);
+                    var typedNamedParameters1 = transition.Parameters.Any() ? $"{ToTypedNamedVariables(transition.Parameters)}, " : string.Empty;
+                    var typedNamedParameters2 = ToTypedNamedVariables(transition.Parameters);
+                    var namedParameters = ToNamedVariables(transition.Parameters);
+
                     WriteComment(context, transition, "Implement this method to handle the transition below:");
-                    context.Writer.WriteLine($"protected virtual {(transition.IsAsync ? "Task" : "void" )} {transitionMethodName}(StateMachine<State, Trigger>.Transition transition)");
+                    context.Writer.WriteLine($"protected virtual {(transition.IsAsync ? "Task" : "void" )} {transitionMethodName}({typedNamedParameters2})");
                     context.Writer.WriteLine("{");
                     context.Writer.Indent += 1;
                     if (transition.IsAsync)
@@ -111,6 +115,7 @@
                     }
                     context.Writer.Indent -= 1;
                     context.Writer.WriteLine("}");
+                    context.Writer.WriteLine($"private {(transition.IsAsync ? "Task" : "void" )} {transitionMethodName}({typedNamedParameters1}{StateMachineType}.Transition transition) => {transitionMethodName}({namedParameters});");
                     context.Writer.WriteLine();
                 }
 
@@ -123,14 +128,9 @@
                 {
                     var typedNamedParameters = ToTypedNamedVariables(transition.Parameters);
 
-                    typedNamedParameters = transition.Parameters.Any()
-                        ? $"{(transition.IsAsync ? "" : ", ")}{typedNamedParameters}"
-                        : string.Empty;
-
                     var transitionMethodName = ToTransitionMethodName(transition);
-                    var firstParameter = transition.IsAsync ? string.Empty : "StateMachine<State, Trigger>.Transition transition";
                     WriteComment(context, transition, "Implement this method to handle the transition below:");
-                    context.Writer.WriteLine($"protected virtual {(transition.IsAsync ? "Task" : "void" )} {transitionMethodName}({firstParameter}{typedNamedParameters})");
+                    context.Writer.WriteLine($"protected virtual {(transition.IsAsync ? "Task" : "void" )} {transitionMethodName}({typedNamedParameters})");
                     context.Writer.WriteLine("{");
                     context.Writer.Indent += 1;
                     if (transition.IsAsync)

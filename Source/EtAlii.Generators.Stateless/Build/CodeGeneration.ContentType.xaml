@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ProjectSchemaDefinitions
+    xmlns="http://schemas.microsoft.com/build/2009/properties">
+
+    <ContentType
+        Name="StatelessFile"
+        DisplayName="Stateless PlantUML diagram"
+        ItemType="StatelessFile" />
+
+    <ItemType
+        Name="StatelessFile"
+        DisplayName="Stateless PlantUML diagram"/>
+
+    <FileExtension
+        Name=".puml"
+        ContentType="StatelessFile" />
+
+</ProjectSchemaDefinitions>

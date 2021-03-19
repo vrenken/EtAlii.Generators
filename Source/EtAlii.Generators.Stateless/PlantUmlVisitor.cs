@@ -8,7 +8,7 @@
     /// An implementation of the visitor generated using the Antlr4 g4 parser and lexer.
     /// Antlr4 is very fascinating technology if you'd ask me...
     /// </summary>
-    public class StateMachineVisitor : PlantUmlParserBaseVisitor<object>
+    public class PlantUmlVisitor : PlantUmlParserBaseVisitor<object>
     {
         public override object VisitState_machine(PlantUmlParser.State_machineContext context)
         {
@@ -39,6 +39,7 @@
         public override object VisitStateless_setting_class(PlantUmlParser.Stateless_setting_classContext context) => new ClassStatelessSetting(context.name.Text);
         public override object VisitStateless_setting_generate_partial(PlantUmlParser.Stateless_setting_generate_partialContext context) => new GeneratePartialClassSetting(true);
         public override object VisitStateless_setting_namespace(PlantUmlParser.Stateless_setting_namespaceContext context) => new NamespaceSetting(context.@namespace().GetText());
+        public override object VisitStateless_setting_using(PlantUmlParser.Stateless_setting_usingContext context) => new UsingSetting(context.@namespace().GetText());
 
         public override object VisitNote_line(PlantUmlParser.Note_lineContext context) => new Header(context.GetText());
 

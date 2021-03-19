@@ -42,8 +42,8 @@
         private static readonly DiagnosticDescriptor _unnamedParameterRule = new
         (
             id: "SL1004",
-            title: "Trigger definition uses unnamed parameters. Consider using named parameters",
-            messageFormat: "Trigger definition uses unnamed parameters: '{0}'. Consider using named parameters",
+            title: "Trigger definition uses unnamed parameters - Consider using named parameters",
+            messageFormat: "Trigger definition uses unnamed parameters: '{0}' - Consider using named parameters",
             category: "Code-Gen",
             defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true
@@ -80,7 +80,7 @@
                 parser.AddErrorListener(errorListener);
                 var parsingContext = parser.state_machine();
 
-                var visitor = new StateMachineVisitor();
+                var visitor = new PlantUmlVisitor();
                 stateMachine = visitor.VisitState_machine(parsingContext) as StateMachine;
 
                 if (parser.NumberOfSyntaxErrors != 0)

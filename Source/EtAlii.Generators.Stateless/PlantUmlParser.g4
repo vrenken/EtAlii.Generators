@@ -32,12 +32,13 @@ namespace                          : ID (DOT ID)*;
 stateless_setting_namespace        : STATELESS_SETTING_NAMESPACE WHITESPACE+ namespace;
 stateless_setting_class            : STATELESS_SETTING_CLASS WHITESPACE+ name=ID;
 stateless_setting_generate_partial : STATELESS_SETTING_GENERATE_PARTIAL;
+stateless_setting_using            : STATELESS_SETTING_USING WHITESPACE+ namespace;
 stateless_setting
     : stateless_setting_namespace
     | stateless_setting_class
     | stateless_setting_generate_partial
+    | stateless_setting_using
     ;
-
 state_definition                : STATE WHITESPACE+ name=ID (WHITESPACE | NEWLINE)+ LBRACE (WHITESPACE* (states) NEWLINE+)* RBRACE;
 states_transition_start_to      : BOUNDARY_NODE WHITESPACE+ transition_from_to WHITESPACE+ (to=ID) transition_details?;
 states_transition_to_start      : (to=ID) WHITESPACE+ transition_to_from WHITESPACE+ BOUNDARY_NODE transition_details?;
