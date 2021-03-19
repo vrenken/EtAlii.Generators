@@ -2,10 +2,36 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.Text;
 
     public partial class SourceGenerator
     {
         private const string StateMachineType = "global::Stateless.StateMachine<State, Trigger>";
+
+        private void WriteStateMachineInstantiation(WriteContext context)
+        {
+            var startStates = context.AllTransitions
+                .Where(t => t.From == "None")
+                .ToArray();
+            if (startStates.Length == 0)
+            {
+                var startStatesAsString = string.Join(", ", startStates.Select(s => s.To));
+                var location = Location.Create(context.OriginalFileName, new TextSpan(), new LinePositionSpan());
+                var diagnostic = Diagnostic.Create(_noStartStatesDefinedRule, location, startStatesAsString);
+                context.Diagnostics.Add(diagnostic);
+            }
+            else
+            {
+                context.Writer.WriteLine("// Time to create a new state machine instance.");
+                context.Writer.WriteLine($"_stateMachine = new {StateMachineType}(State.None);");
+                context.Writer.WriteLine();
+
+                WriteTriggerConstructions(context);
+
+                WriteStateConstructions(context);
+            }
+        }
 
         private void WriteTriggerConstructions(WriteContext context)
         {

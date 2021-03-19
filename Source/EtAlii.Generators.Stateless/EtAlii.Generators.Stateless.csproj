@@ -79,7 +79,7 @@
     <Compile Update="SourceGenerator.Parsing.cs">
       <DependentUpon>SourceGenerator.cs</DependentUpon>
     </Compile>
-    <Compile Update="SourceGenerator.Writing.cs">
+    <Compile Update="SourceGenerator.Namespace.cs">
       <DependentUpon>SourceGenerator.cs</DependentUpon>
     </Compile>
   </ItemGroup>

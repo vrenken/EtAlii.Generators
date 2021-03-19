@@ -11,4 +11,5 @@ State1 -> State2 << async >> : Continue
 State2 -down-> [*]
 State2 -> State2 << (string name) >> : Check
 State2 -up-> State3 : Continue
+State3 -up-> State4 : Continue
 @enduml

@@ -1,34 +1,7 @@
 ﻿namespace EtAlii.Generators.Stateless
 {
-    using System.Linq;
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.Text;
-
     public partial class SourceGenerator
     {
-        private void WriteNamespace(WriteContext context)
-        {
-            context.Writer.WriteLine($"// Remark: this file was auto-generated based on '{context.OriginalFileName}'.");
-            context.Writer.WriteLine("// Any changes will be overwritten the next time the file is generated.");
-            context.Writer.WriteLine($"namespace {context.StateMachine.Namespace}");
-            context.Writer.WriteLine("{");
-            context.Writer.Indent += 1;
-            context.Writer.WriteLine("using System;");
-            context.Writer.WriteLine("using System.Threading.Tasks;");
-            context.Writer.WriteLine("using Stateless;");
-
-            foreach (var @using in context.StateMachine.Usings)
-            {
-                context.Writer.WriteLine($"using {@using};");
-            }
-
-            context.Writer.WriteLine();
-            WriteClass(context);
-
-            context.Writer.Indent -= 1;
-            context.Writer.WriteLine("}");
-        }
-
         private void WriteClass(WriteContext context)
         {
             var prefix = context.StateMachine.GeneratePartialClass ? "abstract partial" : "abstract";
@@ -77,30 +50,6 @@
 
             context.Writer.Indent -= 1;
             context.Writer.WriteLine("}");
-        }
-
-        private void WriteStateMachineInstantiation(WriteContext context)
-        {
-            var startStates = context.AllTransitions
-                .Where(t => t.From == "None")
-                .ToArray();
-            if (startStates.Length == 0)
-            {
-                var startStatesAsString = string.Join(", ", startStates.Select(s => s.To));
-                var location = Location.Create(context.OriginalFileName, new TextSpan(), new LinePositionSpan());
-                var diagnostic = Diagnostic.Create(_noStartStatesDefinedRule, location, startStatesAsString);
-                context.Diagnostics.Add(diagnostic);
-            }
-            else
-            {
-                context.Writer.WriteLine("// Time to create a new state machine instance.");
-                context.Writer.WriteLine($"_stateMachine = new {StateMachineType}(State.None);");
-                context.Writer.WriteLine();
-
-                WriteTriggerConstructions(context);
-
-                WriteStateConstructions(context);
-            }
         }
     }
 }

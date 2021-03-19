@@ -6,6 +6,15 @@
 
     public partial class SourceGenerator
     {
+        private StateTransition[][] ToTransitionsSetsWithUniqueParameters(StateTransition[] transitions)
+        {
+            return transitions
+                .Select(t => new { Transition = t, ParametersAsKey = string.Join(", ", t.Parameters.Select(p => p.Type)) })
+                .GroupBy(item => item.ParametersAsKey)
+                .Select(g => g.Select(t => t.Transition).ToArray())
+                .Where(s => s.Any())
+                .ToArray();
+        }
         private string ToTransitionMethodName(StateTransition transition)
         {
             return transition.From == transition.To

@@ -15,42 +15,48 @@
 
             foreach (var trigger in context.AllTriggers)
             {
-                var syncTransitions = context.UniqueParameterTransitions
-                    .Where(t => t.Trigger == trigger)
+                var syncTransitions = context.AllTransitions
                     .Where(t => !t.IsAsync)
                     .ToArray();
-                if (syncTransitions.Any())
+                var syncTransitionSets = ToTransitionsSetsWithUniqueParameters(syncTransitions)
+                    .Where(t => t.First().Trigger == trigger)
+                    .ToArray();
+                if (syncTransitionSets.Any())
                 {
-                    foreach (var transition in syncTransitions)
+                    foreach (var transitionSet in syncTransitionSets)
                     {
-                        var parameters = transition.Parameters;
+                        var firstTransition = transitionSet.First();
+                        var parameters = firstTransition.Parameters;
                         var typedParameters = ToTypedNamedVariables(parameters);
                         var genericParameters = ToGenericParameters(parameters);
                         var namedParameters = parameters.Any() ? $", {ToNamedVariables(parameters)}" : string.Empty;
-                        var triggerParameter = ToTriggerParameter(transition);
+                        var triggerParameter = ToTriggerParameter(firstTransition);
 
-                        WriteComment(context, transition, "Call this method to trigger the transition below:");
-                        context.Writer.WriteLine($"public void {transition.Trigger}({typedParameters}) => _stateMachine.Fire{genericParameters}({triggerParameter}{namedParameters});");
+                        WriteComment(context, transitionSet, "Depending on the current state, call this method to trigger one of the transitions below:");
+                        context.Writer.WriteLine($"public void {firstTransition.Trigger}({typedParameters}) => _stateMachine.Fire{genericParameters}({triggerParameter}{namedParameters});");
                         context.Writer.WriteLine();
                     }
                 }
 
-                var asyncTransitions = context.UniqueParameterTransitions
-                    .Where(t => t.Trigger == trigger)
+                var asyncTransitions = context.AllTransitions
                     .Where(t => t.IsAsync)
                     .ToArray();
-                if (asyncTransitions.Any())
+                var asyncTransitionSets = ToTransitionsSetsWithUniqueParameters(asyncTransitions)
+                    .Where(t => t.First().Trigger == trigger)
+                    .ToArray();
+                if (asyncTransitionSets.Any())
                 {
-                    foreach (var transition in asyncTransitions)
+                    foreach (var transitionSet in asyncTransitionSets)
                     {
-                        var parameters = transition.Parameters;
+                        var firstTransition = transitionSet.First();
+                        var parameters = firstTransition.Parameters;
                         var typedParameters = ToTypedNamedVariables(parameters);
                         var genericParameters = ToGenericParameters(parameters);
                         var namedParameters = parameters.Any() ? $", {ToNamedVariables(parameters)}" : string.Empty;
-                        var triggerParameter = ToTriggerParameter(transition);
+                        var triggerParameter = ToTriggerParameter(firstTransition);
 
-                        WriteComment(context, transition, "Call this method to trigger the transition below:");
-                        context.Writer.WriteLine($"public Task {transition.Trigger}Async({typedParameters}) => _stateMachine.FireAsync{genericParameters}({triggerParameter}{namedParameters});");
+                        WriteComment(context, transitionSet, "Depending on the current state, call this method to trigger one of the async transitions below:");
+                        context.Writer.WriteLine($"public Task {firstTransition.Trigger}Async({typedParameters}) => _stateMachine.FireAsync{genericParameters}({triggerParameter}{namedParameters});");
                         context.Writer.WriteLine();
                     }
                 }
@@ -103,7 +109,7 @@
                     var typedNamedParameters2 = ToTypedNamedVariables(transition.Parameters);
                     var namedParameters = ToNamedVariables(transition.Parameters);
 
-                    WriteComment(context, transition, "Implement this method to handle the transition below:");
+                    WriteComment(context, new [] { transition }, "Implement this method to handle the transition below:");
                     context.Writer.WriteLine($"protected virtual {(transition.IsAsync ? "Task" : "void" )} {transitionMethodName}({typedNamedParameters2})");
                     context.Writer.WriteLine("{");
                     context.Writer.Indent += 1;
@@ -127,7 +133,7 @@
                     var typedNamedParameters = ToTypedNamedVariables(transition.Parameters);
 
                     var transitionMethodName = ToTransitionMethodName(transition);
-                    WriteComment(context, transition, "Implement this method to handle the transition below:");
+                    WriteComment(context, new [] { transition }, "Implement this method to handle the transition below:");
                     context.Writer.WriteLine($"protected virtual {(transition.IsAsync ? "Task" : "void" )} {transitionMethodName}({typedNamedParameters})");
                     context.Writer.WriteLine("{");
                     context.Writer.Indent += 1;
@@ -142,11 +148,14 @@
             }
         }
 
-        private void WriteComment(WriteContext context, StateTransition transition, string message)
+        private void WriteComment(WriteContext context, StateTransition[] transitionSet, string message)
         {
             context.Writer.WriteLine($"/// <summary>");
             context.Writer.WriteLine($"/// {message}<br/>");
-            context.Writer.WriteLine($"/// {transition.From} --&gt; {transition.To} : {transition.Trigger}");
+            foreach (var transition in transitionSet)
+            {
+                context.Writer.WriteLine($"/// {transition.From} --&gt; {transition.To} : {transition.Trigger}<br/>");
+            }
             context.Writer.WriteLine($"/// </summary>");
         }
     }
