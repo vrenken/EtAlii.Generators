@@ -25,5 +25,8 @@ namespace EtAlii.Generators.Stateless.Tests
 
         protected override void OnState3Entered() => Console.WriteLine("State3 entered");
         protected override void OnState3Exited() => Console.WriteLine("State3 exited");
+
+        protected override void OnState4Entered() => Console.WriteLine("State4 entered");
+        protected override void OnState4Exited() => Console.WriteLine("State4 exited");
     }
 }
