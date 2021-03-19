@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <StatelessFile Include="MyAsyncStateMachine.puml" />
     <StatelessFile Include="MyFancyStateMachine.puml" />
     <Compile Update="MyFancyStateMachine.cs">
       <DependentUpon>MyFancyStateMachine.puml</DependentUpon>

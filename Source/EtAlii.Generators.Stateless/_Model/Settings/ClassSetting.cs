@@ -1,10 +1,10 @@
 namespace EtAlii.Generators.Stateless
 {
-    public class ClassStatelessSetting : Setting
+    public class ClassNameSetting : Setting
     {
         public string Value { get; }
 
-        public ClassStatelessSetting(string value)
+        public ClassNameSetting(string value)
         {
             Value = value;
         }

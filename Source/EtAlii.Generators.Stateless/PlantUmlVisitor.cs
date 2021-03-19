@@ -36,7 +36,7 @@
             return stateMachine;
         }
 
-        public override object VisitStateless_setting_class(PlantUmlParser.Stateless_setting_classContext context) => new ClassStatelessSetting(context.name.Text);
+        public override object VisitStateless_setting_class(PlantUmlParser.Stateless_setting_classContext context) => new ClassNameSetting(context.name.Text);
         public override object VisitStateless_setting_generate_partial(PlantUmlParser.Stateless_setting_generate_partialContext context) => new GeneratePartialClassSetting(true);
         public override object VisitStateless_setting_namespace(PlantUmlParser.Stateless_setting_namespaceContext context) => new NamespaceSetting(context.@namespace().GetText());
         public override object VisitStateless_setting_using(PlantUmlParser.Stateless_setting_usingContext context) => new UsingSetting(context.@namespace().GetText());

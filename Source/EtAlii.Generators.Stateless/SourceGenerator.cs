@@ -46,11 +46,11 @@
                         var originalFileName = Path.GetFileName(file.Path);
 
                         // If there is no classname defined in the diagram we'll need to come up with one ourselves.
-                        if (!stateMachine.Settings.OfType<ClassStatelessSetting>().Any())
+                        if (!stateMachine.Settings.OfType<ClassNameSetting>().Any())
                         {
                             // Let's use a C# safe subset of the characters in the filename.
                             var classNameFromFileName = Regex.Replace(Path.GetFileNameWithoutExtension(originalFileName), "[^a-zA-Z0-9_]", "");
-                            stateMachine.Settings.Add(new ClassStatelessSetting(classNameFromFileName));
+                            stateMachine.Settings.Add(new ClassNameSetting(classNameFromFileName));
                         }
 
                         var fileName = Path.ChangeExtension(originalFileName, "Generated.cs");
