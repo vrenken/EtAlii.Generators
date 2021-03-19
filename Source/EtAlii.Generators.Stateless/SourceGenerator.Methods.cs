@@ -12,6 +12,7 @@
             context.Writer.WriteLine("// The methods below can be each called to fire a specific trigger");
             context.Writer.WriteLine("// and cause the state machine to transition to another state.");
             context.Writer.WriteLine();
+
             foreach (var trigger in context.AllTriggers)
             {
                 var syncTransitions = context.UniqueParameterTransitions
@@ -23,14 +24,13 @@
                     foreach (var transition in syncTransitions)
                     {
                         var parameters = transition.Parameters;
-
                         var typedParameters = ToTypedNamedVariables(parameters);
                         var genericParameters = ToGenericParameters(parameters);
-                        var namedParameters = transition.Parameters.Any() ? $", {ToNamedVariables(parameters)}" : string.Empty;
+                        var namedParameters = parameters.Any() ? $", {ToNamedVariables(parameters)}" : string.Empty;
                         var triggerParameter = ToTriggerParameter(transition);
 
                         WriteComment(context, transition, "Call this method to trigger the transition below:");
-                        context.Writer.WriteLine($"public void {trigger}({typedParameters}) => _stateMachine.Fire{genericParameters}({triggerParameter}{namedParameters});");
+                        context.Writer.WriteLine($"public void {transition.Trigger}({typedParameters}) => _stateMachine.Fire{genericParameters}({triggerParameter}{namedParameters});");
                         context.Writer.WriteLine();
                     }
                 }
@@ -44,14 +44,13 @@
                     foreach (var transition in asyncTransitions)
                     {
                         var parameters = transition.Parameters;
-
-                        var typedParameters = ToTypedNamedVariables(transition.Parameters);
-                        var genericParameters = ToGenericParameters(transition.Parameters);
-                        var namedParameters = transition.Parameters.Any() ? $", {ToNamedVariables(transition.Parameters)}" : string.Empty;
+                        var typedParameters = ToTypedNamedVariables(parameters);
+                        var genericParameters = ToGenericParameters(parameters);
+                        var namedParameters = parameters.Any() ? $", {ToNamedVariables(parameters)}" : string.Empty;
                         var triggerParameter = ToTriggerParameter(transition);
 
                         WriteComment(context, transition, "Call this method to trigger the transition below:");
-                        context.Writer.WriteLine($"public Task {trigger}Async({typedParameters}) => _stateMachine.FireAsync{genericParameters}({triggerParameter}{namedParameters});");
+                        context.Writer.WriteLine($"public Task {transition.Trigger}Async({typedParameters}) => _stateMachine.FireAsync{genericParameters}({triggerParameter}{namedParameters});");
                         context.Writer.WriteLine();
                     }
                 }
@@ -86,8 +85,7 @@
                 context.Writer.WriteLine("}");
                 context.Writer.WriteLine();
 
-                var uniqueTransitions = context.StateMachine.StateFragments
-                    .OfType<StateTransition>()
+                var uniqueTransitions = context.AllTransitions
                     .Select(t => new { Transition = t, ParametersAsKey = $"{t.To}{t.Trigger}{string.Join(", ", t.Parameters.Select(p => p.Type))}" })
                     .GroupBy(item => item.ParametersAsKey)
                     .Select(g => g.First().Transition)

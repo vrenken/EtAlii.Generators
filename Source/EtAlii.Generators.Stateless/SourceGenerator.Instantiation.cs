@@ -70,8 +70,7 @@
 
         private void WriteOutboundTransitions(WriteContext context, string state, List<string> stateConfiguration)
         {
-            var outboundTransitions = context.StateMachine.StateFragments
-                .OfType<StateTransition>()
+            var outboundTransitions = context.AllTransitions
                 .Where(t => t.From == state)
                 .ToArray();
 
@@ -101,8 +100,7 @@
 
         private void WriteInboundTransitions(WriteContext context, string state, List<string> stateConfiguration)
         {
-            var inboundTransitions = context.StateMachine.StateFragments
-                .OfType<StateTransition>()
+            var inboundTransitions = context.AllTransitions
                 .Where(t => t.To == state)
                 .ToArray();
 

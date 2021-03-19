@@ -93,8 +93,7 @@
 
         private void ValidateStateMachine(WriteContext context)
         {
-            var unnamedParameters = context.StateMachine.StateFragments
-                .OfType<StateTransition>()
+            var unnamedParameters = context.AllTransitions
                 .Where(t => t.Parameters.Any(p => p.Name == null))
                 .Select(t => t.Parameters.First(p => p.Name == null))
                 .ToArray();
@@ -122,8 +121,12 @@
         /// </summary>
         private WriteContext CreateWriteContext(IndentedTextWriter writer, string originalFileName, List<string> log, List<Diagnostic> diagnostics, StateMachine stateMachine)
         {
+            var allTransitions = stateMachine.StateFragments
+                .OfType<StateTransition>()
+                .ToArray();
+
             // We want to know all unique states defined in the diagram.
-            var transitionStates = stateMachine.StateFragments.OfType<StateTransition>().SelectMany(t => new[] { t.From, t.To });
+            var transitionStates = allTransitions.SelectMany(t => new[] { t.From, t.To });
             var endTransitionStates = stateMachine.StateFragments.OfType<EndTransition>().SelectMany(t => new[] { t.From });
             var descriptionStates = stateMachine.StateFragments.OfType<StateDescription>().SelectMany(t => new[] { t.State });
             var allStates = transitionStates
@@ -133,7 +136,7 @@
                 .ToArray();
 
             // We want to know all unique triggers defined in the diagram.
-            var transitionTriggers = stateMachine.StateFragments.OfType<StateTransition>().Select(t => t.Trigger);
+            var transitionTriggers = allTransitions.Select(t => t.Trigger);
             var endTransitionTriggers = stateMachine.StateFragments.OfType<EndTransition>().Select(t => t.Trigger);
             var allTriggers = transitionTriggers
                 .Concat(endTransitionTriggers)
@@ -142,14 +145,13 @@
 
             // We want to know all unique transitions defined in the diagram.
             // That is, the transitions grouped by the trigger and unique sequence of parameters.
-            var uniqueParameterTransitions = stateMachine.StateFragments
-                .OfType<StateTransition>()
+            var uniqueParameterTransitions = allTransitions
                 .Select(t => new { Transition = t, ParametersAsKey = $"{t.Trigger}{string.Join(", ", t.Parameters.Select(p => p.Type))}" })
                 .GroupBy(item => item.ParametersAsKey)
                 .Select(g => g.First().Transition)
                 .ToArray();
 
-            return new WriteContext(writer, originalFileName, log, diagnostics, stateMachine, allStates, allTriggers, uniqueParameterTransitions);
+            return new WriteContext(writer, originalFileName, log, diagnostics, stateMachine, allStates, allTriggers, allTransitions, uniqueParameterTransitions);
         }
 
         public void Initialize(GeneratorInitializationContext context)

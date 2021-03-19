@@ -81,8 +81,7 @@
 
         private void WriteStateMachineInstantiation(WriteContext context)
         {
-            var startStates = context.StateMachine.StateFragments
-                .OfType<StateTransition>()
+            var startStates = context.AllTransitions
                 .Where(t => t.From == "None")
                 .ToArray();
             if (startStates.Length == 0)

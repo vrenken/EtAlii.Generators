@@ -27,10 +27,20 @@ namespace EtAlii.Generators.Stateless
         public StateMachine StateMachine { get; }
 
         public StateTransition[] UniqueParameterTransitions { get; }
+        public StateTransition[] AllTransitions { get; }
         public string[] AllStates { get; }
         public string[] AllTriggers { get; }
 
-        public WriteContext(IndentedTextWriter writer, string originalFileName, List<string> log, List<Diagnostic> diagnostics, StateMachine stateMachine, string[] allStates, string[] allTriggers, StateTransition[] uniqueParameterTransitions)
+        public WriteContext(
+            IndentedTextWriter writer,
+            string originalFileName,
+            List<string> log,
+            List<Diagnostic> diagnostics,
+            StateMachine stateMachine,
+            string[] allStates,
+            string[] allTriggers,
+            StateTransition[] allTransitions,
+            StateTransition[] uniqueParameterTransitions)
         {
             Writer = writer;
             OriginalFileName = originalFileName;
@@ -39,6 +49,7 @@ namespace EtAlii.Generators.Stateless
             StateMachine = stateMachine;
             AllStates = allStates;
             AllTriggers = allTriggers;
+            AllTransitions = allTransitions;
             UniqueParameterTransitions = uniqueParameterTransitions;
         }
     }
