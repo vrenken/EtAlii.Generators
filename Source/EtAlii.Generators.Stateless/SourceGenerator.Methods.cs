@@ -6,6 +6,10 @@
     {
         /// <summary>
         /// Write the trigger methods through which the individual triggers can be fired.
+        /// There is some magic involved in creating duplicates for cases where both async
+        /// and sync methods are needed.
+        /// Also the sequence of parameter types are important as C# won't allow methods with the
+        /// same name, parameters with the same type but other names.
         /// </summary>
         private void WriteTriggerMethods(WriteContext context)
         {
@@ -18,9 +22,8 @@
                 var syncTransitions = context.AllTransitions
                     .Where(t => !t.IsAsync)
                     .ToArray();
-                var syncTransitionSets = ToTransitionsSetsWithUniqueParameters(syncTransitions)
-                    .Where(t => t.First().Trigger == trigger)
-                    .ToArray();
+
+                var syncTransitionSets = ToTransitionsSetsPerTriggerAndUniqueParameters(syncTransitions, trigger);
                 if (syncTransitionSets.Any())
                 {
                     foreach (var transitionSet in syncTransitionSets)
@@ -41,9 +44,8 @@
                 var asyncTransitions = context.AllTransitions
                     .Where(t => t.IsAsync)
                     .ToArray();
-                var asyncTransitionSets = ToTransitionsSetsWithUniqueParameters(asyncTransitions)
-                    .Where(t => t.First().Trigger == trigger)
-                    .ToArray();
+
+                var asyncTransitionSets = ToTransitionsSetsPerTriggerAndUniqueParameters(asyncTransitions, trigger);
                 if (asyncTransitionSets.Any())
                 {
                     foreach (var transitionSet in asyncTransitionSets)

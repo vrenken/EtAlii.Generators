@@ -6,21 +6,24 @@
 
     public partial class SourceGenerator
     {
-        private StateTransition[][] ToTransitionsSetsWithUniqueParameters(StateTransition[] transitions)
+        private StateTransition[][] ToTransitionsSetsPerTriggerAndUniqueParameters(StateTransition[] transitions, string trigger)
         {
             return transitions
+                .Where(t => t.Trigger == trigger)
                 .Select(t => new { Transition = t, ParametersAsKey = string.Join(", ", t.Parameters.Select(p => p.Type)) })
                 .GroupBy(item => item.ParametersAsKey)
                 .Select(g => g.Select(t => t.Transition).ToArray())
                 .Where(s => s.Any())
                 .ToArray();
         }
+
         private string ToTransitionMethodName(StateTransition transition)
         {
             return transition.From == transition.To
                 ? $"On{transition.To}Internal{transition.Trigger}Trigger"
                 : $"On{transition.To}EnteredFrom{transition.Trigger}Trigger";
         }
+
         private string ToTriggerParameter(StateTransition transition)
         {
             return transition.Parameters.Any()
