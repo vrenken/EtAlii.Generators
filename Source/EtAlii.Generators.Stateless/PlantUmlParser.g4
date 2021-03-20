@@ -13,10 +13,10 @@ options {
 }
 
 state_machine:
-    START NEWLINE
+    (NEWLINE | WHITESPACE)* START WHITESPACE* NEWLINE
     (WHITESPACE* header_lines? NEWLINE+)*
     (WHITESPACE* states NEWLINE+)*
-    END NEWLINE?
+    END (NEWLINE | WHITESPACE)*
     EOF;
 
 header_title                       : TITLE (~NEWLINE)* ;
@@ -39,14 +39,14 @@ stateless_setting
     | stateless_setting_generate_partial
     | stateless_setting_using
     ;
-state_definition                : STATE WHITESPACE+ name=ID WHITESPACE+ LBRACE WHITESPACE* NEWLINE+ (WHITESPACE* (states) NEWLINE+)* WHITESPACE* RBRACE;
-states_transition_start_to      : BOUNDARY_NODE WHITESPACE+ transition_from_to WHITESPACE+ (to=ID) transition_details?;
-states_transition_to_start      : (to=ID) WHITESPACE+ transition_to_from WHITESPACE+ BOUNDARY_NODE transition_details?;
-states_transition_from_end      : (from=ID) WHITESPACE+ transition_from_to WHITESPACE+ BOUNDARY_NODE transition_details?;
-states_transition_end_from      : BOUNDARY_NODE WHITESPACE+ transition_to_from WHITESPACE+ (from=ID) transition_details?;
-states_transition_from_to       : (from=ID) WHITESPACE+ transition_from_to WHITESPACE+ (to=ID) transition_details?;
-states_transition_to_from       : (to=ID) WHITESPACE+ transition_to_from WHITESPACE+ (from=ID) transition_details?;
-states_description              : (node=ID) WHITESPACE+ COLON WHITESPACE* (text=~NEWLINE)*;
+state_definition                : STATE WHITESPACE+ name=ID WHITESPACE* LBRACE WHITESPACE* NEWLINE+ (WHITESPACE* (states) NEWLINE+)* WHITESPACE* RBRACE;
+states_transition_start_to      : BOUNDARY_NODE WHITESPACE* transition_from_to WHITESPACE* (to=ID) transition_details?;
+states_transition_to_start      : (to=ID) WHITESPACE* transition_to_from WHITESPACE* BOUNDARY_NODE transition_details?;
+states_transition_from_end      : (from=ID) WHITESPACE* transition_from_to WHITESPACE* BOUNDARY_NODE transition_details?;
+states_transition_end_from      : BOUNDARY_NODE WHITESPACE* transition_to_from WHITESPACE* (from=ID) transition_details?;
+states_transition_from_to       : (from=ID) WHITESPACE* transition_from_to WHITESPACE* (to=ID) transition_details?;
+states_transition_to_from       : (to=ID) WHITESPACE* transition_to_from WHITESPACE* (from=ID) transition_details?;
+states_description              : (node=ID) WHITESPACE* COLON WHITESPACE* (text=~NEWLINE)*;
 states
     : states_transition_from_to
     | states_transition_to_from
@@ -71,9 +71,9 @@ transition_to_from
 
 transition_details_id           : ID (ID | WHITESPACE | UNDERSCORE)*;
 transition_details_description  : (~NEWLINE)+;
-transition_details              : WHITESPACE+ trigger_definition? COLON WHITESPACE+ transition_details_id transition_details_description?;
+transition_details              : WHITESPACE* trigger_definition? COLON WHITESPACE* transition_details_id transition_details_description?;
 
-trigger_definition              : LCHEVR LCHEVR WHITESPACE* (ASYNC WHITESPACE+)? parameters_definition? WHITESPACE* RCHEVR RCHEVR WHITESPACE+ ;
+trigger_definition              : LCHEVR LCHEVR WHITESPACE* (ASYNC WHITESPACE+)? parameters_definition? WHITESPACE* RCHEVR RCHEVR WHITESPACE* ;
 parameters_definition_unnamed   : LPAREN WHITESPACE* ID WHITESPACE* (COMMA WHITESPACE* ID)* WHITESPACE* RPAREN ;
 parameters_definition_named     : LPAREN WHITESPACE* ID WHITESPACE+ ID WHITESPACE* (COMMA WHITESPACE* ID WHITESPACE+ ID)* WHITESPACE* RPAREN ;
 parameters_definition
