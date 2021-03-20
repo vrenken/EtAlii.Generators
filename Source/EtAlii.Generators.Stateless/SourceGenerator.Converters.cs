@@ -31,7 +31,7 @@
         private string ToTriggerMemberName(StateTransition transition)
         {
             var parametersCombinedWithAnd = transition.Parameters.Any()
-                ? $"With{string.Join("And", transition.Parameters.Select(p => ToPascalCase(p.Name)))}"
+                ? $"With{string.Join("And", transition.Parameters.Select(p => p.HasName ? ToPascalCase(p.Name) : ToCamelCase(p.Type)))}"
                 : string.Empty;
             return $"_{ToCamelCase(transition.Trigger)}{parametersCombinedWithAnd}Trigger";
         }
@@ -49,10 +49,21 @@
             for (var i = 0; i < parameters.Length; i++)
             {
                 var type = parameters[i].Type;
-                var name = parameters[i].Name ?? $"@{ToCamelCase(parameters[i].Type)}{i}";
+                var name = parameters[i].HasName ? parameters[i].Name : $"@{ToCamelCase(parameters[i].Type)}{i}";
                 result.Add($"{type} {name}");
             }
 
+            return string.Join(", ", result);
+        }
+
+        private string ToNamedVariables(Parameter[] parameters)
+        {
+            var result = new List<string>();
+            for (var i = 0; i < parameters.Length; i++)
+            {
+                var name = parameters[i].HasName ? parameters[i].Name : $"@{ToCamelCase(parameters[i].Type)}{i}";
+                result.Add($"{name}");
+            }
             return string.Join(", ", result);
         }
 
@@ -68,17 +79,6 @@
             var span = new Span<char>(s.ToCharArray());
             span[0] = char.ToLower(span[0]);
             return span.ToString();
-        }
-
-        private string ToNamedVariables(Parameter[] parameters)
-        {
-            var result = new List<string>();
-            for (var i = 0; i < parameters.Length; i++)
-            {
-                var name = parameters[i].Name ?? $"@{ToCamelCase(parameters[i].Type)}{i}";
-                result.Add($"{name}");
-            }
-            return string.Join(", ", result);
         }
     }
 }

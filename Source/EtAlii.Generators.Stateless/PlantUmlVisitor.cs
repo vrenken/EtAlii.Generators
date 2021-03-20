@@ -79,7 +79,7 @@
         {
             return context
                 .ID()
-                .Select(id => new Parameter(id.GetText(), null, id.Symbol.Line, id.Symbol.Column))
+                .Select(id => new Parameter(id.GetText(), string.Empty, id.Symbol.Line, id.Symbol.Column))
                 .ToArray();
         }
 
@@ -145,7 +145,7 @@
                 var name = $"StartTo{context.to.Text}";
                 transitionDetails = new TransitionDetails(name, false, Array.Empty<Parameter>());
             }
-            return new StateTransition("None", context.to.Text, transitionDetails);
+            return new StateTransition(SourceGenerator.BeginStateName, context.to.Text, transitionDetails);
         }
 
         public override object VisitStates_transition_to_start(PlantUmlParser.States_transition_to_startContext context)
@@ -163,7 +163,7 @@
                 transitionDetails = new TransitionDetails(name, false, Array.Empty<Parameter>());
             }
 
-            return new StateTransition("None", context.to.Text, transitionDetails);
+            return new StateTransition(SourceGenerator.BeginStateName, context.to.Text, transitionDetails);
         }
 
         public override object VisitStates_transition_from_end(PlantUmlParser.States_transition_from_endContext context)
@@ -181,7 +181,7 @@
                 transitionDetails = new TransitionDetails(name, false, Array.Empty<Parameter>());
             }
 
-            return new EndTransition(context.from.Text, transitionDetails);
+            return new StateTransition(context.from.Text, SourceGenerator.EndStateName, transitionDetails);
         }
 
         public override object VisitStates_transition_end_from(PlantUmlParser.States_transition_end_fromContext context)
@@ -199,7 +199,7 @@
                 transitionDetails = new TransitionDetails(name, false, Array.Empty<Parameter>());
             }
 
-            return new EndTransition(context.from.Text, transitionDetails);
+            return new StateTransition(context.from.Text, SourceGenerator.EndStateName, transitionDetails);
         }
 
         public override object VisitStates_description(PlantUmlParser.States_descriptionContext context) => new StateDescription(context.ID().GetText(), context.text?.Text ?? string.Empty);

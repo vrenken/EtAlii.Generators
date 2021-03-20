@@ -21,6 +21,9 @@
     [Generator]
     public partial class SourceGenerator : ISourceGenerator
     {
+        public const string BeginStateName = "_Begin";
+        public const string EndStateName = "_End";
+
         public void Execute(GeneratorExecutionContext context)
         {
             // For testing and troubleshooting we'll use a simple list of strings that will be dumped to a file
@@ -94,8 +97,8 @@
         private void ValidateStateMachine(WriteContext context)
         {
             var unnamedParameters = context.AllTransitions
-                .Where(t => t.Parameters.Any(p => p.Name == null))
-                .Select(t => t.Parameters.First(p => p.Name == null))
+                .Where(t => t.Parameters.Any(p => !p.HasName))
+                .Select(t => t.Parameters.First(p => !p.HasName))
                 .ToArray();
 
             foreach (var unnamedParameter in unnamedParameters)
@@ -125,23 +128,40 @@
                 .OfType<StateTransition>()
                 .ToArray();
 
+            log.Add("Transitions found:");
+            log.AddRange(allTransitions.Select(t =>
+            {
+                var parameters = t.Parameters.Any()
+                    ? $" ({string.Join(", ", t.Parameters.Select(p => $"{p.Type} {p.Name}".Trim()))}) "
+                    : " ";
+                var stereoType = t.IsAsync || t.Parameters.Any()
+                    ? $" << {(t.IsAsync ? "async" : "")}{parameters}>> "
+                    : " ";
+                return $"- {t.From} -> {t.To}{stereoType}: {t.Trigger}";
+            }));
+
             // We want to know all unique states defined in the diagram.
             var transitionStates = allTransitions.SelectMany(t => new[] { t.From, t.To });
-            var endTransitionStates = stateMachine.StateFragments.OfType<EndTransition>().SelectMany(t => new[] { t.From });
             var descriptionStates = stateMachine.StateFragments.OfType<StateDescription>().SelectMany(t => new[] { t.State });
             var allStates = transitionStates
-                .Concat(endTransitionStates)
                 .Concat(descriptionStates)
+                .Where(s => s != null)
+                .OrderBy(s => s)
                 .Distinct() // That is, of course without any doubles.
                 .ToArray();
 
+            log.Add("States found:");
+            log.AddRange(allStates.Select(s => $"- {s}"));
+
             // We want to know all unique triggers defined in the diagram.
             var transitionTriggers = allTransitions.Select(t => t.Trigger);
-            var endTransitionTriggers = stateMachine.StateFragments.OfType<EndTransition>().Select(t => t.Trigger);
             var allTriggers = transitionTriggers
-                .Concat(endTransitionTriggers)
+                .OrderBy(t => t)
                 .Distinct() // That is, of course without any doubles.
                 .ToArray();
+
+            log.Add("Triggers found:");
+            log.AddRange(allTriggers.Select(t => $"- {t}"));
 
             // We want to know all unique transitions defined in the diagram.
             // That is, the transitions grouped by the trigger and unique sequence of parameters.

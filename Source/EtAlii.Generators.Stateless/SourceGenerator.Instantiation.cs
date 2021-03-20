@@ -12,7 +12,7 @@
         private void WriteStateMachineInstantiation(WriteContext context)
         {
             var startStates = context.AllTransitions
-                .Where(t => t.From == "None")
+                .Where(t => t.From == BeginStateName)
                 .ToArray();
             if (startStates.Length == 0)
             {
@@ -24,7 +24,7 @@
             else
             {
                 context.Writer.WriteLine("// Time to create a new state machine instance.");
-                context.Writer.WriteLine($"_stateMachine = new {StateMachineType}(State.None);");
+                context.Writer.WriteLine($"_stateMachine = new {StateMachineType}(State.{BeginStateName});");
                 context.Writer.WriteLine();
 
                 WriteTriggerConstructions(context);
