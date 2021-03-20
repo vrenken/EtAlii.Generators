@@ -53,7 +53,7 @@
                         {
                             // Let's use a C# safe subset of the characters in the filename.
                             var classNameFromFileName = Regex.Replace(Path.GetFileNameWithoutExtension(originalFileName), "[^a-zA-Z0-9_]", "");
-                            stateMachine.Settings.Add(new ClassNameSetting(classNameFromFileName));
+                            stateMachine.AddSettings(new ClassNameSetting(classNameFromFileName));
                         }
 
                         var fileName = Path.ChangeExtension(originalFileName, "Generated.cs");

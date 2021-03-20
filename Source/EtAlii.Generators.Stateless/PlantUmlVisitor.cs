@@ -12,28 +12,21 @@
     {
         public override object VisitState_machine(PlantUmlParser.State_machineContext context)
         {
-            var stateMachine = new StateMachine();
-
             var headers = context
                 .header_lines()
                 .Select(Visit)
                 .ToArray();
 
-            foreach (var header in headers)
-            {
-                switch (header)
-                {
-                    case Setting roslynSetting: stateMachine.Settings.Add(roslynSetting); break;
-                    case Header realHeader: stateMachine.Headers.Add(realHeader); break;
-                }
-            }
+            var realHeaders = headers.OfType<Header>().ToArray();
+            var settings = headers.OfType<Setting>().ToArray();
+
             var stateFragments = context
                 .states()
                 .Select(Visit)
-                .OfType<StateFragment>();
-            stateMachine.StateFragments.AddRange(stateFragments);
+                .OfType<StateFragment>()
+                .ToArray();
 
-            return stateMachine;
+            return new StateMachine(realHeaders, settings, stateFragments);
         }
 
         public override object VisitStateless_setting_class(PlantUmlParser.Stateless_setting_classContext context) => new ClassNameSetting(context.name.Text);
@@ -203,5 +196,17 @@
         }
 
         public override object VisitStates_description(PlantUmlParser.States_descriptionContext context) => new StateDescription(context.ID().GetText(), context.text?.Text ?? string.Empty);
+
+        public override object VisitState_definition(PlantUmlParser.State_definitionContext context)
+        {
+            var name = context.name.Text;
+            var stateFragments = context
+                .states()
+                .Select(Visit)
+                .OfType<StateFragment>()
+                .ToArray();
+
+            return new SuperState(name, stateFragments);
+        }
     }
 }
