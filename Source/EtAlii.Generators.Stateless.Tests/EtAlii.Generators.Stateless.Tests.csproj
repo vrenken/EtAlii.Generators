@@ -32,6 +32,10 @@
     <Compile Update="MyAsyncStateMachine.cs">
       <DependentUpon>MyAsyncStateMachine.puml</DependentUpon>
     </Compile>
+    <StatelessFile Include="MyNestedStateMachine1.puml" />
+    <StatelessFile Include="MyNestedStateMachine2.puml" />
+    <StatelessFile Include="MyNestedStateMachine3.puml" />
+    <StatelessFile Include="MyNestedStateMachine4.puml" />
   </ItemGroup>
 
   <Import Project="..\EtAlii.Generators.Stateless\Build\*.props" />

@@ -39,7 +39,7 @@ stateless_setting
     | stateless_setting_generate_partial
     | stateless_setting_using
     ;
-state_definition                : STATE WHITESPACE+ name=ID (WHITESPACE | NEWLINE)+ LBRACE (WHITESPACE* (states) NEWLINE+)* RBRACE;
+state_definition                : STATE WHITESPACE+ name=ID WHITESPACE+ LBRACE WHITESPACE* NEWLINE+ (WHITESPACE* (states) NEWLINE+)* WHITESPACE* RBRACE;
 states_transition_start_to      : BOUNDARY_NODE WHITESPACE+ transition_from_to WHITESPACE+ (to=ID) transition_details?;
 states_transition_to_start      : (to=ID) WHITESPACE+ transition_to_from WHITESPACE+ BOUNDARY_NODE transition_details?;
 states_transition_from_end      : (from=ID) WHITESPACE+ transition_from_to WHITESPACE+ BOUNDARY_NODE transition_details?;
