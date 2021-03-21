@@ -1,22 +1,28 @@
-name: .NET
+name: Build
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.x
+      - name: Restore dependencies
+        run: dotnet restore .\Source\EtAlii.Generators.sln
+      - name: Build
+        run: dotnet build --no-restore .\Source\EtAlii.Generators.sln
+      - name: Test
+        run: dotnet test --no-build --verbosity normal .\Source\EtAlii.Generators.sln
+      - name: Publish
+        run: dotnet nuget push ${{env.working-directory}}/**/*.nupkg --skip-duplicate --api-key ${{ secrets.Nuget }} --source https://api.nuget.org/v3/index.json
