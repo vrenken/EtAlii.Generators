@@ -1,9 +1,11 @@
 # EtAlii.Generators
 
+[![Build](https://github.com/vrenken/EtAlii.Generators/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/vrenken/EtAlii.Generators/actions/workflows/build.yml)
+
 A set of Roslyn generators to simplify usage of some of the more mainstream frameworks/libraries.
 
-As today's code generators mature they can bring a lot of value to the complex world of software development. 
-In this solution we'll try to gather a few nifty code generators with which speed up the usage of well-known open source projects. 
+As today's code generators mature they can bring a lot of value to the complex world of software development.
+In this solution we'll try to gather a few nifty code generators with which speed up the usage of well-known open source projects.
 
 Below is a small grasp on what is possible.
 
@@ -40,12 +42,12 @@ Usage:
      </ItemGroup>
    ```
 4. Compile the project - the Roslyn generator now uses the diagram to create C# state machine code.
-5. Add a class file to implement the needed state machine behavior. 
+5. Add a class file to implement the needed state machine behavior.
    ```cs
    namespace My.ExampleNamespace
    {
       using System;
-      
+
       public partial class MyFancyStateMachine
       {
          public override void OnState1Entered() => Console.WriteLine("Entered State 1");
@@ -61,7 +63,7 @@ Usage:
    namespace My.ExampleNamespace
    {
       using System;
-      
+
       public static void Main()
       {
          var stateMachine = new MyFancyStateMachine();
