@@ -104,8 +104,8 @@
             foreach (var unnamedParameter in unnamedParameters)
             {
                 // We need to map the Antlr line indexing onto the Roslyn line indexing. They differ.
-                var line = unnamedParameter.SourceLine - 1;
-                var column = unnamedParameter.SourceColumn;
+                var line = unnamedParameter.Source.Line - 1;
+                var column = unnamedParameter.Source.Column;
 
                 var linePositionStart = new LinePosition(line, column);
                 var linePositionEnd = new LinePosition(line, column);
@@ -113,7 +113,28 @@
                 var textSpan = new TextSpan(column, 0);
                 var location = Location.Create(context.OriginalFileName, textSpan, linePositionSpan);
 
-                var diagnostic = Diagnostic.Create(_unnamedParameterRule, location, unnamedParameter.Type);
+                var diagnostic = Diagnostic.Create(_unnamedParameterRule, location, unnamedParameter.Source.Text);
+
+                context.Diagnostics.Add(diagnostic);
+            }
+
+            var transitionsWithUnnamedTrigger = context.AllTransitions
+                .Where(t => !t.HasConcreteTriggerName)
+                .ToArray();
+
+            foreach (var transitionWithUnnamedTrigger in transitionsWithUnnamedTrigger)
+            {
+                // We need to map the Antlr line indexing onto the Roslyn line indexing. They differ.
+                var line = transitionWithUnnamedTrigger.Source.Line - 1;
+                var column = transitionWithUnnamedTrigger.Source.Column;
+
+                var linePositionStart = new LinePosition(line, column);
+                var linePositionEnd = new LinePosition(line, column);
+                var linePositionSpan = new LinePositionSpan(linePositionStart, linePositionEnd);
+                var textSpan = new TextSpan(column, 0);
+                var location = Location.Create(context.OriginalFileName, textSpan, linePositionSpan);
+
+                var diagnostic = Diagnostic.Create(_unnamedTriggerRule, location, transitionWithUnnamedTrigger.Source.Text);
 
                 context.Diagnostics.Add(diagnostic);
             }

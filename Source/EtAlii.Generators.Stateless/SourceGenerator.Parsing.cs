@@ -59,6 +59,16 @@
             isEnabledByDefault: true
         );
 
+        private static readonly DiagnosticDescriptor _unnamedTriggerRule = new
+        (
+            id: "SL1006",
+            title: "State transition lacks a named trigger - Consider using named triggers",
+            messageFormat: "State transition lacks a named trigger: '{0}' - Consider using named triggers (From -> To : Trigger)",
+            category: "Code-Gen",
+            defaultSeverity: DiagnosticSeverity.Warning,
+            isEnabledByDefault: true
+        );
+
         private bool TryParsePlantUml(AdditionalText file, List<string> log, out StateMachine stateMachine, out Diagnostic[] diagnostics)
         {
             var success = false;

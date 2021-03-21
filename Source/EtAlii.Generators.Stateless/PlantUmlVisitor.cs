@@ -48,9 +48,11 @@
                 isAsync = triggerDefinition.IsAsync;
                 parameters = triggerDefinition.Parameters;
             }
-            var name = context.transition_details_id().GetText().Replace(" ", "");
 
-            return new TransitionDetails(name, isAsync, parameters);
+            var triggerNameContext = context.trigger_name();
+            var name = triggerNameContext?.GetText().Replace(" ", "");
+
+            return new TransitionDetails(name, isAsync, parameters, name != null);
         }
 
         public override object VisitParameters_definition_named(PlantUmlParser.Parameters_definition_namedContext context)
@@ -62,7 +64,8 @@
                 var type = ids[i];
                 var name = ids[i + 1];
 
-                parameters.Add(new Parameter(type.GetText(), name.GetText(), type.Symbol.Line, type.Symbol.Column));
+                var position = new SourcePosition(type.Symbol.Line, type.Symbol.Column, type.GetText());
+                parameters.Add(new Parameter(type.GetText(), name.GetText(), position));
             }
 
             return parameters.ToArray();
@@ -72,7 +75,7 @@
         {
             return context
                 .ID()
-                .Select(id => new Parameter(id.GetText(), string.Empty, id.Symbol.Line, id.Symbol.Column))
+                .Select(id => new Parameter(id.GetText(), string.Empty, new SourcePosition(id.Symbol.Line, id.Symbol.Column, id.GetText())))
                 .ToArray();
         }
 
@@ -93,106 +96,136 @@
         public override object VisitStates_transition_from_to(PlantUmlParser.States_transition_from_toContext context)
         {
             TransitionDetails transitionDetails;
+            var fallbackTriggerName = $"{context.from.Text}To{context.to.Text}";
 
             var transitionDetailsContext = context.transition_details();
             if (transitionDetailsContext != null)
             {
                 transitionDetails = (TransitionDetails)VisitTransition_details(transitionDetailsContext);
+                if (!transitionDetails.HasConcreteName)
+                {
+                    transitionDetails.Name = fallbackTriggerName;
+                }
             }
             else
             {
-                var name = $"{context.from.Text}To{context.to.Text}";
-                transitionDetails = new TransitionDetails(name, false, Array.Empty<Parameter>());
+                transitionDetails = new TransitionDetails(fallbackTriggerName, false, Array.Empty<Parameter>(), false);
             }
-            return new StateTransition(context.from.Text, context.to.Text, transitionDetails);
+            var position = new SourcePosition(context.Start.Line, context.Start.Column, context.GetText());
+            return new StateTransition(context.from.Text, context.to.Text, transitionDetails, position);
         }
 
         public override object VisitStates_transition_to_from(PlantUmlParser.States_transition_to_fromContext context)
         {
             TransitionDetails transitionDetails;
+            var fallbackTriggerName = $"{context.from.Text}To{context.to.Text}";
 
             var transitionDetailsContext = context.transition_details();
             if (transitionDetailsContext != null)
             {
                 transitionDetails = (TransitionDetails)VisitTransition_details(transitionDetailsContext);
+                if (!transitionDetails.HasConcreteName)
+                {
+                    transitionDetails.Name = fallbackTriggerName;
+                }
             }
             else
             {
-                var name = $"{context.from.Text}To{context.to.Text}";
-                transitionDetails = new TransitionDetails(name, false, Array.Empty<Parameter>());
+                transitionDetails = new TransitionDetails(fallbackTriggerName, false, Array.Empty<Parameter>(), false);
             }
-            return new StateTransition(context.from.Text, context.to.Text, transitionDetails);
+            var position = new SourcePosition(context.Start.Line, context.Start.Column, context.GetText());
+            return new StateTransition(context.from.Text, context.to.Text, transitionDetails, position);
         }
 
         public override object VisitStates_transition_start_to(PlantUmlParser.States_transition_start_toContext context)
         {
             TransitionDetails transitionDetails;
+            var fallbackTriggerName = $"StartTo{context.to.Text}";
 
             var transitionDetailsContext = context.transition_details();
             if (transitionDetailsContext != null)
             {
                 transitionDetails = (TransitionDetails)VisitTransition_details(transitionDetailsContext);
+                if (!transitionDetails.HasConcreteName)
+                {
+                    transitionDetails.Name = fallbackTriggerName;
+                }
             }
             else
             {
-                var name = $"StartTo{context.to.Text}";
-                transitionDetails = new TransitionDetails(name, false, Array.Empty<Parameter>());
+                transitionDetails = new TransitionDetails(fallbackTriggerName, false, Array.Empty<Parameter>(), false);
             }
-            return new StateTransition(SourceGenerator.BeginStateName, context.to.Text, transitionDetails);
+            var position = new SourcePosition(context.Start.Line, context.Start.Column, context.GetText());
+            return new StateTransition(SourceGenerator.BeginStateName, context.to.Text, transitionDetails, position);
         }
 
         public override object VisitStates_transition_to_start(PlantUmlParser.States_transition_to_startContext context)
         {
             TransitionDetails transitionDetails;
+            var fallbackTriggerName = $"StartTo{context.to.Text}";
 
             var transitionDetailsContext = context.transition_details();
             if (transitionDetailsContext != null)
             {
                 transitionDetails = (TransitionDetails)VisitTransition_details(transitionDetailsContext);
+                if (!transitionDetails.HasConcreteName)
+                {
+                    transitionDetails.Name = fallbackTriggerName;
+                }
             }
             else
             {
-                var name = $"StartTo{context.to.Text}";
-                transitionDetails = new TransitionDetails(name, false, Array.Empty<Parameter>());
+                transitionDetails = new TransitionDetails(fallbackTriggerName, false, Array.Empty<Parameter>(), false);
             }
 
-            return new StateTransition(SourceGenerator.BeginStateName, context.to.Text, transitionDetails);
+            var position = new SourcePosition(context.Start.Line, context.Start.Column, context.GetText());
+            return new StateTransition(SourceGenerator.BeginStateName, context.to.Text, transitionDetails, position);
         }
 
         public override object VisitStates_transition_from_end(PlantUmlParser.States_transition_from_endContext context)
         {
             TransitionDetails transitionDetails;
+            var fallbackTriggerName = $"{context.from.Text}ToEnd";
 
             var transitionDetailsContext = context.transition_details();
             if (transitionDetailsContext != null)
             {
                 transitionDetails = (TransitionDetails)VisitTransition_details(transitionDetailsContext);
+                if (!transitionDetails.HasConcreteName)
+                {
+                    transitionDetails.Name = fallbackTriggerName;
+                }
             }
             else
             {
-                var name = $"{context.from.Text}ToEnd";
-                transitionDetails = new TransitionDetails(name, false, Array.Empty<Parameter>());
+                transitionDetails = new TransitionDetails(fallbackTriggerName, false, Array.Empty<Parameter>(), false);
             }
 
-            return new StateTransition(context.from.Text, SourceGenerator.EndStateName, transitionDetails);
+            var position = new SourcePosition(context.Start.Line, context.Start.Column, context.GetText());
+            return new StateTransition(context.from.Text, SourceGenerator.EndStateName, transitionDetails, position);
         }
 
         public override object VisitStates_transition_end_from(PlantUmlParser.States_transition_end_fromContext context)
         {
             TransitionDetails transitionDetails;
+            var fallbackTriggerName = $"{context.from.Text}ToEnd";
 
             var transitionDetailsContext = context.transition_details();
             if (transitionDetailsContext != null)
             {
                 transitionDetails = (TransitionDetails)VisitTransition_details(transitionDetailsContext);
+                if (!transitionDetails.HasConcreteName)
+                {
+                    transitionDetails.Name = fallbackTriggerName;
+                }
             }
             else
             {
-                var name = $"{context.from.Text}ToEnd";
-                transitionDetails = new TransitionDetails(name, false, Array.Empty<Parameter>());
+                transitionDetails = new TransitionDetails(fallbackTriggerName, false, Array.Empty<Parameter>(), false);
             }
 
-            return new StateTransition(context.from.Text, SourceGenerator.EndStateName, transitionDetails);
+            var position = new SourcePosition(context.Start.Line, context.Start.Column, context.GetText());
+            return new StateTransition(context.from.Text, SourceGenerator.EndStateName, transitionDetails, position);
         }
 
         public override object VisitStates_description(PlantUmlParser.States_descriptionContext context) => new StateDescription(context.ID().GetText(), context.text?.Text ?? string.Empty);
