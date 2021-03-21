@@ -7,7 +7,6 @@ ProjectSection(SolutionItems) = preProject
 	..\.gitignore = ..\.gitignore
 	EtAlii.Generators.sln.DotSettings = EtAlii.Generators.sln.DotSettings
 	..\README.md = ..\README.md
-	..\.github\workflows\build.yml = ..\.github\workflows\build.yml
 	..\.github\workflows\analysis.yml = ..\.github\workflows\analysis.yml
 EndProjectSection
 EndProject
