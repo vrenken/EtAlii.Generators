@@ -1,5 +1,6 @@
 ﻿namespace EtAlii.Generators.Stateless
 {
+    using System;
     using System.Linq;
 
     public partial class SourceGenerator
@@ -24,44 +25,35 @@
                     .ToArray();
 
                 var syncTransitionSets = ToTransitionsSetsPerTriggerAndUniqueParameters(syncTransitions, trigger);
-                if (syncTransitionSets.Any())
-                {
-                    foreach (var transitionSet in syncTransitionSets)
-                    {
-                        var firstTransition = transitionSet.First();
-                        var parameters = firstTransition.Parameters;
-                        var typedParameters = ToTypedNamedVariables(parameters);
-                        var genericParameters = ToGenericParameters(parameters);
-                        var namedParameters = parameters.Any() ? $", {ToNamedVariables(parameters)}" : string.Empty;
-                        var triggerParameter = ToTriggerParameter(firstTransition);
 
-                        WriteComment(context, transitionSet, "Depending on the current state, call this method to trigger one of the transitions below:");
-                        context.Writer.WriteLine($"public void {firstTransition.Trigger}({typedParameters}) => _stateMachine.Fire{genericParameters}({triggerParameter}{namedParameters});");
-                        context.Writer.WriteLine();
-                    }
-                }
+                var syncWrite = new Func<string, string, string, string, string, string>((triggerName, typedParameters, genericParameters, triggerParameter, namedParameters) => $"public void {triggerName}({typedParameters}) => _stateMachine.Fire{genericParameters}({triggerParameter}{namedParameters});");
+                WriteTriggerMethods(context, syncTransitionSets, "sync", syncWrite);
 
                 var asyncTransitions = context.AllTransitions
                     .Where(t => t.IsAsync)
                     .ToArray();
 
                 var asyncTransitionSets = ToTransitionsSetsPerTriggerAndUniqueParameters(asyncTransitions, trigger);
-                if (asyncTransitionSets.Any())
-                {
-                    foreach (var transitionSet in asyncTransitionSets)
-                    {
-                        var firstTransition = transitionSet.First();
-                        var parameters = firstTransition.Parameters;
-                        var typedParameters = ToTypedNamedVariables(parameters);
-                        var genericParameters = ToGenericParameters(parameters);
-                        var namedParameters = parameters.Any() ? $", {ToNamedVariables(parameters)}" : string.Empty;
-                        var triggerParameter = ToTriggerParameter(firstTransition);
+                var asyncWrite = new Func<string, string, string, string, string, string>((triggerName, typedParameters, genericParameters, triggerParameter, namedParameters) => $"public Task {triggerName}Async({typedParameters}) => _stateMachine.FireAsync{genericParameters}({triggerParameter}{namedParameters});");
+                WriteTriggerMethods(context, asyncTransitionSets, "async", asyncWrite);
+            }
+        }
 
-                        WriteComment(context, transitionSet, "Depending on the current state, call this method to trigger one of the async transitions below:");
-                        context.Writer.WriteLine($"public Task {firstTransition.Trigger}Async({typedParameters}) => _stateMachine.FireAsync{genericParameters}({triggerParameter}{namedParameters});");
-                        context.Writer.WriteLine();
-                    }
-                }
+        private void WriteTriggerMethods(WriteContext context, StateTransition[][] transitionSets, string triggerType, Func<string, string, string, string, string, string> write)
+        {
+            foreach (var transitionSet in transitionSets)
+            {
+                var firstTransition = transitionSet.First();
+                var parameters = firstTransition.Parameters;
+                var typedParameters = ToTypedNamedVariables(parameters);
+                var genericParameters = ToGenericParameters(parameters);
+                ;
+                var namedParameters = parameters.Any() ? $", {ToNamedVariables(parameters)}" : string.Empty;
+                var triggerParameter = ToTriggerParameter(firstTransition);
+
+                WriteComment(context, transitionSet, $"Depending on the current state, call this method to trigger one of the {triggerType} transitions below:");
+                context.Writer.WriteLine(write(firstTransition.Trigger, typedParameters, genericParameters, triggerParameter, namedParameters));
+                context.Writer.WriteLine();
             }
         }
 
