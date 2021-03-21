@@ -23,7 +23,7 @@ jobs:
           #-Dsonar.sources=lib/
           #-Dsonar.test.exclusions=tests/**
           args: >
-            -Dsonar.organization=my-vrenken
+            -Dsonar.organization=vrenken
             -Dsonar.projectKey=EtAlii.Generators
             -Dsonar.sources=.
             -Dsonar.python.coverage.reportPaths=coverage.xml
