@@ -22,4 +22,4 @@ jobs:
       - name: Test
         run: dotnet test --no-build --verbosity normal .\Source\EtAlii.Generators.sln
       - name: Publish
-        run: dotnet nuget push ${{env.working-directory}}/**/*.nupkg --skip-duplicate --api-key ${{ secrets.Nuget }} --source https://api.nuget.org/v3/index.json
+        run: dotnet nuget push ${{env.working-directory}}/**/*.nupkg --skip-duplicate --api-key ${{ secrets.NUGET_ORG_TOKEN }} --source https://api.nuget.org/v3/index.json
