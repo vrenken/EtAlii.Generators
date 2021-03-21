@@ -202,7 +202,7 @@ dotnet_code_quality.ca1822.api_surface = private, internal
 dotnet_code_quality.ca2208.api_surface = public
 
 # License header
-file_header_template = Copyright (c) Peter Vrenken. All rights reserved. See the license in https://github.com/vrenken/EtAlii.Ubigia
+file_header_template = Copyright (c) Peter Vrenken. All rights reserved. See https://github.com/vrenken/EtAlii.Generators for more information and the license
 
 #################################################################################################################
 # The rules below change/alter the standard dotnet rules.
