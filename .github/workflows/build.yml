@@ -19,15 +19,15 @@ jobs:
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
         with:
-          #projectBaseDir: Source
+          projectBaseDir: ./Source
           #-Dsonar.sources=lib/
+          #-Dsonar.test.exclusions=tests/**
           args: >
             -Dsonar.organization=my-vrenken
             -Dsonar.projectKey=EtAlii.Generators
             -Dsonar.sources=.
             -Dsonar.python.coverage.reportPaths=coverage.xml
-            -Dsonar.test.exclusions=tests/**
-            -Dsonar.tests=tests/
+            -Dsonar.tests=./*.Tests/
             -Dsonar.verbose=true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
