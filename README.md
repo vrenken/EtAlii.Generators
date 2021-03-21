@@ -1,7 +1,7 @@
 # EtAlii.Generators
 
 ## Introduction
-Code generation is fun and when done right extremely helpfull. This project aims to use Roslyn source generators to simplify usage of some of the more mainstream frameworks/libraries.
+Code generation is fun and when done right extremely helpful. This project aims to use a combination of [ANTLR](https://github.com/antlr/antlr4) and [Roslyn source generators](https://github.com/dotnet/roslyn/blob/main/docs/features/source-generators.cookbook.md) to simplify usage of some of the more mainstream frameworks/libraries.
 The first attempt is to use PlantUML to visually design [Stateless](https://github.com/dotnet-state-machine/stateless) state machines.
 
 ## Project status
