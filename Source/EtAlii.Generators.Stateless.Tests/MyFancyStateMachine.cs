@@ -2,7 +2,7 @@ namespace EtAlii.Generators.Stateless.Tests
 {
     using System;
 
-    public partial class MyFancyStateMachine : MyFancyStateMachineBase
+    public class MyFancyStateMachine : MyFancyStateMachineBase
     {
         protected override void OnState1Entered() => Console.WriteLine("State1 entered");
         protected override void OnState1EnteredFromStartTrigger(string name)
