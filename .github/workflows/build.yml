@@ -10,9 +10,9 @@ jobs:
   build:
     name: Build
     runs-on: windows-latest
-    #defaults:
-    #  run:
-        #working-directory: ./Source
+    defaults:
+      run:
+        working-directory: .\Source
     steps:
       - name: Set up JDK 11
         uses: actions/setup-java@v1
@@ -46,6 +46,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"vrenken_EtAlii.Generators" /o:"vrenken" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-          dotnet build .\Source\EtAlii.Generators.sln
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"EtAlii.Generators" /o:"vrenken" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+          dotnet build EtAlii.Generators.sln
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
