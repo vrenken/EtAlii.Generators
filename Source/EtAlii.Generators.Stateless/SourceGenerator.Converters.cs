@@ -34,10 +34,12 @@
         private string ToTriggerMemberName(StateTransition transition)
         {
             var parametersCombinedWithAnd = transition.Parameters.Any()
-                ? $"With{string.Join("And", transition.Parameters.Select(p => p.HasName ? ToPascalCase(p.Name) : ToCamelCase(p.Type)))}"
+                ? $"With{string.Join("And", transition.Parameters.Select(ToParameterName))}"
                 : string.Empty;
             return $"_{ToCamelCase(transition.Trigger)}{parametersCombinedWithAnd}Trigger";
         }
+
+        private string ToParameterName(Parameter parameter) => parameter.HasName ? ToPascalCase(parameter.Name) : ToCamelCase(parameter.Type);
 
         private string ToGenericParameters(Parameter[] parameters)
         {

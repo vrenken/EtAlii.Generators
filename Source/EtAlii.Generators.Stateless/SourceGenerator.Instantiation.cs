@@ -2,8 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Microsoft.CodeAnalysis;
-    using Microsoft.CodeAnalysis.Text;
 
     public partial class SourceGenerator
     {
@@ -11,26 +9,13 @@
 
         private void WriteStateMachineInstantiation(WriteContext context)
         {
-            var startStates = context.AllTransitions
-                .Where(t => t.From == BeginStateName)
-                .ToArray();
-            if (startStates.Length == 0)
-            {
-                var startStatesAsString = string.Join(", ", startStates.Select(s => s.To));
-                var location = Location.Create(context.OriginalFileName, new TextSpan(), new LinePositionSpan());
-                var diagnostic = Diagnostic.Create(_noStartStatesDefinedRule, location, startStatesAsString);
-                context.Diagnostics.Add(diagnostic);
-            }
-            else
-            {
-                context.Writer.WriteLine("// Time to create a new state machine instance.");
-                context.Writer.WriteLine($"_stateMachine = new {StateMachineType}(State.{BeginStateName});");
-                context.Writer.WriteLine();
+            context.Writer.WriteLine("// Time to create a new state machine instance.");
+            context.Writer.WriteLine($"_stateMachine = new {StateMachineType}(State.{BeginStateName});");
+            context.Writer.WriteLine();
 
-                WriteTriggerConstructions(context);
+            WriteTriggerConstructions(context);
 
-                WriteStateConstructions(context);
-            }
+            WriteStateConstructions(context);
         }
 
         private void WriteTriggerConstructions(WriteContext context)

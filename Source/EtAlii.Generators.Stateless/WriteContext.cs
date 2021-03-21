@@ -1,8 +1,6 @@
 namespace EtAlii.Generators.Stateless
 {
     using System.CodeDom.Compiler;
-    using System.Collections.Generic;
-    using Microsoft.CodeAnalysis;
 
     /// <summary>
     /// Use this class to transport actionable instances and data through the callstack of write methods.
@@ -18,8 +16,6 @@ namespace EtAlii.Generators.Stateless
         /// THe original file name (i.e. the name of the original .puml file).
         /// </summary>
         public string OriginalFileName { get; }
-        public List<string> Log { get; }
-        public List<Diagnostic> Diagnostics { get; }
 
         /// <summary>
         /// The parsed state machine.
@@ -34,8 +30,6 @@ namespace EtAlii.Generators.Stateless
         public WriteContext(
             IndentedTextWriter writer,
             string originalFileName,
-            List<string> log,
-            List<Diagnostic> diagnostics,
             StateMachine stateMachine,
             string[] allStates,
             string[] allTriggers,
@@ -44,8 +38,6 @@ namespace EtAlii.Generators.Stateless
         {
             Writer = writer;
             OriginalFileName = originalFileName;
-            Log = log;
-            Diagnostics = diagnostics;
             StateMachine = stateMachine;
             AllStates = allStates;
             AllTriggers = allTriggers;

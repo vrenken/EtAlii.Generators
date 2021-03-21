@@ -60,9 +60,9 @@
 
                         using var stringWriter = new StringWriter();
                         using var writer = new IndentedTextWriter(stringWriter);
-                        var writeContext = CreateWriteContext(writer, originalFileName, log, diagnostics, stateMachine);
+                        var writeContext = CreateWriteContext(writer, originalFileName, log, stateMachine);
 
-                        ValidateStateMachine(writeContext);
+                        ValidateStateMachine(writeContext, diagnostics);
 
                         WriteNamespace(writeContext);
 
@@ -94,8 +94,19 @@
             context.AddSource( "Log.txt", string.Join("\n",log));
         }
 
-        private void ValidateStateMachine(WriteContext context)
+        private void ValidateStateMachine(WriteContext context, List<Diagnostic> diagnostics)
         {
+            var startStates = context.AllTransitions
+                .Where(t => t.From == BeginStateName)
+                .ToArray();
+            if (startStates.Length == 0)
+            {
+                var startStatesAsString = string.Join(", ", startStates.Select(s => s.To));
+                var location = Location.Create(context.OriginalFileName, new TextSpan(), new LinePositionSpan());
+                var diagnostic = Diagnostic.Create(_noStartStatesDefinedRule, location, startStatesAsString);
+                diagnostics.Add(diagnostic);
+            }
+
             var unnamedParameters = context.AllTransitions
                 .Where(t => t.Parameters.Any(p => !p.HasName))
                 .Select(t => t.Parameters.First(p => !p.HasName))
@@ -115,7 +126,7 @@
 
                 var diagnostic = Diagnostic.Create(_unnamedParameterRule, location, unnamedParameter.Source.Text);
 
-                context.Diagnostics.Add(diagnostic);
+                diagnostics.Add(diagnostic);
             }
 
             var transitionsWithUnnamedTrigger = context.AllTransitions
@@ -136,14 +147,14 @@
 
                 var diagnostic = Diagnostic.Create(_unnamedTriggerRule, location, transitionWithUnnamedTrigger.Source.Text);
 
-                context.Diagnostics.Add(diagnostic);
+                diagnostics.Add(diagnostic);
             }
         }
 
         /// <summary>
         /// Create a context with commonly used instances and data that we can easily pass through the whole writing callstack.
         /// </summary>
-        private WriteContext CreateWriteContext(IndentedTextWriter writer, string originalFileName, List<string> log, List<Diagnostic> diagnostics, StateMachine stateMachine)
+        private WriteContext CreateWriteContext(IndentedTextWriter writer, string originalFileName, List<string> log, StateMachine stateMachine)
         {
             var allTransitions = stateMachine.StateFragments
                 .OfType<StateTransition>()
@@ -155,8 +166,10 @@
                 var parameters = t.Parameters.Any()
                     ? $" ({string.Join(", ", t.Parameters.Select(p => $"{p.Type} {p.Name}".Trim()))}) "
                     : " ";
+
+                var asyncPrefix = t.IsAsync ? "async " : "";
                 var stereoType = t.IsAsync || t.Parameters.Any()
-                    ? $" << {(t.IsAsync ? "async" : "")}{parameters}>> "
+                    ? $" << {asyncPrefix}{parameters}>> "
                     : " ";
                 return $"- {t.From} -> {t.To}{stereoType}: {t.Trigger}";
             }));
@@ -192,7 +205,7 @@
                 .Select(g => g.First().Transition)
                 .ToArray();
 
-            return new WriteContext(writer, originalFileName, log, diagnostics, stateMachine, allStates, allTriggers, allTransitions, uniqueParameterTransitions);
+            return new WriteContext(writer, originalFileName, stateMachine, allStates, allTriggers, allTransitions, uniqueParameterTransitions);
         }
 
         public void Initialize(GeneratorInitializationContext context)

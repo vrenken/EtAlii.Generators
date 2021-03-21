@@ -47,7 +47,6 @@
                 var parameters = firstTransition.Parameters;
                 var typedParameters = ToTypedNamedVariables(parameters);
                 var genericParameters = ToGenericParameters(parameters);
-                ;
                 var namedParameters = parameters.Any() ? $", {ToNamedVariables(parameters)}" : string.Empty;
                 var triggerParameter = ToTriggerParameter(firstTransition);
 
