@@ -3,6 +3,7 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$/../../../.editorconfig" />
     <content url="file://$MODULE_DIR$/../../../.github/workflows/analysis.yml" />
+    <content url="file://$MODULE_DIR$/../../../.github/workflows/build.yml" />
     <content url="file://$MODULE_DIR$/../../../.gitignore" />
     <content url="file://$MODULE_DIR$/../../../README.md" />
     <content url="file://$MODULE_DIR$/../.." />
