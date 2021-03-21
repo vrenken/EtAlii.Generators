@@ -26,8 +26,9 @@ jobs:
             -Dsonar.organization=vrenken
             -Dsonar.projectKey=EtAlii.Generators
             -Dsonar.sources=.
+            -Dsonar.exclusions=**/*.Tests/**,**/*.puml
             -Dsonar.python.coverage.reportPaths=coverage.xml
-            -Dsonar.tests=EtAlii.Generators.Stateless.Tests/
+            -Dsonar.tests=**/*.Tests/**
             -Dsonar.verbose=true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
