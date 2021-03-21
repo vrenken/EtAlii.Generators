@@ -197,6 +197,7 @@
 
         public void Initialize(GeneratorInitializationContext context)
         {
+            // Nothing to initialize.
         }
     }
 }

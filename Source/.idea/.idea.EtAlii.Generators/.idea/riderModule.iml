@@ -2,7 +2,6 @@
 <module type="RIDER_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$/../../../.editorconfig" />
-    <content url="file://$MODULE_DIR$/../../../.github/workflows/analysis-new.yml" />
     <content url="file://$MODULE_DIR$/../../../.github/workflows/analysis.yml" />
     <content url="file://$MODULE_DIR$/../../../.gitignore" />
     <content url="file://$MODULE_DIR$/../../../README.md" />
