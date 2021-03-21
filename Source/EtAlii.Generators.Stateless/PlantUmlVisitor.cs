@@ -41,12 +41,12 @@
             var isAsync = false;
             var parameters = Array.Empty<Parameter>();
 
-            var triggerDefinitionContext = context.trigger_definition();
-            if (triggerDefinitionContext != null)
+            var triggerDetailsContext = context.trigger_details();
+            if (triggerDetailsContext != null)
             {
-                var triggerDefinition = (TriggerDefinition)VisitTrigger_definition(triggerDefinitionContext);
-                isAsync = triggerDefinition.IsAsync;
-                parameters = triggerDefinition.Parameters;
+                var triggerDetails = (TriggerDetails)VisitTrigger_details(triggerDetailsContext);
+                isAsync = triggerDetails.IsAsync;
+                parameters = triggerDetails.Parameters;
             }
 
             var triggerNameContext = context.trigger_name();
@@ -79,7 +79,7 @@
                 .ToArray();
         }
 
-        public override object VisitTrigger_definition(PlantUmlParser.Trigger_definitionContext context)
+        public override object VisitTrigger_details(PlantUmlParser.Trigger_detailsContext context)
         {
             var parameters = Array.Empty<Parameter>();
             var parameterContext = context.parameters_definition();
@@ -90,7 +90,7 @@
 
             var isAsync = context.ASYNC() != null;
 
-            return new TriggerDefinition(isAsync, parameters);
+            return new TriggerDetails(isAsync, parameters);
         }
 
         public override object VisitStates_transition_from_to(PlantUmlParser.States_transition_from_toContext context)

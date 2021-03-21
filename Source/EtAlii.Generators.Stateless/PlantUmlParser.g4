@@ -70,10 +70,10 @@ transition_to_from
     ;
 
 transition_details_description  : (~NEWLINE)+;
-transition_details              : WHITESPACE* trigger_definition? COLON WHITESPACE* trigger_name transition_details_description?;
+transition_details              : WHITESPACE* trigger_details? COLON WHITESPACE* trigger_name transition_details_description?;
 
 trigger_name                    : ID (ID | WHITESPACE | UNDERSCORE)*;
-trigger_definition              : LCHEVR LCHEVR WHITESPACE* (ASYNC WHITESPACE+)? parameters_definition? WHITESPACE* RCHEVR RCHEVR WHITESPACE* ;
+trigger_details                 : LCHEVR LCHEVR WHITESPACE* (ASYNC WHITESPACE+)? parameters_definition? WHITESPACE* RCHEVR RCHEVR WHITESPACE* ;
 parameters_definition_unnamed   : LPAREN WHITESPACE* ID WHITESPACE* (COMMA WHITESPACE* ID)* WHITESPACE* RPAREN ;
 parameters_definition_named     : LPAREN WHITESPACE* ID WHITESPACE+ ID WHITESPACE* (COMMA WHITESPACE* ID WHITESPACE+ ID)* WHITESPACE* RPAREN ;
 parameters_definition

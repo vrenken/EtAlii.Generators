@@ -1,11 +1,11 @@
 namespace EtAlii.Generators.Stateless
 {
-    public class TriggerDefinition
+    public class TriggerDetails
     {
         public bool IsAsync { get; }
         public Parameter[] Parameters { get; }
 
-        public TriggerDefinition(bool isAsync, Parameter[] parameters)
+        public TriggerDetails(bool isAsync, Parameter[] parameters)
         {
             IsAsync = isAsync;
             Parameters = parameters;
