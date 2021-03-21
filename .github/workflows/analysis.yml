@@ -1,13 +1,13 @@
 # This is the GitHub action workflow we use to build, test, analyze and publish the EtAlii.Generators solution.
-name: Analysis
-on:
+name: SonarCloud Analysis
+  #on:
   # Trigger analysis when pushing in master or pull requests, and when creating
   # a pull request.
-  push:
-    branches:
-      - main
-  pull_request:
-    types: [opened, synchronize, reopened]
+#  push:
+  #    branches:
+  #    - main
+  #pull_request:
+#  types: [opened, synchronize, reopened]
 jobs:
   sonarcloud:
     name: Analysis using SonarCloud
