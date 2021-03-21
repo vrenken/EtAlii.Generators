@@ -22,11 +22,12 @@ jobs:
           projectBaseDir: ./Source
           #-Dsonar.sources=lib/
           #-Dsonar.test.exclusions=tests/**
+          #-Dsonar.sources=.
+          #,/**/*.cs
           args: >
             -Dsonar.organization=vrenken
             -Dsonar.projectKey=EtAlii.Generators
-            -Dsonar.sources=.
-            -Dsonar.exclusions=/**/*.puml,/**/*.cs
+            -Dsonar.exclusions=/**/*.puml
             -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.tests=EtAlii.Generators.Stateless.Tests/
             -Dsonar.verbose=true
