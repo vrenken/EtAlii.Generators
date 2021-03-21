@@ -23,4 +23,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore .\Source\EtAlii.Generators.sln
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal .\Source\EtAlii.Generators.sln
