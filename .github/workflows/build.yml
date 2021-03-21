@@ -28,7 +28,7 @@ jobs:
             -Dsonar.sources=.
             -Dsonar.exclusions=**/*.puml
             -Dsonar.python.coverage.reportPaths=coverage.xml
-            -Dsonar.tests=EtAlii.Generators.Stateless.Tests/**
+            -Dsonar.tests=EtAlii.Generators.Stateless.Tests/
             -Dsonar.verbose=true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
