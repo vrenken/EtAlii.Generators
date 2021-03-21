@@ -37,6 +37,18 @@
     <StatelessFile Include="MyNestedStateMachine2.puml" />
     <StatelessFile Include="MyNestedStateMachine3.puml" />
     <StatelessFile Include="MyNestedStateMachine4.puml" />
+    <Compile Update="MyNestedStateMachine1.cs">
+      <DependentUpon>MyNestedStateMachine1.puml</DependentUpon>
+    </Compile>
+    <Compile Update="MyNestedStateMachine2.cs">
+      <DependentUpon>MyNestedStateMachine2.puml</DependentUpon>
+    </Compile>
+    <Compile Update="MyNestedStateMachine3.cs">
+      <DependentUpon>MyNestedStateMachine3.puml</DependentUpon>
+    </Compile>
+    <Compile Update="MyNestedStateMachine4.cs">
+      <DependentUpon>MyNestedStateMachine4.puml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <Import Project="..\EtAlii.Generators.Stateless\Build\*.props" />
