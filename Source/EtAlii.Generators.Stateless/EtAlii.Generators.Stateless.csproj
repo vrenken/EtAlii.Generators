@@ -4,6 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>EtAlii.Generators.Stateless</RootNamespace>
     <LangVersion>9</LangVersion>
+    <ProjectGuid>CED6903F-7C8D-4A7E-81AE-4E01D11C7E82</ProjectGuid>
   </PropertyGroup>
 
   <PropertyGroup>

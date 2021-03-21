@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <OutputType>Exe</OutputType>
+    <ProjectGuid>4D9AFD07-45EF-4DDD-980E-D9FD619ECD95</ProjectGuid>
   </PropertyGroup>
 
   <ItemGroup>
