@@ -1,10 +1,9 @@
 name: Build
-on: workflow_dispatch 
-#push:
-  #  branches:
-    #  - master
-#  pull_request:
- #   types: [opened, synchronize, reopened]
+push:
+    branches:
+      - master
+  pull_request:
+    types: [opened, synchronize, reopened]
 jobs:
   build:
     name: Build
@@ -46,5 +45,5 @@ jobs:
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"vrenken_EtAlii.Generators" /o:"vrenken" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-          dotnet build ./*.sln
+          dotnet build EtAlii.Generators.sln
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
