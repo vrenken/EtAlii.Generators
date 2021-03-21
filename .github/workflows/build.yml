@@ -26,7 +26,7 @@ jobs:
             -Dsonar.organization=vrenken
             -Dsonar.projectKey=EtAlii.Generators
             -Dsonar.sources=.
-            -Dsonar.exclusions=**/*.Tests/**,**/*.puml
+            -Dsonar.exclusions=**/*.puml
             -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.tests=EtAlii.Generators.Stateless.Tests/
             -Dsonar.verbose=true
