@@ -27,7 +27,7 @@ jobs:
             -Dsonar.projectKey=EtAlii.Generators
             -Dsonar.sources=.
             -Dsonar.python.coverage.reportPaths=coverage.xml
-            -Dsonar.tests=./**.Tests/
+            -Dsonar.tests=EtAlii.Generators.*.Tests/
             -Dsonar.verbose=true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
