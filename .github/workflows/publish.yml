@@ -1,10 +1,10 @@
-name: Build
+name: Publish
 
 on:
   workflow_dispatch:
 
 jobs:
-  build:
+  publish:
 
     #runs-on: ubuntu-latest
     runs-on: windows-latest
