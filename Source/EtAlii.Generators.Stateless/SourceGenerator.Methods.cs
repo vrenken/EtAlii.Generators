@@ -91,54 +91,67 @@
                     .Select(g => g.First().Transition)
                     .ToArray();
 
-                var internalTransitions = uniqueTransitions
-                    .Where(t => t.From == t.To) // only internal transitions.
-                    .Where(t => t.To == state)
-                    .ToArray();
+                WriteInternalTransitionMethodsForState(context, uniqueTransitions, state);
 
-                foreach (var transition in internalTransitions)
+                WriteInboundTransitionMethodsForState(context, uniqueTransitions, state);
+            }
+        }
+
+        private void WriteInboundTransitionMethodsForState(WriteContext context, StateTransition[] uniqueTransitions, string state)
+        {
+            var inboundTransitions = uniqueTransitions
+                .Where(t => t.From != t.To) // skip internal transitions.
+                .Where(t => t.To == state)
+                .ToArray();
+
+            foreach (var transition in inboundTransitions)
+            {
+                var typedNamedParameters = ToTypedNamedVariables(transition.Parameters);
+
+                var transitionMethodName = ToTransitionMethodName(transition);
+                WriteComment(context, new[] {transition}, "Implement this method to handle the transition below:");
+                context.Writer.WriteLine($"protected virtual {(transition.IsAsync ? "Task" : "void")} {transitionMethodName}({typedNamedParameters})");
+                context.Writer.WriteLine("{");
+                context.Writer.Indent += 1;
+                if (transition.IsAsync)
                 {
-                    var transitionMethodName = ToTransitionMethodName(transition);
-                    var typedNamedParameters1 = transition.Parameters.Any() ? $"{ToTypedNamedVariables(transition.Parameters)}, " : string.Empty;
-                    var typedNamedParameters2 = ToTypedNamedVariables(transition.Parameters);
-                    var namedParameters = ToNamedVariables(transition.Parameters);
-
-                    WriteComment(context, new [] { transition }, "Implement this method to handle the transition below:");
-                    context.Writer.WriteLine($"protected virtual {(transition.IsAsync ? "Task" : "void" )} {transitionMethodName}({typedNamedParameters2})");
-                    context.Writer.WriteLine("{");
-                    context.Writer.Indent += 1;
-                    if (transition.IsAsync)
-                    {
-                        context.Writer.WriteLine("return Task.CompletedTask;");
-                    }
-                    context.Writer.Indent -= 1;
-                    context.Writer.WriteLine("}");
-                    context.Writer.WriteLine($"private {(transition.IsAsync ? "Task" : "void" )} {transitionMethodName}({typedNamedParameters1}{StateMachineType}.Transition transition) => {transitionMethodName}({namedParameters});");
-                    context.Writer.WriteLine();
+                    context.Writer.WriteLine("return Task.CompletedTask;");
                 }
 
-                var inboundTransitions = uniqueTransitions
-                    .Where(t => t.From != t.To) // skip internal transitions.
-                    .Where(t => t.To == state)
-                    .ToArray();
+                context.Writer.Indent -= 1;
+                context.Writer.WriteLine("}");
+                context.Writer.WriteLine();
+            }
+        }
 
-                foreach (var transition in inboundTransitions)
+        private void WriteInternalTransitionMethodsForState(WriteContext context, StateTransition[] uniqueTransitions, string state)
+        {
+            var internalTransitions = uniqueTransitions
+                .Where(t => t.From == t.To) // only internal transitions.
+                .Where(t => t.To == state)
+                .ToArray();
+
+            foreach (var transition in internalTransitions)
+            {
+                var transitionMethodName = ToTransitionMethodName(transition);
+                var typedNamedParameters1 = transition.Parameters.Any() ? $"{ToTypedNamedVariables(transition.Parameters)}, " : string.Empty;
+                var typedNamedParameters2 = ToTypedNamedVariables(transition.Parameters);
+                var namedParameters = ToNamedVariables(transition.Parameters);
+
+                WriteComment(context, new[] {transition}, "Implement this method to handle the transition below:");
+                context.Writer.WriteLine($"protected virtual {(transition.IsAsync ? "Task" : "void")} {transitionMethodName}({typedNamedParameters2})");
+                context.Writer.WriteLine("{");
+                context.Writer.Indent += 1;
+                if (transition.IsAsync)
                 {
-                    var typedNamedParameters = ToTypedNamedVariables(transition.Parameters);
-
-                    var transitionMethodName = ToTransitionMethodName(transition);
-                    WriteComment(context, new [] { transition }, "Implement this method to handle the transition below:");
-                    context.Writer.WriteLine($"protected virtual {(transition.IsAsync ? "Task" : "void" )} {transitionMethodName}({typedNamedParameters})");
-                    context.Writer.WriteLine("{");
-                    context.Writer.Indent += 1;
-                    if (transition.IsAsync)
-                    {
-                        context.Writer.WriteLine("return Task.CompletedTask;");
-                    }
-                    context.Writer.Indent -= 1;
-                    context.Writer.WriteLine("}");
-                    context.Writer.WriteLine();
+                    context.Writer.WriteLine("return Task.CompletedTask;");
                 }
+
+                context.Writer.Indent -= 1;
+                context.Writer.WriteLine("}");
+                context.Writer.WriteLine(
+                    $"private {(transition.IsAsync ? "Task" : "void")} {transitionMethodName}({typedNamedParameters1}{StateMachineType}.Transition transition) => {transitionMethodName}({namedParameters});");
+                context.Writer.WriteLine();
             }
         }
 
