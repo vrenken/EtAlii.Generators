@@ -8,7 +8,6 @@ ProjectSection(SolutionItems) = preProject
 	EtAlii.Generators.sln.DotSettings = EtAlii.Generators.sln.DotSettings
 	..\README.md = ..\README.md
 	..\.github\workflows\analysis.yml = ..\.github\workflows\analysis.yml
-	..\.github\workflows\analysis-new.yml = ..\.github\workflows\analysis-new.yml
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EtAlii.Generators.Stateless", "EtAlii.Generators.Stateless\EtAlii.Generators.Stateless.csproj", "{ECDC1798-7EF9-4179-BB4F-891F0F1E2175}"

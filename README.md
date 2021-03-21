@@ -1,6 +1,6 @@
 # EtAlii.Generators
 
-[![Build](https://github.com/vrenken/EtAlii.Generators/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/vrenken/EtAlii.Generators/actions/workflows/build.yml)
+[![Analysis](https://github.com/vrenken/EtAlii.Generators/actions/workflows/analysis.yml/badge.svg)](https://github.com/vrenken/EtAlii.Generators/actions/workflows/analysis.yml)
 
 A set of Roslyn generators to simplify usage of some of the more mainstream frameworks/libraries.
 
