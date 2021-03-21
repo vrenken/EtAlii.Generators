@@ -8,26 +8,29 @@ The first attempt is to use PlantUML to visually design [Stateless](https://gith
 
 [![Build](https://github.com/vrenken/EtAlii.Generators/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/vrenken/EtAlii.Generators/actions/workflows/build.yml)
 [![Analysis](https://github.com/vrenken/EtAlii.Generators/actions/workflows/analysis.yml/badge.svg)](https://github.com/vrenken/EtAlii.Generators/actions/workflows/analysis.yml)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![GitHub](https://img.shields.io/github/license/vrenken/EtAlii.Generators)
 
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=bugs)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=code_smells)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=coverage)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
+
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=ncloc)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
-
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=alert_status)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=security_rating)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
-
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=sqale_index)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
 
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=security_rating)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=alert_status)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
 
 ## Examples
 
 ###  Behavior trees
 ### PlantUML state diagrams to Stateless state machines
+![Nuget](https://img.shields.io/nuget/v/EtAlii.Generators.Stateless)
+![Nuget](https://img.shields.io/nuget/dt/EtAlii.Generators.Stateless)
+
 _(EtAlii.Generators.Stateless)_
 
 Usage:
