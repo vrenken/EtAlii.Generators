@@ -1,8 +1,15 @@
 ﻿namespace EtAlii.Generators.Stateless
 {
-    public partial class SourceGenerator
+    internal class NamespaceWriter
     {
-        private void WriteNamespace(WriteContext context)
+        private readonly ClassWriter _classWriter;
+
+        public NamespaceWriter(ClassWriter classWriter)
+        {
+            _classWriter = classWriter;
+        }
+
+        public void Write(WriteContext context)
         {
             context.Writer.WriteLine($"// Remark: this file was auto-generated based on '{context.OriginalFileName}'.");
             context.Writer.WriteLine("// Any changes will be overwritten the next time the file is generated.");
@@ -19,7 +26,7 @@
             }
 
             context.Writer.WriteLine();
-            WriteClass(context);
+            _classWriter.Write(context);
 
             context.Writer.Indent -= 1;
             context.Writer.WriteLine("}");

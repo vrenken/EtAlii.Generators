@@ -1,11 +1,11 @@
 ﻿namespace EtAlii.Generators.Stateless
 {
-    public partial class SourceGenerator
+    internal class EnumWriter
     {
         /// <summary>
         /// Write the state machine internal State enum.
         /// </summary>
-        private void WriteStateEnum(WriteContext context)
+        public void WriteStateEnum(WriteContext context)
         {
             context.Writer.WriteLine("// Of course each state machine needs a set of states.");
             context.Writer.WriteLine("protected enum State");
@@ -24,7 +24,7 @@
         /// <summary>
         /// Write the state machine internal Trigger enum.
         /// </summary>
-        private void WriteTriggerEnum(WriteContext context)
+        public void WriteTriggerEnum(WriteContext context)
         {
             context.Writer.WriteLine("// And all state machine need something that trigger them.");
             context.Writer.WriteLine("protected enum Trigger");

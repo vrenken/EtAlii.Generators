@@ -1,8 +1,25 @@
 ﻿namespace EtAlii.Generators.Stateless
 {
-    public partial class SourceGenerator
+    internal class ClassWriter
     {
-        private void WriteClass(WriteContext context)
+        private readonly EnumWriter _enumWriter;
+        private readonly FieldWriter _fieldWriter;
+        private readonly MethodWriter _methodWriter;
+        private readonly InstantiationWriter _instantiationWriter;
+
+        public ClassWriter(
+            EnumWriter enumWriter,
+            FieldWriter fieldWriter,
+            MethodWriter methodWriter,
+            InstantiationWriter instantiationWriter)
+        {
+            _enumWriter = enumWriter;
+            _fieldWriter = fieldWriter;
+            _methodWriter = methodWriter;
+            _instantiationWriter = instantiationWriter;
+        }
+
+        public void Write(WriteContext context)
         {
             var prefix = context.StateMachine.GeneratePartialClass ? "abstract partial" : "abstract";
 
@@ -15,26 +32,26 @@
             context.Writer.WriteLine("{");
             context.Writer.Indent += 1;
 
-            context.Writer.WriteLine($"protected {StateMachineType} StateMachine => _stateMachine;");
-            context.Writer.WriteLine($"private readonly {StateMachineType} _stateMachine;");
+            context.Writer.WriteLine($"protected {SourceGenerator.StateMachineType} StateMachine => _stateMachine;");
+            context.Writer.WriteLine($"private readonly {SourceGenerator.StateMachineType} _stateMachine;");
             context.Writer.WriteLine();
 
-            WriteAllTriggerMembers(context);
+            _fieldWriter.WriteAllTriggerFields(context);
             context.Writer.WriteLine();
 
             WriteConstructor(context);
             context.Writer.WriteLine();
 
-            WriteTriggerMethods(context);
+            _methodWriter.WriteTriggerMethods(context);
             context.Writer.WriteLine();
 
-            WriteStateEnum(context);
+            _enumWriter.WriteStateEnum(context);
             context.Writer.WriteLine();
 
-            WriteTriggerEnum(context);
+            _enumWriter.WriteTriggerEnum(context);
             context.Writer.WriteLine();
 
-            WriteTransitionMethods(context);
+            _methodWriter.WriteTransitionMethods(context);
 
             context.Writer.Indent -= 1;
             context.Writer.WriteLine("}");
@@ -46,7 +63,7 @@
             context.Writer.WriteLine("{");
             context.Writer.Indent += 1;
 
-            WriteStateMachineInstantiation(context);
+            _instantiationWriter.WriteStateMachineInstantiation(context);
 
             context.Writer.Indent -= 1;
             context.Writer.WriteLine("}");

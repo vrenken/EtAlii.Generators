@@ -125,7 +125,7 @@
                 transitionDetails = new TransitionDetails(fallbackTriggerName, false, Array.Empty<Parameter>(), false);
             }
             var position = new SourcePosition(context.Start.Line, context.Start.Column, context.GetText());
-            return new StateTransition(context.from.Text, context.to.Text, transitionDetails, position);
+            return new Transition(context.from.Text, context.to.Text, transitionDetails, position);
         }
 
         public override object VisitStates_transition_to_from(PlantUmlParser.States_transition_to_fromContext context)
@@ -147,7 +147,7 @@
                 transitionDetails = new TransitionDetails(fallbackTriggerName, false, Array.Empty<Parameter>(), false);
             }
             var position = new SourcePosition(context.Start.Line, context.Start.Column, context.GetText());
-            return new StateTransition(context.from.Text, context.to.Text, transitionDetails, position);
+            return new Transition(context.from.Text, context.to.Text, transitionDetails, position);
         }
 
         public override object VisitStates_transition_start_to(PlantUmlParser.States_transition_start_toContext context)
@@ -169,7 +169,7 @@
                 transitionDetails = new TransitionDetails(fallbackTriggerName, false, Array.Empty<Parameter>(), false);
             }
             var position = new SourcePosition(context.Start.Line, context.Start.Column, context.GetText());
-            return new StateTransition(SourceGenerator.BeginStateName, context.to.Text, transitionDetails, position);
+            return new Transition(SourceGenerator.BeginStateName, context.to.Text, transitionDetails, position);
         }
 
         public override object VisitStates_transition_to_start(PlantUmlParser.States_transition_to_startContext context)
@@ -192,7 +192,7 @@
             }
 
             var position = new SourcePosition(context.Start.Line, context.Start.Column, context.GetText());
-            return new StateTransition(SourceGenerator.BeginStateName, context.to.Text, transitionDetails, position);
+            return new Transition(SourceGenerator.BeginStateName, context.to.Text, transitionDetails, position);
         }
 
         public override object VisitStates_transition_from_end(PlantUmlParser.States_transition_from_endContext context)
@@ -215,7 +215,7 @@
             }
 
             var position = new SourcePosition(context.Start.Line, context.Start.Column, context.GetText());
-            return new StateTransition(context.from.Text, SourceGenerator.EndStateName, transitionDetails, position);
+            return new Transition(context.from.Text, SourceGenerator.EndStateName, transitionDetails, position);
         }
 
         public override object VisitStates_transition_end_from(PlantUmlParser.States_transition_end_fromContext context)
@@ -238,7 +238,7 @@
             }
 
             var position = new SourcePosition(context.Start.Line, context.Start.Column, context.GetText());
-            return new StateTransition(context.from.Text, SourceGenerator.EndStateName, transitionDetails, position);
+            return new Transition(context.from.Text, SourceGenerator.EndStateName, transitionDetails, position);
         }
 
         public override object VisitStates_description(PlantUmlParser.States_descriptionContext context) => new StateDescription(context.ID().GetText(), context.text?.Text ?? string.Empty);

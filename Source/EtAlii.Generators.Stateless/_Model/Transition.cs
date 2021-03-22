@@ -1,6 +1,6 @@
 namespace EtAlii.Generators.Stateless
 {
-    public class StateTransition : StateFragment
+    public class Transition : StateFragment
     {
         private readonly TransitionDetails _details;
 
@@ -18,7 +18,7 @@ namespace EtAlii.Generators.Stateless
 
         public SourcePosition Source { get; }
 
-        public StateTransition(string from, string to, TransitionDetails details, SourcePosition source)
+        public Transition(string from, string to, TransitionDetails details, SourcePosition source)
         {
             _details = details;
             Source = source;

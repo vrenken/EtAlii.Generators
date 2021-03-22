@@ -3,22 +3,29 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public partial class SourceGenerator
+    internal class InstantiationWriter
     {
-        private const string StateMachineType = "global::Stateless.StateMachine<State, Trigger>";
+        private readonly ParameterConverter _parameterConverter;
+        private readonly TransitionConverter _transitionConverter;
 
-        private void WriteStateMachineInstantiation(WriteContext context)
+        public InstantiationWriter(ParameterConverter parameterConverter, TransitionConverter transitionConverter)
         {
-            context.Writer.WriteLine("// Time to create a new state machine instance.");
-            context.Writer.WriteLine($"_stateMachine = new {StateMachineType}(State.{BeginStateName});");
-            context.Writer.WriteLine();
-
-            WriteTriggerConstructions(context);
-
-            WriteStateConstructions(context);
+            _parameterConverter = parameterConverter;
+            _transitionConverter = transitionConverter;
         }
 
-        private void WriteTriggerConstructions(WriteContext context)
+        public void WriteStateMachineInstantiation(WriteContext context)
+        {
+            context.Writer.WriteLine("// Time to create a new state machine instance.");
+            context.Writer.WriteLine($"_stateMachine = new {SourceGenerator.StateMachineType}(State.{SourceGenerator.BeginStateName});");
+            context.Writer.WriteLine();
+
+            WriteTriggerInstantiations(context);
+
+            WriteStateInstantiations(context);
+        }
+
+        private void WriteTriggerInstantiations(WriteContext context)
         {
             // We only need to write a trigger construction calls for all relations that have parameters.
             var uniqueTransitions = context.UniqueParameterTransitions
@@ -32,8 +39,8 @@
 
             foreach (var uniqueTransition in uniqueTransitions)
             {
-                var genericParameters = ToGenericParameters(uniqueTransition.Parameters);
-                var triggerMemberName = ToTriggerMemberName(uniqueTransition);
+                var genericParameters = _parameterConverter.ToGenericParameters(uniqueTransition.Parameters);
+                var triggerMemberName = _transitionConverter.ToTriggerMemberName(uniqueTransition);
 
                 context.Writer.WriteLine($"{triggerMemberName} = _stateMachine.SetTriggerParameters{genericParameters}(Trigger.{uniqueTransition.Trigger});");
             }
@@ -44,7 +51,7 @@
             }
         }
 
-        private void WriteStateConstructions(WriteContext context)
+        private void WriteStateInstantiations(WriteContext context)
         {
             context.Writer.WriteLine("// Then we need to configure the state machine.");
 
@@ -92,12 +99,12 @@
                 {
                     if (transition.From == transition.To)
                     {
-                        var triggerParameter = ToTriggerParameter(transition);
-                        var genericParameters = ToGenericParameters(transition.Parameters);
-                        var transitionMethodName = ToTransitionMethodName(transition);
+                        var triggerParameter = _transitionConverter.ToTriggerParameter(transition);
+                        var genericParameters = _parameterConverter.ToGenericParameters(transition.Parameters);
+                        var transitionMethodName = _transitionConverter.ToTransitionMethodName(transition);
                         var triggerParameterTypes = string.Join(", ", transition.Parameters.Select(p => p.Type));
                         triggerParameterTypes = transition.Parameters.Any() ? $"{triggerParameterTypes}, " : "";
-                        return $"\t.InternalTransition{(transition.IsAsync ? "Async" : "")}{genericParameters}({triggerParameter}, (Action<{triggerParameterTypes}{StateMachineType}.Transition>){transitionMethodName})";
+                        return $"\t.InternalTransition{(transition.IsAsync ? "Async" : "")}{genericParameters}({triggerParameter}, (Action<{triggerParameterTypes}{SourceGenerator.StateMachineType}.Transition>){transitionMethodName})";
                     }
                     else
                     {
@@ -121,9 +128,9 @@
                 .Where(t => t.From != t.To) // No need to write Entries for the internal transitions again.
                 .Select(transition =>
                 {
-                    var triggerParameter = ToTriggerParameter(transition);
-                    var genericParameters = ToGenericParameters(transition.Parameters);
-                    var transitionMethodName = ToTransitionMethodName(transition);
+                    var triggerParameter = _transitionConverter.ToTriggerParameter(transition);
+                    var genericParameters = _parameterConverter.ToGenericParameters(transition.Parameters);
+                    var transitionMethodName = _transitionConverter.ToTransitionMethodName(transition);
                     return $"\t.OnEntryFrom{(transition.IsAsync ? "Async" : "")}{genericParameters}({triggerParameter}, {transitionMethodName})";
                 })
                 .ToArray();

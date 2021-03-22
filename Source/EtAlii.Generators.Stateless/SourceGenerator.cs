@@ -19,10 +19,32 @@
     /// - Same named triggers with differently named parameters.
     /// </remarks>
     [Generator]
-    public partial class SourceGenerator : ISourceGenerator
+    public class SourceGenerator : ISourceGenerator
     {
+        public const string StateMachineType = "global::Stateless.StateMachine<State, Trigger>";
         public const string BeginStateName = "_Begin";
         public const string EndStateName = "_End";
+
+        private readonly NamespaceWriter _namespaceWriter;
+        private readonly StatelessPlantUmlParser _plantUmlParser;
+        private readonly StatelessPlantUmlValidator _plantUmlValidator;
+        public SourceGenerator()
+        {
+            // Layman's dependency injection:
+            // No need to introduce a whole new package here as it'll only make the analyzer more bloated.
+            // For now the simple composition below also works absolutely fine.
+            var parameterConverter = new ParameterConverter();
+            var transitionConverter = new TransitionConverter(parameterConverter);
+            var enumWriter = new EnumWriter();
+            var methodWriter = new MethodWriter(parameterConverter, transitionConverter);
+            var fieldWriter = new FieldWriter(parameterConverter, transitionConverter);
+            var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter);
+            var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, instantiationWriter);
+            _namespaceWriter = new NamespaceWriter(classWriter);
+
+            _plantUmlParser = new StatelessPlantUmlParser();
+            _plantUmlValidator = new StatelessPlantUmlValidator();
+        }
 
         public void Execute(GeneratorExecutionContext context)
         {
@@ -42,7 +64,7 @@
             foreach(var file in plantUmlFiles)
             {
                 // First thing to do is parse the .puml file and build an in-memory model.
-                if (TryParsePlantUml(file, log, out var stateMachine, out var parseDiagnostics))
+                if (_plantUmlParser.TryParsePlantUml(file, log, out var stateMachine, out var parseDiagnostics))
                 {
                     try
                     {
@@ -62,9 +84,9 @@
                         using var writer = new IndentedTextWriter(stringWriter);
                         var writeContext = CreateWriteContext(writer, originalFileName, log, stateMachine);
 
-                        ValidateStateMachine(writeContext, diagnostics);
+                        _plantUmlValidator.Validate(writeContext, diagnostics);
 
-                        WriteNamespace(writeContext);
+                        _namespaceWriter.Write(writeContext);
 
                         var content = stringWriter.ToString();
                         context.AddSource(fileName, content);
@@ -75,7 +97,7 @@
                         log.Add($"{e.StackTrace}");
 
                         var location = Location.Create(file.Path, new TextSpan(), new LinePositionSpan());
-                        var diagnostic = Diagnostic.Create(_plantUmlStateMachineProcessingThrowsExceptionRule, location, e.Message, e.StackTrace);
+                        var diagnostic = Diagnostic.Create(DiagnosticRule.PlantUmlStateMachineProcessingThrowsException, location, e.Message, e.StackTrace);
                         diagnostics.Add(diagnostic);
                     }
                 }
@@ -94,70 +116,13 @@
             context.AddSource( "Log.txt", string.Join("\n",log));
         }
 
-        private void ValidateStateMachine(WriteContext context, List<Diagnostic> diagnostics)
-        {
-            var startStates = context.AllTransitions
-                .Where(t => t.From == BeginStateName)
-                .ToArray();
-            if (startStates.Length == 0)
-            {
-                var startStatesAsString = string.Join(", ", startStates.Select(s => s.To));
-                var location = Location.Create(context.OriginalFileName, new TextSpan(), new LinePositionSpan());
-                var diagnostic = Diagnostic.Create(_noStartStatesDefinedRule, location, startStatesAsString);
-                diagnostics.Add(diagnostic);
-            }
-
-            var unnamedParameters = context.AllTransitions
-                .Where(t => t.Parameters.Any(p => !p.HasName))
-                .Select(t => t.Parameters.First(p => !p.HasName))
-                .ToArray();
-
-            foreach (var unnamedParameter in unnamedParameters)
-            {
-                // We need to map the Antlr line indexing onto the Roslyn line indexing. They differ.
-                var line = unnamedParameter.Source.Line - 1;
-                var column = unnamedParameter.Source.Column;
-
-                var linePositionStart = new LinePosition(line, column);
-                var linePositionEnd = new LinePosition(line, column);
-                var linePositionSpan = new LinePositionSpan(linePositionStart, linePositionEnd);
-                var textSpan = new TextSpan(column, 0);
-                var location = Location.Create(context.OriginalFileName, textSpan, linePositionSpan);
-
-                var diagnostic = Diagnostic.Create(_unnamedParameterRule, location, unnamedParameter.Source.Text);
-
-                diagnostics.Add(diagnostic);
-            }
-
-            var transitionsWithUnnamedTrigger = context.AllTransitions
-                .Where(t => !t.HasConcreteTriggerName)
-                .ToArray();
-
-            foreach (var transitionWithUnnamedTrigger in transitionsWithUnnamedTrigger)
-            {
-                // We need to map the Antlr line indexing onto the Roslyn line indexing. They differ.
-                var line = transitionWithUnnamedTrigger.Source.Line - 1;
-                var column = transitionWithUnnamedTrigger.Source.Column;
-
-                var linePositionStart = new LinePosition(line, column);
-                var linePositionEnd = new LinePosition(line, column);
-                var linePositionSpan = new LinePositionSpan(linePositionStart, linePositionEnd);
-                var textSpan = new TextSpan(column, 0);
-                var location = Location.Create(context.OriginalFileName, textSpan, linePositionSpan);
-
-                var diagnostic = Diagnostic.Create(_unnamedTriggerRule, location, transitionWithUnnamedTrigger.Source.Text);
-
-                diagnostics.Add(diagnostic);
-            }
-        }
-
         /// <summary>
         /// Create a context with commonly used instances and data that we can easily pass through the whole writing callstack.
         /// </summary>
         private WriteContext CreateWriteContext(IndentedTextWriter writer, string originalFileName, List<string> log, StateMachine stateMachine)
         {
             var allTransitions = stateMachine.StateFragments
-                .OfType<StateTransition>()
+                .OfType<Transition>()
                 .ToArray();
 
             log.Add("Transitions found:");

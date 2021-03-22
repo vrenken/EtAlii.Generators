@@ -1,4 +1,4 @@
-// Copyright (c) Peter Vrenken. All rights reserved. See https://github.com/vrenken/EtAlii.Generators for more information and the license
+// Copyright (c) Peter Vrenken. All rights reserved. See https://github.com/vrenken/EtAlii.Generators for more information and the license.
 
 namespace EtAlii.Generators.Stateless
 {

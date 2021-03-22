@@ -22,8 +22,8 @@ namespace EtAlii.Generators.Stateless
         /// </summary>
         public StateMachine StateMachine { get; }
 
-        public StateTransition[] UniqueParameterTransitions { get; }
-        public StateTransition[] AllTransitions { get; }
+        public Transition[] UniqueParameterTransitions { get; }
+        public Transition[] AllTransitions { get; }
         public string[] AllStates { get; }
         public string[] AllTriggers { get; }
 
@@ -33,8 +33,8 @@ namespace EtAlii.Generators.Stateless
             StateMachine stateMachine,
             string[] allStates,
             string[] allTriggers,
-            StateTransition[] allTransitions,
-            StateTransition[] uniqueParameterTransitions)
+            Transition[] allTransitions,
+            Transition[] uniqueParameterTransitions)
         {
             Writer = writer;
             OriginalFileName = originalFileName;
