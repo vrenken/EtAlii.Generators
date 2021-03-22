@@ -89,7 +89,7 @@
         public override object VisitParameter_type(PlantUmlParser.Parameter_typeContext context)
         {
             var isArray = context.LBRACK() != null;
-            return $"{context.ID().GetText()}{(isArray ? "[]" : "")}";
+            return $"{string.Join(".", context.ID().Select(id => id.GetText()))}{(isArray ? "[]" : "")}";
         }
 
         public override object VisitTrigger_details(PlantUmlParser.Trigger_detailsContext context)
