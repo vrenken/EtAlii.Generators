@@ -58,14 +58,17 @@
         public override object VisitParameters_definition_named(PlantUmlParser.Parameters_definition_namedContext context)
         {
             var parameters = new List<Parameter>();
-            var ids = context.ID();
-            for (var i = 0; i < ids.Length; i += 2)
-            {
-                var type = ids[i];
-                var name = ids[i + 1];
 
-                var position = new SourcePosition(type.Symbol.Line, type.Symbol.Column, type.GetText());
-                parameters.Add(new Parameter(type.GetText(), name.GetText(), position));
+            var types = context.parameter_type();
+            var names = context.ID();
+            for (var i = 0; i < types.Length; i++)
+            {
+                var type = types[i];
+                var typeName = (string)VisitParameter_type(type);
+                var name = names[i];
+
+                var position = new SourcePosition(type.Start.Line, type.Start.Column, type.GetText());
+                parameters.Add(new Parameter(typeName, name.GetText(), position));
             }
 
             return parameters.ToArray();
@@ -74,9 +77,19 @@
         public override object VisitParameters_definition_unnamed(PlantUmlParser.Parameters_definition_unnamedContext context)
         {
             return context
-                .ID()
-                .Select(id => new Parameter(id.GetText(), string.Empty, new SourcePosition(id.Symbol.Line, id.Symbol.Column, id.GetText())))
+                .parameter_type()
+                .Select(type =>
+                {
+                    var typeName = (string)VisitParameter_type(type);
+                    return new Parameter(typeName, string.Empty, new SourcePosition(type.Start.Line, type.Start.Column, type.GetText()));
+                })
                 .ToArray();
+        }
+
+        public override object VisitParameter_type(PlantUmlParser.Parameter_typeContext context)
+        {
+            var isArray = context.LBRACK() != null;
+            return $"{context.ID().GetText()}{(isArray ? "[]" : "")}";
         }
 
         public override object VisitTrigger_details(PlantUmlParser.Trigger_detailsContext context)

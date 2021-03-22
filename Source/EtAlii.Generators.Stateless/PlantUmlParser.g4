@@ -74,8 +74,9 @@ transition_details              : WHITESPACE* trigger_details? COLON WHITESPACE*
 
 trigger_name                    : ID (ID | WHITESPACE | UNDERSCORE)*;
 trigger_details                 : LCHEVR LCHEVR WHITESPACE* (ASYNC WHITESPACE+)? parameters_definition? WHITESPACE* RCHEVR RCHEVR WHITESPACE* ;
-parameters_definition_unnamed   : LPAREN WHITESPACE* ID WHITESPACE* (COMMA WHITESPACE* ID)* WHITESPACE* RPAREN ;
-parameters_definition_named     : LPAREN WHITESPACE* ID WHITESPACE+ ID WHITESPACE* (COMMA WHITESPACE* ID WHITESPACE+ ID)* WHITESPACE* RPAREN ;
+parameter_type                  : ID (LBRACK WHITESPACE* RBRACK)? ;
+parameters_definition_unnamed   : LPAREN WHITESPACE* parameter_type WHITESPACE* (COMMA WHITESPACE* parameter_type)* WHITESPACE* RPAREN ;
+parameters_definition_named     : LPAREN WHITESPACE* parameter_type WHITESPACE+ ID WHITESPACE* (COMMA WHITESPACE* parameter_type WHITESPACE+ ID)* WHITESPACE* RPAREN ;
 parameters_definition
     : parameters_definition_unnamed
     | parameters_definition_named
