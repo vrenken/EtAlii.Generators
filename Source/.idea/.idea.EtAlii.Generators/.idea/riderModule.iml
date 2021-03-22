@@ -8,6 +8,7 @@
     <content url="file://$MODULE_DIR$/../../../.gitignore" />
     <content url="file://$MODULE_DIR$/../../../README.md" />
     <content url="file://$MODULE_DIR$/../.." />
+    <content url="file://$USER_HOME$/.nuget/packages/antlr4.runtime.standard/4.9.2/lib/netstandard2.0/Antlr4.Runtime.Standard.dll" />
     <content url="file://$USER_HOME$/.nuget/packages/microsoft.net.test.sdk/16.9.1/build/netcoreapp2.1" />
     <content url="file://$USER_HOME$/.nuget/packages/microsoft.testplatform.testhost/16.9.1/build/netcoreapp2.1/x64/Microsoft.TestPlatform.PlatformAbstractions.dll" />
     <content url="file://$USER_HOME$/.nuget/packages/microsoft.testplatform.testhost/16.9.1/build/netcoreapp2.1/x64/testhost.dll" />
