@@ -34,8 +34,8 @@ jobs:
         #if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
         shell: powershell
         #dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner --version 5.1.0
+          #New-Item -Path .\.sonar\scanner -ItemType Directory
         run: |
-          New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
       - name: Build and analyze
         env:
