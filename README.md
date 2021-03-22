@@ -27,8 +27,8 @@ The first attempt is to use PlantUML to visually design [Stateless](https://gith
 ## Examples
 
 ### Behavior trees
-[![Nuget](https://img.shields.io/nuget/v/EtAlii.Generators.Stateless)](https://www.nuget.org/packages/EtAlii.Generators.Stateless)
-[![Nuget](https://img.shields.io/nuget/dt/EtAlii.Generators.Stateless)](https://www.nuget.org/packages/EtAlii.Generators.Stateless)
+[![Nuget](https://img.shields.io/nuget/v/EtAlii.Generators.Behavior)](https://www.nuget.org/packages/EtAlii.Generators.Behavior)
+[![Nuget](https://img.shields.io/nuget/dt/EtAlii.Generators.Behavior)](https://www.nuget.org/packages/EtAlii.Generators.Behavior)
 
 Tbd.
 ### EtAlii.Generators.Stateless - PlantUML state diagrams to Stateless state machines
