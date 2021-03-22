@@ -92,6 +92,9 @@
     <Compile Update="SourceGenerator.Namespace.cs">
       <DependentUpon>SourceGenerator.cs</DependentUpon>
     </Compile>
+    <Compile Update="SourceGenerator.Class.cs">
+      <DependentUpon>SourceGenerator.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <Target Name="GetPackageDependencyTargetPaths">
