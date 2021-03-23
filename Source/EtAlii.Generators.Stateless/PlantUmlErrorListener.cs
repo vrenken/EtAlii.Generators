@@ -7,7 +7,7 @@ namespace EtAlii.Generators.Stateless
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Text;
 
-    internal class PlantUmlErrorListener : IAntlrErrorListener<object>
+    public class PlantUmlErrorListener : IAntlrErrorListener<object>
     {
         private readonly string _fileName;
         private readonly DiagnosticDescriptor _invalidPlantUmlStateMachineRule;
