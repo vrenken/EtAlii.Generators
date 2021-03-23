@@ -104,7 +104,10 @@
                         var transitionMethodName = _transitionConverter.ToTransitionMethodName(transition);
                         var triggerParameterTypes = string.Join(", ", transition.Parameters.Select(p => p.Type));
                         triggerParameterTypes = transition.Parameters.Any() ? $"{triggerParameterTypes}, " : "";
-                        return $"\t.InternalTransition{(transition.IsAsync ? "Async" : "")}{genericParameters}({triggerParameter}, (Action<{triggerParameterTypes}{SourceGenerator.StateMachineType}.Transition>){transitionMethodName})";
+                        var methodCast = transition.IsAsync
+                            ? $"(Func<{triggerParameterTypes}{SourceGenerator.StateMachineType}.Transition, Task>)"
+                            : $"(Action<{triggerParameterTypes}{SourceGenerator.StateMachineType}.Transition>)";
+                        return $"\t.InternalTransition{(transition.IsAsync ? "Async" : "")}{genericParameters}({triggerParameter}, {methodCast}{transitionMethodName})";
                     }
                     else
                     {
