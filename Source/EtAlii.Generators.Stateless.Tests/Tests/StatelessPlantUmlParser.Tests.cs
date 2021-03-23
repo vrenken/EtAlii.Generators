@@ -31,10 +31,16 @@
 'stateless generate partial
 'stateless using System.Text
 
+note This is a state machine
+' And this is a comment
+
 [*] -> State1 << (string name) >> : Start
 State1 -> State2 << (string name) >> : Continue
-State2 -> State2 << async (string name) >> : Check
-State2 -up-> State3 : Continue
+State2 -> State2 << async (string[] names) >> : Check
+State2 -up-> State3 << (string) >> : Continue
+State3 -up-> State4 : Continue
+State4 -> [*]
+State4 : This is the final state
 @enduml";
             var file = new TestAdditionalTextFile(text, "Test.puml");
 
