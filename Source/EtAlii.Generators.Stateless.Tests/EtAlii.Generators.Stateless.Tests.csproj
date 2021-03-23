@@ -24,7 +24,7 @@
     <!-- Below is not a normal project reference! It introduces the GCL code-generator. -->
     <ProjectReference Include="..\EtAlii.Generators.Stateless\EtAlii.Generators.Stateless.csproj">
       <PrivateAssets>all</PrivateAssets>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <!-- <ReferenceOutputAssembly>false</ReferenceOutputAssembly> --> <!-- We want to unit test the internals. -->
       <OutputItemType>Analyzer</OutputItemType>
     </ProjectReference>
   </ItemGroup>

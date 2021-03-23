@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    internal class ParameterConverter
+    public class ParameterConverter
     {
         public string ToParameterName(Parameter parameter) => parameter.HasName ? ToPascalCase(parameter.Name) : ToCamelCase(parameter.Type);
 
