@@ -4,7 +4,7 @@ namespace EtAlii.Generators.Stateless
 {
     using System.Linq;
 
-    internal class TransitionConverter
+    public class TransitionConverter
     {
         private readonly ParameterConverter _parameterConverter;
 

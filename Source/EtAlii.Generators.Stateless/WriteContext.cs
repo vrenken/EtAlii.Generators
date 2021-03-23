@@ -5,7 +5,7 @@ namespace EtAlii.Generators.Stateless
     /// <summary>
     /// Use this class to transport actionable instances and data through the callstack of write methods.
     /// </summary>
-    internal class WriteContext
+    public class WriteContext
     {
         /// <summary>
         /// The writer. Everything written using this instance finds its way into a source file.

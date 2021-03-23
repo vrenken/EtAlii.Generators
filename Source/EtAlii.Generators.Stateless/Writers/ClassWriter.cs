@@ -1,6 +1,6 @@
 ﻿namespace EtAlii.Generators.Stateless
 {
-    internal class ClassWriter
+    public class ClassWriter
     {
         private readonly EnumWriter _enumWriter;
         private readonly FieldWriter _fieldWriter;

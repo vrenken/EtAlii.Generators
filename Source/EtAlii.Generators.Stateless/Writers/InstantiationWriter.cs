@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    internal class InstantiationWriter
+    public class InstantiationWriter
     {
         private readonly ParameterConverter _parameterConverter;
         private readonly TransitionConverter _transitionConverter;

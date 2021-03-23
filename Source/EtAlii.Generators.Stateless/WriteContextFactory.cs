@@ -4,7 +4,7 @@ namespace EtAlii.Generators.Stateless
     using System.Collections.Generic;
     using System.Linq;
 
-    internal class WriteContextFactory
+    public class WriteContextFactory
     {
         /// <summary>
         /// Create a context with commonly used instances and data that we can easily pass through the whole writing callstack.

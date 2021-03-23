@@ -1,6 +1,6 @@
 ﻿namespace EtAlii.Generators.Stateless
 {
-    internal class EnumWriter
+    public class EnumWriter
     {
         /// <summary>
         /// Write the state machine internal State enum.

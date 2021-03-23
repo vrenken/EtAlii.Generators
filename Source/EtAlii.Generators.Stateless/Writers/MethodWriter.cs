@@ -3,7 +3,7 @@
     using System;
     using System.Linq;
 
-    internal class MethodWriter
+    public class MethodWriter
     {
         private readonly ParameterConverter _parameterConverter;
         private readonly TransitionConverter _transitionConverter;

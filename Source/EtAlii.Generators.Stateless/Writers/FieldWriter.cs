@@ -2,7 +2,7 @@
 {
     using System.Linq;
 
-    internal class FieldWriter
+    public class FieldWriter
     {
         private readonly ParameterConverter _parameterConverter;
         private readonly TransitionConverter _transitionConverter;
