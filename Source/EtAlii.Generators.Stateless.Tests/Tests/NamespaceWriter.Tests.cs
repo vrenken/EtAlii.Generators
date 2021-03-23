@@ -42,7 +42,7 @@
             var originalFileName = "Test.puml";
             var log = new List<string>();
 
-            var headers = new Header[]
+            var headers = new[]
             {
                 new Header("This is a stub header")
             };
@@ -56,8 +56,8 @@
 
             var fragments = new StateFragment[]
             {
-                new Transition("First", "Second", new TransitionDetails("Continue", false, Array.Empty<Parameter>(), true), new SourcePosition(0,0, "")),
-                new Transition("Second", "Third", new TransitionDetails("Continue", false, Array.Empty<Parameter>(), true), new SourcePosition(0,0, ""))
+                new Transition("First", "Second", new TransitionDetails("Continue", false, Array.Empty<Parameter>(), true), new SourcePosition(1,0, "")),
+                new Transition("Second", "Third", new TransitionDetails("Continue", false, Array.Empty<Parameter>(), true), new SourcePosition(2,0, ""))
             };
 
             var stateMachine = new StateMachine(headers, settings, fragments);

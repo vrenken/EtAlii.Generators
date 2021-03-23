@@ -11,7 +11,7 @@ namespace EtAlii.Generators.Stateless
     /// The central class responsible of validating both the PlantUML and Stateless specific requirements
     /// and express them using Roslyn Diagnostic instances.
     /// </summary>
-    internal class StatelessPlantUmlValidator
+    public class StatelessPlantUmlValidator
     {
         public void Validate(WriteContext context, List<Diagnostic> diagnostics)
         {
