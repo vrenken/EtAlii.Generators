@@ -10,7 +10,8 @@
 
 START                                               : '@startuml';
 END                                                 : '@enduml';
-NOTE                                                : 'note';
+NOTE_START                                          : 'note';
+NOTE_END                                            : 'end note';
 TITLE                                               : 'title';
 ASYNC                                               : 'async';
 AS                                                  : 'as';

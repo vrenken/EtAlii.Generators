@@ -68,6 +68,14 @@
 
             WriteOutboundTransitions(context, state, stateConfiguration);
 
+            var superState = context.StateMachine.StateFragments
+                .OfType<SuperState>()
+                .SingleOrDefault(s => s.StateFragments.OfType<Transition>().Any(t => t.To == state));
+            if (superState != null)
+            {
+                context.Writer.WriteLine($"\t.SubstateOf(State.{superState.Name})");
+            }
+
             stateConfiguration.Add($"\t.OnEntry(On{state}Entered)");
             stateConfiguration.Add($"\t.OnExit(On{state}Exited)");
 
