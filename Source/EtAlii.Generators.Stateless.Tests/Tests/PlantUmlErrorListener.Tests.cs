@@ -24,7 +24,7 @@
             // Arrange.
             var fileName = "Test.puml";
             var listener = new PlantUmlErrorListener(fileName, DiagnosticRule.InvalidPlantUmlStateMachine);
-            var writer = new StringWriter();
+            using var writer = new StringWriter();
 
             // Act.
             listener.SyntaxError(writer, null, null, 1, 2, "Test exception", null);
