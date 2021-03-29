@@ -71,25 +71,7 @@
             var allStates = StateFragment.GetAllStates(context.StateMachine.StateFragments);
             foreach (var state in allStates)
             {
-                context.Writer.WriteLine("/// <summary>");
-                context.Writer.WriteLine($"/// Implement this method to handle the entry of the '{state}' state.");
-                context.Writer.WriteLine("/// </summary>");
-                context.Writer.WriteLine($"protected virtual void On{state}Entered()");
-                context.Writer.WriteLine("{");
-                context.Writer.Indent += 1;
-                context.Writer.Indent -= 1;
-                context.Writer.WriteLine("}");
-                context.Writer.WriteLine();
-
-                context.Writer.WriteLine("/// <summary>");
-                context.Writer.WriteLine($"/// Implement this method to handle the exit of the '{state}' state.");
-                context.Writer.WriteLine("/// </summary>");
-                context.Writer.WriteLine($"protected virtual void On{state}Exited()");
-                context.Writer.WriteLine("{");
-                context.Writer.Indent += 1;
-                context.Writer.Indent -= 1;
-                context.Writer.WriteLine("}");
-                context.Writer.WriteLine();
+                WriteEntryAndExitMethods(context, state);
 
                 var allTransitions = StateFragment.GetAllTransitions(context.StateMachine.StateFragments);
                 var uniqueTransitions = allTransitions
@@ -102,6 +84,57 @@
 
                 WriteInboundTransitionMethodsForState(context, uniqueTransitions, state);
             }
+        }
+
+        private void WriteEntryAndExitMethods(WriteContext context, string state)
+        {
+            var inboundTransitions = StateFragment.GetInboundTransitions(context.StateMachine.StateFragments, state);
+            var writeAsyncEntryMethod = inboundTransitions.All(t => t.IsAsync) && state != SourceGenerator.BeginStateName && state != SourceGenerator.EndStateName;
+            var entryMethodName = writeAsyncEntryMethod ? $"On{state}EnteredAsync" : $"On{state}Entered";
+
+            context.Writer.WriteLine("/// <summary>");
+            context.Writer.WriteLine($"/// Implement this method to handle the entry of the '{state}' state.");
+            if (writeAsyncEntryMethod)
+            {
+                context.Writer.WriteLine("/// <remark>");
+                context.Writer.WriteLine("/// This method is configured to return a task because all transitions are marked to be called asynchronous.");
+                context.Writer.WriteLine("/// </remark>");
+            }
+            context.Writer.WriteLine("/// </summary>");
+            context.Writer.WriteLine($"protected virtual {(writeAsyncEntryMethod ? "Task" : "void")} {entryMethodName}()");
+            context.Writer.WriteLine("{");
+            context.Writer.Indent += 1;
+            if (writeAsyncEntryMethod)
+            {
+                context.Writer.WriteLine("return Task.CompletedTask;");
+            }
+            context.Writer.Indent -= 1;
+            context.Writer.WriteLine("}");
+            context.Writer.WriteLine();
+
+            var outboundTransitions = StateFragment.GetOutboundTransitions(context.StateMachine.StateFragments, state);
+            var writeAsyncExitMethod = outboundTransitions.All(t => t.IsAsync) && state != SourceGenerator.BeginStateName && state != SourceGenerator.EndStateName;
+            var exitMethodName = writeAsyncExitMethod ? $"On{state}ExitedAsync" : $"On{state}Exited";
+
+            context.Writer.WriteLine("/// <summary>");
+            context.Writer.WriteLine($"/// Implement this method to handle the exit of the '{state}' state.");
+            if (writeAsyncEntryMethod)
+            {
+                context.Writer.WriteLine("/// <remark>");
+                context.Writer.WriteLine("/// This method is configured to return a task because all transitions are marked to be called asynchronous.");
+                context.Writer.WriteLine("/// </remark>");
+            }
+            context.Writer.WriteLine("/// </summary>");
+            context.Writer.WriteLine($"protected virtual {(writeAsyncExitMethod ? "Task" : "void")} {exitMethodName}()");
+            context.Writer.WriteLine("{");
+            context.Writer.Indent += 1;
+            if (writeAsyncExitMethod)
+            {
+                context.Writer.WriteLine("return Task.CompletedTask;");
+            }
+            context.Writer.Indent -= 1;
+            context.Writer.WriteLine("}");
+            context.Writer.WriteLine();
         }
 
         private void WriteInboundTransitionMethodsForState(WriteContext context, Transition[] uniqueTransitions, string state)

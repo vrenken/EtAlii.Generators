@@ -9,12 +9,21 @@ namespace EtAlii.Generators.Stateless
         {
             return GetAllTransitions(fragments)
                 .Where(t => t.From == state)
+                .Where(t => t.From != t.To)
                 .ToArray();
         }
         public static Transition[] GetInboundTransitions(StateFragment[] fragments, string state)
         {
             return GetAllTransitions(fragments)
                 .Where(t => t.To == state)
+                .Where(t => t.From != t.To)
+                .ToArray();
+        }
+
+        public static Transition[] GetInternalTransitions(StateFragment[] fragments, string state)
+        {
+            return GetAllTransitions(fragments)
+                .Where(t => t.To == state && t.To == t.From)
                 .ToArray();
         }
 

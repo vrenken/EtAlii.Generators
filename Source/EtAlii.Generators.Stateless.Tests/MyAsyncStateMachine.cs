@@ -5,16 +5,29 @@ namespace EtAlii.Generators.Stateless.Tests
 
     public class MyAsyncStateMachine : MyAsyncStateMachineBase
     {
-        protected override void OnState1Entered() => Console.WriteLine("State1 entered");
+        protected override Task OnState1EnteredAsync()
+        {
+            Console.WriteLine("State1 entered");
+            return Task.CompletedTask;
+        }
+
         protected override async Task OnState1EnteredFromStartTrigger(string name)
         {
             Console.WriteLine($"Name: {name}");
             await ContinueAsync().ConfigureAwait(false);
         }
 
-        protected override void OnState1Exited() => Console.WriteLine("State1 exited");
+        protected override Task OnState1ExitedAsync()
+        {
+            Console.WriteLine("State1 exited");
+            return Task.CompletedTask;
+        }
 
-        protected override void OnState2Entered() => Console.WriteLine("State2 entered");
+        protected override Task OnState2EnteredAsync()
+        {
+            Console.WriteLine("State2 entered");
+            return Task.CompletedTask;
+        }
 
         protected override Task OnState2EnteredFromContinueTrigger()
         {
@@ -25,10 +38,20 @@ namespace EtAlii.Generators.Stateless.Tests
 
         protected override void OnState2Exited() => Console.WriteLine("State2 exited");
 
-        protected override void OnState3Entered() => Console.WriteLine("State3 entered");
+        protected override Task OnState3EnteredAsync()
+        {
+            Console.WriteLine("State3 entered");
+            return Task.CompletedTask;
+        }
+
         protected override void OnState3Exited() => Console.WriteLine("State3 exited");
 
         protected override void OnState4Entered() => Console.WriteLine("State4 entered");
-        protected override void OnState4Exited() => Console.WriteLine("State4 exited");
+
+        protected override Task OnState4ExitedAsync()
+        {
+            Console.WriteLine("State4 exited");
+            return Task.CompletedTask;
+        }
     }
 }
