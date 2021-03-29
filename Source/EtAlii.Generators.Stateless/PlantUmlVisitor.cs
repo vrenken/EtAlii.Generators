@@ -246,16 +246,23 @@
 
         public override object VisitStates_description(PlantUmlParser.States_descriptionContext context) => new StateDescription((string)VisitId(context.id()), context.text?.Text ?? string.Empty);
 
-        public override object VisitState_definition(PlantUmlParser.State_definitionContext context)
+        public override object VisitState_definition_no_substates(PlantUmlParser.State_definition_no_substatesContext context)
+        {
+            var name = (string)VisitId(context.name);
+            var position = SourcePosition.FromContext(context);
+            return new SuperState(name, Array.Empty<StateFragment>(), position);
+        }
+
+        public override object VisitState_definition_with_substates(PlantUmlParser.State_definition_with_substatesContext context)
         {
             var name = (string)VisitId(context.name);
             var stateFragments = context
-                .states()
+                .states()?
                 .Select(Visit)
                 .OfType<StateFragment>()
-                .ToArray();
+                .ToArray() ?? Array.Empty<StateFragment>();
 
-            var position = SourcePosition.FromContext(context);
+            var position = SourcePosition.FromContext(context.name);
             return new SuperState(name, stateFragments, position);
         }
     }

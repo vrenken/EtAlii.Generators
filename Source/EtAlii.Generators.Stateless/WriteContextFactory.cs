@@ -11,10 +11,7 @@ namespace EtAlii.Generators.Stateless
         /// </summary>
         public WriteContext Create(IndentedTextWriter writer, string originalFileName, List<string> log, StateMachine stateMachine)
         {
-            var allTransitions = stateMachine.StateFragments
-                .OfType<Transition>()
-                .ToArray();
-
+            var allTransitions = StateFragment.GetAllTransitions(stateMachine.StateFragments);
             log.Add("Transitions found:");
             log.AddRange(allTransitions.Select(t =>
             {
@@ -29,26 +26,13 @@ namespace EtAlii.Generators.Stateless
                 return $"- {t.From} -> {t.To}{stereoType}: {t.Trigger}";
             }));
 
-            // We want to know all unique states defined in the diagram.
-            var transitionStates = allTransitions.SelectMany(t => new[] { t.From, t.To });
-            var descriptionStates = stateMachine.StateFragments.OfType<StateDescription>().SelectMany(t => new[] { t.State });
-            var allStates = transitionStates
-                .Concat(descriptionStates)
-                .Where(s => s != null)
-                .OrderBy(s => s)
-                .Distinct() // That is, of course without any doubles.
-                .ToArray();
-
+            // We want to dump all unique states defined in the diagram.
+            var allStates = StateFragment.GetAllStates(stateMachine.StateFragments);
             log.Add("States found:");
             log.AddRange(allStates.Select(s => $"- {s}"));
 
-            // We want to know all unique triggers defined in the diagram.
-            var transitionTriggers = allTransitions.Select(t => t.Trigger);
-            var allTriggers = transitionTriggers
-                .OrderBy(t => t)
-                .Distinct() // That is, of course without any doubles.
-                .ToArray();
-
+            // We want to also dump all unique triggers defined in the diagram.
+            var allTriggers = StateFragment.GetAllTriggers(stateMachine.StateFragments);
             log.Add("Triggers found:");
             log.AddRange(allTriggers.Select(t => $"- {t}"));
 
@@ -60,7 +44,7 @@ namespace EtAlii.Generators.Stateless
                 .Select(g => g.First().Transition)
                 .ToArray();
 
-            return new WriteContext(writer, originalFileName, stateMachine, allStates, allTriggers, allTransitions, uniqueParameterTransitions);
+            return new WriteContext(writer, originalFileName, stateMachine, uniqueParameterTransitions);
         }
     }
 }

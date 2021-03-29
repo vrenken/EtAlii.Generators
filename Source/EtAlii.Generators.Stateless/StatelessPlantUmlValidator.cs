@@ -15,57 +15,116 @@ namespace EtAlii.Generators.Stateless
     {
         public void Validate(WriteContext context, List<Diagnostic> diagnostics)
         {
-            var startStates = context.AllTransitions
-                .Where(t => t.From == SourceGenerator.BeginStateName)
-                .ToArray();
-            if (startStates.Length == 0)
+            CheckForStartStates(context, diagnostics);
+
+            CheckForUnnamedParameters(context, diagnostics);
+
+            CheckForUnnamedTriggers(context, diagnostics);
+
+            CheckSubstatesEntryTransition(context, diagnostics);
+        }
+
+        private void CheckSubstatesEntryTransition(WriteContext context, List<Diagnostic> diagnostics)
+        {
+            var superStates = StateFragment.GetAllSuperStates(context.StateMachine.StateFragments);
+            foreach (var superState in superStates)
             {
-                var startStatesAsString = string.Join(", ", startStates.Select(s => s.To));
-                var location = Location.Create(context.OriginalFileName, new TextSpan(), new LinePositionSpan());
-                var diagnostic = Diagnostic.Create(DiagnosticRule.NoStartStatesDefined, location, startStatesAsString);
+                var allSubstates = StateFragment.GetAllStates(superState.StateFragments);
+                var allSubTransitions = StateFragment.GetAllTransitions(superState.StateFragments);
+                var allTransitions = StateFragment.GetAllTransitions(context.StateMachine.StateFragments);
+
+                var directTransitionsToSubState = allTransitions
+                    .Where(t => !allSubTransitions.Contains(t))
+                    .Where(t => allSubstates.Contains(t.To))
+                    .ToArray();
+
+                var transitionsToSuperState = allTransitions
+                    .Where(t => t.To == superState.Name)
+                    .ToArray();
+
+                var superStateStartTransitions = superState.StateFragments
+                    .OfType<Transition>()
+                    .Where(t => t.From != t.To && t.From == SourceGenerator.BeginStateName)
+                    .ToArray();
+
+                var namedSuperStateStartTransitions = superStateStartTransitions
+                    .Where(t => t.HasConcreteTriggerName)
+                    .ToArray();
+
+                var unnamedSuperStateStartTransitions = superStateStartTransitions
+                    .Where(t => !t.HasConcreteTriggerName)
+                    .ToArray();
+
+                if (!transitionsToSuperState.Any() && !directTransitionsToSubState.Any())
+                {
+                    // The superstate is not being used. Let's not throw a warning/error for now.
+                }
+
+                // UNNAMED+ DIRECT+ => No can do
+                if (unnamedSuperStateStartTransitions.Any() && directTransitionsToSubState.Any())
+                {
+                    // As we cannot guarantee an adequate sequential order of execution we don't support both unnamed start transitions and direct substate transitions.
+                    var location = superState.Source.ToLocation(context.OriginalFileName);
+                    var diagnostic = Diagnostic.Create(DiagnosticRule.SuperstateHasBothUnnamedAndDirectTransitionsDefined, location, superState.Source.Text);
+                    diagnostics.Add(diagnostic);
+                }
+
+                // ~NAMED UNNAMED+ ~DIRECT
+                if (!namedSuperStateStartTransitions.Any() && unnamedSuperStateStartTransitions.Any() && !directTransitionsToSubState.Any())
+                {
+                    if (unnamedSuperStateStartTransitions.Length > 1)
+                    {
+                        var location = superState.Source.ToLocation(context.OriginalFileName);
+                        var diagnostic = Diagnostic.Create(DiagnosticRule.SuperstateHasMultipleUnnamedStartTransitionsDefined, location, superState.Source.Text);
+                        diagnostics.Add(diagnostic);
+                    }
+                }
+            }
+        }
+
+        private static void CheckForUnnamedTriggers(WriteContext context, List<Diagnostic> diagnostics)
+        {
+            var allTransitions = StateFragment.GetAllTransitions(context.StateMachine.StateFragments);
+            var transitionsWithUnnamedTrigger = allTransitions
+                .Where(t => !t.HasConcreteTriggerName)
+                .ToArray();
+
+            foreach (var transitionWithUnnamedTrigger in transitionsWithUnnamedTrigger)
+            {
+                var location = transitionWithUnnamedTrigger.Source.ToLocation(context.OriginalFileName);
+                var diagnostic = Diagnostic.Create(DiagnosticRule.UnnamedTrigger, location, transitionWithUnnamedTrigger.Source.Text);
+
                 diagnostics.Add(diagnostic);
             }
+        }
 
-            var unnamedParameters = context.AllTransitions
+        private static void CheckForUnnamedParameters(WriteContext context, List<Diagnostic> diagnostics)
+        {
+            var allTransitions = StateFragment.GetAllTransitions(context.StateMachine.StateFragments);
+            var unnamedParameters = allTransitions
                 .Where(t => t.Parameters.Any(p => !p.HasName))
                 .Select(t => t.Parameters.First(p => !p.HasName))
                 .ToArray();
 
             foreach (var unnamedParameter in unnamedParameters)
             {
-                // We need to map the Antlr line indexing onto the Roslyn line indexing. They differ.
-                var line = unnamedParameter.Source.Line - 1;
-                var column = unnamedParameter.Source.Column;
-
-                var linePositionStart = new LinePosition(line, column);
-                var linePositionEnd = new LinePosition(line, column);
-                var linePositionSpan = new LinePositionSpan(linePositionStart, linePositionEnd);
-                var textSpan = new TextSpan(column, 0);
-                var location = Location.Create(context.OriginalFileName, textSpan, linePositionSpan);
-
+                var location = unnamedParameter.Source.ToLocation(context.OriginalFileName);
                 var diagnostic = Diagnostic.Create(DiagnosticRule.UnnamedParameter, location, unnamedParameter.Source.Text);
 
                 diagnostics.Add(diagnostic);
             }
+        }
 
-            var transitionsWithUnnamedTrigger = context.AllTransitions
-                .Where(t => !t.HasConcreteTriggerName)
+        private static void CheckForStartStates(WriteContext context, List<Diagnostic> diagnostics)
+        {
+            var allTransitions = StateFragment.GetAllTransitions(context.StateMachine.StateFragments);
+            var startStates = allTransitions
+                .Where(t => t.From == SourceGenerator.BeginStateName)
                 .ToArray();
-
-            foreach (var transitionWithUnnamedTrigger in transitionsWithUnnamedTrigger)
+            if (startStates.Length == 0)
             {
-                // We need to map the Antlr line indexing onto the Roslyn line indexing. They differ.
-                var line = transitionWithUnnamedTrigger.Source.Line - 1;
-                var column = transitionWithUnnamedTrigger.Source.Column;
-
-                var linePositionStart = new LinePosition(line, column);
-                var linePositionEnd = new LinePosition(line, column);
-                var linePositionSpan = new LinePositionSpan(linePositionStart, linePositionEnd);
-                var textSpan = new TextSpan(column, 0);
-                var location = Location.Create(context.OriginalFileName, textSpan, linePositionSpan);
-
-                var diagnostic = Diagnostic.Create(DiagnosticRule.UnnamedTrigger, location, transitionWithUnnamedTrigger.Source.Text);
-
+                var location = Location.Create(context.OriginalFileName, new TextSpan(), new LinePositionSpan());
+                var diagnostic = Diagnostic.Create(DiagnosticRule.NoStartStatesDefined, location);
                 diagnostics.Add(diagnostic);
             }
         }

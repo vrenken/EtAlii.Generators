@@ -65,5 +65,46 @@ namespace EtAlii.Generators.Stateless
             defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true
         );
+
+        public static readonly DiagnosticDescriptor SuperstateHasNoStartOrEntryTransitionDefined = new
+        (
+            id: "SL1007",
+            title: "Superstate has no start or entry transitions defined",
+            messageFormat: "Superstate {0} has no start or entry transition defined",
+            category: "Code-Gen",
+            defaultSeverity: DiagnosticSeverity.Warning,
+            isEnabledByDefault: true
+        );
+
+        public static readonly DiagnosticDescriptor SuperstateHasNoStopOrExitTransitionDefined = new
+        (
+            id: "SL1008",
+            title: "Superstate has no stop or exit transitions defined",
+            messageFormat: "Superstate {0} has no stop or exit transition defined",
+            category: "Code-Gen",
+            defaultSeverity: DiagnosticSeverity.Warning,
+            isEnabledByDefault: true
+        );
+
+        public static readonly DiagnosticDescriptor SuperstateHasBothUnnamedAndDirectTransitionsDefined = new
+        (
+            id: "SL1009",
+            title: "Superstate has both unnamed start transitions as well as direct substate transitions defined",
+            messageFormat: "Superstate {0} has both unnamed start transitions as well as direct substate transitions defined",
+            category: "Code-Gen",
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true
+        );
+
+        public static readonly DiagnosticDescriptor SuperstateHasMultipleUnnamedStartTransitionsDefined = new
+        (
+            id: "SL1010",
+            title: "Superstate can only have one single unnamed start transition defined",
+            messageFormat: "Superstate {0} can only have one single unnamed start transition defined",
+            category: "Code-Gen",
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true
+        );
+
     }
 }

@@ -23,25 +23,16 @@ namespace EtAlii.Generators.Stateless
         public StateMachine StateMachine { get; }
 
         public Transition[] UniqueParameterTransitions { get; }
-        public Transition[] AllTransitions { get; }
-        public string[] AllStates { get; }
-        public string[] AllTriggers { get; }
 
         public WriteContext(
             IndentedTextWriter writer,
             string originalFileName,
             StateMachine stateMachine,
-            string[] allStates,
-            string[] allTriggers,
-            Transition[] allTransitions,
             Transition[] uniqueParameterTransitions)
         {
             Writer = writer;
             OriginalFileName = originalFileName;
             StateMachine = stateMachine;
-            AllStates = allStates;
-            AllTriggers = allTriggers;
-            AllTransitions = allTransitions;
             UniqueParameterTransitions = uniqueParameterTransitions;
         }
     }

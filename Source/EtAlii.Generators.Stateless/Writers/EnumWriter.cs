@@ -12,7 +12,8 @@
             context.Writer.WriteLine("{");
             context.Writer.Indent += 1;
 
-            foreach (var state in context.AllStates)
+            var allStates = StateFragment.GetAllStates(context.StateMachine.StateFragments);
+            foreach (var state in allStates)
             {
                 context.Writer.WriteLine($"{state},");
             }
@@ -31,7 +32,8 @@
             context.Writer.WriteLine("{");
             context.Writer.Indent += 1;
 
-            foreach (var trigger in context.AllTriggers)
+            var allTriggers = StateFragment.GetAllTriggers(context.StateMachine.StateFragments);
+            foreach (var trigger in allTriggers)
             {
                 context.Writer.WriteLine($"{trigger},");
             }

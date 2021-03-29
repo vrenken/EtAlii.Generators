@@ -55,7 +55,8 @@
         {
             context.Writer.WriteLine("// Then we need to configure the state machine.");
 
-            foreach (var state in context.AllStates)
+            var allStates = StateFragment.GetAllStates(context.StateMachine.StateFragments);
+            foreach (var state in allStates)
             {
                 WriteStateConstruction(context, state);
             }
@@ -96,9 +97,7 @@
 
         private void WriteOutboundTransitions(WriteContext context, string state, List<string> stateConfiguration)
         {
-            var outboundTransitions = context.AllTransitions
-                .Where(t => t.From == state)
-                .ToArray();
+            var outboundTransitions =StateFragment.GetOutboundTransitions(context.StateMachine.StateFragments, state);
 
             var lines = outboundTransitions
                 .GroupBy(t => t.Trigger)
@@ -129,9 +128,7 @@
 
         private void WriteInboundTransitions(WriteContext context, string state, List<string> stateConfiguration)
         {
-            var inboundTransitions = context.AllTransitions
-                .Where(t => t.To == state)
-                .ToArray();
+            var inboundTransitions = StateFragment.GetInboundTransitions(context.StateMachine.StateFragments, state);
 
             var lines = inboundTransitions
                 .GroupBy(t => t.Trigger)
