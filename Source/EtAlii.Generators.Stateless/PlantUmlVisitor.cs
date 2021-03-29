@@ -29,7 +29,9 @@
             return new StateMachine(realHeaders, settings, stateFragments);
         }
 
-        public override object VisitStateless_setting_class(PlantUmlParser.Stateless_setting_classContext context) => new ClassNameSetting(context.name.Text);
+        public override object VisitId(PlantUmlParser.IdContext context) => context.GetText();
+
+        public override object VisitStateless_setting_class(PlantUmlParser.Stateless_setting_classContext context) => new ClassNameSetting((string)VisitId(context.name));
         public override object VisitStateless_setting_generate_partial(PlantUmlParser.Stateless_setting_generate_partialContext context) => new GeneratePartialClassSetting(true);
         public override object VisitStateless_setting_namespace(PlantUmlParser.Stateless_setting_namespaceContext context) => new NamespaceSetting(context.@namespace().GetText());
         public override object VisitStateless_setting_using(PlantUmlParser.Stateless_setting_usingContext context) => new UsingSetting(context.@namespace().GetText());
@@ -60,15 +62,15 @@
             var parameters = new List<Parameter>();
 
             var types = context.parameter_type();
-            var names = context.ID();
+            var names = context.id();
             for (var i = 0; i < types.Length; i++)
             {
                 var type = types[i];
                 var typeName = (string)VisitParameter_type(type);
-                var name = names[i];
+                var name = (string)VisitId(names[i]);
 
-                var position = new SourcePosition(type.Start.Line, type.Start.Column, type.GetText());
-                parameters.Add(new Parameter(typeName, name.GetText(), position));
+                var position = SourcePosition.FromContext(type);
+                parameters.Add(new Parameter(typeName, name, position));
             }
 
             return parameters.ToArray();
@@ -81,7 +83,8 @@
                 .Select(type =>
                 {
                     var typeName = (string)VisitParameter_type(type);
-                    return new Parameter(typeName, string.Empty, new SourcePosition(type.Start.Line, type.Start.Column, type.GetText()));
+                    var position = SourcePosition.FromContext(type);
+                    return new Parameter(typeName, string.Empty, position);
                 })
                 .ToArray();
         }
@@ -89,7 +92,7 @@
         public override object VisitParameter_type(PlantUmlParser.Parameter_typeContext context)
         {
             var isArray = context.LBRACK() != null;
-            return $"{string.Join(".", context.ID().Select(id => id.GetText()))}{(isArray ? "[]" : "")}";
+            return $"{string.Join(".", context.id().Select(id => (string)VisitId(id)))}{(isArray ? "[]" : "")}";
         }
 
         public override object VisitTrigger_details(PlantUmlParser.Trigger_detailsContext context)
@@ -109,7 +112,7 @@
         public override object VisitStates_transition_from_to(PlantUmlParser.States_transition_from_toContext context)
         {
             TransitionDetails transitionDetails;
-            var fallbackTriggerName = $"{context.from.Text}To{context.to.Text}";
+            var fallbackTriggerName = $"{(string)VisitId(context.from)}To{(string)VisitId(context.to)}";
 
             var transitionDetailsContext = context.transition_details();
             if (transitionDetailsContext != null)
@@ -124,14 +127,14 @@
             {
                 transitionDetails = new TransitionDetails(fallbackTriggerName, false, Array.Empty<Parameter>(), false);
             }
-            var position = new SourcePosition(context.Start.Line, context.Start.Column, context.GetText());
-            return new Transition(context.from.Text, context.to.Text, transitionDetails, position);
+            var position = SourcePosition.FromContext(context);
+            return new Transition((string)VisitId(context.from), (string)VisitId(context.to), transitionDetails, position);
         }
 
         public override object VisitStates_transition_to_from(PlantUmlParser.States_transition_to_fromContext context)
         {
             TransitionDetails transitionDetails;
-            var fallbackTriggerName = $"{context.from.Text}To{context.to.Text}";
+            var fallbackTriggerName = $"{(string)VisitId(context.from)}To{(string)VisitId(context.to)}";
 
             var transitionDetailsContext = context.transition_details();
             if (transitionDetailsContext != null)
@@ -146,14 +149,14 @@
             {
                 transitionDetails = new TransitionDetails(fallbackTriggerName, false, Array.Empty<Parameter>(), false);
             }
-            var position = new SourcePosition(context.Start.Line, context.Start.Column, context.GetText());
-            return new Transition(context.from.Text, context.to.Text, transitionDetails, position);
+            var position = SourcePosition.FromContext(context);
+            return new Transition((string)VisitId(context.from), (string)VisitId(context.to), transitionDetails, position);
         }
 
         public override object VisitStates_transition_start_to(PlantUmlParser.States_transition_start_toContext context)
         {
             TransitionDetails transitionDetails;
-            var fallbackTriggerName = $"StartTo{context.to.Text}";
+            var fallbackTriggerName = $"StartTo{(string)VisitId(context.to)}";
 
             var transitionDetailsContext = context.transition_details();
             if (transitionDetailsContext != null)
@@ -168,14 +171,14 @@
             {
                 transitionDetails = new TransitionDetails(fallbackTriggerName, false, Array.Empty<Parameter>(), false);
             }
-            var position = new SourcePosition(context.Start.Line, context.Start.Column, context.GetText());
-            return new Transition(SourceGenerator.BeginStateName, context.to.Text, transitionDetails, position);
+            var position = SourcePosition.FromContext(context);
+            return new Transition(SourceGenerator.BeginStateName, (string)VisitId(context.to), transitionDetails, position);
         }
 
         public override object VisitStates_transition_to_start(PlantUmlParser.States_transition_to_startContext context)
         {
             TransitionDetails transitionDetails;
-            var fallbackTriggerName = $"StartTo{context.to.Text}";
+            var fallbackTriggerName = $"StartTo{(string)VisitId(context.to)}";
 
             var transitionDetailsContext = context.transition_details();
             if (transitionDetailsContext != null)
@@ -191,14 +194,14 @@
                 transitionDetails = new TransitionDetails(fallbackTriggerName, false, Array.Empty<Parameter>(), false);
             }
 
-            var position = new SourcePosition(context.Start.Line, context.Start.Column, context.GetText());
-            return new Transition(SourceGenerator.BeginStateName, context.to.Text, transitionDetails, position);
+            var position = SourcePosition.FromContext(context);
+            return new Transition(SourceGenerator.BeginStateName, (string)VisitId(context.to), transitionDetails, position);
         }
 
         public override object VisitStates_transition_from_end(PlantUmlParser.States_transition_from_endContext context)
         {
             TransitionDetails transitionDetails;
-            var fallbackTriggerName = $"{context.from.Text}ToEnd";
+            var fallbackTriggerName = $"{(string)VisitId(context.from)}ToEnd";
 
             var transitionDetailsContext = context.transition_details();
             if (transitionDetailsContext != null)
@@ -214,14 +217,14 @@
                 transitionDetails = new TransitionDetails(fallbackTriggerName, false, Array.Empty<Parameter>(), false);
             }
 
-            var position = new SourcePosition(context.Start.Line, context.Start.Column, context.GetText());
-            return new Transition(context.from.Text, SourceGenerator.EndStateName, transitionDetails, position);
+            var position = SourcePosition.FromContext(context);
+            return new Transition((string)VisitId(context.from), SourceGenerator.EndStateName, transitionDetails, position);
         }
 
         public override object VisitStates_transition_end_from(PlantUmlParser.States_transition_end_fromContext context)
         {
             TransitionDetails transitionDetails;
-            var fallbackTriggerName = $"{context.from.Text}ToEnd";
+            var fallbackTriggerName = $"{(string)VisitId(context.from)}ToEnd";
 
             var transitionDetailsContext = context.transition_details();
             if (transitionDetailsContext != null)
@@ -237,22 +240,23 @@
                 transitionDetails = new TransitionDetails(fallbackTriggerName, false, Array.Empty<Parameter>(), false);
             }
 
-            var position = new SourcePosition(context.Start.Line, context.Start.Column, context.GetText());
-            return new Transition(context.from.Text, SourceGenerator.EndStateName, transitionDetails, position);
+            var position = SourcePosition.FromContext(context);
+            return new Transition((string)VisitId(context.from), SourceGenerator.EndStateName, transitionDetails, position);
         }
 
-        public override object VisitStates_description(PlantUmlParser.States_descriptionContext context) => new StateDescription(context.ID().GetText(), context.text?.Text ?? string.Empty);
+        public override object VisitStates_description(PlantUmlParser.States_descriptionContext context) => new StateDescription((string)VisitId(context.id()), context.text?.Text ?? string.Empty);
 
         public override object VisitState_definition(PlantUmlParser.State_definitionContext context)
         {
-            var name = context.name.Text;
+            var name = (string)VisitId(context.name);
             var stateFragments = context
                 .states()
                 .Select(Visit)
                 .OfType<StateFragment>()
                 .ToArray();
 
-            return new SuperState(name, stateFragments);
+            var position = SourcePosition.FromContext(context);
+            return new SuperState(name, stateFragments, position);
         }
     }
 }

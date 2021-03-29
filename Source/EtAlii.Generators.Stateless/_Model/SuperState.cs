@@ -5,10 +5,16 @@ namespace EtAlii.Generators.Stateless
         public string Name { get; }
         public StateFragment[] StateFragments { get; }
 
-        public SuperState(string name, StateFragment[] stateFragments)
+        public SourcePosition Source { get; }
+
+        public SuperState(
+            string name,
+            StateFragment[] stateFragments,
+            SourcePosition source)
         {
             Name = name;
             StateFragments = stateFragments;
+            Source = source;
         }
     }
 }

@@ -28,9 +28,9 @@ header_lines
     | header_title
     ;
 
-namespace                          : ID (DOT ID)*;
+namespace                          : id (DOT id)*;
 stateless_setting_namespace        : STATELESS_SETTING_NAMESPACE WHITESPACE+ namespace;
-stateless_setting_class            : STATELESS_SETTING_CLASS WHITESPACE+ name=ID;
+stateless_setting_class            : STATELESS_SETTING_CLASS WHITESPACE+ name=id;
 stateless_setting_generate_partial : STATELESS_SETTING_GENERATE_PARTIAL;
 stateless_setting_using            : STATELESS_SETTING_USING WHITESPACE+ namespace;
 stateless_setting
@@ -39,14 +39,14 @@ stateless_setting
     | stateless_setting_generate_partial
     | stateless_setting_using
     ;
-state_definition                : STATE WHITESPACE+ name=ID WHITESPACE* LBRACE WHITESPACE* NEWLINE+ (WHITESPACE* (states) NEWLINE+)* WHITESPACE* RBRACE;
-states_transition_start_to      : BOUNDARY_NODE WHITESPACE* transition_from_to WHITESPACE* (to=ID) transition_details?;
-states_transition_to_start      : (to=ID) WHITESPACE* transition_to_from WHITESPACE* BOUNDARY_NODE transition_details?;
-states_transition_from_end      : (from=ID) WHITESPACE* transition_from_to WHITESPACE* BOUNDARY_NODE transition_details?;
-states_transition_end_from      : BOUNDARY_NODE WHITESPACE* transition_to_from WHITESPACE* (from=ID) transition_details?;
-states_transition_from_to       : (from=ID) WHITESPACE* transition_from_to WHITESPACE* (to=ID) transition_details?;
-states_transition_to_from       : (to=ID) WHITESPACE* transition_to_from WHITESPACE* (from=ID) transition_details?;
-states_description              : (node=ID) WHITESPACE* COLON WHITESPACE* (text=~NEWLINE)*;
+state_definition                : STATE WHITESPACE+ name=id WHITESPACE* LBRACE WHITESPACE* NEWLINE+ (WHITESPACE* (states) NEWLINE+)* WHITESPACE* RBRACE;
+states_transition_start_to      : BOUNDARY_NODE WHITESPACE* transition_from_to WHITESPACE* (to=id) transition_details?;
+states_transition_to_start      : (to=id) WHITESPACE* transition_to_from WHITESPACE* BOUNDARY_NODE transition_details?;
+states_transition_from_end      : (from=id) WHITESPACE* transition_from_to WHITESPACE* BOUNDARY_NODE transition_details?;
+states_transition_end_from      : BOUNDARY_NODE WHITESPACE* transition_to_from WHITESPACE* (from=id) transition_details?;
+states_transition_from_to       : (from=id) WHITESPACE* transition_from_to WHITESPACE* (to=id) transition_details?;
+states_transition_to_from       : (to=id) WHITESPACE* transition_to_from WHITESPACE* (from=id) transition_details?;
+states_description              : (node=id) WHITESPACE* COLON WHITESPACE* (text=~NEWLINE)*;
 states
     : states_transition_from_to
     | states_transition_to_from
@@ -61,22 +61,22 @@ states
     ;
 
 transition_from_to
-    : MINUS+ (orientation=ID)? MINUS+ RCHEVR
+    : MINUS+ (orientation=id)? MINUS+ RCHEVR
     | MINUS+ RCHEVR
     ;
 transition_to_from
-    : LCHEVR MINUS+ (orientation=ID)? MINUS+
+    : LCHEVR MINUS+ (orientation=id)? MINUS+
     | LCHEVR MINUS+
     ;
 
 transition_details_description  : (~NEWLINE)+;
 transition_details              : WHITESPACE* trigger_details? COLON WHITESPACE* trigger_name transition_details_description?;
 
-trigger_name                    : ID (ID | WHITESPACE | UNDERSCORE)*;
+trigger_name                    : id (id | WHITESPACE | UNDERSCORE)*;
 trigger_details                 : LCHEVR LCHEVR WHITESPACE* (ASYNC WHITESPACE+)? parameters_definition? WHITESPACE* RCHEVR RCHEVR WHITESPACE* ;
-parameter_type                  : ID (DOT ID)* (LBRACK WHITESPACE* RBRACK)? ;
+parameter_type                  : id (DOT id)* (LBRACK WHITESPACE* RBRACK)? ;
 parameters_definition_unnamed   : LPAREN WHITESPACE* parameter_type WHITESPACE* (COMMA WHITESPACE* parameter_type)* WHITESPACE* RPAREN ;
-parameters_definition_named     : LPAREN WHITESPACE* parameter_type WHITESPACE+ ID WHITESPACE* (COMMA WHITESPACE* parameter_type WHITESPACE+ ID)* WHITESPACE* RPAREN ;
+parameters_definition_named     : LPAREN WHITESPACE* parameter_type WHITESPACE+ id WHITESPACE* (COMMA WHITESPACE* parameter_type WHITESPACE+ id)* WHITESPACE* RPAREN ;
 parameters_definition
     : parameters_definition_unnamed
     | parameters_definition_named
@@ -84,8 +84,17 @@ parameters_definition
 
 note_line
     : NOTE_START (~NEWLINE)+
-    | NOTE_START WHITESPACE+ QUOTED_STRING WHITESPACE+ AS WHITESPACE+ ID WHITESPACE?
+    | NOTE_START WHITESPACE+ QUOTED_STRING WHITESPACE+ AS WHITESPACE+ id WHITESPACE?
     | NOTE_START (~NEWLINE)+ NEWLINE ((~NEWLINE)+ NEWLINE)* WHITESPACE* NOTE_END
     ;
 
 comment_line                    : SINGLEQUOTE (~NEWLINE)*;
+
+// Some keywords are allowed to be used as identifiers. We need to explicitly allow this.
+id_valid_keywords
+    : TITLE
+    | STATE
+    | NOTE_START
+    ;
+id                              : (ID | id_valid_keywords)+ ;
+
