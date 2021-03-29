@@ -27,6 +27,6 @@ The first attempt is to use PlantUML to visually design [Stateless](https://gith
 
 |Generation | Documentation | Version | Downloads |
 |:---|:---|:---|:---|
-| PlantUML diagram to Stateless C# code | [Link](Source/EtAlii.Generators.Stateless.Tests/README.md) | [![Nuget](https://img.shields.io/nuget/v/EtAlii.Generators.Stateless)](https://www.nuget.org/packages/EtAlii.Generators.Stateless) | [![Nuget](https://img.shields.io/nuget/dt/EtAlii.Generators.Stateless)](https://www.nuget.org/packages/EtAlii.Generators.Stateless) |
+| PlantUML diagram to <br/> Stateless C# state machine code | [Link](Source/EtAlii.Generators.Stateless.Tests/README.md) | [![Nuget](https://img.shields.io/nuget/v/EtAlii.Generators.Stateless)](https://www.nuget.org/packages/EtAlii.Generators.Stateless) | [![Nuget](https://img.shields.io/nuget/dt/EtAlii.Generators.Stateless)](https://www.nuget.org/packages/EtAlii.Generators.Stateless) |
 | Behavior tree to C# code | Tbd. | [![Nuget](https://img.shields.io/nuget/v/EtAlii.Generators.Behavior)](https://www.nuget.org/packages/EtAlii.Generators.Behavior) | [![Nuget](https://img.shields.io/nuget/dt/EtAlii.Generators.Behavior)](https://www.nuget.org/packages/EtAlii.Generators.Behavior) |
 | ML pipeline diagram to C# code | Tbd. | [![Nuget](https://img.shields.io/nuget/v/EtAlii.Generators.MlPipeline)](https://www.nuget.org/packages/EtAlii.Generators.MlPipeline) | [![Nuget](https://img.shields.io/nuget/dt/EtAlii.Generators.MlPipeline)](https://www.nuget.org/packages/EtAlii.Generators.MlPipeline) |

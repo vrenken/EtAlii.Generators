@@ -1,18 +1,26 @@
-# EtAlii.Generators.Stateless - PlantUML state diagrams to Stateless state machines
+# PlantUML diagram to Stateless C# state machine code
 
 Usage:
 
-1. Add the package to the target project:
+1. Add the analyzer NuGet package to the target project:
    ```csproj
      <ItemGroup>
        <PackageReference Update="EtAlii.Generators.Stateless" Version="1.0.0" PrivateAssets="all" />
      </ItemGroup>
    ```
+
+   Also add the Stateless NuGet package to the target project:
+   ```csproj
+     <ItemGroup>
+       <PackageReference Include="stateless" Version="5.10.1" />
+     </ItemGroup>
+   ```
+
 3. Come up with a fancy PlantUML state machine diagram:
    ```puml
    @startuml
    'stateless namespace My.ExampleNamespace
-   'stateless class MyFancyStateMachine
+   'stateless class MyFancyStateMachineBase
    'stateless generate partial
    [*] --> State1 : Start
    State1 --> [*]
@@ -36,7 +44,7 @@ Usage:
    {
       using System;
 
-      public partial class MyFancyStateMachine
+      public class MyFancyStateMachine : MyFancyStateMachineBase
       {
          public override void OnState1Entered() => Console.WriteLine("Entered State 1");
          public override void OnState1Exited() => Console.WriteLine("Exited State 1");
