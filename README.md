@@ -24,75 +24,9 @@ The first attempt is to use PlantUML to visually design [Stateless](https://gith
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=security_rating)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=alert_status)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
 
-## Examples
 
-### Behavior trees
-[![Nuget](https://img.shields.io/nuget/v/EtAlii.Generators.Behavior)](https://www.nuget.org/packages/EtAlii.Generators.Behavior)
-[![Nuget](https://img.shields.io/nuget/dt/EtAlii.Generators.Behavior)](https://www.nuget.org/packages/EtAlii.Generators.Behavior)
-
-Tbd.
-### EtAlii.Generators.Stateless - PlantUML state diagrams to Stateless state machines
-[![Nuget](https://img.shields.io/nuget/v/EtAlii.Generators.Stateless)](https://www.nuget.org/packages/EtAlii.Generators.Stateless)
-[![Nuget](https://img.shields.io/nuget/dt/EtAlii.Generators.Stateless)](https://www.nuget.org/packages/EtAlii.Generators.Stateless)
-
-
-Usage:
-
-1. Add the package to the target project:
-   ```csproj
-     <ItemGroup>
-       <PackageReference Update="EtAlii.Generators.Stateless" Version="1.0.0" PrivateAssets="all" />
-     </ItemGroup>
-   ```
-3. Come up with a fancy PlantUML state machine diagram:
-   ```puml
-   @startuml
-   'stateless namespace My.ExampleNamespace
-   'stateless class MyFancyStateMachine
-   'stateless generate partial
-   [*] --> State1 : Start
-   State1 --> [*]
-   State1 : this is a string
-   State1 : this is another string
-   State1 -> State2 : Continue
-   State2 --> [*]
-   State2 -> State3 : DoState3
-   @enduml
-   ```
-3. Put the PlantUML diagram in a file and reference it in the project as a `Stateless` entry:
-   ```csproj
-     <ItemGroup>
-       <Stateless Include="MyFancyStateMachine.puml" />
-     </ItemGroup>
-   ```
-4. Compile the project - the Roslyn generator now uses the diagram to create C# state machine code.
-5. Add a class file to implement the needed state machine behavior.
-   ```cs
-   namespace My.ExampleNamespace
-   {
-      using System;
-
-      public partial class MyFancyStateMachine
-      {
-         public override void OnState1Entered() => Console.WriteLine("Entered State 1");
-         public override void OnState1Exited() => Console.WriteLine("Exited State 1");
-
-         public override void OnState2Entered() => Console.WriteLine("Entered State 2");
-         public override void OnState2Exited() => Console.WriteLine("Exited State 2");
-      }
-   }
-   ```
-6. Create and trigger the state machine from somewhere in your code.
-   ```cs
-   namespace My.ExampleNamespace
-   {
-      using System;
-
-      public static void Main()
-      {
-         var stateMachine = new MyFancyStateMachine();
-         stateMachine.Start();
-         stateMachine.Continue();
-      }
-   }
-   ```
+|Generation | Documentation | Version | Downloads |
+|:---|:---|:---|:---|
+| PlantUML diagram to Stateless C# code | [Link](EtAlii.Generators.Stateless.Tests/README.md) | [![Nuget](https://img.shields.io/nuget/v/EtAlii.Generators.Stateless)](https://www.nuget.org/packages/EtAlii.Generators.Stateless) | [![Nuget](https://img.shields.io/nuget/dt/EtAlii.Generators.Stateless)](https://www.nuget.org/packages/EtAlii.Generators.Stateless) |
+| Behavior tree to C# code | Tbd. | [![Nuget](https://img.shields.io/nuget/v/EtAlii.Generators.Behavior)](https://www.nuget.org/packages/EtAlii.Generators.Behavior) | [![Nuget](https://img.shields.io/nuget/dt/EtAlii.Generators.Behavior)](https://www.nuget.org/packages/EtAlii.Generators.Behavior) |
+| ML pipeline diagram to C# code | Tbd. | [![Nuget](https://img.shields.io/nuget/v/EtAlii.Generators.MlPipeline)](https://www.nuget.org/packages/EtAlii.Generators.MlPipeline) | [![Nuget](https://img.shields.io/nuget/dt/EtAlii.Generators.MlPipeline)](https://www.nuget.org/packages/EtAlii.Generators.MlPipeline) |
