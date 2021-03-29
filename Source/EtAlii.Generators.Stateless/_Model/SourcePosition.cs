@@ -23,6 +23,7 @@ namespace EtAlii.Generators.Stateless
 
         public Location ToLocation(string fileName)
         {
+            // We need to map the Antlr line indexing onto the Roslyn line indexing. They differ.
             var line = Line - 1;
             var column = Column;
 
