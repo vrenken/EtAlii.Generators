@@ -7,11 +7,11 @@
 [*] -> State1 << (string name) >> : Start
 State1 : this is a string
 State1 : this is another string
-State1 -> State2 : Continue
 state State2 {
     State2 -> State2 << (string name) >> : Check
     SubState1 -> SubState2 : Continue
 }
-State2 -up-> State3 : Continue
-State3 -up-> State4 << async >> : Continue
+State1 --> SubState2 : Continue
+State2 --> State3 : Continue
+State3 --> State4 << async >> : Continue
 @enduml

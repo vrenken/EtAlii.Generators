@@ -9,7 +9,7 @@ State1 : this is a string
 State1 : this is another string
 State1 -> State2 : Continue
 state State2 {
-    [*] --> SubState1
+    [*] --> SubState1 : StartState2
     State2 -> State2 << (string name) >> : Check
     SubState1 -> SubState2 : Continue
 }

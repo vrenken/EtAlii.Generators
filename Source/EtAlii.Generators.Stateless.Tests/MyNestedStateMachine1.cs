@@ -15,7 +15,7 @@ namespace EtAlii.Generators.Stateless.Tests
 
         protected override void OnState2Entered() => Console.WriteLine("State2 entered");
 
-        protected override void OnState2EnteredFromContinueTrigger()
+        protected override void OnSubState2EnteredFromContinueTrigger()
         {
             Console.WriteLine("Inside State2");
             Continue();
