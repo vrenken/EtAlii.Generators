@@ -53,7 +53,6 @@ Usage:
    ```cs
     namespace EtAlii.Generators.Stateless.Tests
     {
-        using System;
         using System.Collections.Generic;
 
         public class SimpleStateMachine : SimpleStateMachineBase
@@ -200,3 +199,71 @@ end note
 Please take notice:
 - When no parameter names are given the code generation tries to come up with a fitting set. Don't use this and use only fully qualified parameter names as the generated names will only cause confusion.
 - When parameters are specified as custom types don't forget to add the `stateless using` statement to make the code generation aware of the namespace the custom types live in.
+
+### Nested states.
+
+Both Stateless and PlantUML support nested states. The code generator is able to parse and generate nesting but as this is a relative new feature there might be some hiccups. Happy to see PR's to improve these matters.
+
+![ParameterStateMachine.puml](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/vrenken/EtAlii.Generators/main/Source/EtAlii.Generators.Stateless.Tests/ParameterStateMachine.puml)
+
+```puml
+@startuml
+'stateless namespace EtAlii.Generators.Stateless.Tests
+'stateless class SubstateTransitionsBase
+'stateless generate partial
+'stateless using System.Text
+
+[*] -up-> State1 : Continue
+State1 -right-> SuperState1 : Continue
+note top on link
+Transition towards superstate with unnamed start trigger
+--
+- Only one single start trigger is supported.
+- The superstate will automatically transition
+  towards the specified substate.
+end note
+state SuperState1 {
+    [*] -right-> SubState1
+}
+
+
+[*] -right-> State2 : Continue
+State2 -right-> SuperState2 : Continue
+note top on link
+Transition towards superstate with named start trigger
+--
+- Multiple start trigger are supported (in one single superstate).
+- The superstate will NOT automatically transition
+  towards the specified substate.
+end note
+state SuperState2 {
+    [*] -right-> SubState2 : Start
+}
+
+
+[*] -down-> State3 : Continue
+state SuperState3 {
+    state SubState3
+}
+
+State3 -right-> SubState3 : Continue
+note top on link
+Transition directly towards a substate
+--
+- The superstate will automatically transition
+  towards the specified substate.
+end note
+
+@enduml
+```
+Please take notice:
+- Currently states and substates cannot have the same name. In other word: each state name can only be used once in the state machine.
+- The supported transitions are:
+  1. Transition towards superstate with unnamed start trigger.
+      - Only one single start trigger is supported.
+      - The superstate will automatically transition towards the specified substate.
+  2. Transition directly towards a substate.
+      - The superstate will automatically transition towards the specified substate.
+  3. Transition towards superstate with named start trigger.
+      - Multiple start trigger are supported (in one single superstate).
+      - The superstate will NOT automatically transition towards the specified substate.

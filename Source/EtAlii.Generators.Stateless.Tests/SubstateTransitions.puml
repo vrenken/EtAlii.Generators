@@ -45,8 +45,5 @@ Transition directly towards a substate
   towards the specified substate.
 end note
 
-' Add support for non-transitional states.
-' Provide async OnEntry / OnExit methods.
-
 @enduml
 

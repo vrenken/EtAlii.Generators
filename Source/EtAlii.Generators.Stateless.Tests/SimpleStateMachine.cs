@@ -1,6 +1,5 @@
 namespace EtAlii.Generators.Stateless.Tests
 {
-    using System;
     using System.Collections.Generic;
 
     public class SimpleStateMachine : SimpleStateMachineBase
