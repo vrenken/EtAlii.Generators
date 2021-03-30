@@ -1,0 +1,11 @@
+@startuml
+'stateless namespace EtAlii.Generators.Stateless.Tests
+'stateless class AsyncStateMachineBase
+
+[*] -> State1 << async >> : Start
+State1 -> State2 << async >> : Continue
+State2 -down-> [*] : Stop
+State2 -> State2 : Check
+State2 -up-> State3 << async >> : Continue
+State3 -up-> State4 : Continue
+@enduml

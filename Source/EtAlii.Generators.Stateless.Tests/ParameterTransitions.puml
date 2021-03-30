@@ -5,7 +5,6 @@
 'stateless using System.Text
 'stateless using EtAlii.Generators.Stateless.Tests.Nested
 
-
 [*] -up--> State1 : Continue
 State1 -right-> NextState1 << (string title, int count) >> : Activate1
 note top on link

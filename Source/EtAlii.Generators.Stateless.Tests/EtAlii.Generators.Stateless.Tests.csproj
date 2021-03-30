@@ -32,33 +32,34 @@
   </ItemGroup>
 
   <ItemGroup>
+    <StatelessFile Include="AsyncStateMachine.puml" />
+    <Compile Update="AsyncStateMachine.cs">
+      <DependentUpon>MyAsyncStateMachine.puml</DependentUpon>
+    </Compile>
+    <StatelessFile Include="ParameterTransitions.puml" />
+    <Compile Update="ParameterTransitions.cs">
+      <DependentUpon>ParameterTransitions.puml</DependentUpon>
+    </Compile>
+    <StatelessFile Include="SubstateTransitions.puml" />
+    <Compile Update="SubstateTransitions.cs">
+      <DependentUpon>SubstateTransitions.puml</DependentUpon>
+    </Compile>
+
     <StatelessFile Include="MyFancyStateMachine.puml" />
     <Compile Update="MyFancyStateMachine.cs">
       <DependentUpon>MyFancyStateMachine.puml</DependentUpon>
     </Compile>
-    <StatelessFile Include="MyAsyncStateMachine.puml" />
-    <Compile Update="MyAsyncStateMachine.cs">
-      <DependentUpon>MyAsyncStateMachine.puml</DependentUpon>
-    </Compile>
     <StatelessFile Include="MyNestedStateMachine1.puml" />
-    <StatelessFile Include="MyNestedStateMachine2.puml" />
-    <StatelessFile Include="ParameterTransitions.puml" />
-    <StatelessFile Include="SubstateTransitions.puml" />
-    <StatelessFile Include="MyNestedStateMachine4.puml" />
     <Compile Update="MyNestedStateMachine1.cs">
       <DependentUpon>MyNestedStateMachine1.puml</DependentUpon>
     </Compile>
+    <StatelessFile Include="MyNestedStateMachine2.puml" />
     <Compile Update="MyNestedStateMachine2.cs">
       <DependentUpon>MyNestedStateMachine2.puml</DependentUpon>
     </Compile>
-    <Compile Update="SubstateTransitions.cs">
-      <DependentUpon>SubstateTransitions.puml</DependentUpon>
-    </Compile>
+    <StatelessFile Include="MyNestedStateMachine4.puml" />
     <Compile Update="MyNestedStateMachine4.cs">
       <DependentUpon>MyNestedStateMachine4.puml</DependentUpon>
-    </Compile>
-    <Compile Update="ParameterTransitions.cs">
-      <DependentUpon>ParameterTransitions.puml</DependentUpon>
     </Compile>
   </ItemGroup>
 

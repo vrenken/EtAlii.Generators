@@ -3,18 +3,12 @@ namespace EtAlii.Generators.Stateless.Tests
     using System;
     using System.Threading.Tasks;
 
-    public class MyAsyncStateMachine : MyAsyncStateMachineBase
+    public class AsyncStateMachine : AsyncStateMachineBase
     {
         protected override Task OnState1EnteredAsync()
         {
             Console.WriteLine("State1 entered");
             return Task.CompletedTask;
-        }
-
-        protected override async Task OnState1EnteredFromStartTrigger(string name)
-        {
-            Console.WriteLine($"Name: {name}");
-            await ContinueAsync().ConfigureAwait(false);
         }
 
         protected override Task OnState1ExitedAsync()
