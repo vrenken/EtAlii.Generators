@@ -1,0 +1,12 @@
+@startuml
+'stateless namespace EtAlii.Generators.Stateless.Tests
+'stateless class SimpleStateMachineBase
+
+[*] -> State1 : Start
+State1 : this is a description
+State1 -> State2 : Continue
+State2 -down-> [*] : Exit
+State2 -> State2 : Check
+State2 -up-> State3 : Continue
+State3 -up-> State4 : Continue
+@enduml

@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <ProjectGuid>15BD9931-757F-4DA6-B17B-7753EFA297AC</ProjectGuid>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.8.0" />
+    <PackageReference Include="stateless" Version="5.10.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Coverlet.Collector" Version="3.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Below is not a normal project reference! It introduces the GCL code-generator. -->
+    <ProjectReference Include="..\EtAlii.Generators.GraphQL.Client\EtAlii.Generators.GraphQL.Client.csproj">
+      <PrivateAssets>all</PrivateAssets>
+      <!-- <ReferenceOutputAssembly>false</ReferenceOutputAssembly> --> <!-- We want to unit test the internals. -->
+      <OutputItemType>Analyzer</OutputItemType>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <StatelessFile Include="AsyncStateMachine.puml" />
+    <Compile Update="AsyncStateMachine.cs">
+      <DependentUpon>AsyncStateMachine.puml</DependentUpon>
+    </Compile>
+    <StatelessFile Include="ParameterStateMachine.puml" />
+    <Compile Update="ParameterStateMachine.cs">
+      <DependentUpon>ParameterStateMachine.puml</DependentUpon>
+    </Compile>
+    <StatelessFile Include="SubstateTransitions.puml" />
+    <Compile Update="SubstateTransitions.cs">
+      <DependentUpon>SubstateTransitions.puml</DependentUpon>
+    </Compile>
+    <StatelessFile Include="SimpleStateMachine.puml" />
+    <Compile Update="SimpleStateMachine.cs">
+      <DependentUpon>SimpleStateMachine.puml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <Import Project="..\EtAlii.Generators.Stateless\Build\*.props" />
+  <Import Project="..\EtAlii.Generators.Stateless\Build\*.targets" />
+
+</Project>

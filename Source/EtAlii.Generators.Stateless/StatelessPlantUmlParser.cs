@@ -29,7 +29,7 @@
                 var lexer = new PlantUmlLexer(inputStream);
                 var commonTokenStream = new CommonTokenStream(lexer);
                 var parser = new PlantUmlParser(commonTokenStream);
-                var errorListener = new PlantUmlErrorListener(file.Path, DiagnosticRule.InvalidPlantUmlStateMachine);
+                var errorListener = new ParsingErrorListener(file.Path, DiagnosticRule.InvalidPlantUmlStateMachine);
                 parser.RemoveErrorListeners();
                 parser.AddErrorListener(errorListener);
                 var parsingContext = parser.state_machine();

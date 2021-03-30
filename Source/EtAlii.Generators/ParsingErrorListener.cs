@@ -1,4 +1,4 @@
-namespace EtAlii.Generators.Stateless
+namespace EtAlii.Generators
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -7,17 +7,17 @@ namespace EtAlii.Generators.Stateless
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Text;
 
-    public class PlantUmlErrorListener : IAntlrErrorListener<object>
+    public class ParsingErrorListener : IAntlrErrorListener<object>
     {
         private readonly string _fileName;
-        private readonly DiagnosticDescriptor _invalidPlantUmlStateMachineRule;
+        private readonly DiagnosticDescriptor _parsingExceptionDiagnosticRule;
         private readonly List<Diagnostic> _diagnostics;
         public IReadOnlyCollection<Diagnostic> Diagnostics { get; }
 
-        public PlantUmlErrorListener(string fileName, DiagnosticDescriptor invalidPlantUmlStateMachineRule)
+        public ParsingErrorListener(string fileName, DiagnosticDescriptor parsingExceptionDiagnosticRule)
         {
             _fileName = fileName;
-            _invalidPlantUmlStateMachineRule = invalidPlantUmlStateMachineRule;
+            _parsingExceptionDiagnosticRule = parsingExceptionDiagnosticRule;
             _diagnostics = new List<Diagnostic>();
             Diagnostics = new ReadOnlyCollection<Diagnostic>(_diagnostics);
         }
@@ -35,7 +35,7 @@ namespace EtAlii.Generators.Stateless
             var location = Location.Create(_fileName, textSpan, linePositionSpan);
 
 
-            var diagnostic = Diagnostic.Create(_invalidPlantUmlStateMachineRule, location, msg);
+            var diagnostic = Diagnostic.Create(_parsingExceptionDiagnosticRule, location, msg);
 
             _diagnostics.Add(diagnostic);
             output.WriteLine($"line {line}:{charPositionInLine} {msg}");
