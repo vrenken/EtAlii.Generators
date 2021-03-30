@@ -18,8 +18,8 @@
         public const string EndStateName = "_End";
 
         private readonly NamespaceWriter _namespaceWriter;
-        private readonly StatelessPlantUmlParser _plantUmlParser;
-        private readonly StatelessPlantUmlValidator _plantUmlValidator;
+        private readonly GraphQLQueryParser _parser;
+        private readonly GraphQLQueryValidator _validator;
         public SourceGenerator()
         : base(".graphql", DiagnosticRule.PlantUmlStateMachineProcessingThrowsException)
         {
@@ -35,8 +35,8 @@
             var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, instantiationWriter);
             _namespaceWriter = new NamespaceWriter(classWriter);
 
-            _plantUmlParser = new StatelessPlantUmlParser();
-            _plantUmlValidator = new StatelessPlantUmlValidator();
+            _parser = new GraphQLQueryParser();
+            _validator = new GraphQLQueryValidator();
         }
 
         protected override bool TryParseFile(AdditionalText file, List<string> log, out object instance, out Diagnostic[] parseDiagnostics) => throw new NotImplementedException();

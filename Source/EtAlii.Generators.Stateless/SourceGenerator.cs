@@ -24,8 +24,8 @@
         public const string EndStateName = "_End";
 
         private readonly NamespaceWriter _namespaceWriter;
-        private readonly StatelessPlantUmlParser _plantUmlParser;
-        private readonly StatelessPlantUmlValidator _plantUmlValidator;
+        private readonly StatelessPlantUmlParser _parser;
+        private readonly StatelessPlantUmlValidator _validator;
         public SourceGenerator()
         : base(".puml", DiagnosticRule.PlantUmlStateMachineProcessingThrowsException)
         {
@@ -41,13 +41,13 @@
             var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, instantiationWriter);
             _namespaceWriter = new NamespaceWriter(classWriter);
 
-            _plantUmlParser = new StatelessPlantUmlParser();
-            _plantUmlValidator = new StatelessPlantUmlValidator();
+            _parser = new StatelessPlantUmlParser();
+            _validator = new StatelessPlantUmlValidator();
         }
 
         protected override bool TryParseFile(AdditionalText file, List<string> log, out StateMachine stateMachine, out Diagnostic[] parseDiagnostics)
         {
-            return _plantUmlParser.TryParsePlantUml(file, log, out stateMachine, out parseDiagnostics);
+            return _parser.TryParsePlantUml(file, log, out stateMachine, out parseDiagnostics);
         }
 
         protected override void WriteContent(StateMachine stateMachine, IndentedTextWriter writer, string originalFileName, List<string> log, List<Diagnostic> writeDiagnostics)
@@ -63,10 +63,9 @@
 
             var writeContext = new WriteContextFactory().Create(writer, originalFileName, log, stateMachine);
 
-            _plantUmlValidator.Validate(writeContext, writeDiagnostics);
+            _validator.Validate(writeContext, writeDiagnostics);
 
             _namespaceWriter.Write(writeContext);
-
         }
     }
 }

@@ -32,22 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <StatelessFile Include="AsyncStateMachine.puml" />
-    <Compile Update="AsyncStateMachine.cs">
-      <DependentUpon>AsyncStateMachine.puml</DependentUpon>
-    </Compile>
-    <StatelessFile Include="ParameterStateMachine.puml" />
-    <Compile Update="ParameterStateMachine.cs">
-      <DependentUpon>ParameterStateMachine.puml</DependentUpon>
-    </Compile>
-    <StatelessFile Include="SubstateTransitions.puml" />
-    <Compile Update="SubstateTransitions.cs">
-      <DependentUpon>SubstateTransitions.puml</DependentUpon>
-    </Compile>
-    <StatelessFile Include="SimpleStateMachine.puml" />
-    <Compile Update="SimpleStateMachine.cs">
-      <DependentUpon>SimpleStateMachine.puml</DependentUpon>
-    </Compile>
+    <Folder Include="Tests" />
   </ItemGroup>
 
   <Import Project="..\EtAlii.Generators.Stateless\Build\*.props" />

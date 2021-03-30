@@ -11,9 +11,9 @@
     /// The central class responsible of parsing both the PlantUML and Stateless specific constructions
     /// from the given input file.
     /// </summary>
-    public class StatelessPlantUmlParser
+    public class GraphQLQueryParser
     {
-        public bool TryParsePlantUml(AdditionalText file, List<string> log, out StateMachine stateMachine, out Diagnostic[] diagnostics)
+        public bool TryParse(AdditionalText file, List<string> log, out StateMachine stateMachine, out Diagnostic[] diagnostics)
         {
             var success = false;
             var diagnosticErrors = new List<Diagnostic>();
@@ -26,16 +26,16 @@
                 log.Add(plantUmlText);
 
                 var inputStream = new AntlrInputStream(plantUmlText);
-                var lexer = new PlantUmlLexer(inputStream);
+                var lexer = new GraphQLLexer(inputStream);
                 var commonTokenStream = new CommonTokenStream(lexer);
-                var parser = new PlantUmlParser(commonTokenStream);
+                var parser = new GraphQLParser(commonTokenStream);
                 var errorListener = new ParsingErrorListener(file.Path, DiagnosticRule.InvalidPlantUmlStateMachine);
                 parser.RemoveErrorListeners();
                 parser.AddErrorListener(errorListener);
                 var parsingContext = parser.state_machine();
 
-                var visitor = new PlantUmlVisitor();
-                stateMachine = visitor.VisitState_machine(parsingContext) as StateMachine;
+                var visitor = new GraphQLVisitor();
+                stateMachine = visitor.VisitDocument(parsingContext) as StateMachine;
 
                 if (parser.NumberOfSyntaxErrors != 0)
                 {
