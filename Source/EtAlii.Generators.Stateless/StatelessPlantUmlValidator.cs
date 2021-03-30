@@ -70,14 +70,11 @@ namespace EtAlii.Generators.Stateless
                 }
 
                 // ~NAMED UNNAMED+ ~DIRECT
-                if (!namedSuperStateStartTransitions.Any() && unnamedSuperStateStartTransitions.Any() && !directTransitionsToSubState.Any())
+                if (!namedSuperStateStartTransitions.Any() && unnamedSuperStateStartTransitions.Any() && !directTransitionsToSubState.Any() && unnamedSuperStateStartTransitions.Length > 1)
                 {
-                    if (unnamedSuperStateStartTransitions.Length > 1)
-                    {
-                        var location = superState.Source.ToLocation(context.OriginalFileName);
-                        var diagnostic = Diagnostic.Create(DiagnosticRule.SuperstateHasMultipleUnnamedStartTransitionsDefined, location, superState.Source.Text);
-                        diagnostics.Add(diagnostic);
-                    }
+                    var location = superState.Source.ToLocation(context.OriginalFileName);
+                    var diagnostic = Diagnostic.Create(DiagnosticRule.SuperstateHasMultipleUnnamedStartTransitionsDefined, location, superState.Source.Text);
+                    diagnostics.Add(diagnostic);
                 }
             }
         }
