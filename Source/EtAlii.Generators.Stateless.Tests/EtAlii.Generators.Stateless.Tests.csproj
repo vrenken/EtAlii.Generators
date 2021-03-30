@@ -36,8 +36,8 @@
     <Compile Update="AsyncStateMachine.cs">
       <DependentUpon>AsyncStateMachine.puml</DependentUpon>
     </Compile>
-    <StatelessFile Include="ParameterTransitions.puml" />
-    <Compile Update="ParameterTransitions.cs">
+    <StatelessFile Include="ParameterStateMachine.puml" />
+    <Compile Update="ParameterStateMachine.cs">
       <DependentUpon>ParameterTransitions.puml</DependentUpon>
     </Compile>
     <StatelessFile Include="SubstateTransitions.puml" />

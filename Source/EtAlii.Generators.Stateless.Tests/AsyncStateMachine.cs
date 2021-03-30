@@ -1,51 +1,33 @@
 namespace EtAlii.Generators.Stateless.Tests
 {
-    using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     public class AsyncStateMachine : AsyncStateMachineBase
     {
-        protected override Task OnState1EnteredAsync()
-        {
-            Console.WriteLine("State1 entered");
-            return Task.CompletedTask;
-        }
+        public List<string> Actions { get; } = new List<string>();
 
-        protected override Task OnState1ExitedAsync()
-        {
-            Console.WriteLine("State1 exited");
-            return Task.CompletedTask;
-        }
+        protected override Task OnState1EnteredAsync() => Task.Run(() => Actions.Add("State 1 entered"));
 
-        protected override Task OnState2EnteredAsync()
-        {
-            Console.WriteLine("State2 entered");
-            return Task.CompletedTask;
-        }
+        protected override Task OnState1ExitedAsync() => Task.Run(() => Actions.Add("State 1 exited"));
 
-        protected override Task OnState2EnteredFromContinueTrigger()
+        protected override Task OnState2EnteredAsync() => Task.Run(() => Actions.Add("State 2 entered"));
+
+        protected override void OnState2Exited() => Actions.Add("State 2 exited");
+
+        protected override Task OnState3EnteredAsync() => Task.Run(() => Actions.Add("State 3 entered"));
+
+        protected override Task OnState3EnteredFromContinueTrigger()
         {
-            Console.WriteLine("Inside State2");
+            Actions.Add("State 3 entered from Continue trigger");
             Continue();
             return Task.CompletedTask;
         }
 
-        protected override void OnState2Exited() => Console.WriteLine("State2 exited");
+        protected override void OnState2InternalCheckTrigger() => Actions.Add("Check trigger called");
 
-        protected override Task OnState3EnteredAsync()
-        {
-            Console.WriteLine("State3 entered");
-            return Task.CompletedTask;
-        }
+        protected override void OnState3Exited() => Actions.Add("State 3 exited");
 
-        protected override void OnState3Exited() => Console.WriteLine("State3 exited");
-
-        protected override void OnState4Entered() => Console.WriteLine("State4 entered");
-
-        protected override Task OnState4ExitedAsync()
-        {
-            Console.WriteLine("State4 exited");
-            return Task.CompletedTask;
-        }
+        protected override void OnState4Entered() => Actions.Add("State 4 entered");
     }
 }

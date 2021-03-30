@@ -1,6 +1,6 @@
 # PlantUML diagram to Stateless C# state machine code
 
-## How to start:
+## How to start.
 Usage:
 
 1. Add the analyzer NuGet package to the target project:
@@ -89,8 +89,7 @@ Usage:
 
 10. Star this project if you like it :-)
 
-## features:
-
+## features.
 
 <table width="100%">
     <thead>
@@ -125,15 +124,79 @@ Usage:
     </tr>
 </table>
 
-## Advanced features:
+## Advanced features.
 
-1. Synchronous / Asynchronous transitions:
-   The code generation can be signalled to create asynchronous methods by providing stereotype details on the needed transitions:
-   ```puml
+### Synchronous / Asynchronous transitions.
 
-   ```
-   Please take notice:
-    - The `OnEntry` method will also be made asynchronous when all _inbound_ transitions are tagged as being asynchronous.
-    - The `OnExit` method will also be made asynchronous when all _outbound_ transitions are tagged as being asynchronous.
-    - When triggers are to be used in both synchronous and asynchronous two different methods will be generated: One for synchronous invocation and one for asynchronous invocation.
-      It is up to the developer to call the right one.
+The code generation can be configured to create asynchronous methods by providing stereotype details on the needed transitions. The below diagram and corresponding puml code show how to do so:
+
+![AsyncStateMachine.puml](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/vrenken/EtAlii.Generators/main/Source/EtAlii.Generators.Stateless.Tests/AsyncStateMachine.puml)
+
+```puml
+@startuml
+'stateless namespace EtAlii.Generators.Stateless.Tests
+'stateless class AsyncStateMachineBase
+
+[*] -> State1 << async >> : Start
+State1 -> State2 << async >> : Continue
+State2 -down-> [*] : Stop
+State2 -> State2 : Check
+State2 -up-> State3 << async >> : Continue
+State3 -up-> State4 : Continue
+@enduml
+```
+Please take notice:
+- The `OnEntry` method will also be made asynchronous when all _inbound_ transitions are tagged as being asynchronous.
+- The `OnExit` method will also be made asynchronous when all _outbound_ transitions are tagged as being asynchronous.
+- When triggers are to be used in both synchronous and asynchronous two different methods will be generated: One for synchronous invocation and one for asynchronous invocation.
+  It is up to the developer to call the right one.
+- When a transition is configured as asynchronous, both the trigger methods and virtual methods will contain the "Async" postfix.
+
+### Transition method parameterization.
+
+Using stereotype details, transition can be configured in the puml file to demand parameters.
+When parameter details are provided, the code generation writes both the trigger methods and virtual methods will the parameters specified.
+
+![ParameterStateMachine.puml](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/vrenken/EtAlii.Generators/main/Source/EtAlii.Generators.Stateless.Tests/ParameterStateMachine.puml)
+
+```puml
+@startuml
+'stateless namespace EtAlii.Generators.Stateless.Tests
+'stateless class ParameterStateMachineBase
+'stateless using EtAlii.Generators.Stateless.Tests.Nested
+
+[*] -up--> State1 : Continue
+State1 -right-> NextState1 << (string title, int count) >> : Activate1
+note top on link
+Transition towards another state with NAMED parameters.
+--
+- Supports Standard .NET types like string, int, float etc.
+end note
+
+
+[*] -right-> State2 : Continue
+State2 -right-> NextState2 << (string, int, float) >> : Continue
+note top on link
+Transition towards another state with UNNAMED parameters.
+--
+- Supports Standard .NET types like string, int, float etc.
+- Gives a compiler warning as the method parameter
+names will be generated from the type names.
+end note
+
+
+[*] -down--> State3 : Continue
+
+State3 -right-> NextState3 << (Customer customer, Project project) >> : Continue
+note top on link
+Transition towards another state with custom parameter types.
+--
+- All custom types are supported
+- Just don't forget to include their namespace in the header of the file.
+end note
+
+@enduml
+```
+Please take notice:
+- When no parameter names are given the code generation tries to come up with a fitting set. Don't use this and use only fully qualified parameter names as the generated names will only cause confusion.
+- When parameters are specified as custom types don't forget to add the `stateless using` statement to make the code generation aware of the namespace the custom types live in.

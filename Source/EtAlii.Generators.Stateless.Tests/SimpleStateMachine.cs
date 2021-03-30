@@ -13,6 +13,10 @@ namespace EtAlii.Generators.Stateless.Tests
 
         protected override void OnState2Entered() => Actions.Add("State 2 entered");
 
+        protected override void OnState2Exited() => Actions.Add("State 2 exited");
+
+        protected override void OnState3Entered() => Actions.Add("State 3 entered");
+
         protected override void OnState3EnteredFromContinueTrigger()
         {
             Actions.Add("State 3 entered from Continue trigger");
@@ -20,10 +24,6 @@ namespace EtAlii.Generators.Stateless.Tests
         }
 
         protected override void OnState2InternalCheckTrigger() => Actions.Add("Check trigger called");
-
-        protected override void OnState2Exited() => Actions.Add("State 2 exited");
-
-        protected override void OnState3Entered() => Actions.Add("State 3 entered");
 
         protected override void OnState3Exited() => Actions.Add("State 3 exited");
 

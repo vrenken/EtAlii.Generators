@@ -2,9 +2,9 @@ namespace EtAlii.Generators.Stateless.Tests
 {
     using System;
 
-    public static class Program
+    public class Program
     {
-        public static void Main()
+        public void Main()
         {
             var stateMachine = new SimpleStateMachine();
             stateMachine.Start();

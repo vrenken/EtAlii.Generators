@@ -1,8 +1,6 @@
 @startuml
 'stateless namespace EtAlii.Generators.Stateless.Tests
-'stateless class ParameterTransitionsBase
-'stateless generate partial
-'stateless using System.Text
+'stateless class ParameterStateMachineBase
 'stateless using EtAlii.Generators.Stateless.Tests.Nested
 
 [*] -up--> State1 : Continue
@@ -35,9 +33,5 @@ Transition towards another state with custom parameter types.
 - Just don't forget to include their namespace in the header of the file.
 end note
 
-' Add support for non-transitional states.
-
-' .
-' .
 @enduml
 
