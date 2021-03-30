@@ -38,17 +38,17 @@
     </Compile>
     <StatelessFile Include="ParameterStateMachine.puml" />
     <Compile Update="ParameterStateMachine.cs">
-      <DependentUpon>ParameterTransitions.puml</DependentUpon>
+      <DependentUpon>ParameterStateMachine.puml</DependentUpon>
     </Compile>
     <StatelessFile Include="SubstateTransitions.puml" />
     <Compile Update="SubstateTransitions.cs">
       <DependentUpon>SubstateTransitions.puml</DependentUpon>
     </Compile>
-
     <StatelessFile Include="SimpleStateMachine.puml" />
     <Compile Update="SimpleStateMachine.cs">
-      <DependentUpon>MyFancyStateMachine.puml</DependentUpon>
+      <DependentUpon>SimpleStateMachine.puml</DependentUpon>
     </Compile>
+    
     <StatelessFile Include="MyNestedStateMachine1.puml" />
     <Compile Update="MyNestedStateMachine1.cs">
       <DependentUpon>MyNestedStateMachine1.puml</DependentUpon>
