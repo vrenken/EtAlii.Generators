@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Rule xmlns="http://schemas.microsoft.com/build/2009/properties"
+      Name="StatelessRule"
+      DisplayName="GraphQLQuery"
+      PageTemplate="generic"
+      Description="GraphQL client query">
+    <Rule.Categories>
+        <Category Name="General" DisplayName="General" />
+    </Rule.Categories>
+    <Rule.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="GraphQLQuery" />
+    </Rule.DataSource>
+</Rule>

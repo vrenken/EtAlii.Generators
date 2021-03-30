@@ -2,17 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>EtAlii.Generators.Stateless</RootNamespace>
+    <RootNamespace>EtAlii.Generators.GraphQL.Client</RootNamespace>
     <LangVersion>9</LangVersion>
     <ProjectGuid>CED6903F-7C8D-4A7E-81AE-4E01D11C7E82</ProjectGuid>
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>EtAlii.Generators.Stateless</PackageId>
-    <Version>1.0.6</Version>
+    <PackageId>EtAlii.Generators.GraphQL.Client</PackageId>
+    <Version>1.0.0</Version>
     <Authors>Peter Vrenken</Authors>
     <Company>EtAlii</Company>
-    <PackageDescription>A PlantUML powered Stateless state machine generator</PackageDescription>
+    <PackageDescription>An ANTLR4/Roslyn powered generator for typed GraphQL queries</PackageDescription>
     <RepositoryUrl>https://github.com/vrenken/EtAlii.Generators</RepositoryUrl>
   </PropertyGroup>
 
@@ -44,13 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Antlr4 Include="PlantUmlLexer.g4">
-      <Listener>false</Listener>
-      <Visitor>false</Visitor>
-      <Package>$(RootNamespace)</Package>
-      <Error>true</Error>
-    </Antlr4>
-    <Antlr4 Include="PlantUmlParser.g4">
+    <Antlr4 Include="GraphQLParser.g4">
       <Listener>false</Listener>
       <Visitor>true</Visitor>
       <Package>$(RootNamespace)</Package>
