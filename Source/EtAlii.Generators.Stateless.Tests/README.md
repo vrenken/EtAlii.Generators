@@ -51,38 +51,43 @@ Usage:
 
 7. Add a class file to implement the needed state machine behavior.
    ```cs
-   namespace EtAlii.Generators.Stateless.Tests
-   {
-      using System;
+    namespace EtAlii.Generators.Stateless.Tests
+    {
+        using System;
+        using System.Collections.Generic;
 
-      public class MyFancyStateMachine : MyFancyStateMachineBase
-      {
-         public override void OnState1Entered() => Console.WriteLine("Entered State 1");
-         public override void OnState1Exited() => Console.WriteLine("Exited State 1");
+        public class SimpleStateMachine : SimpleStateMachineBase
+        {
+            public List<string> Actions { get; } = new List<string>();
 
-         public override void OnState2Entered() => Console.WriteLine("Entered State 2");
-         public override void OnState2Exited() => Console.WriteLine("Exited State 2");
-      }
-   }
+            protected override void OnState1Entered() => Actions.Add("State 1 entered");
+
+            protected override void OnState1Exited() => Actions.Add("State 1 exited");
+        }
+    }
    ```
 8. Create and trigger the state machine from somewhere in your code, for example as done in the Main method below.
    ```cs
-   namespace EtAlii.Generators.Stateless.Tests
-   {
-      using System;
+    namespace EtAlii.Generators.Stateless.Tests
+    {
+        using System;
 
-      public static void Main()
-      {
-         var stateMachine = new MyFancyStateMachine();
-         stateMachine.Start();
-         stateMachine.Continue();
-      }
-   }
+        public static class Program
+        {
+            public static void Main()
+            {
+                var stateMachine = new SimpleStateMachine();
+                stateMachine.Start();
+                Console.WriteLine(stateMachine.Actions[0]);
+                stateMachine.Continue();
+            }
+        }
+    }
    ```
 9. Enjoy the magic that code-generation can bring to your project.
 
 
-10. Star this project :-)
+10. Star this project if you like it :-)
 
 ## features:
 
