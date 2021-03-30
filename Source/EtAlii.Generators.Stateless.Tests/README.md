@@ -19,15 +19,13 @@ Usage:
 
 3. Come up with a fancy PlantUML state machine diagram, for example:
 
-    ![MyFancyStateMachine.puml](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/vrenken/EtAlii.Generators/main/Source/EtAlii.Generators.Stateless.Tests/MyFancyStateMachine.puml)
+    ![SimpleStateMachine.puml](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/vrenken/EtAlii.Generators/main/Source/EtAlii.Generators.Stateless.Tests/SimpleStateMachine.puml)
 
-4. Put the PlantUML diagram in a file, for example `MyFancyStateMachine.puml` as specified below:
+4. Put the PlantUML diagram in a file, for example `SimpleStateMachine.puml` as specified below:
    ```puml
     @startuml
     'stateless namespace EtAlii.Generators.Stateless.Tests
-    'stateless class MyAsyncStateMachineBase
-    'stateless generate partial
-    'stateless using System.Text
+    'stateless class SimpleStateMachineBase
 
     [*] -> State1 << async (string name) >> : Start
     State1 : this is a string
@@ -53,7 +51,7 @@ Usage:
 
 7. Add a class file to implement the needed state machine behavior.
    ```cs
-   namespace My.ExampleNamespace
+   namespace EtAlii.Generators.Stateless.Tests
    {
       using System;
 
@@ -69,7 +67,7 @@ Usage:
    ```
 8. Create and trigger the state machine from somewhere in your code, for example as done in the Main method below.
    ```cs
-   namespace My.ExampleNamespace
+   namespace EtAlii.Generators.Stateless.Tests
    {
       using System;
 
@@ -88,10 +86,11 @@ Usage:
 
 ## features:
 
-<table>
+
+<table width="100%">
     <thead>
-        <td>Stateless</td>
-        <td>PlantUML</td>
+        <td><b>Stateless</b></td>
+        <td><b>PlantUML</b></td>
     </thead>
     <tr valign="top">
         <td>

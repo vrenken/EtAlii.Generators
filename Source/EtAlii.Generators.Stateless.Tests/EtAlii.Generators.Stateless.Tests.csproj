@@ -34,7 +34,7 @@
   <ItemGroup>
     <StatelessFile Include="AsyncStateMachine.puml" />
     <Compile Update="AsyncStateMachine.cs">
-      <DependentUpon>MyAsyncStateMachine.puml</DependentUpon>
+      <DependentUpon>AsyncStateMachine.puml</DependentUpon>
     </Compile>
     <StatelessFile Include="ParameterTransitions.puml" />
     <Compile Update="ParameterTransitions.cs">
@@ -45,8 +45,8 @@
       <DependentUpon>SubstateTransitions.puml</DependentUpon>
     </Compile>
 
-    <StatelessFile Include="MyFancyStateMachine.puml" />
-    <Compile Update="MyFancyStateMachine.cs">
+    <StatelessFile Include="SimpleStateMachine.puml" />
+    <Compile Update="SimpleStateMachine.cs">
       <DependentUpon>MyFancyStateMachine.puml</DependentUpon>
     </Compile>
     <StatelessFile Include="MyNestedStateMachine1.puml" />
