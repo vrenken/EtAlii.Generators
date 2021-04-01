@@ -172,7 +172,7 @@
                 transitionDetails = new TransitionDetails(fallbackTriggerName, false, Array.Empty<Parameter>(), false);
             }
             var position = SourcePosition.FromContext(context);
-            return new Transition(SourceGenerator.BeginStateName, (string)VisitId(context.to), transitionDetails, position);
+            return new Transition(StatelessWriter.BeginStateName, (string)VisitId(context.to), transitionDetails, position);
         }
 
         public override object VisitStates_transition_to_start(PlantUmlParser.States_transition_to_startContext context)
@@ -195,7 +195,7 @@
             }
 
             var position = SourcePosition.FromContext(context);
-            return new Transition(SourceGenerator.BeginStateName, (string)VisitId(context.to), transitionDetails, position);
+            return new Transition(StatelessWriter.BeginStateName, (string)VisitId(context.to), transitionDetails, position);
         }
 
         public override object VisitStates_transition_from_end(PlantUmlParser.States_transition_from_endContext context)
@@ -218,7 +218,7 @@
             }
 
             var position = SourcePosition.FromContext(context);
-            return new Transition((string)VisitId(context.from), SourceGenerator.EndStateName, transitionDetails, position);
+            return new Transition((string)VisitId(context.from), StatelessWriter.EndStateName, transitionDetails, position);
         }
 
         public override object VisitStates_transition_end_from(PlantUmlParser.States_transition_end_fromContext context)
@@ -241,7 +241,7 @@
             }
 
             var position = SourcePosition.FromContext(context);
-            return new Transition((string)VisitId(context.from), SourceGenerator.EndStateName, transitionDetails, position);
+            return new Transition((string)VisitId(context.from), StatelessWriter.EndStateName, transitionDetails, position);
         }
 
         public override object VisitStates_description(PlantUmlParser.States_descriptionContext context) => new StateDescription((string)VisitId(context.id()), context.text?.Text ?? string.Empty);

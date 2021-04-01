@@ -11,9 +11,9 @@
     /// The central class responsible of parsing both the PlantUML and Stateless specific constructions
     /// from the given input file.
     /// </summary>
-    public class StatelessPlantUmlParser
+    public class StatelessPlantUmlParser : IParser<StateMachine>
     {
-        public bool TryParsePlantUml(AdditionalText file, List<string> log, out StateMachine stateMachine, out Diagnostic[] diagnostics)
+        public bool TryParse(AdditionalText file, List<string> log, out StateMachine stateMachine, out Diagnostic[] diagnostics)
         {
             var success = false;
             var diagnosticErrors = new List<Diagnostic>();
@@ -48,7 +48,7 @@
                 {
                     log.Add($"Parser exception: {parsingContext.exception.Message}");
                     var location = Location.Create(file.Path, TextSpan.FromBounds(0,0), new LinePositionSpan(LinePosition.Zero, LinePosition.Zero));
-                    var diagnostic = Diagnostic.Create(DiagnosticRule.PlantUmlStateMachineParsingThrowsException, location, parsingContext.exception.Message, parsingContext.exception.StackTrace);
+                    var diagnostic = Diagnostic.Create(DiagnosticRule.ParsingThrowsException, location, parsingContext.exception.Message, parsingContext.exception.StackTrace);
                     diagnosticErrors.Add(diagnostic);
                 }
 
@@ -70,7 +70,7 @@
                 log.Add($"{e.StackTrace}");
 
                 var location = Location.Create(file.Path, new TextSpan(), new LinePositionSpan());
-                var diagnostic = Diagnostic.Create(DiagnosticRule.PlantUmlStateMachineParsingThrowsException, location, e.Message, e.StackTrace);
+                var diagnostic = Diagnostic.Create(DiagnosticRule.ParsingThrowsException, location, e.Message, e.StackTrace);
                 diagnosticErrors.Add(diagnostic);
 
                 stateMachine = null;

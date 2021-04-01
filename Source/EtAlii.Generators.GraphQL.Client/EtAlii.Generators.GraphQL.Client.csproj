@@ -23,7 +23,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Antlr4 Include="GraphQLParser.g4">
+    <Antlr4 Include="GraphQL.g4">
       <Listener>false</Listener>
       <Visitor>true</Visitor>
       <Package>$(RootNamespace)</Package>

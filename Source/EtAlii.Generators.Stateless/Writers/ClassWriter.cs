@@ -32,8 +32,8 @@
             context.Writer.WriteLine("{");
             context.Writer.Indent += 1;
 
-            context.Writer.WriteLine($"protected {SourceGenerator.StateMachineType} StateMachine => _stateMachine;");
-            context.Writer.WriteLine($"private readonly {SourceGenerator.StateMachineType} _stateMachine;");
+            context.Writer.WriteLine($"protected {StatelessWriter.StateMachineType} StateMachine => _stateMachine;");
+            context.Writer.WriteLine($"private readonly {StatelessWriter.StateMachineType} _stateMachine;");
             context.Writer.WriteLine();
 
             _fieldWriter.WriteAllTriggerFields(context);

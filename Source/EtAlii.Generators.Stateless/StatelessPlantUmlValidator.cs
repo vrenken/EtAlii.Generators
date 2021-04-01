@@ -44,7 +44,7 @@ namespace EtAlii.Generators.Stateless
 
                 var superStateStartTransitions = superState.StateFragments
                     .OfType<Transition>()
-                    .Where(t => t.From != t.To && t.From == SourceGenerator.BeginStateName)
+                    .Where(t => t.From != t.To && t.From == StatelessWriter.BeginStateName)
                     .ToArray();
 
                 var namedSuperStateStartTransitions = superStateStartTransitions
@@ -116,7 +116,7 @@ namespace EtAlii.Generators.Stateless
         {
             var allTransitions = StateFragment.GetAllTransitions(context.StateMachine.StateFragments);
             var startStates = allTransitions
-                .Where(t => t.From == SourceGenerator.BeginStateName)
+                .Where(t => t.From == StatelessWriter.BeginStateName)
                 .ToArray();
             if (startStates.Length == 0)
             {

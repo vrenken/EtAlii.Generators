@@ -45,7 +45,7 @@ State4 : This is the final state
             var file = new TestAdditionalTextFile(text, "Test.puml");
 
             // Act.
-            var result = parser.TryParsePlantUml(file, log, out var stateMachine, out var diagnostics);
+            var result = parser.TryParse(file, log, out var stateMachine, out var diagnostics);
 
             // Assert.
             Assert.True(result);
@@ -78,7 +78,7 @@ State2 -up-> State3 : Continue
             var file = new TestAdditionalTextFile(text, "Test.puml");
 
             // Act.
-            var result = parser.TryParsePlantUml(file, log, out var stateMachine, out var diagnostics);
+            var result = parser.TryParse(file, log, out var stateMachine, out var diagnostics);
 
             // Assert.
             Assert.False(result);

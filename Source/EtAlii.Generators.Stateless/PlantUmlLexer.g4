@@ -7,7 +7,6 @@
     // ReSharper disable all
 }
 
-
 START                                               : '@startuml';
 END                                                 : '@enduml';
 NOTE_START                                          : 'note';

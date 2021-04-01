@@ -89,7 +89,7 @@
         private void WriteEntryAndExitMethods(WriteContext context, string state)
         {
             var inboundTransitions = StateFragment.GetInboundTransitions(context.StateMachine.StateFragments, state);
-            var writeAsyncEntryMethod = inboundTransitions.All(t => t.IsAsync) && state != SourceGenerator.BeginStateName && state != SourceGenerator.EndStateName;
+            var writeAsyncEntryMethod = inboundTransitions.All(t => t.IsAsync) && state != StatelessWriter.BeginStateName && state != StatelessWriter.EndStateName;
             var entryMethodName = writeAsyncEntryMethod ? $"On{state}EnteredAsync" : $"On{state}Entered";
 
             context.Writer.WriteLine("/// <summary>");
@@ -113,7 +113,7 @@
             context.Writer.WriteLine();
 
             var outboundTransitions = StateFragment.GetOutboundTransitions(context.StateMachine.StateFragments, state);
-            var writeAsyncExitMethod = outboundTransitions.All(t => t.IsAsync) && state != SourceGenerator.BeginStateName && state != SourceGenerator.EndStateName;
+            var writeAsyncExitMethod = outboundTransitions.All(t => t.IsAsync) && state != StatelessWriter.BeginStateName && state != StatelessWriter.EndStateName;
             var exitMethodName = writeAsyncExitMethod ? $"On{state}ExitedAsync" : $"On{state}Exited";
 
             context.Writer.WriteLine("/// <summary>");
@@ -190,7 +190,7 @@
                 context.Writer.Indent -= 1;
                 context.Writer.WriteLine("}");
                 context.Writer.WriteLine(
-                    $"private {(transition.IsAsync ? "Task" : "void")} {transitionMethodName}({typedNamedParameters1}{SourceGenerator.StateMachineType}.Transition transition) => {transitionMethodName}({namedParameters});");
+                    $"private {(transition.IsAsync ? "Task" : "void")} {transitionMethodName}({typedNamedParameters1}{StatelessWriter.StateMachineType}.Transition transition) => {transitionMethodName}({namedParameters});");
                 context.Writer.WriteLine();
             }
         }

@@ -12,18 +12,12 @@ namespace EtAlii.Generators
 
     public abstract class SourceGeneratorBase<T> : ISourceGenerator
     {
-        private readonly string _extension;
-        private readonly DiagnosticDescriptor _parsingExceptionRule;
+        protected abstract IParser<T> CreateParser();
+        protected abstract IWriter<T> CreateWriter();
 
-        protected SourceGeneratorBase(string extension, DiagnosticDescriptor parsingExceptionRule)
-        {
-            _extension = extension;
-            _parsingExceptionRule = parsingExceptionRule;
-        }
+        protected abstract string GetExtension();
 
-        protected abstract bool TryParseFile(AdditionalText file, List<string> log, out T instance, out Diagnostic[] parseDiagnostics);
-
-        protected abstract void WriteContent(T instance, IndentedTextWriter writer, string originalFileName, List<string> log, List<Diagnostic> writeDiagnostics);
+        protected abstract DiagnosticDescriptor GetParsingExceptionRule();
 
         public void Execute(GeneratorExecutionContext context)
         {
@@ -34,16 +28,22 @@ namespace EtAlii.Generators
             // For actual troubleshooting of the source diagrams we use the Roslyn specific Diagnostics pattern.
             var diagnostics = new List<Diagnostic>();
 
+            var extension = GetExtension();
+            var parsingExceptionRule = GetParsingExceptionRule();
+
             // This code generator is only able to understand and parse the designated files.
             // Because of that we ignore everything except files with the configured extension.
             var additionalFiles = context.AdditionalFiles
-                .Where(file => Path.GetExtension(file.Path).Equals(_extension, StringComparison.OrdinalIgnoreCase))
+                .Where(file => Path.GetExtension(file.Path).Equals(extension, StringComparison.OrdinalIgnoreCase))
                 .ToArray();
+
+            var parser = CreateParser();
+            var writer = CreateWriter();
 
             foreach(var file in additionalFiles)
             {
                 // First thing to do is parse the file and build an in-memory model.
-                if (TryParseFile(file, log, out var instance, out var parseDiagnostics))
+                if (parser.TryParse(file, log, out var instance, out var parseDiagnostics))
                 {
                     try
                     {
@@ -51,9 +51,9 @@ namespace EtAlii.Generators
                         var fileName = Path.ChangeExtension(originalFileName, "Generated.cs");
 
                         using var stringWriter = new StringWriter();
-                        using var writer = new IndentedTextWriter(stringWriter);
+                        using var indentedWriter = new IndentedTextWriter(stringWriter);
 
-                        WriteContent(instance, writer, originalFileName, log, diagnostics);
+                        writer.Write(instance, indentedWriter, originalFileName, log, diagnostics);
 
                         var content = stringWriter.ToString();
                         context.AddSource(fileName, content);
@@ -64,7 +64,7 @@ namespace EtAlii.Generators
                         log.Add($"{e.StackTrace}");
 
                         var location = Location.Create(file.Path, new TextSpan(), new LinePositionSpan());
-                        var diagnostic = Diagnostic.Create(_parsingExceptionRule, location, e.Message, e.StackTrace);
+                        var diagnostic = Diagnostic.Create(parsingExceptionRule, location, e.Message, e.StackTrace);
                         diagnostics.Add(diagnostic);
                     }
                 }

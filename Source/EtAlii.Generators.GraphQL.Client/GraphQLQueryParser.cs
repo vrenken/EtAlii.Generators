@@ -11,9 +11,9 @@
     /// The central class responsible of parsing both the PlantUML and Stateless specific constructions
     /// from the given input file.
     /// </summary>
-    public class GraphQLQueryParser
+    public class GraphQLQueryParser : IParser<object>
     {
-        public bool TryParse(AdditionalText file, List<string> log, out StateMachine stateMachine, out Diagnostic[] diagnostics)
+        public bool TryParse(AdditionalText file, List<string> log, out object stateMachine, out Diagnostic[] diagnostics)
         {
             var success = false;
             var diagnosticErrors = new List<Diagnostic>();
@@ -22,7 +22,7 @@
                 var plantUmlText = file.GetText()?.ToString();
 
                 log.Add("========================");
-                log.Add($"Parsing PlantUml file: {file.Path}");
+                log.Add($"Parsing GraphQL query file: {file.Path}");
                 log.Add(plantUmlText);
 
                 var inputStream = new AntlrInputStream(plantUmlText);
@@ -32,7 +32,7 @@
                 var errorListener = new ParsingErrorListener(file.Path, DiagnosticRule.InvalidPlantUmlStateMachine);
                 parser.RemoveErrorListeners();
                 parser.AddErrorListener(errorListener);
-                var parsingContext = parser.state_machine();
+                var parsingContext = parser.document();
 
                 var visitor = new GraphQLVisitor();
                 stateMachine = visitor.VisitDocument(parsingContext) as StateMachine;
@@ -48,29 +48,29 @@
                 {
                     log.Add($"Parser exception: {parsingContext.exception.Message}");
                     var location = Location.Create(file.Path, TextSpan.FromBounds(0,0), new LinePositionSpan(LinePosition.Zero, LinePosition.Zero));
-                    var diagnostic = Diagnostic.Create(DiagnosticRule.PlantUmlStateMachineParsingThrowsException, location, parsingContext.exception.Message, parsingContext.exception.StackTrace);
+                    var diagnostic = Diagnostic.Create(DiagnosticRule.ParsingThrowsException, location, parsingContext.exception.Message, parsingContext.exception.StackTrace);
                     diagnosticErrors.Add(diagnostic);
                 }
 
                 success = !diagnosticErrors.Any();
                 if (success)
                 {
-                    log.Add("Parsed PlantUml");
+                    log.Add("Parsed GraphQL query");
                 }
                 else
                 {
-                    log.Add("Failed parsed PlantUml");
+                    log.Add("Failed parsing GraphQL query");
 
                     stateMachine = null;
                 }
             }
             catch (Exception e)
             {
-                log.Add($"Unable to parse PlantUml: {e.Message}");
+                log.Add($"Unable to parse GraphQL query: {e.Message}");
                 log.Add($"{e.StackTrace}");
 
                 var location = Location.Create(file.Path, new TextSpan(), new LinePositionSpan());
-                var diagnostic = Diagnostic.Create(DiagnosticRule.PlantUmlStateMachineParsingThrowsException, location, e.Message, e.StackTrace);
+                var diagnostic = Diagnostic.Create(DiagnosticRule.ParsingThrowsException, location, e.Message, e.StackTrace);
                 diagnosticErrors.Add(diagnostic);
 
                 stateMachine = null;
