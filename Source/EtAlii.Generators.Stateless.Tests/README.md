@@ -19,7 +19,7 @@ Usage:
 
 3. Come up with a fancy PlantUML state machine diagram, for example:
 
-    ![SimpleStateMachine.puml](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/vrenken/EtAlii.Generators/main/Source/EtAlii.Generators.Stateless.Tests/SimpleStateMachine.puml)
+    ![SimpleStateMachine.puml](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/vrenken/EtAlii.Generators/main/Source/EtAlii.Generators.Stateless.Tests/StateMachines/SimpleStateMachine.puml)
 
 4. Put the PlantUML diagram in a file, for example `SimpleStateMachine.puml` as specified below:
    ```puml
@@ -129,7 +129,7 @@ Usage:
 
 The code generation can be configured to create asynchronous methods by providing stereotype details on the needed transitions. The below diagram and corresponding puml code show how to do so:
 
-![AsyncStateMachine.puml](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/vrenken/EtAlii.Generators/main/Source/EtAlii.Generators.Stateless.Tests/AsyncStateMachine.puml)
+![AsyncStateMachine.puml](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/vrenken/EtAlii.Generators/main/Source/EtAlii.Generators.Stateless.Tests/StateMachines/AsyncStateMachine.puml)
 
 ```puml
 @startuml
@@ -156,7 +156,7 @@ Please take notice:
 Using stereotype details, transition can be configured in the puml file to demand parameters.
 When parameter details are provided, the code generation writes both the trigger methods and virtual methods will the parameters specified.
 
-![ParameterStateMachine.puml](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/vrenken/EtAlii.Generators/main/Source/EtAlii.Generators.Stateless.Tests/ParameterStateMachine.puml)
+![ParameterStateMachine.puml](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/vrenken/EtAlii.Generators/main/Source/EtAlii.Generators.Stateless.Tests/StateMachines/ParameterStateMachine.puml)
 
 ```puml
 @startuml
@@ -204,7 +204,7 @@ Please take notice:
 
 Both Stateless and PlantUML support nested states. The code generator is able to parse and generate nesting but as this is a relative new feature there might be some hiccups. Happy to see PR's to improve these matters.
 
-![ParameterStateMachine.puml](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/vrenken/EtAlii.Generators/main/Source/EtAlii.Generators.Stateless.Tests/ParameterStateMachine.puml)
+![ParameterStateMachine.puml](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/vrenken/EtAlii.Generators/main/Source/EtAlii.Generators.Stateless.Tests/StateMachines/ParameterStateMachine.puml)
 
 ```puml
 @startuml
