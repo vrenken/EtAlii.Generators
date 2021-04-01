@@ -21,14 +21,14 @@
 
         public void Write(WriteContext context)
         {
-            var prefix = context.StateMachine.GeneratePartialClass ? "abstract partial" : "abstract";
+            var prefix = context.Instance.GeneratePartialClass ? "abstract partial" : "abstract";
 
             context.Writer.WriteLine("/// <summary>");
             context.Writer.WriteLine($"/// This is the base class for the state machine as defined in '{context.OriginalFileName}'.");
             context.Writer.WriteLine("/// Inherit the class and override the transition methods to define the necessary business behavior.");
             context.Writer.WriteLine("/// The transitions can then be triggered by calling the corresponding trigger methods.");
             context.Writer.WriteLine("/// </summary>");
-            context.Writer.WriteLine($"public {prefix} class {context.StateMachine.ClassName}");
+            context.Writer.WriteLine($"public {prefix} class {context.Instance.ClassName}");
             context.Writer.WriteLine("{");
             context.Writer.Indent += 1;
 
@@ -59,7 +59,7 @@
 
         private void WriteConstructor(WriteContext context)
         {
-            context.Writer.WriteLine($"protected {context.StateMachine.ClassName}()");
+            context.Writer.WriteLine($"protected {context.Instance.ClassName}()");
             context.Writer.WriteLine("{");
             context.Writer.Indent += 1;
 

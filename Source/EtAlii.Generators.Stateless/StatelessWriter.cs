@@ -24,7 +24,6 @@
         public const string EndStateName = "_End";
 
         private readonly NamespaceWriter _namespaceWriter;
-        private readonly StatelessPlantUmlValidator _validator;
 
         public StatelessWriter()
         {
@@ -39,8 +38,6 @@
             var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter);
             var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, instantiationWriter);
             _namespaceWriter = new NamespaceWriter(classWriter);
-
-            _validator = new StatelessPlantUmlValidator();
         }
 
         public void Write(StateMachine stateMachine, IndentedTextWriter writer, string originalFileName, List<string> log, List<Diagnostic> writeDiagnostics)
@@ -55,8 +52,6 @@
             }
 
             var writeContext = new WriteContextFactory().Create(writer, originalFileName, log, stateMachine);
-
-            _validator.Validate(writeContext, writeDiagnostics);
 
             _namespaceWriter.Write(writeContext);
         }

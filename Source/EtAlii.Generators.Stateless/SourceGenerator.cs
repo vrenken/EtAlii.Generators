@@ -18,6 +18,8 @@
 
         protected override IWriter<StateMachine> CreateWriter() => new StatelessWriter();
 
+        protected override IValidator<StateMachine> CreateValidator() => new StatelessPlantUmlValidator();
+
         protected override string GetExtension() => ".puml";
 
         protected override DiagnosticDescriptor GetParsingExceptionRule() => DiagnosticRule.PlantUmlStateMachineProcessingThrowsException;

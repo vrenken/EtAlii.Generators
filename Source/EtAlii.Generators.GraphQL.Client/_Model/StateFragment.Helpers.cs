@@ -66,7 +66,6 @@ namespace EtAlii.Generators.GraphQL.Client
 
         public static Transition[] GetUniqueParameterTransitions(StateFragment[] fragments)
         {
-
             // We want to know all unique transitions defined in the diagram.
             // That is, the transitions grouped by the trigger and unique sequence of parameters.
             return GetAllTransitions(fragments)

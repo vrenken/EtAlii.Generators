@@ -6,9 +6,11 @@ namespace EtAlii.Generators.Stateless
 
     public static class DiagnosticRule
     {
+        private const string Prefix = "SL";
+
         public static readonly DiagnosticDescriptor InvalidPlantUmlStateMachine = new
         (
-            id: "SL1001",
+            id: Prefix + "1001",
             title: "PlantUml file is invalid",
             messageFormat: "PlantUml file is invalid: {0}",
             category: "Code-Gen",
@@ -16,11 +18,11 @@ namespace EtAlii.Generators.Stateless
             isEnabledByDefault: true
         );
 
-        public static readonly DiagnosticDescriptor ParsingThrowsException = new
+        public static readonly DiagnosticDescriptor ParsingThrewException = new
         (
-            id: "SL1002",
-            title: "PlantUml parsing throws exception",
-            messageFormat: "PlantUml parsing throws exception: '{0}' {1}",
+            id: Prefix + "1002",
+            title: "PlantUml parsing threw exception",
+            messageFormat: "PlantUml parsing threw exception: '{0}' {1}",
             category: "Code-Gen",
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true
@@ -28,7 +30,7 @@ namespace EtAlii.Generators.Stateless
 
         public static readonly DiagnosticDescriptor NoStartStatesDefined = new
         (
-            id: "SL1003",
+            id: Prefix + "1003",
             title: "No start states defined",
             messageFormat: "No start states defined",
             category: "Code-Gen",
@@ -38,7 +40,7 @@ namespace EtAlii.Generators.Stateless
 
         public static readonly DiagnosticDescriptor UnnamedParameter = new
         (
-            id: "SL1004",
+            id: Prefix + "1004",
             title: "Trigger definition uses unnamed parameters - Consider using named parameters",
             messageFormat: "Trigger definition uses unnamed parameters: '{0}' - Consider using named parameters",
             category: "Code-Gen",
@@ -48,7 +50,7 @@ namespace EtAlii.Generators.Stateless
 
         public static readonly DiagnosticDescriptor PlantUmlStateMachineProcessingThrowsException = new
         (
-            id: "SL1005",
+            id: Prefix + "1005",
             title: "PlantUml processing throws exception",
             messageFormat: "PlantUml processing throws exception: '{0}' {1}",
             category: "Code-Gen",
@@ -58,7 +60,7 @@ namespace EtAlii.Generators.Stateless
 
         public static readonly DiagnosticDescriptor UnnamedTrigger = new
         (
-            id: "SL1006",
+            id: Prefix + "1006",
             title: "State transition lacks a named trigger - Consider using named triggers",
             messageFormat: "State transition lacks a named trigger: '{0}' - Consider using named triggers (From -> To : Trigger)",
             category: "Code-Gen",
@@ -68,7 +70,7 @@ namespace EtAlii.Generators.Stateless
 
         public static readonly DiagnosticDescriptor SuperstateHasNoStartOrEntryTransitionDefined = new
         (
-            id: "SL1007",
+            id: Prefix + "1007",
             title: "Superstate has no start or entry transitions defined",
             messageFormat: "Superstate {0} has no start or entry transition defined",
             category: "Code-Gen",
@@ -78,7 +80,7 @@ namespace EtAlii.Generators.Stateless
 
         public static readonly DiagnosticDescriptor SuperstateHasNoStopOrExitTransitionDefined = new
         (
-            id: "SL1008",
+            id: Prefix + "1008",
             title: "Superstate has no stop or exit transitions defined",
             messageFormat: "Superstate {0} has no stop or exit transition defined",
             category: "Code-Gen",
@@ -88,7 +90,7 @@ namespace EtAlii.Generators.Stateless
 
         public static readonly DiagnosticDescriptor SuperstateHasBothUnnamedAndDirectTransitionsDefined = new
         (
-            id: "SL1009",
+            id: Prefix + "1009",
             title: "Superstate has both unnamed start transitions as well as direct substate transitions defined",
             messageFormat: "Superstate {0} has both unnamed start transitions as well as direct substate transitions defined",
             category: "Code-Gen",
@@ -98,7 +100,7 @@ namespace EtAlii.Generators.Stateless
 
         public static readonly DiagnosticDescriptor SuperstateHasMultipleUnnamedStartTransitionsDefined = new
         (
-            id: "SL1010",
+            id: Prefix + "1010",
             title: "Superstate can only have one single unnamed start transition defined",
             messageFormat: "Superstate {0} can only have one single unnamed start transition defined",
             category: "Code-Gen",

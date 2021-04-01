@@ -8,6 +8,7 @@
     {
         public override object VisitDocument(GraphQLParser.DocumentContext context)
         {
+            // Action: Return the right object hierarchy.
             return base.VisitDocument(context);
         }
     }

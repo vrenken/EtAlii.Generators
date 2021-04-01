@@ -18,8 +18,10 @@
 
         protected override IWriter<object> CreateWriter() => new GraphQLQueryWriter();
 
+        protected override IValidator<object> CreateValidator() => new GraphQLQueryValidator();
+
         protected override string GetExtension() => ".graphql";
 
-        protected override DiagnosticDescriptor GetParsingExceptionRule() => DiagnosticRule.PlantUmlStateMachineProcessingThrowsException;
+        protected override DiagnosticDescriptor GetParsingExceptionRule() => DiagnosticRule.ParsingThrewException;
     }
 }

@@ -9,9 +9,9 @@ namespace EtAlii.Generators.GraphQL.Client
     /// The central class responsible of validating the query requirements
     /// and express them using Roslyn Diagnostic instances.
     /// </summary>
-    public class GraphQLQueryValidator
+    public class GraphQLQueryValidator : IValidator<object>
     {
-        public void Validate(WriteContext context, List<Diagnostic> diagnostics)
+        public void Validate(object instance, string originalFileName, List<Diagnostic> diagnostics)
         {
         }
     }

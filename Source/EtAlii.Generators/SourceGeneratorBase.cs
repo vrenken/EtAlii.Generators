@@ -15,6 +15,8 @@ namespace EtAlii.Generators
         protected abstract IParser<T> CreateParser();
         protected abstract IWriter<T> CreateWriter();
 
+        protected abstract IValidator<T> CreateValidator();
+
         protected abstract string GetExtension();
 
         protected abstract DiagnosticDescriptor GetParsingExceptionRule();
@@ -39,6 +41,7 @@ namespace EtAlii.Generators
 
             var parser = CreateParser();
             var writer = CreateWriter();
+            var validator = CreateValidator();
 
             foreach(var file in additionalFiles)
             {
@@ -49,6 +52,8 @@ namespace EtAlii.Generators
                     {
                         var originalFileName = Path.GetFileName(file.Path);
                         var fileName = Path.ChangeExtension(originalFileName, "Generated.cs");
+
+                        validator.Validate(instance, originalFileName, diagnostics);
 
                         using var stringWriter = new StringWriter();
                         using var indentedWriter = new IndentedTextWriter(stringWriter);

@@ -28,25 +28,22 @@
         private void WriteTriggerInstantiations(WriteContext context)
         {
             // We only need to write a trigger construction calls for all relations that have parameters.
-            var uniqueTransitions = context.UniqueParameterTransitions
+            var uniqueTransitionsWithParameters = StateFragment.GetUniqueParameterTransitions(context.Instance.StateFragments)
                 .Where(t => t.Parameters.Any())
                 .ToArray();
 
-            if (uniqueTransitions.Any())
+            if (uniqueTransitionsWithParameters.Any())
             {
                 context.Writer.WriteLine("// And for all triggers that are configured with parameters we need to instantiate the corresponding backing fields.");
-            }
 
-            foreach (var uniqueTransition in uniqueTransitions)
-            {
-                var genericParameters = _parameterConverter.ToGenericParameters(uniqueTransition.Parameters);
-                var triggerMemberName = _transitionConverter.ToTriggerMemberName(uniqueTransition);
+                foreach (var transition in uniqueTransitionsWithParameters)
+                {
+                    var genericParameters = _parameterConverter.ToGenericParameters(transition.Parameters);
+                    var triggerMemberName = _transitionConverter.ToTriggerMemberName(transition);
 
-                context.Writer.WriteLine($"{triggerMemberName} = _stateMachine.SetTriggerParameters{genericParameters}(Trigger.{uniqueTransition.Trigger});");
-            }
+                    context.Writer.WriteLine($"{triggerMemberName} = _stateMachine.SetTriggerParameters{genericParameters}(Trigger.{transition.Trigger});");
+                }
 
-            if (uniqueTransitions.Any())
-            {
                 context.Writer.WriteLine();
             }
         }
@@ -55,7 +52,7 @@
         {
             context.Writer.WriteLine("// Then we need to configure the state machine.");
 
-            var allStates = StateFragment.GetAllStates(context.StateMachine.StateFragments);
+            var allStates = StateFragment.GetAllStates(context.Instance.StateFragments);
             foreach (var state in allStates)
             {
                 WriteStateConstruction(context, state);
@@ -67,7 +64,7 @@
 
             var stateConfiguration = new List<string>();
 
-            var superState = context.StateMachine.StateFragments
+            var superState = context.Instance.StateFragments
                 .OfType<SuperState>()
                 .SingleOrDefault(s => s.StateFragments.OfType<Transition>().Any(t => t.To == state));
             if (superState != null)
@@ -95,7 +92,7 @@
 
         private void WriteEntryAndExitConfiguration(WriteContext context, string state, List<string> stateConfiguration)
         {
-            var inboundTransitions = StateFragment.GetInboundTransitions(context.StateMachine.StateFragments, state);
+            var inboundTransitions = StateFragment.GetInboundTransitions(context.Instance.StateFragments, state);
             if (inboundTransitions.All(t => t.IsAsync) && state != StatelessWriter.BeginStateName && state != StatelessWriter.EndStateName)
             {
                 stateConfiguration.Add($"\t.OnEntryAsync(On{state}EnteredAsync)");
@@ -105,7 +102,7 @@
                 stateConfiguration.Add($"\t.OnEntry(On{state}Entered)");
             }
 
-            var outboundTransitions = StateFragment.GetOutboundTransitions(context.StateMachine.StateFragments, state);
+            var outboundTransitions = StateFragment.GetOutboundTransitions(context.Instance.StateFragments, state);
             if (outboundTransitions.All(t => t.IsAsync) && state != StatelessWriter.BeginStateName && state != StatelessWriter.EndStateName)
             {
                 stateConfiguration.Add($"\t.OnExitAsync(On{state}ExitedAsync)");
@@ -118,7 +115,7 @@
 
         private void WriteInternalTransitions(WriteContext context, string state, List<string> stateConfiguration)
         {
-            var internalTransitions = StateFragment.GetInternalTransitions(context.StateMachine.StateFragments, state);
+            var internalTransitions = StateFragment.GetInternalTransitions(context.Instance.StateFragments, state);
 
             var lines = internalTransitions
                 .GroupBy(t => t.Trigger)
@@ -141,7 +138,7 @@
         }
         private void WriteOutboundTransitions(WriteContext context, string state, List<string> stateConfiguration)
         {
-            var outboundTransitions = StateFragment.GetOutboundTransitions(context.StateMachine.StateFragments, state);
+            var outboundTransitions = StateFragment.GetOutboundTransitions(context.Instance.StateFragments, state);
             var lines = outboundTransitions
                 .GroupBy(t => t.Trigger)
                 .Select(g => g.First())
@@ -153,7 +150,7 @@
 
         private void WriteInboundTransitions(WriteContext context, string state, List<string> stateConfiguration)
         {
-            var inboundTransitions = StateFragment.GetInboundTransitions(context.StateMachine.StateFragments, state);
+            var inboundTransitions = StateFragment.GetInboundTransitions(context.Instance.StateFragments, state);
             var lines = inboundTransitions
                 .GroupBy(t => t.Trigger)
                 .Select(g => g.First())

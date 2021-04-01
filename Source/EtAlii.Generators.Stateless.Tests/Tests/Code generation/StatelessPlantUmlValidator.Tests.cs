@@ -26,7 +26,6 @@
         {
             // Arrange.
             var originalFileName = "Test.puml";
-            var log = new List<string>();
             var parser = new StatelessPlantUmlValidator();
             var headers = new[]
             {
@@ -49,11 +48,10 @@
             var stateMachine = new StateMachine(headers, settings, fragments);
             using var stringWriter = new StringWriter();
             using var indentedTriter = new IndentedTextWriter(stringWriter);
-            var writeContext = new WriteContextFactory().Create(indentedTriter, originalFileName, log, stateMachine);
             var diagnostics = new List<Diagnostic>();
 
             // Act.
-            parser.Validate(writeContext, diagnostics);
+            parser.Validate(stateMachine, originalFileName, diagnostics);
 
             // Assert.
             Assert.NotEmpty(diagnostics);

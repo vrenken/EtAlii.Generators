@@ -10,9 +10,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)IParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IValidator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IWriter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ParsingErrorListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SourceGeneratorBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WriteContextBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)_Model\SourcePosition.cs" />
   </ItemGroup>
   <PropertyGroup>
@@ -30,9 +32,6 @@
       <Pack>true</Pack>
       <PackagePath>analyzers/dotnet/cs</PackagePath>
     </None>
-    <Content Include="Build\*">
-      <PackagePath>build\</PackagePath>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Update="NETStandard.Library" PrivateAssets="all" />

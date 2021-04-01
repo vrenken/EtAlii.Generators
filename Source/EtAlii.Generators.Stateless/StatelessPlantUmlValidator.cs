@@ -11,27 +11,27 @@ namespace EtAlii.Generators.Stateless
     /// The central class responsible of validating both the PlantUML and Stateless specific requirements
     /// and express them using Roslyn Diagnostic instances.
     /// </summary>
-    public class StatelessPlantUmlValidator
+    public class StatelessPlantUmlValidator : IValidator<StateMachine>
     {
-        public void Validate(WriteContext context, List<Diagnostic> diagnostics)
+        public void Validate(StateMachine instance, string originalFileName, List<Diagnostic> diagnostics)
         {
-            CheckForStartStates(context, diagnostics);
+            CheckForStartStates(instance, originalFileName, diagnostics);
 
-            CheckForUnnamedParameters(context, diagnostics);
+            CheckForUnnamedParameters(instance, originalFileName, diagnostics);
 
-            CheckForUnnamedTriggers(context, diagnostics);
+            CheckForUnnamedTriggers(instance, originalFileName, diagnostics);
 
-            CheckSubstatesEntryTransition(context, diagnostics);
+            CheckSubstatesEntryTransition(instance, originalFileName, diagnostics);
         }
 
-        private void CheckSubstatesEntryTransition(WriteContext context, List<Diagnostic> diagnostics)
+        private void CheckSubstatesEntryTransition(StateMachine stateMachine, string originalFileName, List<Diagnostic> diagnostics)
         {
-            var superStates = StateFragment.GetAllSuperStates(context.StateMachine.StateFragments);
+            var superStates = StateFragment.GetAllSuperStates(stateMachine.StateFragments);
             foreach (var superState in superStates)
             {
                 var allSubstates = StateFragment.GetAllStates(superState.StateFragments);
                 var allSubTransitions = StateFragment.GetAllTransitions(superState.StateFragments);
-                var allTransitions = StateFragment.GetAllTransitions(context.StateMachine.StateFragments);
+                var allTransitions = StateFragment.GetAllTransitions(stateMachine.StateFragments);
 
                 var directTransitionsToSubState = allTransitions
                     .Where(t => !allSubTransitions.Contains(t))
@@ -64,7 +64,7 @@ namespace EtAlii.Generators.Stateless
                 if (unnamedSuperStateStartTransitions.Any() && directTransitionsToSubState.Any())
                 {
                     // As we cannot guarantee an adequate sequential order of execution we don't support both unnamed start transitions and direct substate transitions.
-                    var location = superState.Source.ToLocation(context.OriginalFileName);
+                    var location = superState.Source.ToLocation(originalFileName);
                     var diagnostic = Diagnostic.Create(DiagnosticRule.SuperstateHasBothUnnamedAndDirectTransitionsDefined, location, superState.Source.Text);
                     diagnostics.Add(diagnostic);
                 }
@@ -72,32 +72,32 @@ namespace EtAlii.Generators.Stateless
                 // ~NAMED UNNAMED+ ~DIRECT
                 if (!namedSuperStateStartTransitions.Any() && unnamedSuperStateStartTransitions.Any() && !directTransitionsToSubState.Any() && unnamedSuperStateStartTransitions.Length > 1)
                 {
-                    var location = superState.Source.ToLocation(context.OriginalFileName);
+                    var location = superState.Source.ToLocation(originalFileName);
                     var diagnostic = Diagnostic.Create(DiagnosticRule.SuperstateHasMultipleUnnamedStartTransitionsDefined, location, superState.Source.Text);
                     diagnostics.Add(diagnostic);
                 }
             }
         }
 
-        private static void CheckForUnnamedTriggers(WriteContext context, List<Diagnostic> diagnostics)
+        private static void CheckForUnnamedTriggers(StateMachine stateMachine, string originalFileName, List<Diagnostic> diagnostics)
         {
-            var allTransitions = StateFragment.GetAllTransitions(context.StateMachine.StateFragments);
+            var allTransitions = StateFragment.GetAllTransitions(stateMachine.StateFragments);
             var transitionsWithUnnamedTrigger = allTransitions
                 .Where(t => !t.HasConcreteTriggerName)
                 .ToArray();
 
             foreach (var transitionWithUnnamedTrigger in transitionsWithUnnamedTrigger)
             {
-                var location = transitionWithUnnamedTrigger.Source.ToLocation(context.OriginalFileName);
+                var location = transitionWithUnnamedTrigger.Source.ToLocation(originalFileName);
                 var diagnostic = Diagnostic.Create(DiagnosticRule.UnnamedTrigger, location, transitionWithUnnamedTrigger.Source.Text);
 
                 diagnostics.Add(diagnostic);
             }
         }
 
-        private static void CheckForUnnamedParameters(WriteContext context, List<Diagnostic> diagnostics)
+        private static void CheckForUnnamedParameters(StateMachine stateMachine, string originalFileName, List<Diagnostic> diagnostics)
         {
-            var allTransitions = StateFragment.GetAllTransitions(context.StateMachine.StateFragments);
+            var allTransitions = StateFragment.GetAllTransitions(stateMachine.StateFragments);
             var unnamedParameters = allTransitions
                 .Where(t => t.Parameters.Any(p => !p.HasName))
                 .Select(t => t.Parameters.First(p => !p.HasName))
@@ -105,22 +105,22 @@ namespace EtAlii.Generators.Stateless
 
             foreach (var unnamedParameter in unnamedParameters)
             {
-                var location = unnamedParameter.Source.ToLocation(context.OriginalFileName);
+                var location = unnamedParameter.Source.ToLocation(originalFileName);
                 var diagnostic = Diagnostic.Create(DiagnosticRule.UnnamedParameter, location, unnamedParameter.Source.Text);
 
                 diagnostics.Add(diagnostic);
             }
         }
 
-        private static void CheckForStartStates(WriteContext context, List<Diagnostic> diagnostics)
+        private static void CheckForStartStates(StateMachine stateMachine, string originalFileName, List<Diagnostic> diagnostics)
         {
-            var allTransitions = StateFragment.GetAllTransitions(context.StateMachine.StateFragments);
+            var allTransitions = StateFragment.GetAllTransitions(stateMachine.StateFragments);
             var startStates = allTransitions
                 .Where(t => t.From == StatelessWriter.BeginStateName)
                 .ToArray();
             if (startStates.Length == 0)
             {
-                var location = Location.Create(context.OriginalFileName, new TextSpan(), new LinePositionSpan());
+                var location = Location.Create(originalFileName, new TextSpan(), new LinePositionSpan());
                 var diagnostic = Diagnostic.Create(DiagnosticRule.NoStartStatesDefined, location);
                 diagnostics.Add(diagnostic);
             }

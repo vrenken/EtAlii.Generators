@@ -64,6 +64,21 @@ namespace EtAlii.Generators.Stateless
             return allTransitions;
         }
 
+        /// <summary>
+        /// We want to know all unique transitions defined in the diagram.
+        /// That is, the transitions grouped by the trigger and unique sequence of parameters.
+        /// </summary>
+        /// <param name="fragments"></param>
+        /// <returns></returns>
+        public static Transition[] GetUniqueParameterTransitions(StateFragment[] fragments)
+        {
+            return GetAllTransitions(fragments)
+                .Select(t => new { Transition = t, ParametersAsKey = $"{t.Trigger}{string.Join(", ", t.Parameters.Select(p => p.Type))}" })
+                .GroupBy(item => item.ParametersAsKey)
+                .Select(g => g.First().Transition)
+                .ToArray();
+        }
+
         public static string[] GetAllStates(StateFragment[] fragments)
         {
             var allTransitions = GetAllTransitions(fragments);

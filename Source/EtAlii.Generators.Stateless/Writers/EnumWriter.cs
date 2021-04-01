@@ -12,7 +12,7 @@
             context.Writer.WriteLine("{");
             context.Writer.Indent += 1;
 
-            var allStates = StateFragment.GetAllStates(context.StateMachine.StateFragments);
+            var allStates = StateFragment.GetAllStates(context.Instance.StateFragments);
             foreach (var state in allStates)
             {
                 context.Writer.WriteLine($"{state},");
@@ -32,7 +32,7 @@
             context.Writer.WriteLine("{");
             context.Writer.Indent += 1;
 
-            var allTriggers = StateFragment.GetAllTriggers(context.StateMachine.StateFragments);
+            var allTriggers = StateFragment.GetAllTriggers(context.Instance.StateFragments);
             foreach (var trigger in allTriggers)
             {
                 context.Writer.WriteLine($"{trigger},");

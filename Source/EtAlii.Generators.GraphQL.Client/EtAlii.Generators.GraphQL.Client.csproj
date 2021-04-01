@@ -23,6 +23,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="Build\*">
+      <PackagePath>build\</PackagePath>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Antlr4 Include="GraphQL.g4">
       <Listener>false</Listener>
       <Visitor>true</Visitor>
