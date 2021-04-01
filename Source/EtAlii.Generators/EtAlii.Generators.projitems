@@ -9,17 +9,15 @@
     <Import_RootNamespace>EtAlii.Generators</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)IParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IWriter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ParsingErrorListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SourceGeneratorBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)_Model\SourcePosition.cs" />
   </ItemGroup>
-  
-  
-
   <PropertyGroup>
     <Antlr4LibraryPath>$(PkgAntlr4_Runtime_Standard)\lib\netstandard2.0\Antlr4.Runtime.Standard.dll</Antlr4LibraryPath>
   </PropertyGroup>
-
   <ItemGroup>
     <!-- Package the generator in the analyzer directory of the nuget package -->
     <None Include="$(OutputPath)\$(AssemblyName).dll">
@@ -36,29 +34,23 @@
       <PackagePath>build\</PackagePath>
     </Content>
   </ItemGroup>
-  
-  
   <ItemGroup>
     <PackageReference Update="NETStandard.Library" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" PrivateAssets="all" />
     <PackageReference Include="Antlr4BuildTasks" Version="8.14.0" PrivateAssets="all" />
   </ItemGroup>
-
   <PropertyGroup>
     <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetPackageDependencyTargetPaths</GetTargetPathDependsOn>
   </PropertyGroup>
-
   <ItemGroup>
     <!-- Generator dependencies -->
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.2" PrivateAssets="all">
       <GeneratePathProperty>true</GeneratePathProperty>
     </PackageReference>
   </ItemGroup>
-
   <Target Name="GetPackageDependencyTargetPaths">
     <ItemGroup>
       <TargetPathWithTargetPlatformMoniker Include="$(Antlr4LibraryPath)" IncludeRuntimeDependency="false" />
     </ItemGroup>
   </Target>
-
 </Project>

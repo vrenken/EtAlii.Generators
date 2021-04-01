@@ -31,7 +31,7 @@
                 var triggerType = transition.Parameters.Any()
                     ? "TriggerWithParameters"
                     : "Trigger";
-                context.Writer.WriteLine($"private {SourceGenerator.StateMachineType}.{triggerType}{genericParameters} {triggerMemberName};");
+                context.Writer.WriteLine($"private {StatelessWriter.StateMachineType}.{triggerType}{genericParameters} {triggerMemberName};");
             }
         }
     }

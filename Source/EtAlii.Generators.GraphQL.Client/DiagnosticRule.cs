@@ -16,7 +16,7 @@ namespace EtAlii.Generators.GraphQL.Client
             isEnabledByDefault: true
         );
 
-        public static readonly DiagnosticDescriptor PlantUmlStateMachineParsingThrowsException = new
+        public static readonly DiagnosticDescriptor ParsingThrowsException = new
         (
             id: "SL1002",
             title: "PlantUml parsing throws exception",

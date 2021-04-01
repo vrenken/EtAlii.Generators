@@ -17,7 +17,7 @@
         public void WriteStateMachineInstantiation(WriteContext context)
         {
             context.Writer.WriteLine("// Time to create a new state machine instance.");
-            context.Writer.WriteLine($"_stateMachine = new {SourceGenerator.StateMachineType}(State.{SourceGenerator.BeginStateName});");
+            context.Writer.WriteLine($"_stateMachine = new {StatelessWriter.StateMachineType}(State.{StatelessWriter.BeginStateName});");
             context.Writer.WriteLine();
 
             WriteTriggerInstantiations(context);
@@ -96,7 +96,7 @@
         private void WriteEntryAndExitConfiguration(WriteContext context, string state, List<string> stateConfiguration)
         {
             var inboundTransitions = StateFragment.GetInboundTransitions(context.StateMachine.StateFragments, state);
-            if (inboundTransitions.All(t => t.IsAsync) && state != SourceGenerator.BeginStateName && state != SourceGenerator.EndStateName)
+            if (inboundTransitions.All(t => t.IsAsync) && state != StatelessWriter.BeginStateName && state != StatelessWriter.EndStateName)
             {
                 stateConfiguration.Add($"\t.OnEntryAsync(On{state}EnteredAsync)");
             }
@@ -106,7 +106,7 @@
             }
 
             var outboundTransitions = StateFragment.GetOutboundTransitions(context.StateMachine.StateFragments, state);
-            if (outboundTransitions.All(t => t.IsAsync) && state != SourceGenerator.BeginStateName && state != SourceGenerator.EndStateName)
+            if (outboundTransitions.All(t => t.IsAsync) && state != StatelessWriter.BeginStateName && state != StatelessWriter.EndStateName)
             {
                 stateConfiguration.Add($"\t.OnExitAsync(On{state}ExitedAsync)");
             }
@@ -131,8 +131,8 @@
                     var triggerParameterTypes = string.Join(", ", transition.Parameters.Select(p => p.Type));
                     triggerParameterTypes = transition.Parameters.Any() ? $"{triggerParameterTypes}, " : "";
                     var methodCast = transition.IsAsync
-                        ? $"(Func<{triggerParameterTypes}{SourceGenerator.StateMachineType}.Transition, Task>)"
-                        : $"(Action<{triggerParameterTypes}{SourceGenerator.StateMachineType}.Transition>)";
+                        ? $"(Func<{triggerParameterTypes}{StatelessWriter.StateMachineType}.Transition, Task>)"
+                        : $"(Action<{triggerParameterTypes}{StatelessWriter.StateMachineType}.Transition>)";
                     return $"\t.InternalTransition{(transition.IsAsync ? "Async" : "")}{genericParameters}({triggerParameter}, {methodCast}{transitionMethodName})";
                 })
                 .ToArray();

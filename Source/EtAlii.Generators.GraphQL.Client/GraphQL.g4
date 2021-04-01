@@ -32,7 +32,18 @@
      now parses: https://raw.githubusercontent.com/graphql-cats/graphql-cats/master/scenarios/validation/validation.schema.graphql
 
  */
-grammar GraphQLParser;
+grammar GraphQL;
+
+@header {
+    #pragma warning disable CS0115 // CS0115: no suitable method found to override
+    #pragma warning disable CS3021 // CS3021: The CLSCompliant attribute is not needed because the assembly does not have a CLSCompliant attribute
+    // ReSharper disable InvalidXmlDocComment
+    // ReSharper disable all
+}
+
+options {
+     language = CSharp;
+}
 
 //https://spec.graphql.org/June2018/#sec-Language.Document
 document: definition+;
