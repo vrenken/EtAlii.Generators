@@ -27,26 +27,24 @@
 
         private void WriteTriggerInstantiations(WriteContext context)
         {
+
             // We only need to write a trigger construction calls for all relations that have parameters.
-            var uniqueTransitions = context.UniqueParameterTransitions
+            var uniqueTransitionsWithParameters = StateFragment.GetUniqueParameterTransitions(context.StateMachine.StateFragments)
                 .Where(t => t.Parameters.Any())
                 .ToArray();
 
-            if (uniqueTransitions.Any())
+            if (uniqueTransitionsWithParameters.Any())
             {
                 context.Writer.WriteLine("// And for all triggers that are configured with parameters we need to instantiate the corresponding backing fields.");
-            }
 
-            foreach (var uniqueTransition in uniqueTransitions)
-            {
-                var genericParameters = _parameterConverter.ToGenericParameters(uniqueTransition.Parameters);
-                var triggerMemberName = _transitionConverter.ToTriggerMemberName(uniqueTransition);
+                foreach (var uniqueTransition in uniqueTransitionsWithParameters)
+                {
+                    var genericParameters = _parameterConverter.ToGenericParameters(uniqueTransition.Parameters);
+                    var triggerMemberName = _transitionConverter.ToTriggerMemberName(uniqueTransition);
 
-                context.Writer.WriteLine($"{triggerMemberName} = _stateMachine.SetTriggerParameters{genericParameters}(Trigger.{uniqueTransition.Trigger});");
-            }
+                    context.Writer.WriteLine($"{triggerMemberName} = _stateMachine.SetTriggerParameters{genericParameters}(Trigger.{uniqueTransition.Trigger});");
+                }
 
-            if (uniqueTransitions.Any())
-            {
                 context.Writer.WriteLine();
             }
         }

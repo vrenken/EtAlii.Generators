@@ -22,18 +22,15 @@ namespace EtAlii.Generators.GraphQL.Client
         /// </summary>
         public StateMachine StateMachine { get; }
 
-        public Transition[] UniqueParameterTransitions { get; }
 
         public WriteContext(
             IndentedTextWriter writer,
             string originalFileName,
-            StateMachine stateMachine,
-            Transition[] uniqueParameterTransitions)
+            StateMachine stateMachine)
         {
             Writer = writer;
             OriginalFileName = originalFileName;
             StateMachine = stateMachine;
-            UniqueParameterTransitions = uniqueParameterTransitions;
         }
     }
 }

@@ -64,6 +64,19 @@ namespace EtAlii.Generators.GraphQL.Client
             return allTransitions;
         }
 
+        public static Transition[] GetUniqueParameterTransitions(StateFragment[] fragments)
+        {
+
+            // We want to know all unique transitions defined in the diagram.
+            // That is, the transitions grouped by the trigger and unique sequence of parameters.
+            return GetAllTransitions(fragments)
+                .Select(t => new { Transition = t, ParametersAsKey = $"{t.Trigger}{string.Join(", ", t.Parameters.Select(p => p.Type))}" })
+                .GroupBy(item => item.ParametersAsKey)
+                .Select(g => g.First().Transition)
+                .ToArray();
+
+        }
+
         public static string[] GetAllStates(StateFragment[] fragments)
         {
             var allTransitions = GetAllTransitions(fragments);

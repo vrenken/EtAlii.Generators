@@ -36,15 +36,7 @@ namespace EtAlii.Generators.GraphQL.Client
             log.Add("Triggers found:");
             log.AddRange(allTriggers.Select(t => $"- {t}"));
 
-            // We want to know all unique transitions defined in the diagram.
-            // That is, the transitions grouped by the trigger and unique sequence of parameters.
-            var uniqueParameterTransitions = allTransitions
-                .Select(t => new { Transition = t, ParametersAsKey = $"{t.Trigger}{string.Join(", ", t.Parameters.Select(p => p.Type))}" })
-                .GroupBy(item => item.ParametersAsKey)
-                .Select(g => g.First().Transition)
-                .ToArray();
-
-            return new WriteContext(writer, originalFileName, stateMachine, uniqueParameterTransitions);
+            return new WriteContext(writer, originalFileName, stateMachine);
         }
     }
 }
