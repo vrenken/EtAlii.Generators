@@ -8,12 +8,16 @@ namespace EtAlii.Generators.ML.Tests
         public void SentimentModel_Import()
         {
             // Arrange.
-            var program = new SentimentProgram();
+            var review = new MovieReview { ReviewText = "this film is really good" };
+            var analysis = new SentimentAnalysis();
+            analysis.Init();
 
             // Act.
-            program.Main(null);
+            var result = analysis.PredictSentiment(review);
 
             // Act.
+            Assert.Equal(2, result.Prediction.Length);
+            Assert.Equal(0.512078702f, result.Prediction[1], 6);
         }
     }
 }
