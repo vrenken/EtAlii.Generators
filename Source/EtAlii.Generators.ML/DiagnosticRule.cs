@@ -6,7 +6,7 @@ namespace EtAlii.Generators.ML
 
     public static class DiagnosticRule
     {
-        private const string Prefix = "GQ";
+        private const string Prefix = "ML";
 
         public static readonly DiagnosticDescriptor InvalidPlantUmlStateMachine = new
         (

@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Below is not a normal project reference! It introduces the GCL code-generator. -->
+    <!-- Below is not a normal project reference! It introduces the GraphQL query specific code-generator. -->
     <ProjectReference Include="..\EtAlii.Generators.GraphQL.Client\EtAlii.Generators.GraphQL.Client.csproj">
       <PrivateAssets>all</PrivateAssets>
       <!-- <ReferenceOutputAssembly>false</ReferenceOutputAssembly> --> <!-- We want to unit test the internals. -->

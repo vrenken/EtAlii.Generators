@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Below is not a normal project reference! It introduces the GCL code-generator. -->
+    <!-- Below is not a normal project reference! It introduces the Stateless specific code-generator. -->
     <ProjectReference Include="..\EtAlii.Generators.Stateless\EtAlii.Generators.Stateless.csproj">
       <PrivateAssets>all</PrivateAssets>
       <!-- <ReferenceOutputAssembly>false</ReferenceOutputAssembly> --> <!-- We want to unit test the internals. -->
@@ -48,7 +48,7 @@
     <Compile Update="SimpleStateMachine.cs">
       <DependentUpon>SimpleStateMachine.puml</DependentUpon>
     </Compile>
-    
+
     <StatelessFile Include="MyNestedStateMachine1.puml" />
     <Compile Update="MyNestedStateMachine1.cs">
       <DependentUpon>MyNestedStateMachine1.puml</DependentUpon>

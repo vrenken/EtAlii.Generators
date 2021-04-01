@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Below is not a normal project reference! It introduces the GCL code-generator. -->
+    <!-- Below is not a normal project reference! It introduces the ML specific code-generator. -->
     <ProjectReference Include="..\EtAlii.Generators.ML\EtAlii.Generators.ML.csproj">
       <PrivateAssets>all</PrivateAssets>
       <!-- <ReferenceOutputAssembly>false</ReferenceOutputAssembly> --> <!-- We want to unit test the internals. -->
@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Tests" />
+    <Folder Include="Tests\Code generation" />
   </ItemGroup>
 
   <Import Project="..\EtAlii.Generators.Stateless\Build\*.props" />
