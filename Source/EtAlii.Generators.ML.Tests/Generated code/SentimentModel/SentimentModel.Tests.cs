@@ -1,4 +1,4 @@
-﻿namespace EtAlii.Generators.ML.Tests
+namespace EtAlii.Generators.ML.Tests
 {
     using Xunit;
 
@@ -8,9 +8,12 @@
         public void SentimentModel_Import()
         {
             // Arrange.
+            var program = new SentimentProgram();
+
+            // Act.
+            program.Main(null);
 
             // Act.
         }
-
     }
 }

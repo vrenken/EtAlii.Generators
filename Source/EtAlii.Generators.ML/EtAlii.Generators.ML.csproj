@@ -42,10 +42,6 @@
     <AdditionalFiles Include="AnalyzerReleases.Unshipped.md" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Google.Protobuf" Version="3.15.6" />
-  </ItemGroup>
-
   <Import Project="..\EtAlii.Generators\EtAlii.Generators.projitems" Label="Shared" />
 
 </Project>
