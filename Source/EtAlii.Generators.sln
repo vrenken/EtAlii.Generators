@@ -22,6 +22,10 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "EtAlii.Generators", "EtAlii
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EtAlii.Generators.GraphQL.Client.Tests", "EtAlii.Generators.GraphQL.Client.Tests\EtAlii.Generators.GraphQL.Client.Tests.csproj", "{4D9AFD07-45EF-4DDD-980E-D9FD619ECD95}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EtAlii.Generators.ML", "EtAlii.Generators.ML\EtAlii.Generators.ML.csproj", "{CED6903F-7C8D-4A7E-81AE-4E01D11C7E82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EtAlii.Generators.ML.Tests", "EtAlii.Generators.ML.Tests\EtAlii.Generators.ML.Tests.csproj", "{15BD9931-757F-4DA6-B17B-7753EFA297AC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,5 +48,9 @@ Global
 		{4D9AFD07-45EF-4DDD-980E-D9FD619ECD95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D9AFD07-45EF-4DDD-980E-D9FD619ECD95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D9AFD07-45EF-4DDD-980E-D9FD619ECD95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15BD9931-757F-4DA6-B17B-7753EFA297AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15BD9931-757F-4DA6-B17B-7753EFA297AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15BD9931-757F-4DA6-B17B-7753EFA297AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15BD9931-757F-4DA6-B17B-7753EFA297AC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

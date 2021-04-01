@@ -2,17 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>EtAlii.Generators.GraphQL.Client</RootNamespace>
+    <RootNamespace>EtAlii.Generators.ML</RootNamespace>
     <LangVersion>9</LangVersion>
-    <ProjectGuid>A3419E8D-B877-4E72-AC5B-D7144C3D90EE</ProjectGuid>
+    <ProjectGuid>B8CEACC0-754D-48ED-BDB5-2EF21505E61C</ProjectGuid>
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>EtAlii.Generators.GraphQL.Client</PackageId>
+    <PackageId>EtAlii.Generators.ML</PackageId>
     <Version>1.0.0</Version>
     <Authors>Peter Vrenken</Authors>
     <Company>EtAlii</Company>
-    <PackageDescription>An ANTLR4/Roslyn powered generator for typed GraphQL queries</PackageDescription>
+    <PackageDescription>An ANTLR4/Roslyn powered generator able to generate typed code for TensorFlow SavedModel folders.</PackageDescription>
     <RepositoryUrl>https://github.com/vrenken/EtAlii.Generators</RepositoryUrl>
   </PropertyGroup>
 
@@ -40,6 +40,10 @@
   <ItemGroup>
     <AdditionalFiles Include="AnalyzerReleases.Shipped.md" />
     <AdditionalFiles Include="AnalyzerReleases.Unshipped.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.15.6" />
   </ItemGroup>
 
   <Import Project="..\EtAlii.Generators\EtAlii.Generators.projitems" Label="Shared" />

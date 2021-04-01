@@ -1,0 +1,22 @@
+﻿<Project>
+
+  <PropertyGroup>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)\$(Configuration)\$(TargetFramework)\Stateless</CompilerGeneratedFilesOutputPath>
+  </PropertyGroup>
+
+  <!-- ===================================================== -->
+
+  <Target Name="_InjectAdditionalFiles" BeforeTargets="GenerateMSBuildEditorConfigFileShouldRun">
+    <ItemGroup>
+      <AdditionalFiles Include="@(StatelessFile)" SourceItemGroup="StatelessFile" />
+    </ItemGroup>
+  </Target>
+
+  <ItemGroup>
+    <CompilerVisibleItemMetadata Include="AdditionalFiles" MetadataName="SourceItemGroup" />
+  </ItemGroup>
+
+  <!-- ===================================================== -->
+
+</Project>
