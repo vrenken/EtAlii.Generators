@@ -34,7 +34,7 @@
                 parser.AddErrorListener(errorListener);
                 var parsingContext = parser.document();
 
-                var visitor = new GraphQLVisitor();
+                var visitor = new PipelineMappingVisitor();
                 stateMachine = visitor.VisitDocument(parsingContext) as StateMachine;
 
                 if (parser.NumberOfSyntaxErrors != 0)
