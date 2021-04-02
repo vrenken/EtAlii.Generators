@@ -1,0 +1,3 @@
+model: saved_model.pb
+in: "Features"
+out: "Prediction/Softmax"

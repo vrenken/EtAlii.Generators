@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.2" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.8.0" />
+    <PackageReference Include="Microsoft.ML.ImageAnalytics" Version="1.5.5" />
     <PackageReference Include="Microsoft.ML.TensorFlow" Version="1.5.5" />
     <PackageReference Include="Microsoft.ML.TensorFlow.Redist" Version="0.14.0" />
     <PackageReference Include="stateless" Version="5.10.1" />
@@ -35,24 +36,33 @@
 
   <ItemGroup>
     <None Remove="Tests\Generated code\SentimentModel\saved_model.pb" />
+    <None Remove="Generated code\SentimentModel\logs\events.out.tfevents.1617291838.FRACTAL" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Generated code\SentimentModel\saved_model.pb">
+    <Content Include="Generated code\SentimentAnalysis\saved_model.pb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Remove="Generated code\SentimentModel\variables\variables.data-00000-of-00001" />
-    <Content Include="Generated code\SentimentModel\variables\variables.data-00000-of-00001">
+    <Content Include="Generated code\SentimentAnalysis\variables\variables.data-00000-of-00001">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Remove="Generated code\SentimentModel\variables\variables.index" />
-    <Content Include="Generated code\SentimentModel\variables\variables.index">
+    <Content Include="Generated code\SentimentAnalysis\variables\variables.index">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Remove="Generated code\SentimentModel\imdb_word_index.csv" />
-    <Content Include="Generated code\SentimentModel\imdb_word_index.csv">
+    <Content Include="Generated code\SentimentAnalysis\imdb_word_index.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Remove="Generated code\ImageClassification\assets\inputs\**\*" />
+    <Content Include="Generated code\ImageClassification\assets\inputs\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Generated code\SentimentAnalysis\logs" />
   </ItemGroup>
 
   <Import Project="..\EtAlii.Generators.Stateless\Build\*.props" />
