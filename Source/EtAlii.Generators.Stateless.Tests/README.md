@@ -204,12 +204,12 @@ Please take notice:
 
 Both Stateless and PlantUML support nested states. The code generator is able to parse and generate nesting but as this is a relative new feature there might be some hiccups. Happy to see PR's to improve these matters.
 
-![StateMachines/ParameterStateMachine.puml](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/vrenken/EtAlii.Generators/main/Source/EtAlii.Generators.Stateless.Tests/StateMachines/ParameterStateMachine.puml)
+![StateMachines/SubStateStateMachine.puml](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/vrenken/EtAlii.Generators/main/Source/EtAlii.Generators.Stateless.Tests/StateMachines/SubStateStateMachine.puml)
 
 ```puml
 @startuml
 'stateless namespace EtAlii.Generators.Stateless.Tests
-'stateless class SubstateTransitionsBase
+'stateless class SubStateStateMachineBase
 'stateless generate partial
 'stateless using System.Text
 
