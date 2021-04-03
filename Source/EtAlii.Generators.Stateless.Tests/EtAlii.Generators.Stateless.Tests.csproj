@@ -41,6 +41,27 @@
     <StatelessFile Include="StateMachines\SubstateTransitions.puml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="StateMachines\AsyncStateMachine.cs">
+      <DependentUpon>AsyncStateMachine.puml</DependentUpon>
+    </Compile>
+    <Compile Update="StateMachines\MyNestedStateMachine1.cs">
+      <DependentUpon>MyNestedStateMachine1.puml</DependentUpon>
+    </Compile>
+    <Compile Update="StateMachines\MyNestedStateMachine2.cs">
+      <DependentUpon>MyNestedStateMachine2.puml</DependentUpon>
+    </Compile>
+    <Compile Update="StateMachines\MyNestedStateMachine4.cs">
+      <DependentUpon>MyNestedStateMachine4.puml</DependentUpon>
+    </Compile>
+    <Compile Update="StateMachines\ParameterStateMachine.cs">
+      <DependentUpon>ParameterStateMachine.puml</DependentUpon>
+    </Compile>
+    <Compile Update="StateMachines\SimpleStateMachine.cs">
+      <DependentUpon>SimpleStateMachine.puml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
   <Import Project="..\EtAlii.Generators.Stateless\Build\*.props" />
   <Import Project="..\EtAlii.Generators.Stateless\Build\*.targets" />
 
