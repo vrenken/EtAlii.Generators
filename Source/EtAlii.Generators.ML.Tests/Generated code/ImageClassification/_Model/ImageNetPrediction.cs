@@ -4,7 +4,7 @@
 
     public class ImageNetPrediction
     {
-        [ColumnName(InceptionSettings.OutputTensorName)]
+        [ColumnName(ImageClassification.OutputTensorName)]
         public float[] PredictedLabels;
     }
 }

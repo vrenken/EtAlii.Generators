@@ -1,0 +1,21 @@
+model: /assets/inception/tensorflow_inception_graph.pb
+namespace: EtAlii.Generators.ML.Tests
+usings:
+- EtAlii.Generators.ML.Tests
+- EtAlii.Generators.ML.Tests
+
+input:
+- Class: ImageData
+- Values:
+    - Id: "Input"
+      Type: Image
+        - Width: 224
+        - Height: 224
+        - Mean: 117
+        - ChannelsLast: true
+output:
+- Class: Prediction
+- Values:
+    - Id: "Prediction/Softmax"
+      Type: Vector
+

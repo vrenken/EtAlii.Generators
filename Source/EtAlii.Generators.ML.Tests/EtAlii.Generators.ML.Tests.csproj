@@ -65,6 +65,15 @@
     <Folder Include="Generated code\SentimentAnalysis\logs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Generated code\SentimentAnalysis\SentimentAnalysis.cs">
+      <DependentUpon>SentimentAnalysis.tf2ml</DependentUpon>
+    </Compile>
+    <Compile Update="Generated code\ImageClassification\ImageClassification.cs">
+      <DependentUpon>ImageClassification.tf2ml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
   <Import Project="..\EtAlii.Generators.Stateless\Build\*.props" />
   <Import Project="..\EtAlii.Generators.Stateless\Build\*.targets" />
 

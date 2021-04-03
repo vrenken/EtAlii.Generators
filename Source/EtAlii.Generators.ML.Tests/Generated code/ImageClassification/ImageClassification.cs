@@ -16,6 +16,19 @@
         private PredictionEngine<ImageNetData, ImageNetPrediction> _predictionEngine;
         private readonly string[] _labels;
 
+        private const int ImageHeight = 224;
+        private const int ImageWidth = 224;
+        private const float Mean = 117;
+        private const bool ChannelsLast = true;
+
+        // for checking tensor names, you can use tools like Netron,
+        // which is installed by Visual Studio AI Tools
+
+        // input tensor name
+        public const string InputTensorName = "input";
+
+        // output tensor name
+        public const string OutputTensorName = "softmax2";
         public ImageClassification()
         {
             //var assetsRelativePath = @"../../../assets";
@@ -36,20 +49,14 @@
 
         public void Init()
         {
-            Console.WriteLine("===Reading model");
-            Console.WriteLine($"Model location: {_modelLocation}");
-            Console.WriteLine($"Images folder: {_imagesFolder}");
-            Console.WriteLine($"Training file: {_dataLocation}");
-            Console.WriteLine($"Default parameters: image size=({ImageNetSettings.ImageWidth},{ImageNetSettings.ImageHeight}), image mean: {ImageNetSettings.Mean}");
-
             var data = _mlContext.Data.LoadFromTextFile<ImageNetData>(_dataLocation, hasHeader: true);
 
             var pipeline = _mlContext.Transforms.LoadImages(outputColumnName: "input", imageFolder: _imagesFolder, inputColumnName: nameof(ImageNetData.ImagePath))
-                .Append(_mlContext.Transforms.ResizeImages(outputColumnName: "input", imageWidth: ImageNetSettings.ImageWidth, imageHeight: ImageNetSettings.ImageHeight, inputColumnName: "input"))
-                .Append(_mlContext.Transforms.ExtractPixels(outputColumnName: "input", interleavePixelColors: ImageNetSettings.ChannelsLast, offsetImage: ImageNetSettings.Mean))
+                .Append(_mlContext.Transforms.ResizeImages(outputColumnName: "input", imageWidth: ImageWidth, imageHeight: ImageHeight, inputColumnName: "input"))
+                .Append(_mlContext.Transforms.ExtractPixels(outputColumnName: "input", interleavePixelColors: ChannelsLast, offsetImage: Mean))
                 .Append(_mlContext.Model.LoadTensorFlowModel(_modelLocation).
                     ScoreTensorFlowModel(outputColumnNames: new[] { "softmax2" },
-                        inputColumnNames: new[] { "input" }, addBatchDimensionInput:true));
+                        inputColumnNames: new[] { InputTensorName }, addBatchDimensionInput:true));
 
             ITransformer model = pipeline.Fit(data);
 
