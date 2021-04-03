@@ -41,6 +41,24 @@ namespace EtAlii.Generators.Stateless
                 .ToArray();
         }
 
+        public static SuperState GetSuperState(StateFragment[] fragments, string substate)
+        {
+            if (substate == StatelessWriter.BeginStateName || substate == StatelessWriter.EndStateName)
+            {
+                return null;
+            }
+
+            return GetAllSuperStates(fragments)
+                .Where(ss =>
+                {
+                    var isDefined = ss.StateFragments.OfType<StateDescription>().Any(sd => sd.State == substate);
+                    var isSuperState = ss.StateFragments.OfType<SuperState>().Any(sd => sd.Name == substate);
+                    var isOutbound = ss.StateFragments.OfType<Transition>().Any(sd => sd.From == substate);
+                    return isDefined || isSuperState || isOutbound;
+                })
+                .SingleOrDefault();
+        }
+
         public static string[] GetAllTriggers(StateFragment[] fragments)
         {
             return GetAllTransitions(fragments)

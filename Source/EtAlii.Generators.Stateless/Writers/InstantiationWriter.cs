@@ -64,9 +64,7 @@
 
             var stateConfiguration = new List<string>();
 
-            var superState = context.Instance.StateFragments
-                .OfType<SuperState>()
-                .SingleOrDefault(s => s.StateFragments.OfType<Transition>().Any(t => t.To == state));
+            var superState = StateFragment.GetSuperState(context.Instance.StateFragments, state);
             if (superState != null)
             {
                 context.Writer.WriteLine($"\t.SubstateOf(State.{superState.Name})");
