@@ -42,7 +42,7 @@
             await stateMachine.ContinueAsync().ConfigureAwait(false);
 
             // Assert.
-            Assert.True(stateMachine.Actions.Count == 9);
+            Assert.Equal(9, stateMachine.Actions.Count);
             Assert.Equal("State 1 entered", stateMachine.Actions[0]);
             Assert.Equal("State 1 exited", stateMachine.Actions[1]);
             Assert.Equal("State 2 entered", stateMachine.Actions[2]);
