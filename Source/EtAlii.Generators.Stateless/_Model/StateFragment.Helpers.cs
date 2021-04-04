@@ -57,14 +57,13 @@ namespace EtAlii.Generators.Stateless
             }
 
             return GetAllSuperStates(fragments)
-                .Where(ss =>
+                .SingleOrDefault(ss =>
                 {
                     var isDefined = ss.StateFragments.OfType<StateDescription>().Any(sd => sd.State == substate);
                     var isSuperState = ss.StateFragments.OfType<SuperState>().Any(sd => sd.Name == substate);
                     var isOutbound = ss.StateFragments.OfType<Transition>().Any(sd => sd.From == substate);
                     return isDefined || isSuperState || isOutbound;
-                })
-                .SingleOrDefault();
+                });
         }
 
         public static string[] GetAllTriggers(StateFragment[] fragments)
