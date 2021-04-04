@@ -3,7 +3,7 @@
 'stateless class ParameterStateMachineBase
 'stateless using EtAlii.Generators.Stateless.Tests.Nested
 
-[*] -up--> State1 : Continue
+[*] -up--> State1 : Continue1
 State1 -right-> NextState1 << (string title, int count) >> : Activate1
 note top on link
 Transition towards another state with NAMED parameters.
@@ -12,7 +12,7 @@ Transition towards another state with NAMED parameters.
 end note
 
 
-[*] -right-> State2 : Continue
+[*] -right-> State2 : Continue2
 State2 -right-> NextState2 << (string, int, float) >> : Continue
 note top on link
 Transition towards another state with UNNAMED parameters.
@@ -23,7 +23,7 @@ names will be generated from the type names.
 end note
 
 
-[*] -down--> State3 : Continue
+[*] -down--> State3 : Continue3
 
 State3 -right-> NextState3 << (Customer customer, Project project) >> : Continue
 note top on link

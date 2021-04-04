@@ -4,7 +4,7 @@
 'stateless generate partial
 'stateless using System.Text
 
-[*] -up-> State1 : Continue
+[*] -up-> State1 : Continue1
 State1 -right-> SuperState1 : Continue
 note top on link
 Transition towards superstate with unnamed start trigger
@@ -18,7 +18,7 @@ state SuperState1 {
 }
 
 
-[*] -right-> State2 : Continue
+[*] -right-> State2 : Continue2
 State2 -right-> SuperState2 : Continue
 note top on link
 Transition towards superstate with named start trigger
@@ -32,7 +32,7 @@ state SuperState2 {
 }
 
 
-[*] -down-> State3 : Continue
+[*] -down-> State3 : Continue3
 state SuperState3 {
     state SubState3
 }

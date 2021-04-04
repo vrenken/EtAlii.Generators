@@ -6,7 +6,7 @@ Usage:
 1. Add the analyzer NuGet package to the target project:
    ```csproj
     <ItemGroup>
-        <PackageReference Update="EtAlii.Generators.Stateless" Version="1.0.0" PrivateAssets="all" />
+        <PackageReference Update="EtAlii.Generators.Stateless" Version="1.0.7" PrivateAssets="all" />
     </ItemGroup>
    ```
 
@@ -182,7 +182,6 @@ Transition towards another state with UNNAMED parameters.
 - Gives a compiler warning as the method parameter
 names will be generated from the type names.
 end note
-
 
 [*] -down--> State3 : Continue
 
