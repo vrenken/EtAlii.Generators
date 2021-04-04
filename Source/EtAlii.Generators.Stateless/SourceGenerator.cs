@@ -22,6 +22,6 @@
 
         protected override string GetExtension() => ".puml";
 
-        protected override DiagnosticDescriptor GetParsingExceptionRule() => DiagnosticRule.PlantUmlStateMachineProcessingThrowsException;
+        protected override DiagnosticDescriptor GetParsingExceptionRule() => GeneratorRule.PlantUmlStateMachineProcessingThrowsException;
     }
 }

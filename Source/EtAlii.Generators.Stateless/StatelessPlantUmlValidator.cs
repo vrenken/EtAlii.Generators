@@ -45,7 +45,7 @@ namespace EtAlii.Generators.Stateless
             {
                 var source = transitionWithDuplicateTriggers.Source;
                 var location = source.ToLocation(originalFileName);
-                var diagnostic = Diagnostic.Create(DiagnosticRule.DuplicateTriggers, location, transitionWithDuplicateTriggers.Trigger, transitionWithDuplicateTriggers.Count, transitionWithDuplicateTriggers.State);
+                var diagnostic = Diagnostic.Create(GeneratorRule.DuplicateTriggers, location, transitionWithDuplicateTriggers.Trigger, transitionWithDuplicateTriggers.Count, transitionWithDuplicateTriggers.State);
 
                 diagnostics.Add(diagnostic);
             }
@@ -92,7 +92,7 @@ namespace EtAlii.Generators.Stateless
                 {
                     // As we cannot guarantee an adequate sequential order of execution we don't support both unnamed start transitions and direct substate transitions.
                     var location = superState.Source.ToLocation(originalFileName);
-                    var diagnostic = Diagnostic.Create(DiagnosticRule.SuperstateHasBothUnnamedAndDirectTransitionsDefined, location, superState.Source.Text);
+                    var diagnostic = Diagnostic.Create(GeneratorRule.SuperstateHasBothUnnamedAndDirectTransitionsDefined, location, superState.Source.Text);
                     diagnostics.Add(diagnostic);
                 }
 
@@ -100,7 +100,7 @@ namespace EtAlii.Generators.Stateless
                 if (!namedSuperStateStartTransitions.Any() && unnamedSuperStateStartTransitions.Any() && !directTransitionsToSubState.Any() && unnamedSuperStateStartTransitions.Length > 1)
                 {
                     var location = superState.Source.ToLocation(originalFileName);
-                    var diagnostic = Diagnostic.Create(DiagnosticRule.SuperstateHasMultipleUnnamedStartTransitionsDefined, location, superState.Source.Text);
+                    var diagnostic = Diagnostic.Create(GeneratorRule.SuperstateHasMultipleUnnamedStartTransitionsDefined, location, superState.Source.Text);
                     diagnostics.Add(diagnostic);
                 }
             }
@@ -116,7 +116,7 @@ namespace EtAlii.Generators.Stateless
             foreach (var transitionWithUnnamedTrigger in transitionsWithUnnamedTrigger)
             {
                 var location = transitionWithUnnamedTrigger.Source.ToLocation(originalFileName);
-                var diagnostic = Diagnostic.Create(DiagnosticRule.UnnamedTrigger, location, transitionWithUnnamedTrigger.Source.Text);
+                var diagnostic = Diagnostic.Create(GeneratorRule.UnnamedTrigger, location, transitionWithUnnamedTrigger.Source.Text);
 
                 diagnostics.Add(diagnostic);
             }
@@ -133,7 +133,7 @@ namespace EtAlii.Generators.Stateless
             foreach (var unnamedParameter in unnamedParameters)
             {
                 var location = unnamedParameter.Source.ToLocation(originalFileName);
-                var diagnostic = Diagnostic.Create(DiagnosticRule.UnnamedParameter, location, unnamedParameter.Source.Text);
+                var diagnostic = Diagnostic.Create(GeneratorRule.UnnamedParameter, location, unnamedParameter.Source.Text);
 
                 diagnostics.Add(diagnostic);
             }
@@ -148,7 +148,7 @@ namespace EtAlii.Generators.Stateless
             if (startStates.Length == 0)
             {
                 var location = Location.Create(originalFileName, new TextSpan(), new LinePositionSpan());
-                var diagnostic = Diagnostic.Create(DiagnosticRule.NoStartStatesDefined, location);
+                var diagnostic = Diagnostic.Create(GeneratorRule.NoStartStatesDefined, location);
                 diagnostics.Add(diagnostic);
             }
         }
