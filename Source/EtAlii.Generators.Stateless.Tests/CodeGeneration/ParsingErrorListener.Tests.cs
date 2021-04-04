@@ -12,7 +12,7 @@
             var fileName = "Test.puml";
 
             // Act.
-            var listener = new ParsingErrorListener(fileName, DiagnosticRule.InvalidPlantUmlStateMachine);
+            var listener = new ParsingErrorListener(fileName, GeneratorRule.InvalidPlantUmlStateMachine);
 
             // Assert.
             Assert.NotNull(listener);
@@ -23,7 +23,7 @@
         {
             // Arrange.
             var fileName = "Test.puml";
-            var listener = new ParsingErrorListener(fileName, DiagnosticRule.InvalidPlantUmlStateMachine);
+            var listener = new ParsingErrorListener(fileName, GeneratorRule.InvalidPlantUmlStateMachine);
             using var writer = new StringWriter();
 
             // Act.

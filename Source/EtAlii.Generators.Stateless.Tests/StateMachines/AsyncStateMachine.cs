@@ -5,7 +5,7 @@ namespace EtAlii.Generators.Stateless.Tests
 
     public class AsyncStateMachine : AsyncStateMachineBase
     {
-        public List<string> Actions { get; } = new List<string>();
+        public List<string> Actions { get; } = new();
 
         protected override Task OnState1EnteredAsync() => Task.Run(() => Actions.Add("State 1 entered"));
 
