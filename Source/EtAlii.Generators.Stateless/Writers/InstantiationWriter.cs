@@ -64,16 +64,12 @@
 
             var stateConfiguration = new List<string>();
 
-            var superState = StateFragment.GetSuperState(context.Instance.StateFragments, state);
-            if (superState != null)
-            {
-                context.Writer.WriteLine($"\t.SubstateOf(State.{superState.Name})");
-            }
-
             WriteEntryAndExitConfiguration(context, state, stateConfiguration);
             WriteInboundTransitions(context, state, stateConfiguration);
             WriteInternalTransitions(context, state, stateConfiguration);
             WriteOutboundTransitions(context, state, stateConfiguration);
+            WriteSuperState(context, state, stateConfiguration);
+            WriteSubstate(context, state, stateConfiguration);
 
             stateConfiguration = stateConfiguration.OrderBy(l => l).ToList();
             // ReSharper disable UseIndexFromEndExpression - Roslyn generators need an old version of C# that does not support index from end.
@@ -86,6 +82,43 @@
             }
 
             context.Writer.WriteLine();
+        }
+
+        private void WriteSubstate(WriteContext context, string state, List<string> stateConfiguration)
+        {
+            var superState = StateFragment.GetSuperState(context.Instance, state);
+            if (superState != null)
+            {
+                stateConfiguration.Add($"\t.SubstateOf(State.{superState.Name})");
+            }
+        }
+
+        private void WriteSuperState(WriteContext context, string state, List<string> stateConfiguration)
+        {
+            var superState = StateFragment
+                .GetAllSuperStates(context.Instance.StateFragments)
+                .SingleOrDefault(s => s.Name == state);
+
+            if (superState != null)
+            {
+                // Write initial transition (when needed)
+                var unnamedInitialTransition = superState.StateFragments
+                    .OfType<Transition>()
+                    .SingleOrDefault(t => t.From == StatelessWriter.BeginStateName && !t.HasConcreteTriggerName);
+                if (unnamedInitialTransition != null)
+                {
+                    stateConfiguration.Add($"\t.InitialTransition(State.{unnamedInitialTransition.To})");
+                }
+
+                var namedInitialTransitions = superState.StateFragments
+                    .OfType<Transition>()
+                    .Where(t => t.From == StatelessWriter.BeginStateName && t.HasConcreteTriggerName)
+                    .ToArray();
+                foreach(var namedInitialTransition in namedInitialTransitions)
+                {
+                    stateConfiguration.Add($"\t.Permit(Trigger.{namedInitialTransition.Trigger}, State.{namedInitialTransition.To})");
+                }
+            }
         }
 
         private void WriteEntryAndExitConfiguration(WriteContext context, string state, List<string> stateConfiguration)

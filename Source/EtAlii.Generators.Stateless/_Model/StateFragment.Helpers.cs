@@ -7,7 +7,7 @@ namespace EtAlii.Generators.Stateless
 
         public static Transition[] GetOutboundTransitions(StateMachine stateMachine, string state)
         {
-            var superState = GetSuperState(stateMachine.StateFragments, state);
+            var superState = GetSuperState(stateMachine, state);
             return superState != null
                 ? superState.StateFragments
                     .OfType<Transition>()
@@ -49,20 +49,21 @@ namespace EtAlii.Generators.Stateless
                 .ToArray();
         }
 
-        public static SuperState GetSuperState(StateFragment[] fragments, string substate)
+        public static SuperState GetSuperState(StateMachine stateMachine, string substate)
         {
             if (substate == StatelessWriter.BeginStateName || substate == StatelessWriter.EndStateName)
             {
                 return null;
             }
 
-            return GetAllSuperStates(fragments)
+            return GetAllSuperStates(stateMachine.StateFragments)
                 .SingleOrDefault(ss =>
                 {
                     var isDefined = ss.StateFragments.OfType<StateDescription>().Any(sd => sd.State == substate);
                     var isSuperState = ss.StateFragments.OfType<SuperState>().Any(sd => sd.Name == substate);
                     var isOutbound = ss.StateFragments.OfType<Transition>().Any(sd => sd.From == substate);
-                    return isDefined || isSuperState || isOutbound;
+                    var isInbound = ss.StateFragments.OfType<Transition>().Any(sd => sd.To == substate);
+                    return isDefined || isSuperState || isOutbound || isInbound;
                 });
         }
 

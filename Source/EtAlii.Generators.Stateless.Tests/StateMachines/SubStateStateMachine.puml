@@ -13,10 +13,10 @@ Transition towards superstate with unnamed start trigger
 - The superstate will automatically transition
   towards the specified substate.
 end note
+
 state SuperState1 {
     [*] -right-> SubState1
 }
-
 
 [*] -right-> State2 : Continue2
 State2 -right-> SuperState2 : Continue
@@ -30,7 +30,6 @@ end note
 state SuperState2 {
     [*] -right-> SubState2 : Start
 }
-
 
 [*] -down-> State3 : Continue3
 state SuperState3 {
