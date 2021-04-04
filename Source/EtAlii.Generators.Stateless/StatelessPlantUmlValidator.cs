@@ -17,11 +17,38 @@ namespace EtAlii.Generators.Stateless
         {
             CheckForStartStates(instance, originalFileName, diagnostics);
 
+            CheckForDuplicateTriggers(instance, originalFileName, diagnostics);
+
             CheckForUnnamedParameters(instance, originalFileName, diagnostics);
 
             CheckForUnnamedTriggers(instance, originalFileName, diagnostics);
 
             CheckSubstatesEntryTransition(instance, originalFileName, diagnostics);
+        }
+
+        private void CheckForDuplicateTriggers(StateMachine stateMachine, string originalFileName, List<Diagnostic> diagnostics)
+        {
+            var transitionsWithDuplicateTriggers = StateFragment
+                .GetAllTransitions(stateMachine.StateFragments)
+                .GroupBy(t => t.From)
+                .SelectMany(sg =>
+                {
+                    return sg
+                        .GroupBy(tg => tg.Trigger)
+                        .Select(tg => new {State = sg.Key, Trigger = tg.Key, tg.First().Source, Count = tg.Count()})
+                        .ToArray();
+                })
+                .Where(r => r.Count > 1)
+                .ToArray();
+
+            foreach (var transitionWithDuplicateTriggers in transitionsWithDuplicateTriggers)
+            {
+                var source = transitionWithDuplicateTriggers.Source;
+                var location = source.ToLocation(originalFileName);
+                var diagnostic = Diagnostic.Create(DiagnosticRule.DuplicateTriggers, location, transitionWithDuplicateTriggers.Trigger, transitionWithDuplicateTriggers.Count, transitionWithDuplicateTriggers.State);
+
+                diagnostics.Add(diagnostic);
+            }
         }
 
         private void CheckSubstatesEntryTransition(StateMachine stateMachine, string originalFileName, List<Diagnostic> diagnostics)

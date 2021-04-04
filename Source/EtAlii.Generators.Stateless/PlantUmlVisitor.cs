@@ -156,7 +156,7 @@
         public override object VisitStates_transition_start_to(PlantUmlParser.States_transition_start_toContext context)
         {
             TransitionDetails transitionDetails;
-            var fallbackTriggerName = $"StartTo{(string)VisitId(context.to)}";
+            var fallbackTriggerName = $"{StatelessWriter.BeginStateName}To{(string)VisitId(context.to)}";
 
             var transitionDetailsContext = context.transition_details();
             if (transitionDetailsContext != null)
@@ -178,7 +178,7 @@
         public override object VisitStates_transition_to_start(PlantUmlParser.States_transition_to_startContext context)
         {
             TransitionDetails transitionDetails;
-            var fallbackTriggerName = $"StartTo{(string)VisitId(context.to)}";
+            var fallbackTriggerName = $"{StatelessWriter.BeginStateName}To{(string)VisitId(context.to)}";
 
             var transitionDetailsContext = context.transition_details();
             if (transitionDetailsContext != null)
@@ -201,7 +201,7 @@
         public override object VisitStates_transition_from_end(PlantUmlParser.States_transition_from_endContext context)
         {
             TransitionDetails transitionDetails;
-            var fallbackTriggerName = $"{(string)VisitId(context.from)}ToEnd";
+            var fallbackTriggerName = $"{(string)VisitId(context.from)}To{StatelessWriter.EndStateName}";
 
             var transitionDetailsContext = context.transition_details();
             if (transitionDetailsContext != null)
@@ -224,7 +224,7 @@
         public override object VisitStates_transition_end_from(PlantUmlParser.States_transition_end_fromContext context)
         {
             TransitionDetails transitionDetails;
-            var fallbackTriggerName = $"{(string)VisitId(context.from)}ToEnd";
+            var fallbackTriggerName = $"{(string)VisitId(context.from)}To{StatelessWriter.EndStateName}";
 
             var transitionDetailsContext = context.transition_details();
             if (transitionDetailsContext != null)

@@ -5,12 +5,20 @@ namespace EtAlii.Generators.Stateless
     public abstract partial class StateFragment
     {
 
-        public static Transition[] GetOutboundTransitions(StateFragment[] fragments, string state)
+        public static Transition[] GetOutboundTransitions(StateMachine stateMachine, string state)
         {
-            return GetAllTransitions(fragments)
-                .Where(t => t.From == state)
-                .Where(t => t.From != t.To)
-                .ToArray();
+            var superState = GetSuperState(stateMachine.StateFragments, state);
+            return superState != null
+                ? superState.StateFragments
+                    .OfType<Transition>()
+                    .Where(t => t.From == state)
+                    .Where(t => t.To != state)
+                    .ToArray()
+                : stateMachine.StateFragments
+                    .OfType<Transition>()
+                    .Where(t => t.From == state)
+                    .Where(t => t.To != state)
+                    .ToArray();
         }
         public static Transition[] GetInboundTransitions(StateFragment[] fragments, string state)
         {
@@ -99,11 +107,17 @@ namespace EtAlii.Generators.Stateless
 
         public static string[] GetAllStates(StateFragment[] fragments)
         {
-            var allTransitions = GetAllTransitions(fragments);
+            var transitionStates = GetAllTransitions(fragments)
+                .SelectMany(t => new[] { t.From, t.To })
+                .ToArray();
+            var descriptionStates = fragments
+                .OfType<StateDescription>()
+                .SelectMany(t => new[] { t.State })
+                .ToArray();
+            var superStates = fragments
+                .OfType<SuperState>().Select(s => s.Name )
+                .ToArray();
 
-            var transitionStates = allTransitions.SelectMany(t => new[] { t.From, t.To });
-            var descriptionStates = fragments.OfType<StateDescription>().SelectMany(t => new[] { t.State });
-            var superStates = fragments.OfType<SuperState>().Select(s => s.Name );
             var allStates = transitionStates
                 .Concat(descriptionStates)
                 .Concat(superStates)
@@ -111,9 +125,9 @@ namespace EtAlii.Generators.Stateless
                 .OrderBy(s => s)
                 .Distinct() // That is, of course without any doubles.
                 .ToArray();
-
             return allStates;
         }
+
         public static SuperState[] GetAllSuperStates(StateFragment[] fragments)
         {
             var superStates = fragments
@@ -122,6 +136,5 @@ namespace EtAlii.Generators.Stateless
                 .ToArray();
             return superStates;
         }
-
     }
 }

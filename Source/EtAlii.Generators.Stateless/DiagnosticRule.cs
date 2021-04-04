@@ -108,5 +108,14 @@ namespace EtAlii.Generators.Stateless
             isEnabledByDefault: true
         );
 
+        public static readonly DiagnosticDescriptor DuplicateTriggers = new
+        (
+            id: Prefix + "1011",
+            title: "Trigger used multiple times in state",
+            messageFormat: "Trigger '{0}' used {1} times in state '{2}'",
+            category: "Code-Gen",
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true
+        );
     }
 }

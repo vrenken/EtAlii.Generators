@@ -76,7 +76,7 @@
             WriteOutboundTransitions(context, state, stateConfiguration);
 
             stateConfiguration = stateConfiguration.OrderBy(l => l).ToList();
-            // ReSharper disable UseIndexFromEndExpression
+            // ReSharper disable UseIndexFromEndExpression - Roslyn generators need an old version of C# that does not support index from end.
             stateConfiguration[stateConfiguration.Count - 1] = stateConfiguration[stateConfiguration.Count - 1] + ";";
             // ReSharper restore UseIndexFromEndExpression
 
@@ -91,7 +91,7 @@
         private void WriteEntryAndExitConfiguration(WriteContext context, string state, List<string> stateConfiguration)
         {
             var inboundTransitions = StateFragment.GetInboundTransitions(context.Instance.StateFragments, state);
-            if (inboundTransitions.All(t => t.IsAsync) && state != StatelessWriter.BeginStateName && state != StatelessWriter.EndStateName)
+            if (inboundTransitions.Any() && inboundTransitions.All(t => t.IsAsync) && state != StatelessWriter.BeginStateName && state != StatelessWriter.EndStateName)
             {
                 stateConfiguration.Add($"\t.OnEntryAsync(On{state}EnteredAsync)");
             }
@@ -100,8 +100,8 @@
                 stateConfiguration.Add($"\t.OnEntry(On{state}Entered)");
             }
 
-            var outboundTransitions = StateFragment.GetOutboundTransitions(context.Instance.StateFragments, state);
-            if (outboundTransitions.All(t => t.IsAsync) && state != StatelessWriter.BeginStateName && state != StatelessWriter.EndStateName)
+            var outboundTransitions = StateFragment.GetOutboundTransitions(context.Instance, state);
+            if (outboundTransitions.Any() && outboundTransitions.All(t => t.IsAsync) && state != StatelessWriter.BeginStateName && state != StatelessWriter.EndStateName)
             {
                 stateConfiguration.Add($"\t.OnExitAsync(On{state}ExitedAsync)");
             }
@@ -113,9 +113,8 @@
 
         private void WriteInternalTransitions(WriteContext context, string state, List<string> stateConfiguration)
         {
-            var internalTransitions = StateFragment.GetInternalTransitions(context.Instance.StateFragments, state);
-
-            var lines = internalTransitions
+            var lines = StateFragment
+                .GetInternalTransitions(context.Instance.StateFragments, state)
                 .GroupBy(t => t.Trigger)
                 .Select(g => g.First())
                 .Select(transition =>
@@ -131,27 +130,21 @@
                     return $"\t.InternalTransition{(transition.IsAsync ? "Async" : "")}{genericParameters}({triggerParameter}, {methodCast}{transitionMethodName})";
                 })
                 .ToArray();
-
             stateConfiguration.AddRange(lines);
         }
         private void WriteOutboundTransitions(WriteContext context, string state, List<string> stateConfiguration)
         {
-            var outboundTransitions = StateFragment.GetOutboundTransitions(context.Instance.StateFragments, state);
-            var lines = outboundTransitions
-                .GroupBy(t => t.Trigger)
-                .Select(g => g.First())
+            var lines = StateFragment
+                .GetOutboundTransitions(context.Instance, state)
                 .Select(transition => $"\t.Permit(Trigger.{transition.Trigger}, State.{transition.To})")
                 .ToArray();
-
             stateConfiguration.AddRange(lines);
         }
 
         private void WriteInboundTransitions(WriteContext context, string state, List<string> stateConfiguration)
         {
-            var inboundTransitions = StateFragment.GetInboundTransitions(context.Instance.StateFragments, state);
-            var lines = inboundTransitions
-                .GroupBy(t => t.Trigger)
-                .Select(g => g.First())
+            var lines = StateFragment
+                .GetInboundTransitions(context.Instance.StateFragments, state)
                 .Select(transition =>
                 {
                     var triggerParameter = _transitionConverter.ToTriggerParameter(transition);
@@ -160,7 +153,6 @@
                     return $"\t.OnEntryFrom{(transition.IsAsync ? "Async" : "")}{genericParameters}({triggerParameter}, {transitionMethodName})";
                 })
                 .ToArray();
-
             stateConfiguration.AddRange(lines);
         }
     }
