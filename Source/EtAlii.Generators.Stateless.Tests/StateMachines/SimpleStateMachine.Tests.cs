@@ -5,7 +5,7 @@
     public class SimpleStateMachineTests
     {
         [Fact]
-        public void SimpleStateMachineTests_Create()
+        public void SimpleStateMachine_Create()
         {
             // Arrange.
 
@@ -17,7 +17,7 @@
         }
 
         [Fact]
-        public void SimpleStateMachineTests_Start()
+        public void SimpleStateMachine_Start()
         {
             // Arrange.
             var stateMachine = new SimpleStateMachine();
@@ -29,7 +29,7 @@
         }
 
         [Fact]
-        public void SimpleStateMachineTests_Run()
+        public void SimpleStateMachine_Run()
         {
             // Arrange.
             var stateMachine = new SimpleStateMachine();

@@ -6,7 +6,7 @@
     public class AsyncStateMachineTests
     {
         [Fact]
-        public void AsyncStateMachineTests_Create()
+        public void AsyncStateMachine_Create()
         {
             // Arrange.
 
@@ -18,7 +18,7 @@
         }
 
         [Fact]
-        public async Task AsyncStateMachineTests_Start()
+        public async Task AsyncStateMachine_Start()
         {
             // Arrange.
             var stateMachine = new AsyncStateMachine();
@@ -30,7 +30,7 @@
         }
 
         [Fact]
-        public async Task AsyncStateMachineTests_Run()
+        public async Task AsyncStateMachine_Run()
         {
             // Arrange.
             var stateMachine = new AsyncStateMachine();
