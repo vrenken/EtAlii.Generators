@@ -13,8 +13,8 @@ namespace EtAlii.Generators.Stateless
         public static readonly DiagnosticDescriptor MethodNotImplemented = new
         (
             id: Prefix + "001",
-            title: "State machine method not overridden",
-            messageFormat: "State machine method '{0}' not overridden",
+            title: "State machine does not implement state handling method",
+            messageFormat: "State machine '{0}' does not implement state handling method '{1}'",
             category: "Code-Gen",
             defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true
