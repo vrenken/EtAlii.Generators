@@ -14,4 +14,4 @@ SL1008  | Code-Gen |  Warning | SL1008_AnalyzerName
 SL1009  | Code-Gen |  Error   | SL1009_AnalyzerName
 SL1010  | Code-Gen |  Error   | SL1010_AnalyzerName
 SL1011  | Code-Gen |  Error   | SL1011_AnalyzerName
-
+SL2001  | Code-Gen |  Warning | SL2001_AnalyzerName

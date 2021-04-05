@@ -1,5 +1,6 @@
 ﻿namespace EtAlii.Generators.Stateless
 {
+    using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
     using Microsoft.CodeAnalysis;
@@ -8,12 +9,7 @@
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class SourceAnalyzer : DiagnosticAnalyzer
     {
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; }
-
-        public SourceAnalyzer()
-        {
-            SupportedDiagnostics = ImmutableArray.CreateRange(AnalyzerRule.AllRules);
-        }
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.CreateRange(AnalyzerRule.AllRules);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -72,8 +68,15 @@
 
                 if (!isVirtualStartMethod && !isVirtualEndMethod)
                 {
-                    var location = inheritingType.Locations.First();
-                    var diagnostic = Diagnostic.Create(AnalyzerRule.MethodNotImplemented, location, inheritingType.Name, notImplementedMethod.Name);
+                    var properties = new Dictionary<string, string>
+                    {
+                        { "TargetClassName", inheritingType.Name },
+                        { "MissingMethodName", notImplementedMethod.Name },
+                        { "MethodParameterNames", string.Join("|",notImplementedMethod.Parameters.Select(p => p.Name)) },
+                        { "MethodParameterTypes", string.Join("|",notImplementedMethod.Parameters.Select(p => context.Compilation.GetSpecialType(p.Type.SpecialType).Name)) },
+                        { "MethodReturnType", notImplementedMethod.ReturnsVoid ? "void" : notImplementedMethod.ReturnType.Name }
+                    };
+                    var diagnostic = Diagnostic.Create(AnalyzerRule.MethodNotImplemented, inheritingType.Locations.First(), inheritingType.Locations, properties.ToImmutableDictionary(), inheritingType.Name, notImplementedMethod.Name);
                     context.ReportDiagnostic(diagnostic);
                 }
             }

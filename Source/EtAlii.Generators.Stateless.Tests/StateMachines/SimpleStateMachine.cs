@@ -4,7 +4,7 @@ namespace EtAlii.Generators.Stateless.Tests
 
     public class SimpleStateMachine : SimpleStateMachineBase
     {
-        public List<string> Actions { get; } = new List<string>();
+        public List<string> Actions { get; } = new();
 
         protected override void OnState1Entered() => Actions.Add("State 1 entered");
 
