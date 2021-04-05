@@ -73,13 +73,38 @@
                         { "TargetClassName", inheritingType.Name },
                         { "MissingMethodName", notImplementedMethod.Name },
                         { "MethodParameterNames", string.Join("|",notImplementedMethod.Parameters.Select(p => p.Name)) },
-                        { "MethodParameterTypes", string.Join("|",notImplementedMethod.Parameters.Select(p => context.Compilation.GetSpecialType(p.Type.SpecialType).Name)) },
+                        { "MethodParameterTypes", string.Join("|",notImplementedMethod.Parameters.Select(p => GetParameterType(p, context.Compilation))) },
                         { "MethodReturnType", notImplementedMethod.ReturnsVoid ? "void" : notImplementedMethod.ReturnType.Name }
                     };
                     var diagnostic = Diagnostic.Create(AnalyzerRule.MethodNotImplemented, inheritingType.Locations.First(), inheritingType.Locations, properties.ToImmutableDictionary(), inheritingType.Name, notImplementedMethod.Name);
                     context.ReportDiagnostic(diagnostic);
                 }
             }
+        }
+
+        private string GetParameterType(IParameterSymbol parameterSymbol, Compilation compilation)
+        {
+            return parameterSymbol.Type.SpecialType switch
+            {
+                // Google did not help finding the right way to map these special types onto CLR keywords.
+                // Therefore a simple mapping is the best we can get for now.
+                SpecialType.System_Object => "object",
+                SpecialType.System_Boolean => "bool",
+                SpecialType.System_Char => "char",
+                SpecialType.System_SByte => "sbyte",
+                SpecialType.System_Byte => "byte",
+                SpecialType.System_Int16 => "short",
+                SpecialType.System_UInt16 => "ushort",
+                SpecialType.System_Int32 => "int",
+                SpecialType.System_UInt32 => "uint",
+                SpecialType.System_Int64 => "long",
+                SpecialType.System_UInt64 => "ulong",
+                SpecialType.System_Decimal => "decimal",
+                SpecialType.System_Single => "float",
+                SpecialType.System_Double => "double",
+                SpecialType.System_String => "string",
+                _ => parameterSymbol.Type.Name,
+            };
         }
 
         private void ActivateAnalyzerOnlyWhenNeeded(CompilationStartAnalysisContext context)
