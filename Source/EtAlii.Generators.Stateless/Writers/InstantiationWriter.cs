@@ -123,20 +123,20 @@
 
         private void WriteEntryAndExitConfiguration(WriteContext context, string state, List<string> stateConfiguration)
         {
-            var inboundTransitions = StateFragment.GetInboundTransitions(context.Instance.StateFragments, state);
-            if (inboundTransitions.Any() && inboundTransitions.All(t => t.IsAsync) && state != StatelessWriter.BeginStateName && state != StatelessWriter.EndStateName)
+            var writeAsyncEntryConfiguration = StateFragment.HasOnlyAsyncInboundTransitions(context.Instance, state);
+            if (writeAsyncEntryConfiguration)
             {
-                stateConfiguration.Add($"\t.OnEntryAsync(On{state}EnteredAsync)");
+                stateConfiguration.Add($"\t.OnEntryAsync(On{state}Entered)");
             }
             else
             {
                 stateConfiguration.Add($"\t.OnEntry(On{state}Entered)");
             }
 
-            var outboundTransitions = StateFragment.GetOutboundTransitions(context.Instance, state);
-            if (outboundTransitions.Any() && outboundTransitions.All(t => t.IsAsync) && state != StatelessWriter.BeginStateName && state != StatelessWriter.EndStateName)
+            var writeAsyncExitConfiguration = StateFragment.HasOnlyAsyncOutboundTransitions(context.Instance, state);
+            if (writeAsyncExitConfiguration)
             {
-                stateConfiguration.Add($"\t.OnExitAsync(On{state}ExitedAsync)");
+                stateConfiguration.Add($"\t.OnExitAsync(On{state}Exited)");
             }
             else
             {

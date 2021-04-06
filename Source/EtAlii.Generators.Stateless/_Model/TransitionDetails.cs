@@ -4,15 +4,11 @@ namespace EtAlii.Generators.Stateless
     {
         public string Name { get; set; }
         public bool HasConcreteName { get; }
-        public bool IsAsync { get; }
-        public Parameter[] Parameters { get; }
 
-        public TransitionDetails(string name, bool isAsync, Parameter[] parameters, bool hasConcreteName)
+        public TransitionDetails(string name, bool hasConcreteName)
         {
             Name = name;
             HasConcreteName = hasConcreteName;
-            IsAsync = isAsync;
-            Parameters = parameters;
         }
     }
 }

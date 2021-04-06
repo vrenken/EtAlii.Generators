@@ -41,9 +41,9 @@
 
             var fragments = new StateFragment[]
             {
-                new Transition(null, "Third", new TransitionDetails("Start", false, Array.Empty<Parameter>(), false), new SourcePosition(1,0, "")),
-                new Transition("First", "Second", new TransitionDetails("Continue", false, Array.Empty<Parameter>(), true), new SourcePosition(2,0, "")),
-                new Transition("Second", "Third", new TransitionDetails("Continue", false, Array.Empty<Parameter>(), true), new SourcePosition(3,0, ""))
+                new Transition(null, "Third", new TransitionDetails("Start", false), new TriggerDetails(false, Array.Empty<Parameter>()), new SourcePosition(1,0, "")),
+                new Transition("First", "Second", new TransitionDetails("Continue", true), new TriggerDetails(false, Array.Empty<Parameter>()), new SourcePosition(2,0, "")),
+                new Transition("Second", "Third", new TransitionDetails("Continue", true), new TriggerDetails(false, Array.Empty<Parameter>()), new SourcePosition(3,0, ""))
             };
             var stateMachine = new StateMachine(headers, settings, fragments);
             using var stringWriter = new StringWriter();

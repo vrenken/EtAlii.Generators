@@ -56,8 +56,8 @@
 
             var fragments = new StateFragment[]
             {
-                new Transition("First", "Second", new TransitionDetails("Continue", false, Array.Empty<Parameter>(), true), new SourcePosition(1,0, "")),
-                new Transition("Second", "Third", new TransitionDetails("Continue", false, Array.Empty<Parameter>(), true), new SourcePosition(2,0, ""))
+                new Transition("First", "Second", new TransitionDetails("Continue", true), new TriggerDetails(false, Array.Empty<Parameter>()), new SourcePosition(1,0, "")),
+                new Transition("Second", "Third", new TransitionDetails("Continue", true), new TriggerDetails(false, Array.Empty<Parameter>()), new SourcePosition(2,0, ""))
             };
 
             var stateMachine = new StateMachine(headers, settings, fragments);
@@ -104,9 +104,9 @@
 
             var fragments = new StateFragment[]
             {
-                new Transition("First", "Second", new TransitionDetails("Continue", false, Array.Empty<Parameter>(), true), new SourcePosition(1,0, "")),
-                new Transition("Second", "Third", new TransitionDetails("Continue", false, Array.Empty<Parameter>(), true), new SourcePosition(2,0, "")),
-                new Transition("Second", "Second", new TransitionDetails("Check", true, new [] { new Parameter("string", "name", new SourcePosition(2,0, "")), new Parameter("Guid", "id", new SourcePosition(2,0, "")) }, true), new SourcePosition(2,0, ""))
+                new Transition("First", "Second", new TransitionDetails("Continue", true), new TriggerDetails(false, Array.Empty<Parameter>()), new SourcePosition(1,0, "")),
+                new Transition("Second", "Third", new TransitionDetails("Continue", true), new TriggerDetails(false, Array.Empty<Parameter>()), new SourcePosition(2,0, "")),
+                new Transition("Second", "Second", new TransitionDetails("Check", true), new TriggerDetails(true, new [] { new Parameter("string", "name", new SourcePosition(2,0, "")), new Parameter("Guid", "id", new SourcePosition(2,0, "")) }), new SourcePosition(2,0, ""))
             };
 
             var stateMachine = new StateMachine(headers, settings, fragments);

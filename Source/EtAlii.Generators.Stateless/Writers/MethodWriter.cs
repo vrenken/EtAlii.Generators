@@ -88,10 +88,8 @@
 
         private void WriteEntryAndExitMethods(WriteContext context, string state)
         {
-            var inboundTransitions = StateFragment.GetInboundTransitions(context.Instance.StateFragments, state);
-            var writeAsyncEntryMethod = inboundTransitions.Any() && inboundTransitions.All(t => t.IsAsync) && state != StatelessWriter.BeginStateName && state != StatelessWriter.EndStateName;
+            var writeAsyncEntryMethod = StateFragment.HasOnlyAsyncInboundTransitions(context.Instance, state);
             var entryMethodName = $"On{state}Entered";
-
             context.Writer.WriteLine("/// <summary>");
             context.Writer.WriteLine($"/// Implement this method to handle the entry of the '{state}' state.");
             if (writeAsyncEntryMethod)
@@ -112,10 +110,8 @@
             context.Writer.WriteLine("}");
             context.Writer.WriteLine();
 
-            var outboundTransitions = StateFragment.GetOutboundTransitions(context.Instance, state);
-            var writeAsyncExitMethod = outboundTransitions.Any() && outboundTransitions.All(t => t.IsAsync) && state != StatelessWriter.BeginStateName && state != StatelessWriter.EndStateName;
+            var writeAsyncExitMethod = StateFragment.HasOnlyAsyncOutboundTransitions(context.Instance, state);
             var exitMethodName = $"On{state}Exited";
-
             context.Writer.WriteLine("/// <summary>");
             context.Writer.WriteLine($"/// Implement this method to handle the exit of the '{state}' state.");
             if (writeAsyncEntryMethod)

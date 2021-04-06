@@ -46,12 +46,12 @@ state_definition
     | state_definition_no_substates
     ;
 
-states_transition_start_to      : BOUNDARY_NODE WHITESPACE* transition_from_to WHITESPACE* (to=id) transition_details?;
-states_transition_to_start      : (to=id) WHITESPACE* transition_to_from WHITESPACE* BOUNDARY_NODE transition_details?;
-states_transition_from_end      : (from=id) WHITESPACE* transition_from_to WHITESPACE* BOUNDARY_NODE transition_details?;
-states_transition_end_from      : BOUNDARY_NODE WHITESPACE* transition_to_from WHITESPACE* (from=id) transition_details?;
-states_transition_from_to       : (from=id) WHITESPACE* transition_from_to WHITESPACE* (to=id) transition_details?;
-states_transition_to_from       : (to=id) WHITESPACE* transition_to_from WHITESPACE* (from=id) transition_details?;
+states_transition_start_to      : BOUNDARY_NODE WHITESPACE* transition_from_to WHITESPACE* (to=id) trigger_details? transition_details?;
+states_transition_to_start      : (to=id) WHITESPACE* transition_to_from WHITESPACE* BOUNDARY_NODE trigger_details? transition_details?;
+states_transition_from_end      : (from=id) WHITESPACE* transition_from_to WHITESPACE* BOUNDARY_NODE trigger_details? transition_details?;
+states_transition_end_from      : BOUNDARY_NODE WHITESPACE* transition_to_from WHITESPACE* (from=id) trigger_details? transition_details?;
+states_transition_from_to       : (from=id) WHITESPACE* transition_from_to WHITESPACE* (to=id) trigger_details? transition_details?;
+states_transition_to_from       : (to=id) WHITESPACE* transition_to_from WHITESPACE* (from=id) trigger_details? transition_details?;
 states_description              : (node=id) WHITESPACE* COLON WHITESPACE* (text=~NEWLINE)*;
 states
     : states_transition_from_to
@@ -76,10 +76,10 @@ transition_to_from
     ;
 
 transition_details_description  : (~NEWLINE)+;
-transition_details              : WHITESPACE* trigger_details? COLON WHITESPACE* trigger_name transition_details_description?;
+transition_details              : WHITESPACE* COLON WHITESPACE* trigger_name transition_details_description?;
 
 trigger_name                    : id (id | WHITESPACE | UNDERSCORE)*;
-trigger_details                 : LCHEVR LCHEVR WHITESPACE* (ASYNC WHITESPACE+)? parameters_definition? WHITESPACE* RCHEVR RCHEVR WHITESPACE* ;
+trigger_details                 : WHITESPACE* LCHEVR LCHEVR WHITESPACE* (ASYNC WHITESPACE+)? parameters_definition? WHITESPACE* RCHEVR RCHEVR WHITESPACE* ;
 parameter_type                  : id (DOT id)* (LBRACK WHITESPACE* RBRACK)? ;
 parameters_definition_unnamed   : LPAREN WHITESPACE* parameter_type WHITESPACE* (COMMA WHITESPACE* parameter_type)* WHITESPACE* RPAREN ;
 parameters_definition_named     : LPAREN WHITESPACE* parameter_type WHITESPACE+ id WHITESPACE* (COMMA WHITESPACE* parameter_type WHITESPACE+ id)* WHITESPACE* RPAREN ;

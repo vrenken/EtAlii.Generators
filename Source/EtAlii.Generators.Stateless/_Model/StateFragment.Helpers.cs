@@ -4,7 +4,6 @@ namespace EtAlii.Generators.Stateless
 
     public abstract partial class StateFragment
     {
-
         public static Transition[] GetOutboundTransitions(StateMachine stateMachine, string state)
         {
             var superState = GetSuperState(stateMachine, state);
@@ -20,6 +19,59 @@ namespace EtAlii.Generators.Stateless
                     .Where(t => t.To != state)
                     .ToArray();
         }
+
+        public static bool HasOnlyAsyncInboundTransitions(StateMachine stateMachine, string state)
+        {
+            var inboundTransitions = GetInboundTransitions(stateMachine.StateFragments, state);
+
+            var superState = GetAllSuperStates(stateMachine.StateFragments)
+                .SingleOrDefault(ss => ss.Name == state);
+            if (superState != null)
+            {
+                var allSubstates = GetAllSubStates(superState);
+                var allTransitions = GetAllTransitions(stateMachine.StateFragments);
+                var directTransitionsToSubState = allTransitions
+                    .Where(t => t.From != state && allSubstates.Contains(t.To) && !allSubstates.Contains(t.From))
+                    .ToArray();
+
+                inboundTransitions = inboundTransitions
+                    .Concat(directTransitionsToSubState)
+                    .ToArray();
+            }
+
+            return
+                inboundTransitions.Any() &&
+                inboundTransitions.All(t => t.IsAsync) &&
+                state != StatelessWriter.BeginStateName &&
+                state != StatelessWriter.EndStateName;
+        }
+
+        public static bool HasOnlyAsyncOutboundTransitions(StateMachine stateMachine, string state)
+        {
+            var outboundTransitions = GetOutboundTransitions(stateMachine, state);
+
+            var superState = GetAllSuperStates(stateMachine.StateFragments)
+                .SingleOrDefault(ss => ss.Name == state);
+            if (superState != null)
+            {
+                var allSubstates = GetAllSubStates(superState);
+                var allTransitions = GetAllTransitions(stateMachine.StateFragments);
+                var directTransitionsFromSubState = allTransitions
+                    .Where(t => t.To != state && !allSubstates.Contains(t.To) && allSubstates.Contains(t.From))
+                    .ToArray();
+
+                outboundTransitions = outboundTransitions
+                    .Concat(directTransitionsFromSubState)
+                    .ToArray();
+            }
+
+            return
+                outboundTransitions.Any() &&
+                outboundTransitions.All(t => t.IsAsync) &&
+                state != StatelessWriter.BeginStateName &&
+                state != StatelessWriter.EndStateName;
+        }
+
         public static Transition[] GetInboundTransitions(StateFragment[] fragments, string state)
         {
             return GetAllTransitions(fragments)
