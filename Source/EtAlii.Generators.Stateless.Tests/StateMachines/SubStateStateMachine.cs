@@ -35,5 +35,27 @@ namespace EtAlii.Generators.Stateless.Tests
         protected override void OnSuperState3Entered() => Actions.Add("SuperState 3 entered");
 
         protected override void OnSuperState3Exited() => Actions.Add("SuperState 3 exited");
+
+        protected override void OnState1EnteredFromContinue1Trigger() => Actions.Add("State 1 entered from continue 1 trigger");
+
+        protected override void OnState2EnteredFromContinue2Trigger() => Actions.Add("State 2 entered from continue 2 trigger");
+
+        protected override void OnState3EnteredFromContinue3Trigger() => Actions.Add("State 3 entered from continue 3 trigger");
+
+        protected override void OnSubState1Exited() => Actions.Add("SubState 1 exited");
+
+        protected override void OnSubState1EnteredFrom_BeginToSubState1Trigger() => Actions.Add("SubState 1 entered from _BeginToSubState trigger");
+
+        protected override void OnSubState2Exited() => Actions.Add("SubState 2 exited");
+
+        protected override void OnSubState2EnteredFromStartTrigger() => Actions.Add("SubState 2 entered from start trigger");
+
+        protected override void OnSubState3Exited() => Actions.Add("SubState 3 exited");
+
+        protected override void OnSubState3EnteredFromContinueTrigger() => Actions.Add("SubState 3 entered from continue trigger");
+
+        protected override void OnSuperState1EnteredFromContinueTrigger() => Actions.Add("SuperState 1 entered from continue trigger");
+
+        protected override void OnSuperState2EnteredFromContinueTrigger() => Actions.Add("SuperState 2 entered from continue trigger");
     }
 }

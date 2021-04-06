@@ -27,5 +27,13 @@ namespace EtAlii.Generators.Stateless.Tests
         protected override void OnState3Exited() => Actions.Add("State 3 exited");
 
         protected override void OnState4Entered() => Actions.Add("State 4 entered");
+
+        protected override void OnState1EnteredFromStartTrigger() => Actions.Add("State 1 entered from start trigger");
+
+        protected override void OnState2EnteredFromContinueTrigger() => Actions.Add("State 2 entered from continue trigger");
+
+        protected override void OnState4Exited() => Actions.Add("State 4 exited");
+
+        protected override void OnState4EnteredFromContinueTrigger() => Actions.Add("State 4 entered from continue trigger");
     }
 }

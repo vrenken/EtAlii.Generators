@@ -42,16 +42,19 @@
             await stateMachine.ContinueAsync().ConfigureAwait(false);
 
             // Assert.
-            Assert.Equal(9, stateMachine.Actions.Count);
-            Assert.Equal("State 1 entered", stateMachine.Actions[0]);
-            Assert.Equal("State 1 exited", stateMachine.Actions[1]);
-            Assert.Equal("State 2 entered", stateMachine.Actions[2]);
-            Assert.Equal("Check trigger called", stateMachine.Actions[3]);
-            Assert.Equal("State 2 exited", stateMachine.Actions[4]);
-            Assert.Equal("State 3 entered", stateMachine.Actions[5]);
-            Assert.Equal("State 3 entered from Continue trigger", stateMachine.Actions[6]);
-            Assert.Equal("State 3 exited", stateMachine.Actions[7]);
-            Assert.Equal("State 4 entered", stateMachine.Actions[8]);
+            var i = 0;
+            Assert.Equal(12, stateMachine.Actions.Count);
+            Assert.Equal("State 1 entered", stateMachine.Actions[i++]);
+            Assert.Equal("State 1 entered from start trigger", stateMachine.Actions[i++]);
+            Assert.Equal("State 1 exited", stateMachine.Actions[i++]);
+            Assert.Equal("State 2 entered", stateMachine.Actions[i++]);
+            Assert.Equal("State 2 entered from start trigger", stateMachine.Actions[i++]);
+            Assert.Equal("Check trigger called", stateMachine.Actions[i++]);
+            Assert.Equal("State 2 exited", stateMachine.Actions[i++]);
+            Assert.Equal("State 3 entered", stateMachine.Actions[i++]);
+            Assert.Equal("State 3 entered from Continue trigger", stateMachine.Actions[i++]);
+            Assert.Equal("State 3 exited", stateMachine.Actions[i++]);
+            Assert.Equal("State 4 entered", stateMachine.Actions[i++]);
         }
     }
 }

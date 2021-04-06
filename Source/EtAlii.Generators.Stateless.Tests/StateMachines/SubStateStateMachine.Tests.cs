@@ -27,11 +27,14 @@
             stateMachine.Continue();
 
             // Assert.
-            Assert.Equal(4, stateMachine.Actions.Count);
-            Assert.Equal("State 1 entered", stateMachine.Actions[0]);
-            Assert.Equal("State 1 exited", stateMachine.Actions[1]);
-            Assert.Equal("SuperState 1 entered", stateMachine.Actions[2]);
-            Assert.Equal("SubState 1 entered", stateMachine.Actions[3]);
+            var i = 0;
+            Assert.Equal(6, stateMachine.Actions.Count);
+            Assert.Equal("State 1 entered", stateMachine.Actions[i++]);
+            Assert.Equal("State 1 entered from continue 1 trigger", stateMachine.Actions[i++]);
+            Assert.Equal("State 1 exited", stateMachine.Actions[i++]);
+            Assert.Equal("SuperState 1 entered", stateMachine.Actions[i++]);
+            Assert.Equal("SuperState 1 entered from continue trigger", stateMachine.Actions[i++]);
+            Assert.Equal("SubState 1 entered", stateMachine.Actions[i++]);
         }
 
         [Fact]
@@ -46,11 +49,14 @@
             stateMachine.Start();
 
             // Assert.
-            Assert.Equal(4, stateMachine.Actions.Count);
-            Assert.Equal("State 2 entered", stateMachine.Actions[0]);
-            Assert.Equal("State 2 exited", stateMachine.Actions[1]);
-            Assert.Equal("SuperState 2 entered", stateMachine.Actions[2]);
-            Assert.Equal("SubState 2 entered", stateMachine.Actions[3]);
+            var i = 0;
+            Assert.Equal(7, stateMachine.Actions.Count);
+            Assert.Equal("State 2 entered", stateMachine.Actions[i++]);
+            Assert.Equal("State 2 entered from continue 2 trigger", stateMachine.Actions[i++]);
+            Assert.Equal("State 2 exited", stateMachine.Actions[i++]);
+            Assert.Equal("SuperState 2 entered", stateMachine.Actions[i++]);
+            Assert.Equal("SuperState 2 entered from continue trigger", stateMachine.Actions[i++]);
+            Assert.Equal("SubState 2 entered", stateMachine.Actions[i++]);
         }
 
         [Fact]
@@ -64,11 +70,13 @@
             stateMachine.Continue();
 
             // Assert.
-            Assert.Equal(4, stateMachine.Actions.Count);
-            Assert.Equal("State 3 entered", stateMachine.Actions[0]);
-            Assert.Equal("State 3 exited", stateMachine.Actions[1]);
-            Assert.Equal("SuperState 3 entered", stateMachine.Actions[2]);
-            Assert.Equal("SubState 3 entered", stateMachine.Actions[3]);
+            var i = 0;
+            Assert.Equal(6, stateMachine.Actions.Count);
+            Assert.Equal("State 3 entered", stateMachine.Actions[i++]);
+            Assert.Equal("State 3 entered from continue 3 trigger", stateMachine.Actions[i++]);
+            Assert.Equal("State 3 exited", stateMachine.Actions[i++]);
+            Assert.Equal("SuperState 3 entered", stateMachine.Actions[i++]);
+            Assert.Equal("SubState 3 entered", stateMachine.Actions[i++]);
         }
     }
 }
