@@ -53,7 +53,7 @@
             Assert.Equal("State 3 entered", stateMachine.Actions[i++]);
             Assert.Equal("State 3 entered from Continue trigger", stateMachine.Actions[i++]);
             Assert.Equal("State 3 exited", stateMachine.Actions[i++]);
-            Assert.Equal("State 4 entered", stateMachine.Actions[i++]);
+            Assert.Equal("State 4 entered", stateMachine.Actions[i]);
         }
     }
 }

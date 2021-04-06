@@ -7,6 +7,14 @@ namespace EtAlii.Generators.Stateless.Tests
     {
         public List<string> Actions { get; } = new();
 
+        public List<string> UnhandledTriggers { get; } = new();
+
+        public AsyncStateMachine()
+        {
+            StateMachine.OnUnhandledTrigger((state, trigger) => UnhandledTriggers.Add($"{state}-{trigger}"));
+            StateMachine.OnUnhandledTriggerAsync((state, trigger) => Task.Run(() => UnhandledTriggers.Add($"{state}-{trigger}")));
+        }
+
         protected override Task OnState1Entered() => Task.Run(() => Actions.Add("State 1 entered"));
 
         protected override Task OnState1Exited() => Task.Run(() => Actions.Add("State 1 exited"));
@@ -17,11 +25,10 @@ namespace EtAlii.Generators.Stateless.Tests
 
         protected override Task OnState3Entered() => Task.Run(() => Actions.Add("State 3 entered"));
 
-        protected override Task OnState3EnteredFromContinueTrigger()
+        protected override async Task OnState3EnteredFromContinueTrigger()
         {
             Actions.Add("State 3 entered from Continue trigger");
-            Continue();
-            return Task.CompletedTask;
+            await ContinueAsync().ConfigureAwait(false);
         }
 
         protected override void OnState2InternalCheckTrigger() => Actions.Add("Check trigger called");
