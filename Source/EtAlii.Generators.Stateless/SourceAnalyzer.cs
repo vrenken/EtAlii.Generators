@@ -73,7 +73,7 @@
                         { "TargetClassName", inheritingType.Name },
                         { "MissingMethodName", notImplementedMethod.Name },
                         { "MethodParameterNames", string.Join("|",notImplementedMethod.Parameters.Select(p => p.Name)) },
-                        { "MethodParameterTypes", string.Join("|",notImplementedMethod.Parameters.Select(p => GetParameterType(p, context.Compilation))) },
+                        { "MethodParameterTypes", string.Join("|",notImplementedMethod.Parameters.Select(GetParameterType)) },
                         { "MethodReturnType", notImplementedMethod.ReturnsVoid ? "void" : notImplementedMethod.ReturnType.Name }
                     };
                     var diagnostic = Diagnostic.Create(AnalyzerRule.MethodNotImplemented, inheritingType.Locations.First(), inheritingType.Locations, properties.ToImmutableDictionary(), inheritingType.Name, notImplementedMethod.Name);
@@ -82,7 +82,7 @@
             }
         }
 
-        private string GetParameterType(IParameterSymbol parameterSymbol, Compilation compilation)
+        private string GetParameterType(IParameterSymbol parameterSymbol)
         {
             return parameterSymbol.Type.SpecialType switch
             {
