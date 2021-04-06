@@ -56,13 +56,13 @@ namespace EtAlii.Generators.Stateless
             var superStates = StateFragment.GetAllSuperStates(stateMachine.StateFragments);
             foreach (var superState in superStates)
             {
-                var allSubstates = StateFragment.GetAllStates(superState.StateFragments);
+                var allSubstates = StateFragment.GetAllSubStates(superState);
                 var allSubTransitions = StateFragment.GetAllTransitions(superState.StateFragments);
                 var allTransitions = StateFragment.GetAllTransitions(stateMachine.StateFragments);
 
                 var directTransitionsToSubState = allTransitions
-                    .Where(t => !allSubTransitions.Contains(t))
                     .Where(t => allSubstates.Contains(t.To))
+                    .Where(t => !allSubTransitions.Contains(t))
                     .ToArray();
 
                 var transitionsToSuperState = allTransitions

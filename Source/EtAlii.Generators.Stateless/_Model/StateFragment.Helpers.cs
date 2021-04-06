@@ -78,13 +78,14 @@ namespace EtAlii.Generators.Stateless
 
         public static Transition[] GetAllTransitions(StateFragment[] fragments)
         {
-            var stateMachineTransitions = fragments
+            var transitions = fragments
                 .OfType<Transition>()
                 .ToArray();
             var superStateTransitions = fragments
                 .OfType<SuperState>()
-                .SelectMany(ss => GetAllTransitions(ss.StateFragments));
-            var allTransitions = stateMachineTransitions
+                .Select(ss => ss.StateFragments)
+                .SelectMany(GetAllTransitions);
+            var allTransitions = transitions
                 .Concat(superStateTransitions)
                 .ToArray();
             return allTransitions;
@@ -105,6 +106,34 @@ namespace EtAlii.Generators.Stateless
                 .ToArray();
         }
 
+        public static string[] GetAllSubStates(SuperState superState)
+        {
+            var transitionStates = superState.StateFragments
+                .OfType<Transition>()
+                .SelectMany(t => new[] { t.From })
+                .ToArray();
+            var descriptionStates = superState.StateFragments
+                .OfType<StateDescription>()
+                .SelectMany(t => new[] { t.State })
+                .ToArray();
+            var superStates = superState.StateFragments
+                .OfType<SuperState>()
+                .Select(s => s.Name )
+                .ToArray();
+            var subStates = superState.StateFragments
+                .OfType<SuperState>()
+                .SelectMany(GetAllSubStates);
+
+            var allStates = transitionStates
+                .Concat(descriptionStates)
+                .Concat(superStates)
+                .Concat(subStates)
+                .Where(s => s != null)
+                .OrderBy(s => s)
+                .Distinct() // That is, of course without any doubles.
+                .ToArray();
+            return allStates;
+        }
         public static string[] GetAllStates(StateFragment[] fragments)
         {
             var transitionStates = GetAllTransitions(fragments)
@@ -117,10 +146,15 @@ namespace EtAlii.Generators.Stateless
             var superStates = fragments
                 .OfType<SuperState>().Select(s => s.Name )
                 .ToArray();
+            var subStates = fragments
+                .OfType<SuperState>()
+                .Select(ss => ss.StateFragments)
+                .SelectMany(GetAllStates);
 
             var allStates = transitionStates
                 .Concat(descriptionStates)
                 .Concat(superStates)
+                .Concat(subStates)
                 .Where(s => s != null)
                 .OrderBy(s => s)
                 .Distinct() // That is, of course without any doubles.
