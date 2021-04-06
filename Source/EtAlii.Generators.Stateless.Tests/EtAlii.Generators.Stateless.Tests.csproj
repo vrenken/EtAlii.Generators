@@ -64,6 +64,9 @@
     <Compile Update="StateMachines\SubStateStateMachine.cs">
       <DependentUpon>SubStateStateMachine.puml</DependentUpon>
     </Compile>
+    <Compile Update="StateMachines\AsyncSubStateStateMachine.cs">
+      <DependentUpon>AsyncSubStateStateMachine.puml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <Import Project="..\EtAlii.Generators.Stateless\Build\*.props" />
