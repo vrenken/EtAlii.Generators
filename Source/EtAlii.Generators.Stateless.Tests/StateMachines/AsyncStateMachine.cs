@@ -7,15 +7,15 @@ namespace EtAlii.Generators.Stateless.Tests
     {
         public List<string> Actions { get; } = new();
 
-        protected override Task OnState1EnteredAsync() => Task.Run(() => Actions.Add("State 1 entered"));
+        protected override Task OnState1Entered() => Task.Run(() => Actions.Add("State 1 entered"));
 
-        protected override Task OnState1ExitedAsync() => Task.Run(() => Actions.Add("State 1 exited"));
+        protected override Task OnState1Exited() => Task.Run(() => Actions.Add("State 1 exited"));
 
-        protected override Task OnState2EnteredAsync() => Task.Run(() => Actions.Add("State 2 entered"));
+        protected override Task OnState2Entered() => Task.Run(() => Actions.Add("State 2 entered"));
 
         protected override void OnState2Exited() => Actions.Add("State 2 exited");
 
-        protected override Task OnState3EnteredAsync() => Task.Run(() => Actions.Add("State 3 entered"));
+        protected override Task OnState3Entered() => Task.Run(() => Actions.Add("State 3 entered"));
 
         protected override Task OnState3EnteredFromContinueTrigger()
         {

@@ -20,9 +20,9 @@ namespace EtAlii.Generators.Stateless.Tests
 
         protected override void OnState3Entered() => Console.WriteLine("State 3 entered");
 
-        protected override Task OnState3ExitedAsync() => Task.Run(() => Console.WriteLine("State 3 exited"));
+        protected override Task OnState3Exited() => Task.Run(() => Console.WriteLine("State 3 exited"));
 
-        protected override Task OnState4EnteredAsync() => Task.Run(() => Console.WriteLine("State 4 entered"));
+        protected override Task OnState4Entered() => Task.Run(() => Console.WriteLine("State 4 entered"));
 
         protected override void OnState4Exited() => Console.WriteLine("State 4 exited");
 

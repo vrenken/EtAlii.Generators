@@ -33,6 +33,7 @@
 
   <ItemGroup>
     <StatelessFile Include="StateMachines\AsyncStateMachine.puml" />
+    <StatelessFile Include="StateMachines\AsyncSubStateStateMachine.puml" />
     <StatelessFile Include="StateMachines\MyNestedStateMachine1.puml" />
     <StatelessFile Include="StateMachines\MyNestedStateMachine2.puml" />
     <StatelessFile Include="StateMachines\MyNestedStateMachine4.puml" />
