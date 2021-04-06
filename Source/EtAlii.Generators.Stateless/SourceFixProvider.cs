@@ -34,7 +34,7 @@ namespace EtAlii.Generators.Stateless
                     var codeAction = CodeAction.Create(
                         uniqueTitle,
                         cancellationToken => GetTransformedDocumentAsync(context.Document, diagnostic, cancellationToken),
-                        "Add state machine method");
+                        uniqueTitle);
                     context.RegisterCodeFix(codeAction, diagnostic);
                 }
             }

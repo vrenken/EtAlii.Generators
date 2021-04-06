@@ -59,26 +59,22 @@
 
             var notImplementedMethods = virtualMethods
                 .Where(vm => implementedMethods.All(im => !SymbolEqualityComparer.Default.Equals(im.OverriddenMethod, vm)))
+                .Where(vm => !vm.Name.StartsWith($"On{StatelessWriter.BeginStateName}"))
+                .Where(vm => !vm.Name.StartsWith($"On{StatelessWriter.EndStateName}"))
                 .ToArray();
 
             foreach (var notImplementedMethod in notImplementedMethods)
             {
-                var isVirtualStartMethod = notImplementedMethod.Name.StartsWith($"On{StatelessWriter.BeginStateName}");
-                var isVirtualEndMethod = notImplementedMethod.Name.StartsWith($"On{StatelessWriter.EndStateName}");
-
-                if (!isVirtualStartMethod && !isVirtualEndMethod)
+                var properties = new Dictionary<string, string>
                 {
-                    var properties = new Dictionary<string, string>
-                    {
-                        { "TargetClassName", inheritingType.Name },
-                        { "MissingMethodName", notImplementedMethod.Name },
-                        { "MethodParameterNames", string.Join("|",notImplementedMethod.Parameters.Select(p => p.Name)) },
-                        { "MethodParameterTypes", string.Join("|",notImplementedMethod.Parameters.Select(GetParameterType)) },
-                        { "MethodReturnType", notImplementedMethod.ReturnsVoid ? "void" : notImplementedMethod.ReturnType.Name }
-                    };
-                    var diagnostic = Diagnostic.Create(AnalyzerRule.MethodNotImplemented, inheritingType.Locations.First(), inheritingType.Locations, properties.ToImmutableDictionary(), inheritingType.Name, notImplementedMethod.Name);
-                    context.ReportDiagnostic(diagnostic);
-                }
+                    { "TargetClassName", inheritingType.Name },
+                    { "MissingMethodName", notImplementedMethod.Name },
+                    { "MethodParameterNames", string.Join("|",notImplementedMethod.Parameters.Select(p => p.Name)) },
+                    { "MethodParameterTypes", string.Join("|",notImplementedMethod.Parameters.Select(GetParameterType)) },
+                    { "MethodReturnType", notImplementedMethod.ReturnsVoid ? "void" : notImplementedMethod.ReturnType.Name }
+                };
+                var diagnostic = Diagnostic.Create(AnalyzerRule.MethodNotImplemented, inheritingType.Locations.First(), inheritingType.Locations, properties.ToImmutableDictionary(), inheritingType.Name, notImplementedMethod.Name);
+                context.ReportDiagnostic(diagnostic);
             }
         }
 
