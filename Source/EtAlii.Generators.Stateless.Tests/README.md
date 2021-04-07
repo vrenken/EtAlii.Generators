@@ -1,5 +1,12 @@
 # PlantUML diagram to Stateless C# state machine code
 
+## Features.
+- On the fly code generation for Stateless using in-solution PlantUML diagrams.
+- Generates correct async/sync methods+Stateless configuration - including fitting async OnEntry/OnExit (when possible).
+- Generates methods+Stateless configuration (When configured in PlantUML).
+- Roslyn warnings when the diagram contains constructions that Stateless cannot honor.
+- Roslyn code fixes for when the transitions in the diagram are not implemented in the code base.
+
 ## How to start.
 Usage:
 
@@ -88,7 +95,7 @@ Usage:
 
 10. Star this project if you like it :-)
 
-## features.
+## Supported Stateless/PlantUML features.
 
 <table width="100%">
     <thead>
