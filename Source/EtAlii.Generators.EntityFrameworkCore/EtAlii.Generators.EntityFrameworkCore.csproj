@@ -1,0 +1,57 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>EtAlii.Generators.EntityFrameworkCore</RootNamespace>
+    <LangVersion>9</LangVersion>
+    <ProjectGuid>9CB09670-ACB7-45C9-ADE6-E7559819B219</ProjectGuid>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>EtAlii.Generators.EntityFrameworkCore</PackageId>
+    <Version>1.0.11</Version>
+    <Authors>Peter Vrenken</Authors>
+    <Company>EtAlii</Company>
+    <PackageDescription>A PlantUML powered generator for EF core entities and DbContexts</PackageDescription>
+    <RepositoryUrl>https://github.com/vrenken/EtAlii.Generators</RepositoryUrl>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild> <!-- Generates a package at build -->
+    <IncludeBuildOutput>false</IncludeBuildOutput> <!-- Do not include the generator as a lib dependency -->
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Build\*">
+      <PackagePath>build\</PackagePath>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Antlr4 Include="PlantUmlLexer.g4">
+      <Listener>false</Listener>
+      <Visitor>false</Visitor>
+      <Package>$(RootNamespace)</Package>
+      <Error>true</Error>
+    </Antlr4>
+    <Antlr4 Include="PlantUmlParser.g4">
+      <Listener>false</Listener>
+      <Visitor>true</Visitor>
+      <Package>$(RootNamespace)</Package>
+      <Error>true</Error>
+    </Antlr4>
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="AnalyzerReleases.Shipped.md" />
+    <AdditionalFiles Include="AnalyzerReleases.Unshipped.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Writers" />
+  </ItemGroup>
+
+  <Import Project="..\EtAlii.Generators\EtAlii.Generators.projitems" Label="Shared" />
+
+</Project>

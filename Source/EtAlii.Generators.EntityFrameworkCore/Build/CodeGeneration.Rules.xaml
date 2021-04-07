@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Rule xmlns="http://schemas.microsoft.com/build/2009/properties"
+      Name="EfCoreRule"
+      DisplayName="EfCoreModel"
+      PageTemplate="generic"
+      Description="Entity Framework PlantUML model">
+    <Rule.Categories>
+        <Category Name="General" DisplayName="General" />
+    </Rule.Categories>
+    <Rule.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="EfCoreModel" />
+    </Rule.DataSource>
+</Rule>
