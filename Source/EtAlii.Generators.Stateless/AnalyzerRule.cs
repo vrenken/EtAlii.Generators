@@ -15,7 +15,7 @@ namespace EtAlii.Generators.Stateless
             id: Prefix + "001",
             title: "State machine does not implement state handling method",
             messageFormat: "State machine '{0}' does not implement state handling method '{1}'",
-            category: "Code-Gen",
+            category: "EtAlii",
             defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true
         );

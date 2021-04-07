@@ -13,7 +13,7 @@ namespace EtAlii.Generators.Stateless
             id: Prefix + "001",
             title: "PlantUml file is invalid",
             messageFormat: "PlantUml file is invalid: {0}",
-            category: "Code-Gen",
+            category: "EtAlii",
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true
         );
@@ -23,7 +23,7 @@ namespace EtAlii.Generators.Stateless
             id: Prefix + "002",
             title: "PlantUml parsing threw exception",
             messageFormat: "PlantUml parsing threw exception: '{0}' {1}",
-            category: "Code-Gen",
+            category: "EtAlii",
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true
         );
@@ -33,7 +33,7 @@ namespace EtAlii.Generators.Stateless
             id: Prefix + "003",
             title: "No start states defined",
             messageFormat: "No start states defined",
-            category: "Code-Gen",
+            category: "EtAlii",
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true
         );
@@ -43,7 +43,7 @@ namespace EtAlii.Generators.Stateless
             id: Prefix + "004",
             title: "Trigger definition uses unnamed parameters - Consider using named parameters",
             messageFormat: "Trigger definition uses unnamed parameters: '{0}' - Consider using named parameters",
-            category: "Code-Gen",
+            category: "EtAlii",
             defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true
         );
@@ -53,7 +53,7 @@ namespace EtAlii.Generators.Stateless
             id: Prefix + "005",
             title: "PlantUml processing throws exception",
             messageFormat: "PlantUml processing throws exception: '{0}' {1}",
-            category: "Code-Gen",
+            category: "EtAlii",
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true
         );
@@ -63,7 +63,7 @@ namespace EtAlii.Generators.Stateless
             id: Prefix + "006",
             title: "State transition lacks a named trigger - Consider using named triggers",
             messageFormat: "State transition lacks a named trigger: '{0}' - Consider using named triggers (From -> To : Trigger)",
-            category: "Code-Gen",
+            category: "EtAlii",
             defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true
         );
@@ -73,7 +73,7 @@ namespace EtAlii.Generators.Stateless
             id: Prefix + "007",
             title: "Superstate has no start or entry transitions defined",
             messageFormat: "Superstate {0} has no start or entry transition defined",
-            category: "Code-Gen",
+            category: "EtAlii",
             defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true
         );
@@ -83,7 +83,7 @@ namespace EtAlii.Generators.Stateless
             id: Prefix + "008",
             title: "Superstate has no stop or exit transitions defined",
             messageFormat: "Superstate {0} has no stop or exit transition defined",
-            category: "Code-Gen",
+            category: "EtAlii",
             defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true
         );
@@ -93,7 +93,7 @@ namespace EtAlii.Generators.Stateless
             id: Prefix + "009",
             title: "Superstate has both unnamed start transitions as well as direct substate transitions defined",
             messageFormat: "Superstate {0} has both unnamed start transitions as well as direct substate transitions defined",
-            category: "Code-Gen",
+            category: "EtAlii",
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true
         );
@@ -103,7 +103,7 @@ namespace EtAlii.Generators.Stateless
             id: Prefix + "010",
             title: "Superstate can only have one single unnamed start transition defined",
             messageFormat: "Superstate {0} can only have one single unnamed start transition defined",
-            category: "Code-Gen",
+            category: "EtAlii",
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true
         );
@@ -113,7 +113,7 @@ namespace EtAlii.Generators.Stateless
             id: Prefix + "011",
             title: "Trigger used multiple times in state",
             messageFormat: "Trigger '{0}' used {1} times in state '{2}'",
-            category: "Code-Gen",
+            category: "EtAlii",
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true
         );

@@ -13,7 +13,7 @@ namespace EtAlii.Generators.GraphQL.Client
             id: Prefix + "1001",
             title: "GraphQL query file is invalid",
             messageFormat: "GraphQL query file is invalid: {0}",
-            category: "Code-Gen",
+            category: "EtAlii",
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true
         );
@@ -23,7 +23,7 @@ namespace EtAlii.Generators.GraphQL.Client
             id: Prefix + "1002",
             title: "GraphQL query parsing threw exception",
             messageFormat: "GraphQL query parsing threw exception: '{0}' {1}",
-            category: "Code-Gen",
+            category: "EtAlii",
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true
         );
