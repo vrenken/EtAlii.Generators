@@ -3,8 +3,8 @@ name: Build
 on:
   push:
     branches:
-    - main
-    - 'feature/**'
+      - main
+      - 'feature/**'
   pull_request:
     branches: [ main ]
 
@@ -15,14 +15,14 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.x
-    - name: Restore dependencies
-      run: dotnet restore .\Source\EtAlii.Generators.sln
-    - name: Build
-      run: dotnet build --no-restore .\Source\EtAlii.Generators.sln
-    - name: Test
-      run: dotnet test --no-build --verbosity normal .\Source\EtAlii.Generators.sln
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.x
+      - name: Restore dependencies
+        run: dotnet restore .\Source\EtAlii.Generators.sln
+      - name: Build
+        run: dotnet build --no-restore .\Source\EtAlii.Generators.sln
+      - name: Test
+        run: dotnet test --no-build --verbosity normal .\Source\EtAlii.Generators.sln
