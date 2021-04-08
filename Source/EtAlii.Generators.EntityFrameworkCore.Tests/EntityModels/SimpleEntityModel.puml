@@ -1,0 +1,53 @@
+@startuml
+
+'efcore namespace EtAlii.Generators.EntityFrameworkCore.Tests
+'efcore class SimpleEntityModelBase
+'efcore using EtAlii.Generators.EntityFrameworkCore.Tests.Nested
+'efcore entity Entity
+'efcore dbcontext SimpleEntityModelDbContextBase
+
+
+'efcore map 'Profile' 'User'
+Users "1" *-- "1" Profile
+'efcore map 'Message' 'Profile'
+Profile "1" *-- "0..n" Message
+'efcore map 'Follower' 'Profile'
+Profile "1" *-- "0..n" Follower
+'efcore map 'Tweet' 'Profile'
+Profile "1" *-- "0..n" Tweet
+
+Follower "1" *-- "0..n" Profile : Following
+Follower "1" *-- "0..n" Profile : Followers
+
+class Users
+{
+    +Id: int
+    +Name: string
+    -Email: string
+}
+class Profile
+{
+    +Id: int
+    +UserName: string
+}
+
+class Message {
++Id: int
++Text: string
+}
+
+
+class Follower{
++Id: int
++Profile: Profile
++Following: Profile[]
++Followers: Profile[]
+}
+
+class Tweet{
++Text: string[]
++Profile: Profile
++Id:int
+}
+
+@enduml

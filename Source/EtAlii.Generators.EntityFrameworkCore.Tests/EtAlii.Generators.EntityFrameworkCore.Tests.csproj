@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <ProjectGuid>3F0E9C00-A404-4389-BA44-607EE0F0E29D</ProjectGuid>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.8.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Coverlet.Collector" Version="3.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Below is not a normal project reference! It introduces the Stateless specific code-generator. -->
+    <ProjectReference Include="..\EtAlii.Generators.EntityFrameworkCore\EtAlii.Generators.EntityFrameworkCore.csproj">
+      <PrivateAssets>all</PrivateAssets>
+      <!-- <ReferenceOutputAssembly>false</ReferenceOutputAssembly> --> <!-- We want to unit test the internals. -->
+      <OutputItemType>Analyzer</OutputItemType>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EntityModel Include="EntityModels\SimpleEntityModel.puml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="EntityModels\SimpleEntityModel.cs">
+      <DependentUpon>SimpleEntityModel.puml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+
+  <Import Project="..\EtAlii.Generators.EntityFrameworkCore\Build\*.props" />
+  <Import Project="..\EtAlii.Generators.EntityFrameworkCore\Build\*.targets" />
+
+</Project>

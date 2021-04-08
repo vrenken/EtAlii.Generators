@@ -14,15 +14,25 @@ NOTE_END                                            : 'end note';
 TITLE                                               : 'title';
 ASYNC                                               : 'async';
 AS                                                  : 'as';
-STATE                                               : 'state';
+ClASS                                               : 'class';
 HIDE_EMPTY_DESCRIPTION                              : 'hide empty description';
 ID                                                  : ('A'..'Z' | 'a'..'z' | '1'..'9')+;
 
-STATELESS_SETTING_NAMESPACE                         : '\'stateless namespace';
-STATELESS_SETTING_CLASS                             : '\'stateless class';
-STATELESS_SETTING_USING                             : '\'stateless using';
-STATELESS_SETTING_GENERATE_PARTIAL                  : '\'stateless generate partial';
-BOUNDARY_NODE                                       : '[*]';
+SETTING_NAMESPACE                                   : '\'efcore namespace';
+SETTING_DBCONTEXT                                   : '\'efcore dbcontext';
+SETTING_ENTITY                                      : '\'efcore entity';
+SETTING_USING                                       : '\'efcore using';
+SETTING_GENERATE_PARTIAL                            : '\'efcore generate partial';
+MAP                                                 : '\'efcore map';
+RELATION_PLURALITY_ONE                              : '"1"' | '\'1\'';
+RELATION_PLURALITY_NONE_TO_MANY                     : '"0..n"' | '\'0..n\'';
+RELATION_PLURALITY_MANY_TO_NONE                     : '"n..0"' | '\'n..0\'';
+RELATION_PLURALITY_ONE_TO_MANY                      : '"1..n"' | '\'1..n\'';
+RELATION_PLURALITY_MANY_TO_ONE                      : '"n..1"' | '\'n..1\'';
+RELATION_PLURALITY_MANY_TO_MANY                     : '"n..n"' | '\'n..n\'';
+RELATION_TYPE_COMPOSITION                           : '*--';
+RELATION_TYPE_AGGREGATION                           : 'o--';
+RELATION_TYPE_EXTENSION                             : '<|--';
 
 // String
 QUOTED_STRING                                       : DOUBLEQUOTE  (~["\r\n\u0085\u2028\u2029])+ DOUBLEQUOTE;

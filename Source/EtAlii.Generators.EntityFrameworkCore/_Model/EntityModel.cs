@@ -10,9 +10,14 @@
         public string Namespace { get; private set; }
 
         /// <summary>
-        /// The root class name.
+        /// The name of the base entity to use.
         /// </summary>
-        public string ClassName { get; private set; }
+        public string EntityName { get; private set; }
+
+        /// <summary>
+        /// The name of the DbContext instance to generate.
+        /// </summary>
+        public string DbContextName { get; private set; }
 
         /// <summary>
         /// When set to true a partial class will be created.
@@ -57,8 +62,11 @@
 
         private void Update()
         {
-            ClassName = Settings
-                .OfType<ClassNameSetting>()
+            DbContextName = Settings
+                .OfType<DbContextNameSetting>()
+                .Single().Value;
+            EntityName = Settings
+                .OfType<EntityNameSetting>()
                 .Single().Value;
             Namespace = Settings
                 .OfType<NamespaceSetting>()

@@ -32,10 +32,10 @@
                 var errorListener = new ParsingErrorListener(file.Path, GeneratorRule.InvalidPlantUmlStateMachine);
                 parser.RemoveErrorListeners();
                 parser.AddErrorListener(errorListener);
-                var parsingContext = parser.state_machine();
+                var parsingContext = parser.model();
 
                 var visitor = new PlantUmlVisitor();
-                model = visitor.VisitState_machine(parsingContext) as EntityModel;
+                model = visitor.VisitModel(parsingContext) as EntityModel;
 
                 if (parser.NumberOfSyntaxErrors != 0)
                 {

@@ -12,95 +12,74 @@ options {
      tokenVocab = PlantUmlLexer;
 }
 
-state_machine:
+model:
     (NEWLINE | WHITESPACE)* START WHITESPACE* NEWLINE
-    (WHITESPACE* header_lines? NEWLINE+)*
-    (WHITESPACE* states NEWLINE+)*
+    (WHITESPACE* header_items? NEWLINE+)*
+    (WHITESPACE* model_items NEWLINE+)*
     END (NEWLINE | WHITESPACE)*
     EOF;
 
-header_title                       : TITLE (~NEWLINE)* ;
-header_lines
+title                   : TITLE (~NEWLINE)* ;
+header_items
     : HIDE_EMPTY_DESCRIPTION
-    | note_line
-    | stateless_setting
-    | comment_line
-    | header_title
+    | note
+    | setting
+    | comment
+    | title
     ;
 
-namespace                          : id (DOT id)*;
-stateless_setting_namespace        : STATELESS_SETTING_NAMESPACE WHITESPACE+ namespace;
-stateless_setting_class            : STATELESS_SETTING_CLASS WHITESPACE+ name=id;
-stateless_setting_generate_partial : STATELESS_SETTING_GENERATE_PARTIAL;
-stateless_setting_using            : STATELESS_SETTING_USING WHITESPACE+ namespace;
-stateless_setting
-    : stateless_setting_namespace
-    | stateless_setting_class
-    | stateless_setting_generate_partial
-    | stateless_setting_using
-    ;
-state_definition_no_substates   : STATE WHITESPACE+ name=id ;
-state_definition_with_substates : STATE WHITESPACE+ name=id WHITESPACE* LBRACE WHITESPACE* NEWLINE+ (WHITESPACE* (states) NEWLINE+)* WHITESPACE* RBRACE;
-state_definition
-    : state_definition_with_substates
-    | state_definition_no_substates
+namespace                : id (DOT id)*;
+setting_namespace        : SETTING_NAMESPACE WHITESPACE+ namespace;
+setting_dbcontext        : SETTING_DBCONTEXT WHITESPACE+ name=id;
+setting_entity           : SETTING_ENTITY WHITESPACE+ name=id;
+setting_generate_partial : SETTING_GENERATE_PARTIAL;
+setting_using            : SETTING_USING WHITESPACE+ namespace;
+setting
+    : setting_namespace
+    | setting_dbcontext
+    | setting_entity
+    | setting_generate_partial
+    | setting_using
     ;
 
-states_transition_start_to      : BOUNDARY_NODE WHITESPACE* transition_from_to WHITESPACE* (to=id) trigger_details? transition_details?;
-states_transition_to_start      : (to=id) WHITESPACE* transition_to_from WHITESPACE* BOUNDARY_NODE trigger_details? transition_details?;
-states_transition_from_end      : (from=id) WHITESPACE* transition_from_to WHITESPACE* BOUNDARY_NODE trigger_details? transition_details?;
-states_transition_end_from      : BOUNDARY_NODE WHITESPACE* transition_to_from WHITESPACE* (from=id) trigger_details? transition_details?;
-states_transition_from_to       : (from=id) WHITESPACE* transition_from_to WHITESPACE* (to=id) trigger_details? transition_details?;
-states_transition_to_from       : (to=id) WHITESPACE* transition_to_from WHITESPACE* (from=id) trigger_details? transition_details?;
-states_description              : (node=id) WHITESPACE* COLON WHITESPACE* (text=~NEWLINE)*;
-states
-    : states_transition_from_to
-    | states_transition_to_from
-    | states_transition_start_to
-    | states_transition_to_start
-    | states_transition_from_end
-    | states_transition_end_from
-    | states_description
-    | state_definition
-    | note_line
-    | comment_line
+model_items
+    : relation
+    | class
+    | note
+    | comment
     ;
 
-transition_from_to
-    : MINUS+ (orientation=id)? MINUS+ RCHEVR
-    | MINUS+ RCHEVR
+relation_plurality
+    : RELATION_PLURALITY_ONE
+    | RELATION_PLURALITY_NONE_TO_MANY
+    | RELATION_PLURALITY_MANY_TO_NONE
+    | RELATION_PLURALITY_ONE_TO_MANY
+    | RELATION_PLURALITY_MANY_TO_ONE
+    | RELATION_PLURALITY_MANY_TO_MANY
     ;
-transition_to_from
-    : LCHEVR MINUS+ (orientation=id)? MINUS+
-    | LCHEVR MINUS+
+relation_type
+    : RELATION_TYPE_COMPOSITION
+    | RELATION_TYPE_AGGREGATION
+    | RELATION_TYPE_EXTENSION
     ;
+relation_mapping        : MAP WHITESPACE+ SINGLEQUOTE from=id SINGLEQUOTE WHITESPACE+ SINGLEQUOTE to=id SINGLEQUOTE;
+relation                : (relation_mapping WHITESPACE* NEWLINE WHITESPACE*)? from=id WHITESPACE+ relation_plurality WHITESPACE+ relation_type WHITESPACE+ relation_plurality WHITESPACE+ to=id (WHITESPACE* COLON WHITESPACE* property=id)?;
 
-transition_details_description  : (~NEWLINE)+;
-transition_details              : WHITESPACE* COLON WHITESPACE* trigger_name transition_details_description?;
-
-trigger_name                    : id (id | WHITESPACE | UNDERSCORE)*;
-trigger_details                 : WHITESPACE* LCHEVR LCHEVR WHITESPACE* (ASYNC WHITESPACE+)? parameters_definition? WHITESPACE* RCHEVR RCHEVR WHITESPACE* ;
-parameter_type                  : id (DOT id)* (LBRACK WHITESPACE* RBRACK)? ;
-parameters_definition_unnamed   : LPAREN WHITESPACE* parameter_type WHITESPACE* (COMMA WHITESPACE* parameter_type)* WHITESPACE* RPAREN ;
-parameters_definition_named     : LPAREN WHITESPACE* parameter_type WHITESPACE+ id WHITESPACE* (COMMA WHITESPACE* parameter_type WHITESPACE+ id)* WHITESPACE* RPAREN ;
-parameters_definition
-    : parameters_definition_unnamed
-    | parameters_definition_named
-    ;
-
-note_line
+class_property_array    : LBRACK WHITESPACE* RBRACK;
+class_property          : WHITESPACE* (PLUS|MINUS) WHITESPACE* name=id WHITESPACE* COLON WHITESPACE* type=id WHITESPACE* is_array=class_property_array? WHITESPACE*  NEWLINE;
+class                   : ClASS WHITESPACE+ name=id (WHITESPACE|NEWLINE)* LBRACE class_property* WHITESPACE* RBRACE ;
+note
     : NOTE_START (~NEWLINE)+
     | NOTE_START WHITESPACE+ QUOTED_STRING WHITESPACE+ AS WHITESPACE+ id WHITESPACE?
     | NOTE_START (~NEWLINE)+ NEWLINE ((~NEWLINE)+ NEWLINE)* WHITESPACE* NOTE_END
     ;
 
-comment_line                    : SINGLEQUOTE (~NEWLINE)*;
+comment                 : SINGLEQUOTE (~NEWLINE)*;
 
 // Some keywords are allowed to be used as identifiers. We need to explicitly allow this.
 id_valid_keywords
     : TITLE
-    | STATE
     | NOTE_START
     ;
-id                              : (ID | id_valid_keywords)+ ;
+id                      : (ID | id_valid_keywords)+ ;
 

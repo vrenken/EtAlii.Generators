@@ -33,6 +33,16 @@
           <option name="language" value="" />
           <option name="generateListener" value="false" />
         </PerGrammarGenerationSettings>
+        <PerGrammarGenerationSettings>
+          <option name="fileName" value="$PROJECT_DIR$/EtAlii.Generators.EntityFrameworkCore/PlantUmlParser.g4" />
+          <option name="autoGen" value="true" />
+          <option name="outputDir" value="" />
+          <option name="libDir" value="$PROJECT_DIR$/EtAlii.Generators.EntityFrameworkCore/obj/Debug/netstandard2.0" />
+          <option name="encoding" value="" />
+          <option name="pkg" value="" />
+          <option name="language" value="" />
+          <option name="generateListener" value="false" />
+        </PerGrammarGenerationSettings>
       </list>
     </option>
   </component>

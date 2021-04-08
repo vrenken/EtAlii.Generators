@@ -1,10 +1,10 @@
 namespace EtAlii.Generators.EntityFrameworkCore
 {
-    public class ClassNameSetting : Setting
+    public class DbContextNameSetting : Setting
     {
         public string Value { get; }
 
-        public ClassNameSetting(string value)
+        public DbContextNameSetting(string value)
         {
             Value = value;
         }

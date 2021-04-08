@@ -38,12 +38,12 @@
 
         public void Write(EntityModel model, IndentedTextWriter writer, string originalFileName, List<string> log, List<Diagnostic> writeDiagnostics)
         {
-            // If there is no classname defined in the diagram we'll need to come up with one ourselves.
-            if (!model.Settings.OfType<ClassNameSetting>().Any())
+            // If there is no DbContext name defined in the diagram we'll need to come up with one ourselves.
+            if (!model.Settings.OfType<DbContextNameSetting>().Any())
             {
                 // Let's use a C# safe subset of the characters in the filename.
-                var classNameFromFileName = Regex.Replace(Path.GetFileNameWithoutExtension(originalFileName), "[^a-zA-Z0-9_]", "");
-                model.AddSettings(new ClassNameSetting(classNameFromFileName));
+                var dbContextNameFromFileName = Regex.Replace(Path.GetFileNameWithoutExtension(originalFileName), "[^a-zA-Z0-9_]", "");
+                model.AddSettings(new DbContextNameSetting(dbContextNameFromFileName));
             }
 
             var writeContext = new WriteContextFactory().Create(writer, originalFileName, log, model);
