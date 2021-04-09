@@ -2,12 +2,8 @@
 
 namespace EtAlii.Generators
 {
-    using System.CodeDom.Compiler;
-    using System.Collections.Generic;
-    using Microsoft.CodeAnalysis;
-
-    public interface IWriter<in TInstance>
+    public interface IWriter<TInstance>
     {
-        void Write(TInstance instance, IndentedTextWriter writer, string originalFileName, List<string> log, List<Diagnostic> writeDiagnostics);
+        void Write(WriteContext<TInstance> context);
     }
 }

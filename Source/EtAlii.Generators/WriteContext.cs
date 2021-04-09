@@ -7,7 +7,7 @@ namespace EtAlii.Generators
     /// <summary>
     /// Use this class to transport actionable instances and data through the callstack of write methods.
     /// </summary>
-    public abstract class WriteContextBase<T>
+    public class WriteContext<T>
     {
         /// <summary>
         /// The writer. Everything written using this instance finds its way into a source file.
@@ -24,15 +24,18 @@ namespace EtAlii.Generators
         /// </summary>
         public T Instance { get; }
 
+        public NamespaceDetails NamespaceDetails { get; }
 
-        protected WriteContextBase(
+        public WriteContext(
             IndentedTextWriter writer,
             string originalFileName,
-            T instance)
+            T instance,
+            NamespaceDetails namespaceDetails)
         {
             Writer = writer;
             OriginalFileName = originalFileName;
             Instance = instance;
+            NamespaceDetails = namespaceDetails;
         }
     }
 }

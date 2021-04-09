@@ -1,5 +1,7 @@
 ﻿namespace EtAlii.Generators.GraphQL.Client
 {
+    using System.CodeDom.Compiler;
+    using System.Collections.Generic;
     using Microsoft.CodeAnalysis;
 
     /// <summary>
@@ -10,18 +12,19 @@
     [Generator]
     public class SourceGenerator : SourceGeneratorBase<object>
     {
-        public const string StateMachineType = "global::Stateless.StateMachine<State, Trigger>";
-        public const string BeginStateName = "_Begin";
-        public const string EndStateName = "_End";
-
         protected override IParser<object> CreateParser() => new GraphQLQueryParser();
 
-        protected override IWriter<object> CreateWriter() => new GraphQLQueryWriter();
+        protected override IWriterFactory<object> CreateWriterFactory() => new GraphQLQueryWriterFactory();
 
         protected override IValidator<object> CreateValidator() => new GraphQLQueryValidator();
 
         protected override string GetExtension() => ".graphql";
 
         protected override DiagnosticDescriptor GetParsingExceptionRule() => DiagnosticRule.ParsingThrewException;
+
+        protected override WriteContext<object> CreateWriteContext(object instance, IndentedTextWriter writer, string originalFileName, List<string> log)
+        {
+            return new WriteContextFactory().Create(writer, originalFileName, log, instance);
+        }
     }
 }

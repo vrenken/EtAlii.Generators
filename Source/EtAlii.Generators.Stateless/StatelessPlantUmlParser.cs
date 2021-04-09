@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using Antlr4.Runtime;
     using Microsoft.CodeAnalysis;
@@ -34,7 +35,9 @@
                 parser.AddErrorListener(errorListener);
                 var parsingContext = parser.state_machine();
 
-                var visitor = new PlantUmlVisitor();
+                var originalFileName = Path.GetFileName(file.Path);
+                var visitor = new PlantUmlVisitor(originalFileName);
+
                 stateMachine = visitor.VisitState_machine(parsingContext) as StateMachine;
 
                 if (parser.NumberOfSyntaxErrors != 0)

@@ -4,10 +4,10 @@ namespace EtAlii.Generators.Stateless
 {
     using System.CodeDom.Compiler;
 
-    public class WriteContext : WriteContextBase<StateMachine>
+    public class WriteContext : WriteContext<StateMachine>
     {
-        public WriteContext(IndentedTextWriter writer, string originalFileName, StateMachine instance) 
-            : base(writer, originalFileName, instance)
+        public WriteContext(IndentedTextWriter writer, string originalFileName, StateMachine instance, NamespaceDetails namespaceDetails)
+            : base(writer, originalFileName, instance, namespaceDetails)
         {
         }
     }

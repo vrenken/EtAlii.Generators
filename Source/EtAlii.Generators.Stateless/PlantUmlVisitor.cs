@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Text.RegularExpressions;
     using Antlr4.Runtime;
 
     /// <summary>
@@ -11,6 +13,13 @@
     /// </summary>
     public class PlantUmlVisitor : PlantUmlParserBaseVisitor<object>
     {
+        private readonly string _originalFileName;
+
+        public PlantUmlVisitor(string originalFileName)
+        {
+            _originalFileName = originalFileName;
+        }
+
         public override object VisitState_machine(PlantUmlParser.State_machineContext context)
         {
             var headers = context
@@ -27,15 +36,25 @@
                 .OfType<StateFragment>()
                 .ToArray();
 
+            // If there is no classname defined in the diagram we'll need to come up with one ourselves.
+            if (!settings.OfType<ClassNameSetting>().Any())
+            {
+                // Let's use a C# safe subset of the characters in the filename.
+                var classNameFromFileName = Regex.Replace(Path.GetFileNameWithoutExtension(_originalFileName), "[^a-zA-Z0-9_]", "");
+                settings = settings
+                    .Concat(new [] { new ClassNameSetting(classNameFromFileName) })
+                    .ToArray();
+            }
+
             return new StateMachine(realHeaders, settings, stateFragments);
         }
 
         public override object VisitId(PlantUmlParser.IdContext context) => context.GetText();
 
-        public override object VisitStateless_setting_class(PlantUmlParser.Stateless_setting_classContext context) => new ClassNameSetting((string)VisitId(context.name));
-        public override object VisitStateless_setting_generate_partial(PlantUmlParser.Stateless_setting_generate_partialContext context) => new GeneratePartialClassSetting(true);
-        public override object VisitStateless_setting_namespace(PlantUmlParser.Stateless_setting_namespaceContext context) => new NamespaceSetting(context.@namespace().GetText());
-        public override object VisitStateless_setting_using(PlantUmlParser.Stateless_setting_usingContext context) => new UsingSetting(context.@namespace().GetText());
+        public override object VisitSetting_class(PlantUmlParser.Setting_classContext context) => new ClassNameSetting((string)VisitId(context.name));
+        public override object VisitSetting_generate_partial(PlantUmlParser.Setting_generate_partialContext context) => new GeneratePartialClassSetting(true);
+        public override object VisitSetting_namespace(PlantUmlParser.Setting_namespaceContext context) => new NamespaceSetting(context.@namespace().GetText());
+        public override object VisitSetting_using(PlantUmlParser.Setting_usingContext context) => new UsingSetting(context.@namespace().GetText());
 
         public override object VisitNote_line(PlantUmlParser.Note_lineContext context) => new Header(context.GetText());
 

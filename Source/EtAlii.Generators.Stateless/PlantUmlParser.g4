@@ -19,25 +19,25 @@ state_machine:
     END (NEWLINE | WHITESPACE)*
     EOF;
 
-header_title                       : TITLE (~NEWLINE)* ;
+header_title                    : TITLE (~NEWLINE)* ;
 header_lines
     : HIDE_EMPTY_DESCRIPTION
     | note_line
-    | stateless_setting
+    | setting
     | comment_line
     | header_title
     ;
 
-namespace                          : id (DOT id)*;
-stateless_setting_namespace        : STATELESS_SETTING_NAMESPACE WHITESPACE+ namespace;
-stateless_setting_class            : STATELESS_SETTING_CLASS WHITESPACE+ name=id;
-stateless_setting_generate_partial : STATELESS_SETTING_GENERATE_PARTIAL;
-stateless_setting_using            : STATELESS_SETTING_USING WHITESPACE+ namespace;
-stateless_setting
-    : stateless_setting_namespace
-    | stateless_setting_class
-    | stateless_setting_generate_partial
-    | stateless_setting_using
+namespace                       : id (DOT id)*;
+setting_namespace               : SETTING_NAMESPACE WHITESPACE+ namespace;
+setting_class                   : SETTING_CLASS WHITESPACE+ name=id;
+setting_generate_partial        : SETTING_GENERATE_PARTIAL;
+setting_using                   : SETTING_USING WHITESPACE+ namespace;
+setting
+    : setting_namespace
+    | setting_class
+    | setting_generate_partial
+    | setting_using
     ;
 state_definition_no_substates   : STATE WHITESPACE+ name=id ;
 state_definition_with_substates : STATE WHITESPACE+ name=id WHITESPACE* LBRACE WHITESPACE* NEWLINE+ (WHITESPACE* (states) NEWLINE+)* WHITESPACE* RBRACE;

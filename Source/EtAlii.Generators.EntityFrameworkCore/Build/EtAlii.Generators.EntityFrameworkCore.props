@@ -1,0 +1,22 @@
+﻿<Project>
+
+  <PropertyGroup>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)\$(Configuration)\$(TargetFramework)\EFCore</CompilerGeneratedFilesOutputPath>
+  </PropertyGroup>
+
+  <!-- ===================================================== -->
+
+  <Target Name="_InjectAdditionalFiles" BeforeTargets="GenerateMSBuildEditorConfigFileShouldRun">
+    <ItemGroup>
+      <AdditionalFiles Include="@(EfCoreModel)" SourceItemGroup="EfCoreModel" />
+    </ItemGroup>
+  </Target>
+
+  <ItemGroup>
+    <CompilerVisibleItemMetadata Include="AdditionalFiles" MetadataName="SourceItemGroup" />
+  </ItemGroup>
+
+  <!-- ===================================================== -->
+
+</Project>

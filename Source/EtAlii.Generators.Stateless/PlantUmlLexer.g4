@@ -18,10 +18,10 @@ STATE                                               : 'state';
 HIDE_EMPTY_DESCRIPTION                              : 'hide empty description';
 ID                                                  : ('A'..'Z' | 'a'..'z' | '1'..'9')+;
 
-STATELESS_SETTING_NAMESPACE                         : '\'stateless namespace';
-STATELESS_SETTING_CLASS                             : '\'stateless class';
-STATELESS_SETTING_USING                             : '\'stateless using';
-STATELESS_SETTING_GENERATE_PARTIAL                  : '\'stateless generate partial';
+SETTING_NAMESPACE                                   : '\'stateless namespace';
+SETTING_CLASS                                       : '\'stateless class';
+SETTING_USING                                       : '\'stateless using';
+SETTING_GENERATE_PARTIAL                            : '\'stateless generate partial';
 BOUNDARY_NODE                                       : '[*]';
 
 // String
