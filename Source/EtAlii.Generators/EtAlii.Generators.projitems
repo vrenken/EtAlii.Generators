@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)IValidator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IWriteContextFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IWriterFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ParsingErrorListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SourceGeneratorBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WriteContext.cs" />

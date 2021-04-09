@@ -13,11 +13,9 @@
     /// - Same named triggers with differently named parameters.
     /// </remarks>
     [Generator]
-    public class EntityModelWriter : IWriter<EntityModel>
+    public class EntityModelWriterFactory : IWriterFactory<EntityModel>
     {
-        private readonly IWriter<EntityModel> _namespaceWriter;
-
-        public EntityModelWriter()
+        public IWriter<EntityModel> Create()
         {
             // Layman's dependency injection:
             // No need to introduce a whole new package dependency here as it'll only make the analyzer more bloated.
@@ -31,12 +29,7 @@
                     entityWriter.Write(context, @class);
                 }
             });
-            _namespaceWriter = new NamespaceWriter<EntityModel>(writeEntities);
-        }
-
-        public void Write(WriteContext<EntityModel> context)
-        {
-            _namespaceWriter.Write(context);
+            return new NamespaceWriter<EntityModel>(writeEntities);
         }
     }
 }

@@ -2,8 +2,13 @@
 
 namespace EtAlii.Generators.GraphQL.Client
 {
-    public class GraphQLQueryWriter : IWriter<object>
+    public class GraphQLQueryWriterFactory : IWriterFactory<object>, IWriter<object>
     {
+        public IWriter<object> Create()
+        {
+            return this;
+        }
+
         public void Write(WriteContext<object> context)
         {
             context.Writer.Write("Test");

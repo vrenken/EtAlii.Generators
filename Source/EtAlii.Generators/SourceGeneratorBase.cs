@@ -13,7 +13,7 @@ namespace EtAlii.Generators
     public abstract class SourceGeneratorBase<T> : ISourceGenerator
     {
         protected abstract IParser<T> CreateParser();
-        protected abstract IWriter<T> CreateWriter();
+        protected abstract IWriterFactory<T> CreateWriterFactory();
         protected abstract WriteContext<T> CreateWriteContext(T instance, IndentedTextWriter writer, string originalFileName, List<string> log);
         protected abstract IValidator<T> CreateValidator();
 
@@ -40,7 +40,8 @@ namespace EtAlii.Generators
                 .ToArray();
 
             var parser = CreateParser();
-            var writer = CreateWriter();
+            var writerFactory = CreateWriterFactory();
+            var writer = writerFactory.Create();
             var validator = CreateValidator();
 
             foreach(var file in additionalFiles)

@@ -18,7 +18,7 @@
     {
         protected override IParser<EntityModel> CreateParser() => new EntityModelPlantUmlParser();
 
-        protected override IWriter<EntityModel> CreateWriter() => new EntityModelWriter();
+        protected override IWriterFactory<EntityModel> CreateWriterFactory() => new EntityModelWriterFactory();
 
         protected override IValidator<EntityModel> CreateValidator() => new EntityModelPlantUmlValidator();
 

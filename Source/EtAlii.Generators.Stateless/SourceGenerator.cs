@@ -18,7 +18,7 @@
     {
         protected override IParser<StateMachine> CreateParser() => new StatelessPlantUmlParser();
 
-        protected override IWriter<StateMachine> CreateWriter() => new StatelessWriter();
+        protected override IWriterFactory<StateMachine> CreateWriterFactory() => new StatelessWriterFactory();
 
         protected override IValidator<StateMachine> CreateValidator() => new StatelessPlantUmlValidator();
 

@@ -14,7 +14,7 @@
     {
         protected override IParser<object> CreateParser() => new GraphQLQueryParser();
 
-        protected override IWriter<object> CreateWriter() => new GraphQLQueryWriter();
+        protected override IWriterFactory<object> CreateWriterFactory() => new GraphQLQueryWriterFactory();
 
         protected override IValidator<object> CreateValidator() => new GraphQLQueryValidator();
 
