@@ -1,5 +1,7 @@
 ﻿namespace EtAlii.Generators.Stateless
 {
+    using System.CodeDom.Compiler;
+    using System.Collections.Generic;
     using Microsoft.CodeAnalysis;
 
     /// <summary>
@@ -23,5 +25,10 @@
         protected override string GetExtension() => ".puml";
 
         protected override DiagnosticDescriptor GetParsingExceptionRule() => GeneratorRule.PlantUmlStateMachineProcessingThrowsException;
+
+        protected override WriteContext<StateMachine> CreateWriteContext(StateMachine instance, IndentedTextWriter writer, string originalFileName, List<string> log)
+        {
+            return new WriteContextFactory().Create(writer, originalFileName, log, instance);
+        }
     }
 }

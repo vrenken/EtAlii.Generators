@@ -11,10 +11,14 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)IParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IValidator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IWriteContextFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IWriter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ParsingErrorListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SourceGeneratorBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)WriteContextBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WriteContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Writers\EnumWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Writers\NamespaceWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)_Model\NamespaceDetails.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)_Model\SourcePosition.cs" />
   </ItemGroup>
   <PropertyGroup>

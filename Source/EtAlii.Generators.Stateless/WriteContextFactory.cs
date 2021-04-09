@@ -4,12 +4,12 @@ namespace EtAlii.Generators.Stateless
     using System.Collections.Generic;
     using System.Linq;
 
-    public class WriteContextFactory
+    public class WriteContextFactory : IWriteContextFactory<StateMachine>
     {
         /// <summary>
         /// Create a context with commonly used instances and data that we can easily pass through the whole writing callstack.
         /// </summary>
-        public WriteContext Create(IndentedTextWriter writer, string originalFileName, List<string> log, StateMachine stateMachine)
+        public WriteContext<StateMachine> Create(IndentedTextWriter writer, string originalFileName, List<string> log, StateMachine stateMachine)
         {
             var allTransitions = StateFragment.GetAllTransitions(stateMachine.StateFragments);
             log.Add("Transitions found:");
@@ -36,7 +36,9 @@ namespace EtAlii.Generators.Stateless
             log.Add("Triggers found:");
             log.AddRange(allTriggers.Select(t => $"- {t}"));
 
-            return new WriteContext(writer, originalFileName, stateMachine);
+            var usings = new[] {"System", "System.Threading.Tasks", "Stateless",}.Concat(stateMachine.Usings).ToArray();
+            var namespaceDetails = new NamespaceDetails(stateMachine.Namespace, usings);
+            return new WriteContext(writer, originalFileName, stateMachine, namespaceDetails);
         }
     }
 }

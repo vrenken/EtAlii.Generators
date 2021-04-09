@@ -14,7 +14,7 @@
             _transitionConverter = transitionConverter;
         }
 
-        public void WriteStateMachineInstantiation(WriteContext context)
+        public void WriteStateMachineInstantiation(WriteContext<StateMachine> context)
         {
             context.Writer.WriteLine("// Time to create a new state machine instance.");
             context.Writer.WriteLine($"_stateMachine = new {StatelessWriter.StateMachineType}(State.{StatelessWriter.BeginStateName});");
@@ -25,7 +25,7 @@
             WriteStateInstantiations(context);
         }
 
-        private void WriteTriggerInstantiations(WriteContext context)
+        private void WriteTriggerInstantiations(WriteContext<StateMachine> context)
         {
             // We only need to write a trigger construction calls for all relations that have parameters.
             var uniqueTransitionsWithParameters = StateFragment.GetUniqueParameterTransitions(context.Instance.StateFragments)
@@ -48,7 +48,7 @@
             }
         }
 
-        private void WriteStateInstantiations(WriteContext context)
+        private void WriteStateInstantiations(WriteContext<StateMachine> context)
         {
             context.Writer.WriteLine("// Then we need to configure the state machine.");
 
@@ -58,7 +58,7 @@
                 WriteStateConstruction(context, state);
             }
         }
-        private void WriteStateConstruction(WriteContext context, string state)
+        private void WriteStateConstruction(WriteContext<StateMachine> context, string state)
         {
             context.Writer.WriteLine($"_stateMachine.Configure(State.{state})");
 
@@ -84,7 +84,7 @@
             context.Writer.WriteLine();
         }
 
-        private void WriteSubstate(WriteContext context, string state, List<string> stateConfiguration)
+        private void WriteSubstate(WriteContext<StateMachine> context, string state, List<string> stateConfiguration)
         {
             var superState = StateFragment.GetSuperState(context.Instance, state);
             if (superState != null)
@@ -93,7 +93,7 @@
             }
         }
 
-        private void WriteSuperState(WriteContext context, string state, List<string> stateConfiguration)
+        private void WriteSuperState(WriteContext<StateMachine> context, string state, List<string> stateConfiguration)
         {
             var superState = StateFragment
                 .GetAllSuperStates(context.Instance.StateFragments)
@@ -121,7 +121,7 @@
             }
         }
 
-        private void WriteEntryAndExitConfiguration(WriteContext context, string state, List<string> stateConfiguration)
+        private void WriteEntryAndExitConfiguration(WriteContext<StateMachine> context, string state, List<string> stateConfiguration)
         {
             var writeAsyncEntryConfiguration = StateFragment.HasOnlyAsyncInboundTransitions(context.Instance, state);
             if (writeAsyncEntryConfiguration)
@@ -144,7 +144,7 @@
             }
         }
 
-        private void WriteInternalTransitions(WriteContext context, string state, List<string> stateConfiguration)
+        private void WriteInternalTransitions(WriteContext<StateMachine> context, string state, List<string> stateConfiguration)
         {
             var lines = StateFragment
                 .GetInternalTransitions(context.Instance.StateFragments, state)
@@ -165,7 +165,7 @@
                 .ToArray();
             stateConfiguration.AddRange(lines);
         }
-        private void WriteOutboundTransitions(WriteContext context, string state, List<string> stateConfiguration)
+        private void WriteOutboundTransitions(WriteContext<StateMachine> context, string state, List<string> stateConfiguration)
         {
             var lines = StateFragment
                 .GetOutboundTransitions(context.Instance, state)
@@ -174,7 +174,7 @@
             stateConfiguration.AddRange(lines);
         }
 
-        private void WriteInboundTransitions(WriteContext context, string state, List<string> stateConfiguration)
+        private void WriteInboundTransitions(WriteContext<StateMachine> context, string state, List<string> stateConfiguration)
         {
             var lines = StateFragment
                 .GetInboundTransitions(context.Instance.StateFragments, state)

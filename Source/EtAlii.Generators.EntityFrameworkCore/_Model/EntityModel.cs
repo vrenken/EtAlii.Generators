@@ -7,27 +7,27 @@
         /// <summary>
         /// The namespace that should be used when creating source code files.
         /// </summary>
-        public string Namespace { get; private set; }
+        public string Namespace { get; }
 
         /// <summary>
         /// The name of the base entity to use.
         /// </summary>
-        public string EntityName { get; private set; }
+        public string EntityName { get; }
 
         /// <summary>
         /// The name of the DbContext instance to generate.
         /// </summary>
-        public string DbContextName { get; private set; }
+        public string DbContextName { get; }
 
         /// <summary>
         /// When set to true a partial class will be created.
         /// </summary>
-        public bool GeneratePartialClass { get; private set; }
+        public bool GeneratePartialClass { get; }
 
         /// <summary>
         /// The namespaces that should be added as usings at the root of the file.
         /// </summary>
-        public string[] Usings { get; private set; }
+        public string[] Usings { get; }
 
         /// <summary>
         /// Additional headers from the Plant UML file.
@@ -37,31 +37,22 @@
         /// <summary>
         /// All settings acquired from the Plant UML file.
         /// </summary>
-        public Setting[] Settings { get; private set; }
+        public Setting[] Settings { get; }
 
         /// <summary>
-        /// The root state fragments (i.e. the ones that don't have a super state).
+        /// The classes as defined in the PlantUML diagram.
         /// </summary>
-        public StateFragment[] StateFragments { get; }
+        public Class[] Classes { get; }
 
-        public EntityModel(Header[] headers, Setting[] settings, StateFragment[] stateFragments)
+        public Relation[] Relations { get; }
+
+        public EntityModel(Header[] headers, Setting[] settings, Class[] classes, Relation[] relations)
         {
             Headers = headers;
             Settings = settings;
-            StateFragments = stateFragments;
-            Update();
-        }
+            Classes = classes;
+            Relations = relations;
 
-        public void AddSettings(Setting setting)
-        {
-            Settings = Settings
-                .Concat(new[] {setting})
-                .ToArray();
-            Update();
-        }
-
-        private void Update()
-        {
             DbContextName = Settings
                 .OfType<DbContextNameSetting>()
                 .Single().Value;

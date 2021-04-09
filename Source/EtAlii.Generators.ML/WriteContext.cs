@@ -4,10 +4,10 @@ namespace EtAlii.Generators.ML
 {
     using System.CodeDom.Compiler;
 
-    public class WriteContext : WriteContextBase<object>
+    public class WriteContext : WriteContext<object>
     {
-        public WriteContext(IndentedTextWriter writer, string originalFileName, object instance)
-            : base(writer, originalFileName, instance)
+        public WriteContext(IndentedTextWriter writer, string originalFileName, object instance, NamespaceDetails namespaceDetails)
+            : base(writer, originalFileName, instance, namespaceDetails)
         {
         }
     }

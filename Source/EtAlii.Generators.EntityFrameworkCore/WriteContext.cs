@@ -4,10 +4,10 @@ namespace EtAlii.Generators.EntityFrameworkCore
 {
     using System.CodeDom.Compiler;
 
-    public class WriteContext : WriteContextBase<EntityModel>
+    public class WriteContext : WriteContext<EntityModel>
     {
-        public WriteContext(IndentedTextWriter writer, string originalFileName, EntityModel instance)
-            : base(writer, originalFileName, instance)
+        public WriteContext(IndentedTextWriter writer, string originalFileName, EntityModel instance, NamespaceDetails namespaceDetails)
+            : base(writer, originalFileName, instance, namespaceDetails)
         {
         }
     }

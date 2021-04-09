@@ -14,7 +14,7 @@ namespace EtAlii.Generators
     {
         protected abstract IParser<T> CreateParser();
         protected abstract IWriter<T> CreateWriter();
-
+        protected abstract WriteContext<T> CreateWriteContext(T instance, IndentedTextWriter writer, string originalFileName, List<string> log);
         protected abstract IValidator<T> CreateValidator();
 
         protected abstract string GetExtension();
@@ -58,7 +58,8 @@ namespace EtAlii.Generators
                         using var stringWriter = new StringWriter();
                         using var indentedWriter = new IndentedTextWriter(stringWriter);
 
-                        writer.Write(instance, indentedWriter, originalFileName, log, diagnostics);
+                        var writeContext = CreateWriteContext(instance, indentedWriter, originalFileName, log);
+                        writer.Write(writeContext);
 
                         var content = stringWriter.ToString();
                         context.AddSource(fileName, content);

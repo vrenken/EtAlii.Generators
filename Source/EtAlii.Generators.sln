@@ -31,6 +31,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EtAlii.Generators.EntityFra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EtAlii.Generators.EntityFrameworkCore.Tests", "EtAlii.Generators.EntityFrameworkCore.Tests\EtAlii.Generators.EntityFrameworkCore.Tests.csproj", "{3F0E9C00-A404-4389-BA44-607EE0F0E29D}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "EtAlii.Generators.Tests", "EtAlii.Generators.Tests\EtAlii.Generators.Tests.shproj", "{18108A2D-C3BB-43A4-9E70-A2567F76BD65}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{9BA2A3C6-9D92-436D-854B-ADB54E3C8B13}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,5 +73,12 @@ Global
 		{3F0E9C00-A404-4389-BA44-607EE0F0E29D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F0E9C00-A404-4389-BA44-607EE0F0E29D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F0E9C00-A404-4389-BA44-607EE0F0E29D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3F0E9C00-A404-4389-BA44-607EE0F0E29D} = {9BA2A3C6-9D92-436D-854B-ADB54E3C8B13}
+		{4D9AFD07-45EF-4DDD-980E-D9FD619ECD95} = {9BA2A3C6-9D92-436D-854B-ADB54E3C8B13}
+		{15BD9931-757F-4DA6-B17B-7753EFA297AC} = {9BA2A3C6-9D92-436D-854B-ADB54E3C8B13}
+		{7A7E5272-B0D8-402A-9F89-D38515CFF376} = {9BA2A3C6-9D92-436D-854B-ADB54E3C8B13}
+		{18108A2D-C3BB-43A4-9E70-A2567F76BD65} = {9BA2A3C6-9D92-436D-854B-ADB54E3C8B13}
 	EndGlobalSection
 EndGlobal

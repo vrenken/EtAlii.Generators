@@ -1,14 +1,14 @@
 ﻿namespace EtAlii.Generators.Stateless
 {
-    public class ClassWriter
+    public class ClassWriter : IWriter<StateMachine>
     {
-        private readonly EnumWriter _enumWriter;
+        private readonly EnumWriter<StateMachine> _enumWriter;
         private readonly FieldWriter _fieldWriter;
         private readonly MethodWriter _methodWriter;
         private readonly InstantiationWriter _instantiationWriter;
 
         public ClassWriter(
-            EnumWriter enumWriter,
+            EnumWriter<StateMachine> enumWriter,
             FieldWriter fieldWriter,
             MethodWriter methodWriter,
             InstantiationWriter instantiationWriter)
@@ -19,7 +19,7 @@
             _instantiationWriter = instantiationWriter;
         }
 
-        public void Write(WriteContext context)
+        public void Write(WriteContext<StateMachine> context)
         {
             var prefix = context.Instance.GeneratePartialClass ? "abstract partial" : "abstract";
 
@@ -45,10 +45,12 @@
             _methodWriter.WriteTriggerMethods(context);
             context.Writer.WriteLine();
 
-            _enumWriter.WriteStateEnum(context);
+            var allStates = StateFragment.GetAllStates(context.Instance.StateFragments);
+            _enumWriter.Write(context, new []{ "Of course each state machine needs a set of states."}, "State", allStates);
             context.Writer.WriteLine();
 
-            _enumWriter.WriteTriggerEnum(context);
+            var allTriggers = StateFragment.GetAllTriggers(context.Instance.StateFragments);
+            _enumWriter.Write(context, new []{ "And all state machine need something that trigger them."}, "Trigger", allTriggers);
             context.Writer.WriteLine();
 
             _methodWriter.WriteTransitionMethods(context);
@@ -57,7 +59,7 @@
             context.Writer.WriteLine("}");
         }
 
-        private void WriteConstructor(WriteContext context)
+        private void WriteConstructor(WriteContext<StateMachine> context)
         {
             context.Writer.WriteLine($"protected {context.Instance.ClassName}()");
             context.Writer.WriteLine("{");

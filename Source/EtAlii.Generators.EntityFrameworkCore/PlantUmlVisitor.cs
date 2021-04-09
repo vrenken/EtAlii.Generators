@@ -1,6 +1,8 @@
 ﻿namespace EtAlii.Generators.EntityFrameworkCore
 {
+    using System.IO;
     using System.Linq;
+    using System.Text.RegularExpressions;
 
     /// <summary>
     /// An implementation of the visitor generated using the Antlr4 g4 parser and lexer.
@@ -8,6 +10,13 @@
     /// </summary>
     public class PlantUmlVisitor : PlantUmlParserBaseVisitor<object>
     {
+        private readonly string _originalFileName;
+
+        public PlantUmlVisitor(string originalFileName)
+        {
+            _originalFileName = originalFileName;
+        }
+
         public override object VisitModel(PlantUmlParser.ModelContext context)
         {
             var headers = context
@@ -21,10 +30,42 @@
             var items = context
                 .model_items()
                 .Select(Visit)
-                .OfType<StateFragment>()
                 .ToArray();
 
-            return new EntityModel(realHeaders, settings, items);
+            var classes = items
+                .OfType<Class>()
+                .ToArray();
+
+            var relations = items
+                .OfType<Relation>()
+                .ToArray();
+
+            // If there is no DbContext name defined in the diagram we'll need to come up with one ourselves.
+            if (!settings.OfType<DbContextNameSetting>().Any())
+            {
+                // Let's use a C# safe subset of the characters in the filename.
+                var dbContextNameFromFileName = Regex.Replace(Path.GetFileNameWithoutExtension(_originalFileName), "[^a-zA-Z0-9_]", "");
+                settings = settings
+                    .Concat(new []{ new DbContextNameSetting(dbContextNameFromFileName) })
+                    .ToArray();
+            }
+
+            return new EntityModel(realHeaders, settings, classes, relations);
+        }
+
+        public override object VisitRelation(PlantUmlParser.RelationContext context)
+        {
+            var from = (string)VisitId(context.from);
+            var to = (string)VisitId(context.to);
+            var position = SourcePosition.FromContext(context);
+            return new Relation(from, to, position);
+        }
+
+        public override object VisitClass(PlantUmlParser.ClassContext context)
+        {
+            var name = (string)VisitId(context.name);
+            var position = SourcePosition.FromContext(context);
+            return new Class(name, position);
         }
 
         public override object VisitId(PlantUmlParser.IdContext context) => context.GetText();

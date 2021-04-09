@@ -1,10 +1,5 @@
 ﻿namespace EtAlii.Generators.Stateless
 {
-    using System.CodeDom.Compiler;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Text.RegularExpressions;
     using Microsoft.CodeAnalysis;
 
     /// <summary>
@@ -23,7 +18,7 @@
         public const string BeginStateName = "_Begin";
         public const string EndStateName = "_End";
 
-        private readonly NamespaceWriter _namespaceWriter;
+        private readonly IWriter<StateMachine> _namespaceWriter;
 
         public StatelessWriter()
         {
@@ -32,28 +27,17 @@
             // For now the simple composition below also works absolutely fine.
             var parameterConverter = new ParameterConverter();
             var transitionConverter = new TransitionConverter(parameterConverter);
-            var enumWriter = new EnumWriter();
+            var enumWriter = new EnumWriter<StateMachine>();
             var methodWriter = new MethodWriter(parameterConverter, transitionConverter);
             var fieldWriter = new FieldWriter(parameterConverter, transitionConverter);
             var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter);
             var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, instantiationWriter);
-            _namespaceWriter = new NamespaceWriter(classWriter);
+            _namespaceWriter = new NamespaceWriter<StateMachine>(context => classWriter.Write(context));
         }
 
-        public void Write(StateMachine stateMachine, IndentedTextWriter writer, string originalFileName, List<string> log, List<Diagnostic> writeDiagnostics)
+        public void Write(WriteContext<StateMachine> context)
         {
-
-            // If there is no classname defined in the diagram we'll need to come up with one ourselves.
-            if (!stateMachine.Settings.OfType<ClassNameSetting>().Any())
-            {
-                // Let's use a C# safe subset of the characters in the filename.
-                var classNameFromFileName = Regex.Replace(Path.GetFileNameWithoutExtension(originalFileName), "[^a-zA-Z0-9_]", "");
-                stateMachine.AddSettings(new ClassNameSetting(classNameFromFileName));
-            }
-
-            var writeContext = new WriteContextFactory().Create(writer, originalFileName, log, stateMachine);
-
-            _namespaceWriter.Write(writeContext);
+            _namespaceWriter.Write(context);
         }
     }
 }

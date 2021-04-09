@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EntityModel Include="EntityModels\SimpleEntityModel.puml" />
+    <EfCoreModel Include="EntityModels\SimpleEntityModel.puml" />
   </ItemGroup>
 
   <ItemGroup>

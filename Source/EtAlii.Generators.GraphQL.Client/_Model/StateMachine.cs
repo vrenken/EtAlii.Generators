@@ -7,22 +7,22 @@
         /// <summary>
         /// The namespace that should be used when creating source code files.
         /// </summary>
-        public string Namespace { get; private set; }
+        public string Namespace { get; }
 
         /// <summary>
         /// The root class name.
         /// </summary>
-        public string ClassName { get; private set; }
+        public string ClassName { get; }
 
         /// <summary>
         /// When set to true a partial class will be created.
         /// </summary>
-        public bool GeneratePartialClass { get; private set; }
+        public bool GeneratePartialClass { get; }
 
         /// <summary>
         /// The namespaces that should be added as usings at the root of the file.
         /// </summary>
-        public string[] Usings { get; private set; }
+        public string[] Usings { get; }
 
         /// <summary>
         /// Additional headers from the Plant UML file.
@@ -32,7 +32,7 @@
         /// <summary>
         /// All settings acquired from the Plant UML file.
         /// </summary>
-        public Setting[] Settings { get; private set; }
+        public Setting[] Settings { get; }
 
         /// <summary>
         /// The root state fragments (i.e. the ones that don't have a super state).
@@ -44,19 +44,7 @@
             Headers = headers;
             Settings = settings;
             StateFragments = stateFragments;
-            Update();
-        }
 
-        public void AddSettings(Setting setting)
-        {
-            Settings = Settings
-                .Concat(new[] {setting})
-                .ToArray();
-            Update();
-        }
-
-        private void Update()
-        {
             ClassName = Settings
                 .OfType<ClassNameSetting>()
                 .Single().Value;

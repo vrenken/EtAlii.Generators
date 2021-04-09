@@ -2,15 +2,11 @@
 
 namespace EtAlii.Generators.GraphQL.Client
 {
-    using System.CodeDom.Compiler;
-    using System.Collections.Generic;
-    using Microsoft.CodeAnalysis;
-
     public class GraphQLQueryWriter : IWriter<object>
     {
-        public void Write(object instance, IndentedTextWriter writer, string originalFileName, List<string> log, List<Diagnostic> writeDiagnostics)
+        public void Write(WriteContext<object> context)
         {
-            writer.Write("Test");
+            context.Writer.Write("Test");
         }
     }
 }

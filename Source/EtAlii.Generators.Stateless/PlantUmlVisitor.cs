@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Text.RegularExpressions;
     using Antlr4.Runtime;
 
     /// <summary>
@@ -11,6 +13,13 @@
     /// </summary>
     public class PlantUmlVisitor : PlantUmlParserBaseVisitor<object>
     {
+        private readonly string _originalFileName;
+
+        public PlantUmlVisitor(string originalFileName)
+        {
+            _originalFileName = originalFileName;
+        }
+
         public override object VisitState_machine(PlantUmlParser.State_machineContext context)
         {
             var headers = context
@@ -26,6 +35,16 @@
                 .Select(Visit)
                 .OfType<StateFragment>()
                 .ToArray();
+
+            // If there is no classname defined in the diagram we'll need to come up with one ourselves.
+            if (!settings.OfType<ClassNameSetting>().Any())
+            {
+                // Let's use a C# safe subset of the characters in the filename.
+                var classNameFromFileName = Regex.Replace(Path.GetFileNameWithoutExtension(_originalFileName), "[^a-zA-Z0-9_]", "");
+                settings = settings
+                    .Concat(new [] { new ClassNameSetting(classNameFromFileName) })
+                    .ToArray();
+            }
 
             return new StateMachine(realHeaders, settings, stateFragments);
         }

@@ -67,7 +67,7 @@ relation                : (relation_mapping WHITESPACE* NEWLINE WHITESPACE*)? fr
 
 class_property_array    : LBRACK WHITESPACE* RBRACK;
 class_property          : WHITESPACE* (PLUS|MINUS) WHITESPACE* name=id WHITESPACE* COLON WHITESPACE* type=id WHITESPACE* is_array=class_property_array? WHITESPACE*  NEWLINE;
-class                   : ClASS WHITESPACE+ name=id (WHITESPACE|NEWLINE)* LBRACE class_property* WHITESPACE* RBRACE ;
+class                   : ClASS WHITESPACE+ name=id (WHITESPACE|NEWLINE)* LBRACE WHITESPACE* NEWLINE class_property* WHITESPACE* RBRACE ;
 note
     : NOTE_START (~NEWLINE)+
     | NOTE_START WHITESPACE+ QUOTED_STRING WHITESPACE+ AS WHITESPACE+ id WHITESPACE?

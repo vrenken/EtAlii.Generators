@@ -21,7 +21,7 @@
         /// Also the sequence of parameter types are important as C# won't allow methods with the
         /// same name, parameters with the same type but other names.
         /// </summary>
-        public void WriteTriggerMethods(WriteContext context)
+        public void WriteTriggerMethods(WriteContext<StateMachine> context)
         {
             context.Writer.WriteLine("// The methods below can be each called to fire a specific trigger");
             context.Writer.WriteLine("// and cause the state machine to transition to another state.");
@@ -45,7 +45,7 @@
             }
         }
 
-        private void WriteTriggerMethods(WriteContext context, Transition[][] transitionSets, string triggerType, Func<string, string, string, string, string, string> write)
+        private void WriteTriggerMethods(WriteContext<StateMachine> context, Transition[][] transitionSets, string triggerType, Func<string, string, string, string, string, string> write)
         {
             foreach (var transitionSet in transitionSets)
             {
@@ -66,7 +66,7 @@
         /// Write the transition methods through which behavior can be implemented for the state transitions.
         /// </summary>
         /// <param name="context"></param>
-        public void WriteTransitionMethods(WriteContext context)
+        public void WriteTransitionMethods(WriteContext<StateMachine> context)
         {
             var allStates = StateFragment.GetAllStates(context.Instance.StateFragments);
             foreach (var state in allStates)
@@ -86,7 +86,7 @@
             }
         }
 
-        private void WriteEntryAndExitMethods(WriteContext context, string state)
+        private void WriteEntryAndExitMethods(WriteContext<StateMachine> context, string state)
         {
             var writeAsyncEntryMethod = StateFragment.HasOnlyAsyncInboundTransitions(context.Instance, state);
             var entryMethodName = $"On{state}Entered";
@@ -133,7 +133,7 @@
             context.Writer.WriteLine();
         }
 
-        private void WriteInboundTransitionMethodsForState(WriteContext context, Transition[] uniqueTransitions, string state)
+        private void WriteInboundTransitionMethodsForState(WriteContext<StateMachine> context, Transition[] uniqueTransitions, string state)
         {
             var inboundTransitions = uniqueTransitions
                 .Where(t => t.From != t.To) // skip internal transitions.
@@ -160,7 +160,7 @@
             }
         }
 
-        private void WriteInternalTransitionMethodsForState(WriteContext context, Transition[] uniqueTransitions, string state)
+        private void WriteInternalTransitionMethodsForState(WriteContext<StateMachine> context, Transition[] uniqueTransitions, string state)
         {
             var internalTransitions = uniqueTransitions
                 .Where(t => t.From == t.To) // only internal transitions.
@@ -191,7 +191,7 @@
             }
         }
 
-        private void WriteComment(WriteContext context, Transition[] transitionSet, string message)
+        private void WriteComment(WriteContext<StateMachine> context, Transition[] transitionSet, string message)
         {
             context.Writer.WriteLine($"/// <summary>");
             context.Writer.WriteLine($"/// {message}<br/>");
