@@ -49,4 +49,8 @@ class Tweet{
 +Profile: Profile
 }
 
+'note left of User::Email
+'The email address of the user
+'end note
+
 @enduml

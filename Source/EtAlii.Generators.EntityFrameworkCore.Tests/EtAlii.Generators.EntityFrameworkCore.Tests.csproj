@@ -39,6 +39,9 @@
 
   <ItemGroup>
     <Compile Update="EntityModels\SimpleEntityModelNoBaseEntity.cs">
+      <DependentUpon>SimpleEntityModelNoBaseEntity.puml</DependentUpon>
+    </Compile>
+    <Compile Update="EntityModels\SimpleEntityModel.cs">
       <DependentUpon>SimpleEntityModel.puml</DependentUpon>
     </Compile>
   </ItemGroup>
