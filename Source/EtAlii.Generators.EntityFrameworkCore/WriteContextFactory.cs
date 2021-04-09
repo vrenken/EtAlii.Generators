@@ -18,7 +18,8 @@ namespace EtAlii.Generators.EntityFrameworkCore
                 "System.Threading.Tasks",
                 "System.Diagnostics.CodeAnalysis",
                 "Microsoft.EntityFrameworkCore",
-                "Microsoft.EntityFrameworkCore.ChangeTracking"
+                "Microsoft.EntityFrameworkCore.ChangeTracking",
+                "Microsoft.EntityFrameworkCore.Metadata.Builders"
             }.Concat(model.Usings).ToArray();
             var namespaceDetails = new NamespaceDetails(model.Namespace, usings);
             return new WriteContext(writer, originalFileName, model, namespaceDetails);

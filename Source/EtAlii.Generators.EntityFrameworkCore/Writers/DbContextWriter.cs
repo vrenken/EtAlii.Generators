@@ -18,6 +18,49 @@
                     context.Writer.WriteLine($"public virtual DbSet<{@class.Name}> {propertyName} {{ get; set; }}");
                 }
 
+
+                context.Writer.WriteLine("protected override void OnModelCreating(ModelBuilder modelBuilder)");
+                context.Writer.WriteLine("{");
+                context.Writer.Indent += 1;
+
+                foreach (var @class in context.Instance.Classes)
+                {
+                    var propertyName = @class.Mapping?.Name ?? @class.Name;
+                    context.Writer.WriteLine($"OnConfigure{propertyName}(modelBuilder.Entity<{@class.Name}>());");
+                }
+
+                context.Writer.Indent -= 1;
+                context.Writer.WriteLine("}");
+
+                foreach (var @class in context.Instance.Classes)
+                {
+                    var propertyName = @class.Mapping?.Name ?? @class.Name;
+
+                    context.Writer.WriteLine($"protected virtual void OnConfigure{propertyName}(EntityTypeBuilder<{@class.Name}> builder)");
+                    context.Writer.WriteLine("{");
+                    context.Writer.Indent += 1;
+
+                    var hasBaseEntity = !string.IsNullOrWhiteSpace(context.Instance.EntityName);
+                    if (hasBaseEntity)
+                    {
+                        context.Writer.WriteLine("builder");
+                        context.Writer.WriteLine("\t.HasIndex(entity => entity.Id)");
+                        context.Writer.WriteLine("\t.IsUnique();");
+                        context.Writer.WriteLine();
+                        context.Writer.WriteLine("builder");
+                        context.Writer.WriteLine("\t.HasKey(entity => entity.Id);");
+                        context.Writer.WriteLine();
+                    }
+
+                    foreach (var property in @class.Properties)
+                    {
+                        context.Writer.WriteLine($"builder.Property(entity => entity.{property.Name}).IsRequired();");
+                    }
+
+                    context.Writer.Indent -= 1;
+                    context.Writer.WriteLine("}");
+                }
+
                 context.Writer.Indent -= 1;
                 context.Writer.WriteLine("}");
                 context.Writer.WriteLine();
