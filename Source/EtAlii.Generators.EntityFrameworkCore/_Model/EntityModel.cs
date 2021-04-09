@@ -55,10 +55,10 @@
 
             DbContextName = Settings
                 .OfType<DbContextNameSetting>()
-                .Single().Value;
+                .SingleOrDefault()?.Value;
             EntityName = Settings
                 .OfType<EntityNameSetting>()
-                .Single().Value;
+                .SingleOrDefault()?.Value;
             Namespace = Settings
                 .OfType<NamespaceSetting>()
                 .Single().Value;

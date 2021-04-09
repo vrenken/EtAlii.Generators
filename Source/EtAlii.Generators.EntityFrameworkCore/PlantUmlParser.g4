@@ -65,9 +65,10 @@ relation_type
 relation_mapping        : MAP WHITESPACE+ SINGLEQUOTE from=id SINGLEQUOTE WHITESPACE+ SINGLEQUOTE to=id SINGLEQUOTE;
 relation                : (relation_mapping WHITESPACE* NEWLINE WHITESPACE*)? from=id WHITESPACE+ relation_plurality WHITESPACE+ relation_type WHITESPACE+ relation_plurality WHITESPACE+ to=id (WHITESPACE* COLON WHITESPACE* property=id)?;
 
+class_mapping           : MAP WHITESPACE+ SINGLEQUOTE name=id SINGLEQUOTE;
 class_property_array    : LBRACK WHITESPACE* RBRACK;
 class_property          : WHITESPACE* (PLUS|MINUS) WHITESPACE* name=id WHITESPACE* COLON WHITESPACE* type=id WHITESPACE* is_array=class_property_array? WHITESPACE*  NEWLINE;
-class                   : ClASS WHITESPACE+ name=id (WHITESPACE|NEWLINE)* LBRACE WHITESPACE* NEWLINE class_property* WHITESPACE* RBRACE ;
+class                   : (class_mapping WHITESPACE* NEWLINE WHITESPACE*)? ClASS WHITESPACE+ name=id (WHITESPACE|NEWLINE)* LBRACE WHITESPACE* NEWLINE class_property* WHITESPACE* RBRACE ;
 note
     : NOTE_START (~NEWLINE)+
     | NOTE_START WHITESPACE+ QUOTED_STRING WHITESPACE+ AS WHITESPACE+ id WHITESPACE?

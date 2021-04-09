@@ -1,9 +1,7 @@
 @startuml
 
-'efcore namespace EtAlii.Generators.EntityFrameworkCore.Tests
-'efcore using EtAlii.Generators.EntityFrameworkCore.Tests.Nested
-'efcore entity EntityBase
-'efcore dbcontext SimpleEntityModelDbContextBase
+'efcore namespace EtAlii.Generators.EntityFrameworkCore.NoBaseEntity.Tests
+'efcore dbcontext SimpleEntityModelNoBaseEntityDbContextBase
 
 'efcore map 'Profile' 'User'
 User "1" *-- "1" Profile
@@ -20,24 +18,27 @@ Follower "1" *-- "0..n" Profile : Followers
 'efcore map 'Users'
 class User
 {
+    +Id: int
     +Name: string
     -Email: string
 }
-
 'efcore map 'Profiles'
 class Profile
 {
+    +Id: int
     +UserName: string
 }
 
 'efcore map 'Messages'
 class Message {
++Id: int
 +Text: string
 }
 
 
 'efcore map 'Followers'
 class Follower{
++Id: int
 +Profile: Profile
 +Following: Profile[]
 +Followers: Profile[]
@@ -45,6 +46,7 @@ class Follower{
 
 'efcore map 'Tweets'
 class Tweet{
++Id:int
 +Text: string[]
 +Profile: Profile
 }

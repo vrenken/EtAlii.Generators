@@ -19,6 +19,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,11 +33,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EfCoreModel Include="EntityModels\SimpleEntityModelNoBaseEntity.puml" />
     <EfCoreModel Include="EntityModels\SimpleEntityModel.puml" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="EntityModels\SimpleEntityModel.cs">
+    <Compile Update="EntityModels\SimpleEntityModelNoBaseEntity.cs">
       <DependentUpon>SimpleEntityModel.puml</DependentUpon>
     </Compile>
   </ItemGroup>

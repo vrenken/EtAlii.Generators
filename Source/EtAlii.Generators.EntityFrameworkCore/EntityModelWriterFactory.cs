@@ -21,7 +21,7 @@
             // No need to introduce a whole new package dependency here as it'll only make the analyzer more bloated.
             // For now the simple composition below also works absolutely fine.
             var entityWriter = new EntityWriter();
-
+            var dbContextWriter = new DbContextWriter();
             var writeEntities = new Action<WriteContext<EntityModel>>(context =>
             {
                 foreach (var @class in context.Instance.Classes)
@@ -29,7 +29,14 @@
                     entityWriter.Write(context, @class);
                 }
             });
-            return new NamespaceWriter<EntityModel>(writeEntities);
+
+            var writeNamespaceContent = new Action<WriteContext<EntityModel>>(context =>
+            {
+                writeEntities(context);
+                dbContextWriter.Write(context);
+            });
+
+            return new NamespaceWriter<EntityModel>(writeNamespaceContent);
         }
     }
 }

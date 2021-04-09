@@ -11,7 +11,7 @@ namespace EtAlii.Generators.EntityFrameworkCore
         /// </summary>
         public WriteContext<EntityModel> Create(IndentedTextWriter writer, string originalFileName, List<string> log, EntityModel model)
         {
-            var usings = new[] {"System" }.Concat(model.Usings).ToArray();
+            var usings = new[] {"System", "Microsoft.EntityFrameworkCore" }.Concat(model.Usings).ToArray();
             var namespaceDetails = new NamespaceDetails(model.Namespace, usings);
             return new WriteContext(writer, originalFileName, model, namespaceDetails);
         }

@@ -65,7 +65,37 @@
         {
             var name = (string)VisitId(context.name);
             var position = SourcePosition.FromContext(context);
-            return new Class(name, position);
+
+            var classMapping = context.class_mapping() is var classMappingContext
+                ? (ClassMapping)VisitClass_mapping(classMappingContext)
+                : null;
+
+            var properties = context
+                .class_property()
+                .Select(VisitClass_property)
+                .Cast<Property>()
+                .ToArray();
+            return new Class(name, properties, classMapping, position);
+        }
+
+        public override object VisitClass_mapping(PlantUmlParser.Class_mappingContext context)
+        {
+            var name = (string)VisitId(context.name);
+            var position = SourcePosition.FromContext(context);
+            return new ClassMapping(name, position);
+        }
+
+        public override object VisitClass_property(PlantUmlParser.Class_propertyContext context)
+        {
+            var name = (string)VisitId(context.name);
+            var type = (string)VisitId(context.type);
+            if (context.is_array != null)
+            {
+                type = $"{type}[]";
+            }
+
+            var position = SourcePosition.FromContext(context);
+            return new Property(name, type, position);
         }
 
         public override object VisitId(PlantUmlParser.IdContext context) => context.GetText();
