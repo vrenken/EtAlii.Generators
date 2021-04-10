@@ -20,6 +20,7 @@ ID                                                  : ('A'..'Z' | 'a'..'z' | '1'
 
 SETTING_NAMESPACE                                   : '\'efcore namespace';
 SETTING_DBCONTEXT                                   : '\'efcore dbcontext';
+SETTING_INTERFACE                                   : '\'efcore interface';
 SETTING_ENTITY                                      : '\'efcore entity';
 SETTING_USING                                       : '\'efcore using';
 SETTING_GENERATE_PARTIAL                            : '\'efcore generate partial';

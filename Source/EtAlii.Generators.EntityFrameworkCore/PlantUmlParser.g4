@@ -31,6 +31,7 @@ header_items
 namespace                : id (DOT id)*;
 setting_namespace        : SETTING_NAMESPACE WHITESPACE+ namespace;
 setting_dbcontext        : SETTING_DBCONTEXT WHITESPACE+ name=id;
+setting_interface        : SETTING_INTERFACE WHITESPACE+ name=id;
 setting_entity           : SETTING_ENTITY WHITESPACE+ name=id;
 setting_generate_partial : SETTING_GENERATE_PARTIAL;
 setting_using            : SETTING_USING WHITESPACE+ namespace;
@@ -38,6 +39,7 @@ setting
     : setting_namespace
     | setting_dbcontext
     | setting_entity
+    | setting_interface
     | setting_generate_partial
     | setting_using
     ;

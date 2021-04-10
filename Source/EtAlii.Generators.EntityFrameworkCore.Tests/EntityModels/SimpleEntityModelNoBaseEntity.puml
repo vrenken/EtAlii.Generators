@@ -2,6 +2,7 @@
 
 'efcore namespace EtAlii.Generators.EntityFrameworkCore.NoBaseEntity.Tests
 'efcore dbcontext SimpleEntityModelNoBaseEntityDbContextBase
+'efcore interface ISimpleEntityModelNoBaseEntityDbContext
 
 'efcore map 'Profile' 'User'
 User "1" *-- "1" Profile

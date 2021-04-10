@@ -7,8 +7,13 @@
             var hasDbContextName = !string.IsNullOrWhiteSpace(context.Instance.DbContextName);
             if (hasDbContextName)
             {
+                var hasInterface = !string.IsNullOrEmpty(context.Instance.InterfaceName);
+
+                var postfix = hasInterface
+                    ? $", {context.Instance.InterfaceName}"
+                    : "";
                 context.Writer.WriteLine();
-                context.Writer.WriteLine($"public class {context.Instance.DbContextName} : global::Microsoft.EntityFrameworkCore.DbContext");
+                context.Writer.WriteLine($"public class {context.Instance.DbContextName} : global::Microsoft.EntityFrameworkCore.DbContext {postfix}");
                 context.Writer.WriteLine("{");
                 context.Writer.Indent += 1;
 
@@ -65,7 +70,16 @@
                 context.Writer.WriteLine("}");
                 context.Writer.WriteLine();
 
-                context.Writer.WriteLine($"public interface I{context.Instance.DbContextName}");
+                WriteInterface(context);
+            }
+        }
+
+        private static void WriteInterface(WriteContext<EntityModel> context)
+        {
+            var hasInterface = !string.IsNullOrEmpty(context.Instance.InterfaceName);
+            if (hasInterface)
+            {
+                context.Writer.WriteLine($"public interface {context.Instance.InterfaceName} : global::System.IDisposable");
                 context.Writer.WriteLine("{");
                 context.Writer.Indent += 1;
 
@@ -140,8 +154,6 @@
                 context.Writer.Indent -= 1;
                 context.Writer.WriteLine("}");
                 context.Writer.WriteLine();
-
-
             }
         }
     }

@@ -4,6 +4,7 @@
 'efcore using EtAlii.Generators.EntityFrameworkCore.Tests.Nested
 'efcore entity EntityBase
 'efcore dbcontext SimpleEntityModelDbContextBase
+'efcore interface ISimpleEntityModelDbContext
 
 'efcore map 'Profile' 'User'
 User "1" *-- "1" Profile
