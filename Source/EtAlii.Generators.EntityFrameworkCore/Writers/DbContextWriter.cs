@@ -77,8 +77,9 @@
                             var fromCardinality = fromRelation.FromCardinality;
                             var toProperty = fromRelation.Mapping.ToProperty;
                             var toCardinality = fromRelation.ToCardinality;
+                            var toClass = fromRelation.To;
                             WriteComment(context, fromRelation.Source.Text);
-                            WriteRelationProperty(context, fromProperty, fromCardinality, toProperty, toCardinality);
+                            WriteRelationProperty(context, fromProperty, fromCardinality, toProperty, toCardinality, toClass);
                         }
                         else if (toRelation != null)
                         {
@@ -87,8 +88,9 @@
                             var fromCardinality = toRelation.ToCardinality;
                             var toProperty = toRelation.Mapping.FromProperty;
                             var toCardinality = toRelation.FromCardinality;
+                            var toClass = toRelation.From;
                             WriteComment(context, toRelation.Source.Text);
-                            WriteRelationProperty(context, fromProperty, fromCardinality, toProperty, toCardinality);
+                            WriteRelationProperty(context, fromProperty, fromCardinality, toProperty, toCardinality, toClass);
                         }
                         else
                         {
@@ -122,7 +124,8 @@
         private void WriteRelationProperty(
             WriteContext<EntityModel> context,
             string fromProperty, Cardinality fromCardinality,
-            string toProperty, Cardinality toCardinality)
+            string toProperty, Cardinality toCardinality,
+            string toClass)
         {
             context.Writer.WriteLine("builder");
 
@@ -147,6 +150,15 @@
                 case Cardinality.NoneOrMore:
                     context.Writer.WriteLine($"\t.WithMany(entity => entity.{toProperty})");
                     break;
+            }
+
+            if (fromCardinality == Cardinality.NoneOrOne && toCardinality == Cardinality.One)
+            {
+                context.Writer.WriteLine($"\t.HasForeignKey(\"{toClass}\")");
+            }
+            else if (fromCardinality == Cardinality.One && toCardinality == Cardinality.One)
+            {
+                context.Writer.WriteLine($"\t.HasForeignKey(\"{toClass}\")");
             }
 
             switch (fromCardinality)
