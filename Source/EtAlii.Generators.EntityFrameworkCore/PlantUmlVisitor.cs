@@ -1,5 +1,6 @@
 ﻿namespace EtAlii.Generators.EntityFrameworkCore
 {
+    using System;
     using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
@@ -53,12 +54,35 @@
             return new EntityModel(realHeaders, settings, classes, relations);
         }
 
+        public override object VisitRelation_mapping(PlantUmlParser.Relation_mappingContext context)
+        {
+            var fromProperty = (string)VisitId(context.from);
+            var toProperty = (string)VisitId(context.to);
+            var position = SourcePosition.FromContext(context);
+            return new RelationMapping(fromProperty, toProperty, position);
+        }
+
+        public override object VisitRelation_cardinality(PlantUmlParser.Relation_cardinalityContext context)
+        {
+            return context.GetText() switch
+            {
+                "\"0..1\"" or "'0..1'" => Cardinality.NoneOrOne,
+                "\"0..n\"" or "'0..n'" => Cardinality.NoneOrMore,
+                "\"1\"" or "'1'" => Cardinality.One,
+                "\"1..n\"" or "'1..n'" => Cardinality.OneOrMore,
+                var text => throw new InvalidOperationException($"Unable to visit cardinality: {text}")
+            };
+        }
+
         public override object VisitRelation(PlantUmlParser.RelationContext context)
         {
             var from = (string)VisitId(context.from);
+            var fromCardinality = (Cardinality)VisitRelation_cardinality(context.from_cardinality);
             var to = (string)VisitId(context.to);
+            var toCardinality = (Cardinality)VisitRelation_cardinality(context.to_cardinality);
+            var relationMapping = (RelationMapping)VisitRelation_mapping(context.relation_mapping());
             var position = SourcePosition.FromContext(context);
-            return new Relation(from, to, position);
+            return new Relation(from, fromCardinality, to, toCardinality, relationMapping, position);
         }
 
         public override object VisitClass(PlantUmlParser.ClassContext context)
