@@ -4,49 +4,48 @@
 'efcore using EtAlii.Generators.EntityFrameworkCore.Tests.Nested
 'efcore entity EntityBase
 'efcore dbcontext SimpleEntityModelDbContextBase
+'efcore interface ISimpleEntityModelDbContext
 
-'efcore map 'Profile' 'User'
-User "1" *-- "1" Profile
-'efcore map 'Message' 'Profile'
-Profile "1" *-- "0..n" Message
-'efcore map 'Follower' 'Profile'
-Profile "1" *-- "0..n" Follower
-'efcore map 'Tweet' 'Profile'
-Profile "1" *-- "0..n" Tweet
+'efcore map 'From' 'Sent'
+Message "1" --* "0..n" User
 
-Follower "1" *-- "0..n" Profile : Following
-Follower "1" *-- "0..n" Profile : Followers
+'efcore map 'To' 'Received'
+Message "1" --* "0..n" User
+
+'efcore map 'Tweets' 'User'
+User "0..n" *-- "1" Tweet
+
+'efcore map 'Tweet' 'Image'
+Image "1" -- "0..1" Tweet
 
 'efcore map 'Users'
 class User
 {
     +Name: string
     -Email: string
-}
-
-'efcore map 'Profiles'
-class Profile
-{
-    +UserName: string
+    Sent: Message[]
+    Received: Message[]
+    Tweets: Tweet[]
 }
 
 'efcore map 'Messages'
 class Message {
-+Text: string
-}
-
-
-'efcore map 'Followers'
-class Follower{
-+Profile: Profile
-+Following: Profile[]
-+Followers: Profile[]
+    +Text: string
+    From: User
+    To: User
 }
 
 'efcore map 'Tweets'
 class Tweet{
-+Text: string[]
-+Profile: Profile
++Text: string
++User: User
+Image: Image
+}
+
+'efcore map 'Images'
+class Image{
++Data: byte[]
+Tweet: Tweet
 }
 
 'note left of User::Email

@@ -31,6 +31,7 @@ header_items
 namespace                : id (DOT id)*;
 setting_namespace        : SETTING_NAMESPACE WHITESPACE+ namespace;
 setting_dbcontext        : SETTING_DBCONTEXT WHITESPACE+ name=id;
+setting_interface        : SETTING_INTERFACE WHITESPACE+ name=id;
 setting_entity           : SETTING_ENTITY WHITESPACE+ name=id;
 setting_generate_partial : SETTING_GENERATE_PARTIAL;
 setting_using            : SETTING_USING WHITESPACE+ namespace;
@@ -38,6 +39,7 @@ setting
     : setting_namespace
     | setting_dbcontext
     | setting_entity
+    | setting_interface
     | setting_generate_partial
     | setting_using
     ;
@@ -49,25 +51,27 @@ model_items
     | comment
     ;
 
-relation_plurality
-    : RELATION_PLURALITY_ONE
-    | RELATION_PLURALITY_NONE_TO_MANY
-    | RELATION_PLURALITY_MANY_TO_NONE
-    | RELATION_PLURALITY_ONE_TO_MANY
-    | RELATION_PLURALITY_MANY_TO_ONE
-    | RELATION_PLURALITY_MANY_TO_MANY
+relation_cardinality
+    : RELATION_CARDINALITY_NONE_OR_ONE
+    | RELATION_CARDINALITY_NONE_OR_MORE
+    | RELATION_CARDINALITY_ONE
+    | RELATION_CARDINALITY_ONE_OR_MORE
     ;
 relation_type
-    : RELATION_TYPE_COMPOSITION
-    | RELATION_TYPE_AGGREGATION
-    | RELATION_TYPE_EXTENSION
+    : RELATION_TYPE_LINK
+    | RELATION_TYPE_COMPOSITION_TO_FROM
+    | RELATION_TYPE_COMPOSITION_FROM_TO
+    | RELATION_TYPE_AGGREGATION_TO_FROM
+    | RELATION_TYPE_AGGREGATION_FROM_TO
+    | RELATION_TYPE_EXTENSION_TO_FROM
+    | RELATION_TYPE_EXTENSION_FROM_TO
     ;
 relation_mapping        : MAP WHITESPACE+ SINGLEQUOTE from=id SINGLEQUOTE WHITESPACE+ SINGLEQUOTE to=id SINGLEQUOTE;
-relation                : (relation_mapping WHITESPACE* NEWLINE WHITESPACE*)? from=id WHITESPACE+ relation_plurality WHITESPACE+ relation_type WHITESPACE+ relation_plurality WHITESPACE+ to=id (WHITESPACE* COLON WHITESPACE* property=id)?;
+relation                : (relation_mapping WHITESPACE* NEWLINE WHITESPACE*)? from=id WHITESPACE+ from_cardinality=relation_cardinality WHITESPACE+ relation_type WHITESPACE+ to_cardinality=relation_cardinality WHITESPACE+ to=id (WHITESPACE* COLON WHITESPACE* property=id)?;
 
 class_mapping           : MAP WHITESPACE+ SINGLEQUOTE name=id SINGLEQUOTE;
 class_property_array    : LBRACK WHITESPACE* RBRACK;
-class_property          : WHITESPACE* (PLUS|MINUS) WHITESPACE* name=id WHITESPACE* COLON WHITESPACE* type=id WHITESPACE* is_array=class_property_array? WHITESPACE*  NEWLINE;
+class_property          : WHITESPACE* (PLUS|MINUS)? WHITESPACE* name=id WHITESPACE* COLON WHITESPACE* type=id WHITESPACE* is_array=class_property_array? WHITESPACE*  NEWLINE;
 class                   : (class_mapping WHITESPACE* NEWLINE WHITESPACE*)? ClASS WHITESPACE+ name=id (WHITESPACE|NEWLINE)* LBRACE WHITESPACE* NEWLINE class_property* WHITESPACE* RBRACE ;
 note
     : NOTE_START (~NEWLINE)+

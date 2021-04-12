@@ -2,18 +2,19 @@
 
 'efcore namespace EtAlii.Generators.EntityFrameworkCore.NoBaseEntity.Tests
 'efcore dbcontext SimpleEntityModelNoBaseEntityDbContextBase
+'efcore interface ISimpleEntityModelNoBaseEntityDbContext
 
-'efcore map 'Profile' 'User'
-User "1" *-- "1" Profile
-'efcore map 'Message' 'Profile'
-Profile "1" *-- "0..n" Message
-'efcore map 'Follower' 'Profile'
-Profile "1" *-- "0..n" Follower
-'efcore map 'Tweet' 'Profile'
-Profile "1" *-- "0..n" Tweet
+'efcore map 'From' 'Sent'
+Message "1" --* "0..n" User
 
-Follower "1" *-- "0..n" Profile : Following
-Follower "1" *-- "0..n" Profile : Followers
+'efcore map 'To' 'Received'
+Message "1" --* "0..n" User
+
+'efcore map 'Tweets' 'User'
+User "0..n" *-- "1" Tweet
+
+'efcore map 'Tweet' 'Image'
+Image "1" -- "0..1" Tweet
 
 'efcore map 'Users'
 class User
@@ -21,34 +22,36 @@ class User
     +Id: int
     +Name: string
     -Email: string
-}
-'efcore map 'Profiles'
-class Profile
-{
-    +Id: int
-    +UserName: string
+    Sent: Message[]
+    Received: Message[]
+    Tweets: Tweet[]
 }
 
 'efcore map 'Messages'
 class Message {
-+Id: int
-+Text: string
-}
-
-
-'efcore map 'Followers'
-class Follower{
-+Id: int
-+Profile: Profile
-+Following: Profile[]
-+Followers: Profile[]
+    +Id: int
+    +Text: string
+    From: User
+    To: User
 }
 
 'efcore map 'Tweets'
 class Tweet{
-+Id:int
-+Text: string[]
-+Profile: Profile
++Id: int
++Text: string
++User: User
+Image: Image
 }
+
+'efcore map 'Images'
+class Image{
++Id: int
++Data: byte[]
+Tweet: Tweet
+}
+
+'note left of User::Email
+'The email address of the user
+'end note
 
 @enduml

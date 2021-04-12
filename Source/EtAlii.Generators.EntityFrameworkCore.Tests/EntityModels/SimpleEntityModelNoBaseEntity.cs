@@ -1,6 +1,15 @@
-namespace EtAlii.Generators.EntityFrameworkCore.Tests
+// ReSharper disable once CheckNamespace
+namespace EtAlii.Generators.EntityFrameworkCore.NoBaseEntity.Tests
 {
-    public class SimpleEntityModelNoBaseEntityDbContext //: SimpleEntityModelDbContextBase
+    using Microsoft.EntityFrameworkCore;
+
+    public class SimpleEntityModelNoBaseEntityDbContext : SimpleEntityModelNoBaseEntityDbContextBase
     {
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            options.UseInMemoryDatabase("Test database 2");
+
+            base.OnConfiguring(options);
+        }
     }
 }

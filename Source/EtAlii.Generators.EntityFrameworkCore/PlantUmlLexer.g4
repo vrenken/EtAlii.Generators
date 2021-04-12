@@ -20,19 +20,22 @@ ID                                                  : ('A'..'Z' | 'a'..'z' | '1'
 
 SETTING_NAMESPACE                                   : '\'efcore namespace';
 SETTING_DBCONTEXT                                   : '\'efcore dbcontext';
+SETTING_INTERFACE                                   : '\'efcore interface';
 SETTING_ENTITY                                      : '\'efcore entity';
 SETTING_USING                                       : '\'efcore using';
 SETTING_GENERATE_PARTIAL                            : '\'efcore generate partial';
 MAP                                                 : '\'efcore map';
-RELATION_PLURALITY_ONE                              : '"1"' | '\'1\'';
-RELATION_PLURALITY_NONE_TO_MANY                     : '"0..n"' | '\'0..n\'';
-RELATION_PLURALITY_MANY_TO_NONE                     : '"n..0"' | '\'n..0\'';
-RELATION_PLURALITY_ONE_TO_MANY                      : '"1..n"' | '\'1..n\'';
-RELATION_PLURALITY_MANY_TO_ONE                      : '"n..1"' | '\'n..1\'';
-RELATION_PLURALITY_MANY_TO_MANY                     : '"n..n"' | '\'n..n\'';
-RELATION_TYPE_COMPOSITION                           : '*--';
-RELATION_TYPE_AGGREGATION                           : 'o--';
-RELATION_TYPE_EXTENSION                             : '<|--';
+RELATION_CARDINALITY_NONE_OR_ONE                    : '"0..1"' | '\'0..1\'';
+RELATION_CARDINALITY_NONE_OR_MORE                   : '"0..n"' | '\'0..n\'';
+RELATION_CARDINALITY_ONE                            : '"1"' | '\'1\'';
+RELATION_CARDINALITY_ONE_OR_MORE                    : '"1..n"' | '\'1..n\'';
+RELATION_TYPE_LINK                                  : '--';
+RELATION_TYPE_COMPOSITION_TO_FROM                   : '*--';
+RELATION_TYPE_AGGREGATION_TO_FROM                   : 'o--';
+RELATION_TYPE_EXTENSION_TO_FROM                     : '<|--';
+RELATION_TYPE_COMPOSITION_FROM_TO                   : '--*';
+RELATION_TYPE_AGGREGATION_FROM_TO                   : '--o';
+RELATION_TYPE_EXTENSION_FROM_TO                     : '--|>';
 
 // String
 QUOTED_STRING                                       : DOUBLEQUOTE  (~["\r\n\u0085\u2028\u2029])+ DOUBLEQUOTE;

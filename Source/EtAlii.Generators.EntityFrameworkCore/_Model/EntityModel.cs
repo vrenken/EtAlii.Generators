@@ -20,6 +20,11 @@
         public string DbContextName { get; }
 
         /// <summary>
+        /// The name of the interface to generate.
+        /// </summary>
+        public string InterfaceName { get; }
+
+        /// <summary>
         /// When set to true a partial class will be created.
         /// </summary>
         public bool GeneratePartialClass { get; }
@@ -55,6 +60,9 @@
 
             DbContextName = Settings
                 .OfType<DbContextNameSetting>()
+                .SingleOrDefault()?.Value;
+            InterfaceName = Settings
+                .OfType<InterfaceNameSetting>()
                 .SingleOrDefault()?.Value;
             EntityName = Settings
                 .OfType<EntityNameSetting>()

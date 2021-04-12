@@ -1,6 +1,14 @@
 namespace EtAlii.Generators.EntityFrameworkCore.Tests
 {
-    public class SimpleEntityModelDbContext
+    using Microsoft.EntityFrameworkCore;
+
+    public class SimpleEntityModelDbContext : SimpleEntityModelDbContextBase
     {
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            options.UseInMemoryDatabase("Test database 1");
+
+            base.OnConfiguring(options);
+        }
     }
 }

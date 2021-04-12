@@ -9,18 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.2" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.8.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
-    <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Coverlet.Collector" Version="3.0.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.5" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,8 +35,7 @@
     </Compile>
   </ItemGroup>
 
-
   <Import Project="..\EtAlii.Generators.EntityFrameworkCore\Build\*.props" />
   <Import Project="..\EtAlii.Generators.EntityFrameworkCore\Build\*.targets" />
-
+  <Import Project="..\EtAlii.Generators.Tests\EtAlii.Generators.Tests.projitems" Label="Shared" />
 </Project>
