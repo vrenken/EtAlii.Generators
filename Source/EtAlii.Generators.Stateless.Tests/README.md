@@ -50,7 +50,7 @@ Usage:
 5. Reference the file from the project (.csproj) as a `StatelessFile` entry:
    ```csproj
      <ItemGroup>
-       <Stateless Include="MyFancyStateMachine.puml" />
+       <StatelessFile Include="MyFancyStateMachine.puml" />
      </ItemGroup>
    ```
 6. Compile the project - Antlr is used to parse the puml file and instruct the Roslyn generator to create C# state machine code according to the states, triggers and transitions defined in the diagram.
