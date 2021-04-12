@@ -6,7 +6,7 @@ namespace EtAlii.Generators.EntityFrameworkCore.Tests
     {
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            options.UseInMemoryDatabase("Test database");
+            options.UseInMemoryDatabase("Test database 1");
 
             base.OnConfiguring(options);
         }

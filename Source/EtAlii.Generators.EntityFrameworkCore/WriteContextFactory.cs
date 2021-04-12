@@ -14,6 +14,7 @@ namespace EtAlii.Generators.EntityFrameworkCore
             var usings = new[]
             {
                 "System",
+                "System.Collections.Generic",
                 "System.Threading",
                 "System.Threading.Tasks",
                 "System.Diagnostics.CodeAnalysis",

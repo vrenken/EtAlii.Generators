@@ -15,6 +15,7 @@ namespace EtAlii.Generators
         {
             context.Writer.WriteLine($"// Remark: this file was auto-generated based on '{context.OriginalFileName}'.");
             context.Writer.WriteLine("// Any changes will be overwritten the next time the file is generated.");
+            context.Writer.WriteLine();
             context.Writer.WriteLine($"namespace {context.NamespaceDetails.Name}");
             context.Writer.WriteLine("{");
             context.Writer.Indent += 1;

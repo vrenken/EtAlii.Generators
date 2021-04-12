@@ -38,7 +38,7 @@ class Message {
 'efcore map 'Tweets'
 class Tweet{
 +Id: int
-+Text: string[]
++Text: string
 +User: User
 Image: Image
 }

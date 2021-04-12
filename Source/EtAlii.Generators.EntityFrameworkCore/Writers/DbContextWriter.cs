@@ -15,7 +15,6 @@
                 var postfix = hasInterface
                     ? $", {context.Instance.InterfaceName}"
                     : "";
-                context.Writer.WriteLine();
                 context.Writer.WriteLine($"public class {context.Instance.DbContextName} : global::Microsoft.EntityFrameworkCore.DbContext {postfix}");
                 context.Writer.WriteLine("{");
                 context.Writer.Indent += 1;
@@ -26,7 +25,7 @@
                     context.Writer.WriteLine($"public virtual DbSet<{@class.Name}> {propertyName} {{ get; set; }}");
                 }
 
-
+                context.Writer.WriteLine();
                 context.Writer.WriteLine("protected override void OnModelCreating(ModelBuilder modelBuilder)");
                 context.Writer.WriteLine("{");
                 context.Writer.Indent += 1;
@@ -39,6 +38,7 @@
 
                 context.Writer.Indent -= 1;
                 context.Writer.WriteLine("}");
+                context.Writer.WriteLine();
 
                 foreach (var @class in context.Instance.Classes)
                 {
@@ -260,7 +260,6 @@
 
                 context.Writer.Indent -= 1;
                 context.Writer.WriteLine("}");
-                context.Writer.WriteLine();
             }
         }
     }
