@@ -3,7 +3,7 @@
   <ItemGroup>
     <PropertyPageSchema Include="$(MSBuildThisFileDirectory)CodeGeneration.Rules.xaml" />
     <PropertyPageSchema Include="$(MSBuildThisFileDirectory)CodeGeneration.ContentType.xaml" />
-    <AvailableItemName Include="GraphQLModel"/>
+    <AvailableItemName Include="StatelessFile"/>
   </ItemGroup>
 
 </Project>

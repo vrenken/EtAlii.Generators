@@ -7,7 +7,7 @@
 
   <!-- ===================================================== -->
 
-  <Target Name="_InjectStatelessFilesInAdditionalFiles" BeforeTargets="GenerateMSBuildEditorConfigFileShouldRun">
+  <Target Name="_InjectAdditionalFiles" BeforeTargets="GenerateMSBuildEditorConfigFileShouldRun">
     <ItemGroup>
       <AdditionalFiles Include="@(StatelessFile)" SourceItemGroup="StatelessFile" />
     </ItemGroup>
