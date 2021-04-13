@@ -1,41 +1,55 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31129.286
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Globals", "_Globals", "{B3466FE1-1D97-4D21-8F6C-A0D146732BC6}"
-ProjectSection(SolutionItems) = preProject
-	Global.json = Global.json
-	..\.editorconfig = ..\.editorconfig
-	..\.gitignore = ..\.gitignore
-	EtAlii.Generators.sln.DotSettings = EtAlii.Generators.sln.DotSettings
-	..\README.md = ..\README.md
-	..\.github\workflows\analysis.yml = ..\.github\workflows\analysis.yml
-	..\.github\workflows\build.yml = ..\.github\workflows\build.yml
-	..\.github\workflows\publish.yml = ..\.github\workflows\publish.yml
-	nuget.config = nuget.config
-EndProjectSection
+	ProjectSection(SolutionItems) = preProject
+		..\.editorconfig = ..\.editorconfig
+		..\.gitignore = ..\.gitignore
+		..\.github\workflows\analysis.yml = ..\.github\workflows\analysis.yml
+		..\.github\workflows\build.yml = ..\.github\workflows\build.yml
+		EtAlii.Generators.sln.DotSettings = EtAlii.Generators.sln.DotSettings
+		Global.json = Global.json
+		nuget.config = nuget.config
+		..\.github\workflows\publish.yml = ..\.github\workflows\publish.yml
+		..\README.md = ..\README.md
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EtAlii.Generators.Stateless", "EtAlii.Generators.Stateless\EtAlii.Generators.Stateless.csproj", "{ECDC1798-7EF9-4179-BB4F-891F0F1E2175}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EtAlii.Generators.Stateless", "EtAlii.Generators.Stateless\EtAlii.Generators.Stateless.csproj", "{ECDC1798-7EF9-4179-BB4F-891F0F1E2175}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EtAlii.Generators.Stateless.Tests", "EtAlii.Generators.Stateless.Tests\EtAlii.Generators.Stateless.Tests.csproj", "{7A7E5272-B0D8-402A-9F89-D38515CFF376}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EtAlii.Generators.Stateless.Tests", "EtAlii.Generators.Stateless.Tests\EtAlii.Generators.Stateless.Tests.csproj", "{7A7E5272-B0D8-402A-9F89-D38515CFF376}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EtAlii.Generators.GraphQL.Client", "EtAlii.Generators.GraphQL.Client\EtAlii.Generators.GraphQL.Client.csproj", "{CED6903F-7C8D-4A7E-81AE-4E01D11C7E82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EtAlii.Generators.GraphQL.Client", "EtAlii.Generators.GraphQL.Client\EtAlii.Generators.GraphQL.Client.csproj", "{A3419E8D-B877-4E72-AC5B-D7144C3D90EE}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "EtAlii.Generators", "EtAlii.Generators\EtAlii.Generators.shproj", "{567DA79A-93FE-4EB5-BDA2-E8FF9CC656D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EtAlii.Generators.GraphQL.Client.Tests", "EtAlii.Generators.GraphQL.Client.Tests\EtAlii.Generators.GraphQL.Client.Tests.csproj", "{4D9AFD07-45EF-4DDD-980E-D9FD619ECD95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EtAlii.Generators.GraphQL.Client.Tests", "EtAlii.Generators.GraphQL.Client.Tests\EtAlii.Generators.GraphQL.Client.Tests.csproj", "{4D9AFD07-45EF-4DDD-980E-D9FD619ECD95}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EtAlii.Generators.ML", "EtAlii.Generators.ML\EtAlii.Generators.ML.csproj", "{B8CEACC0-754D-48ED-BDB5-2EF21505E61C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EtAlii.Generators.ML", "EtAlii.Generators.ML\EtAlii.Generators.ML.csproj", "{B8CEACC0-754D-48ED-BDB5-2EF21505E61C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EtAlii.Generators.ML.Tests", "EtAlii.Generators.ML.Tests\EtAlii.Generators.ML.Tests.csproj", "{15BD9931-757F-4DA6-B17B-7753EFA297AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EtAlii.Generators.ML.Tests", "EtAlii.Generators.ML.Tests\EtAlii.Generators.ML.Tests.csproj", "{77D3DFB5-70E8-4E2F-A72B-D963424F149A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EtAlii.Generators.EntityFrameworkCore", "EtAlii.Generators.EntityFrameworkCore\EtAlii.Generators.EntityFrameworkCore.csproj", "{9CB09670-ACB7-45C9-ADE6-E7559819B219}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EtAlii.Generators.EntityFrameworkCore", "EtAlii.Generators.EntityFrameworkCore\EtAlii.Generators.EntityFrameworkCore.csproj", "{9CB09670-ACB7-45C9-ADE6-E7559819B219}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EtAlii.Generators.EntityFrameworkCore.Tests", "EtAlii.Generators.EntityFrameworkCore.Tests\EtAlii.Generators.EntityFrameworkCore.Tests.csproj", "{3F0E9C00-A404-4389-BA44-607EE0F0E29D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EtAlii.Generators.EntityFrameworkCore.Tests", "EtAlii.Generators.EntityFrameworkCore.Tests\EtAlii.Generators.EntityFrameworkCore.Tests.csproj", "{3F0E9C00-A404-4389-BA44-607EE0F0E29D}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "EtAlii.Generators.Tests", "EtAlii.Generators.Tests\EtAlii.Generators.Tests.shproj", "{18108A2D-C3BB-43A4-9E70-A2567F76BD65}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{9BA2A3C6-9D92-436D-854B-ADB54E3C8B13}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		EtAlii.Generators.Tests\EtAlii.Generators.Tests.projitems*{18108a2d-c3bb-43a4-9e70-a2567f76bd65}*SharedItemsImports = 13
+		EtAlii.Generators.Tests\EtAlii.Generators.Tests.projitems*{3f0e9c00-a404-4389-ba44-607ee0f0e29d}*SharedItemsImports = 5
+		EtAlii.Generators\EtAlii.Generators.projitems*{567da79a-93fe-4eb5-bda2-e8ff9cc656d0}*SharedItemsImports = 13
+		EtAlii.Generators.Tests\EtAlii.Generators.Tests.projitems*{77d3dfb5-70e8-4e2f-a72b-d963424f149a}*SharedItemsImports = 5
+		EtAlii.Generators.Tests\EtAlii.Generators.Tests.projitems*{7a7e5272-b0d8-402a-9f89-d38515cff376}*SharedItemsImports = 5
+		EtAlii.Generators\EtAlii.Generators.projitems*{9cb09670-acb7-45c9-ade6-e7559819b219}*SharedItemsImports = 5
+		EtAlii.Generators\EtAlii.Generators.projitems*{a3419e8d-b877-4e72-ac5b-d7144c3d90ee}*SharedItemsImports = 5
+		EtAlii.Generators\EtAlii.Generators.projitems*{b8ceacc0-754d-48ed-bdb5-2ef21505e61c}*SharedItemsImports = 5
+		EtAlii.Generators\EtAlii.Generators.projitems*{ecdc1798-7ef9-4179-bb4f-891f0f1e2175}*SharedItemsImports = 5
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -49,22 +63,22 @@ Global
 		{7A7E5272-B0D8-402A-9F89-D38515CFF376}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A7E5272-B0D8-402A-9F89-D38515CFF376}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A7E5272-B0D8-402A-9F89-D38515CFF376}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CED6903F-7C8D-4A7E-81AE-4E01D11C7E82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CED6903F-7C8D-4A7E-81AE-4E01D11C7E82}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CED6903F-7C8D-4A7E-81AE-4E01D11C7E82}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CED6903F-7C8D-4A7E-81AE-4E01D11C7E82}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B8CEACC0-754D-48ED-BDB5-2EF21505E61C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B8CEACC0-754D-48ED-BDB5-2EF21505E61C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B8CEACC0-754D-48ED-BDB5-2EF21505E61C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B8CEACC0-754D-48ED-BDB5-2EF21505E61C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3419E8D-B877-4E72-AC5B-D7144C3D90EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3419E8D-B877-4E72-AC5B-D7144C3D90EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3419E8D-B877-4E72-AC5B-D7144C3D90EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3419E8D-B877-4E72-AC5B-D7144C3D90EE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4D9AFD07-45EF-4DDD-980E-D9FD619ECD95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4D9AFD07-45EF-4DDD-980E-D9FD619ECD95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D9AFD07-45EF-4DDD-980E-D9FD619ECD95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D9AFD07-45EF-4DDD-980E-D9FD619ECD95}.Release|Any CPU.Build.0 = Release|Any CPU
-		{15BD9931-757F-4DA6-B17B-7753EFA297AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{15BD9931-757F-4DA6-B17B-7753EFA297AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{15BD9931-757F-4DA6-B17B-7753EFA297AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{15BD9931-757F-4DA6-B17B-7753EFA297AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8CEACC0-754D-48ED-BDB5-2EF21505E61C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8CEACC0-754D-48ED-BDB5-2EF21505E61C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8CEACC0-754D-48ED-BDB5-2EF21505E61C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8CEACC0-754D-48ED-BDB5-2EF21505E61C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77D3DFB5-70E8-4E2F-A72B-D963424F149A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77D3DFB5-70E8-4E2F-A72B-D963424F149A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77D3DFB5-70E8-4E2F-A72B-D963424F149A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77D3DFB5-70E8-4E2F-A72B-D963424F149A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9CB09670-ACB7-45C9-ADE6-E7559819B219}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9CB09670-ACB7-45C9-ADE6-E7559819B219}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CB09670-ACB7-45C9-ADE6-E7559819B219}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -74,11 +88,17 @@ Global
 		{3F0E9C00-A404-4389-BA44-607EE0F0E29D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F0E9C00-A404-4389-BA44-607EE0F0E29D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{3F0E9C00-A404-4389-BA44-607EE0F0E29D} = {9BA2A3C6-9D92-436D-854B-ADB54E3C8B13}
-		{4D9AFD07-45EF-4DDD-980E-D9FD619ECD95} = {9BA2A3C6-9D92-436D-854B-ADB54E3C8B13}
-		{15BD9931-757F-4DA6-B17B-7753EFA297AC} = {9BA2A3C6-9D92-436D-854B-ADB54E3C8B13}
 		{7A7E5272-B0D8-402A-9F89-D38515CFF376} = {9BA2A3C6-9D92-436D-854B-ADB54E3C8B13}
+		{4D9AFD07-45EF-4DDD-980E-D9FD619ECD95} = {9BA2A3C6-9D92-436D-854B-ADB54E3C8B13}
+		{77D3DFB5-70E8-4E2F-A72B-D963424F149A} = {9BA2A3C6-9D92-436D-854B-ADB54E3C8B13}
+		{3F0E9C00-A404-4389-BA44-607EE0F0E29D} = {9BA2A3C6-9D92-436D-854B-ADB54E3C8B13}
 		{18108A2D-C3BB-43A4-9E70-A2567F76BD65} = {9BA2A3C6-9D92-436D-854B-ADB54E3C8B13}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7119DFFE-82E0-4D36-9B1A-11919FE47AA8}
 	EndGlobalSection
 EndGlobal

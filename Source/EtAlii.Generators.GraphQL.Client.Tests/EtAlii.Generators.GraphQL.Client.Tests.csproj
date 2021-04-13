@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <ProjectGuid>15BD9931-757F-4DA6-B17B-7753EFA297AC</ProjectGuid>
+    <ProjectGuid>{4D9AFD07-45EF-4DDD-980E-D9FD619ECD95}</ProjectGuid>
   </PropertyGroup>
 
   <ItemGroup>
