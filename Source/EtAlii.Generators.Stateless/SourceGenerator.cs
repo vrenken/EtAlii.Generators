@@ -22,7 +22,7 @@
 
         protected override IValidator<StateMachine> CreateValidator() => new StatelessPlantUmlValidator();
 
-        protected override string GetSourceItemGroup() => "StatelessFile";
+        protected override string GetExtension() => ".puml";
 
         protected override DiagnosticDescriptor GetParsingExceptionRule() => GeneratorRule.PlantUmlStateMachineProcessingThrowsException;
 

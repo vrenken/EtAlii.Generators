@@ -17,7 +17,7 @@ namespace EtAlii.Generators
         protected abstract WriteContext<T> CreateWriteContext(T instance, IndentedTextWriter writer, string originalFileName, List<string> log);
         protected abstract IValidator<T> CreateValidator();
 
-        protected abstract string GetSourceItemGroup();
+        protected abstract string GetExtension();
 
         protected abstract DiagnosticDescriptor GetParsingExceptionRule();
 
@@ -30,13 +30,14 @@ namespace EtAlii.Generators
             // For actual troubleshooting of the source diagrams we use the Roslyn specific Diagnostics pattern.
             var diagnostics = new List<Diagnostic>();
 
-            var sourceItemGroup = GetSourceItemGroup();
+            var extension = GetExtension();
             var parsingExceptionRule = GetParsingExceptionRule();
 
             // This code generator is only able to understand and parse the designated files.
             // Because of that we ignore everything except files with the configured extension.
-
-            var additionalFiles = context.GetAdditionalFilesWithSourceItemGroup(sourceItemGroup);
+            var additionalFiles = context.AdditionalFiles
+                .Where(file => Path.GetExtension(file.Path).Equals(extension, StringComparison.OrdinalIgnoreCase))
+                .ToArray();
 
             var parser = CreateParser();
             var writerFactory = CreateWriterFactory();
