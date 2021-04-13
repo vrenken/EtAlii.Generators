@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Rule xmlns="http://schemas.microsoft.com/build/2009/properties"
-      Name="StatelessRule"
+      Name="GraphQLQueryRule"
       DisplayName="GraphQLQuery"
       PageTemplate="generic"
       Description="GraphQL client query">

@@ -7,7 +7,7 @@
 
   <!-- ===================================================== -->
 
-  <Target Name="_InjectAdditionalFiles" BeforeTargets="GenerateMSBuildEditorConfigFileShouldRun">
+  <Target Name="_InjectEfCoreModelsInAdditionalFiles" BeforeTargets="GenerateMSBuildEditorConfigFileShouldRun">
     <ItemGroup>
       <AdditionalFiles Include="@(EfCoreModel)" SourceItemGroup="EfCoreModel" />
     </ItemGroup>

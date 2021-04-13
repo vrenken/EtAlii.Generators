@@ -7,9 +7,9 @@
 
   <!-- ===================================================== -->
 
-  <Target Name="_InjectAdditionalFiles" BeforeTargets="GenerateMSBuildEditorConfigFileShouldRun">
+  <Target Name="_InjectGraphQLQueriesInAdditionalFiles" BeforeTargets="GenerateMSBuildEditorConfigFileShouldRun">
     <ItemGroup>
-      <AdditionalFiles Include="@(StatelessFile)" SourceItemGroup="StatelessFile" />
+      <AdditionalFiles Include="@(GraphQLQuery)" SourceItemGroup="GraphQLQuery" />
     </ItemGroup>
   </Target>
 
