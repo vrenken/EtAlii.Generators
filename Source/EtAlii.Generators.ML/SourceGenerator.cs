@@ -18,7 +18,9 @@
 
         protected override IValidator<object> CreateValidator() => new GraphQLQueryValidator();
 
-        protected override string GetExtension() => ".graphql";
+        protected override string GetExtension() => ".ml";
+
+        protected override string GetSourceItemGroup() => "StatelessFile";
 
         protected override DiagnosticDescriptor GetParsingExceptionRule() => DiagnosticRule.ParsingThrewException;
 

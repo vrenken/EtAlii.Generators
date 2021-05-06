@@ -24,6 +24,8 @@
 
         protected override string GetExtension() => ".puml";
 
+        protected override string GetSourceItemGroup() => "EfCoreModel";
+
         protected override DiagnosticDescriptor GetParsingExceptionRule() => GeneratorRule.PlantUmlProcessingThrowsException;
 
         protected override WriteContext<EntityModel> CreateWriteContext(EntityModel instance, IndentedTextWriter writer, string originalFileName, List<string> log)

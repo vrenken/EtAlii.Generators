@@ -20,6 +20,8 @@
 
         protected override string GetExtension() => ".graphql";
 
+        protected override string GetSourceItemGroup() => "GraphQLQuery";
+
         protected override DiagnosticDescriptor GetParsingExceptionRule() => DiagnosticRule.ParsingThrewException;
 
         protected override WriteContext<object> CreateWriteContext(object instance, IndentedTextWriter writer, string originalFileName, List<string> log)

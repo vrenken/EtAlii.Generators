@@ -12,10 +12,14 @@ namespace EtAlii.Generators
 
     public abstract class SourceGeneratorBase<T> : ISourceGenerator
     {
+        private const string SourceItemGroupMetadata = "build_metadata.AdditionalFiles.SourceItemGroup";
+
         protected abstract IParser<T> CreateParser();
         protected abstract IWriterFactory<T> CreateWriterFactory();
         protected abstract WriteContext<T> CreateWriteContext(T instance, IndentedTextWriter writer, string originalFileName, List<string> log);
         protected abstract IValidator<T> CreateValidator();
+
+        protected abstract string GetSourceItemGroup();
 
         protected abstract string GetExtension();
 
@@ -31,12 +35,36 @@ namespace EtAlii.Generators
             var diagnostics = new List<Diagnostic>();
 
             var extension = GetExtension();
+            var sourceItemGroup = GetSourceItemGroup();
             var parsingExceptionRule = GetParsingExceptionRule();
 
             // This code generator is only able to understand and parse the designated files.
             // Because of that we ignore everything except files with the configured extension.
             var additionalFiles = context.AdditionalFiles
                 .Where(file => Path.GetExtension(file.Path).Equals(extension, StringComparison.OrdinalIgnoreCase))
+                .ToArray()
+                .Where(f =>
+                {
+                    try
+                    {
+                        var options = context.AnalyzerConfigOptions.GetOptions(f);
+                        //return true;
+                        if (options.TryGetValue(SourceItemGroupMetadata, out var sig))
+                        {
+                            log.Add($"Found SourceItemGroup: {Path.GetFileName(f.Path)} {sig}");
+                            return sig.Equals(sourceItemGroup, StringComparison.OrdinalIgnoreCase);
+                        }
+                        else
+                        {
+                            log.Add($"FAILED finding SourceItemGroup: {Path.GetFileName(f.Path)}");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        log.Add($"EXCEPTION finding SourceItemGroup: {e.Message}");
+                    }
+                    return false;
+                })
                 .ToArray();
 
             var parser = CreateParser();

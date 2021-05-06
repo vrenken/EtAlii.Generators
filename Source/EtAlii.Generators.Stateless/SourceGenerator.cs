@@ -24,6 +24,8 @@
 
         protected override string GetExtension() => ".puml";
 
+        protected override string GetSourceItemGroup() => "StatelessFile";
+
         protected override DiagnosticDescriptor GetParsingExceptionRule() => GeneratorRule.PlantUmlStateMachineProcessingThrowsException;
 
         protected override WriteContext<StateMachine> CreateWriteContext(StateMachine instance, IndentedTextWriter writer, string originalFileName, List<string> log)
