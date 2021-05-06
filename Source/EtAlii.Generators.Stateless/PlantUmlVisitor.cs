@@ -193,11 +193,22 @@
 
         public override object VisitStates_description(PlantUmlParser.States_descriptionContext context) => new StateDescription((string)VisitId(context.id()), context.text?.Text ?? string.Empty);
 
+        public override object VisitStereotype(PlantUmlParser.StereotypeContext context)
+        {
+            return (StereoType)Enum.Parse(typeof(StereoType), context.GetText(), true);
+        }
+
         public override object VisitState_definition_no_substates(PlantUmlParser.State_definition_no_substatesContext context)
         {
             var name = (string)VisitId(context.name);
+
+            var stereoTypeContext = context.stereotype();
+            var stereoType = stereoTypeContext != null
+                ? (StereoType)VisitStereotype(stereoTypeContext)
+                : StereoType.None;
+
             var position = SourcePosition.FromContext(context);
-            return new SuperState(name, Array.Empty<StateFragment>(), position);
+            return new SuperState(name, Array.Empty<StateFragment>(), position, stereoType);
         }
 
         public override object VisitState_definition_with_substates(PlantUmlParser.State_definition_with_substatesContext context)
@@ -209,8 +220,13 @@
                 .OfType<StateFragment>()
                 .ToArray() ?? Array.Empty<StateFragment>();
 
+            var stereoTypeContext = context.stereotype();
+            var stereoType = stereoTypeContext != null
+                ? (StereoType)VisitStereotype(stereoTypeContext)
+                : StereoType.None;
+
             var position = SourcePosition.FromContext(context.name);
-            return new SuperState(name, stateFragments, position);
+            return new SuperState(name, stateFragments, position, stereoType);
         }
     }
 }

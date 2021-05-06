@@ -64,8 +64,11 @@
 
             var stateConfiguration = new List<string>();
 
-            WriteEntryAndExitConfiguration(context, state, stateConfiguration);
-            WriteInboundTransitions(context, state, stateConfiguration);
+            var isChoiceState = StateFragment.GetAllSuperStates(context.Instance.StateFragments)
+                .Any(ss => ss.Name == state && ss.StereoType == StereoType.Choice);
+
+            WriteEntryAndExitConfiguration(context, state, stateConfiguration, isChoiceState);
+            WriteInboundTransitions(context, state, stateConfiguration, isChoiceState);
             WriteInternalTransitions(context, state, stateConfiguration);
             WriteOutboundTransitions(context, state, stateConfiguration);
             WriteSuperState(context, state, stateConfiguration);
@@ -121,16 +124,22 @@
             }
         }
 
-        private void WriteEntryAndExitConfiguration(WriteContext<StateMachine> context, string state, List<string> stateConfiguration)
+        private void WriteEntryAndExitConfiguration(WriteContext<StateMachine> context, string state, List<string> stateConfiguration, bool isChoiceState)
         {
             var writeAsyncEntryConfiguration = StateFragment.HasOnlyAsyncInboundTransitions(context.Instance, state);
             if (writeAsyncEntryConfiguration)
             {
-                stateConfiguration.Add($"\t.OnEntryAsync(On{state}Entered)");
+                var line = isChoiceState
+                    ? $"\t.OnEntryAsync(() => On{state}Entered(new {state}EventArgs(_stateMachine)))"
+                    : $"\t.OnEntryAsync(On{state}Entered)";
+                stateConfiguration.Add(line);
             }
             else
             {
-                stateConfiguration.Add($"\t.OnEntry(On{state}Entered)");
+                var line = isChoiceState
+                    ? $"\t.OnEntry(() => On{state}Entered(new {state}EventArgs(_stateMachine)))"
+                    : $"\t.OnEntry(On{state}Entered)";
+                stateConfiguration.Add(line);
             }
 
             var writeAsyncExitConfiguration = StateFragment.HasOnlyAsyncOutboundTransitions(context.Instance, state);
@@ -174,7 +183,7 @@
             stateConfiguration.AddRange(lines);
         }
 
-        private void WriteInboundTransitions(WriteContext<StateMachine> context, string state, List<string> stateConfiguration)
+        private void WriteInboundTransitions(WriteContext<StateMachine> context, string state, List<string> stateConfiguration, bool isChoiceState)
         {
             var lines = StateFragment
                 .GetInboundTransitions(context.Instance.StateFragments, state)
@@ -182,8 +191,20 @@
                 {
                     var triggerParameter = _transitionConverter.ToTriggerParameter(transition);
                     var genericParameters = _parameterConverter.ToGenericParameters(transition.Parameters);
+                    var lambdaParameters = _parameterConverter.ToNamedVariables(transition.Parameters);
+                    var parameters = transition.Parameters;
+                    if (isChoiceState)
+                    {
+                        parameters = new [] { new Parameter($"", $"new {state}EventArgs(_stateMachine)", transition.Source) }
+                            .Concat(parameters)
+                            .ToArray();
+                    }
+                    var namedParameters = _parameterConverter.ToNamedVariables(parameters);
                     var transitionMethodName = _transitionConverter.ToTransitionMethodName(transition);
-                    return $"\t.OnEntryFrom{(transition.IsAsync ? "Async" : "")}{genericParameters}({triggerParameter}, {transitionMethodName})";
+
+                    return isChoiceState
+                        ? $"\t.OnEntryFrom{(transition.IsAsync ? "Async" : "")}{genericParameters}({triggerParameter}, ({lambdaParameters}) => {transitionMethodName}({namedParameters}))"
+                        : $"\t.OnEntryFrom{(transition.IsAsync ? "Async" : "")}{genericParameters}({triggerParameter}, {transitionMethodName})";
                 })
                 .ToArray();
             stateConfiguration.AddRange(lines);

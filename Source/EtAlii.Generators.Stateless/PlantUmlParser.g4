@@ -39,8 +39,10 @@ setting
     | setting_generate_partial
     | setting_using
     ;
-state_definition_no_substates   : STATE WHITESPACE+ name=id ;
-state_definition_with_substates : STATE WHITESPACE+ name=id WHITESPACE* LBRACE WHITESPACE* NEWLINE+ (WHITESPACE* (states) NEWLINE+)* WHITESPACE* RBRACE;
+
+stereotype                      : STEREOTYPE_CHOICE;
+state_definition_no_substates   : STATE WHITESPACE+ name=id (WHITESPACE+ LCHEVR LCHEVR WHITESPACE? stereotype WHITESPACE? RCHEVR RCHEVR)?;
+state_definition_with_substates : STATE WHITESPACE+ name=id (WHITESPACE+ LCHEVR LCHEVR WHITESPACE? stereotype WHITESPACE? RCHEVR RCHEVR)? WHITESPACE* LBRACE WHITESPACE* NEWLINE+ (WHITESPACE* (states) NEWLINE+)* WHITESPACE* RBRACE;
 state_definition
     : state_definition_with_substates
     | state_definition_no_substates

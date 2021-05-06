@@ -31,21 +31,18 @@
             foreach (var trigger in allTriggers)
             {
                 var syncTransitions = StateFragment.GetSyncTransitions(context.Instance.StateFragments);
-
                 var syncTransitionSets = _transitionConverter.ToTransitionsSetsPerTriggerAndUniqueParameters(syncTransitions, trigger);
-
                 var syncWrite = new Func<string, string, string, string, string, string>((triggerName, typedParameters, genericParameters, triggerParameter, namedParameters) => $"public void {triggerName}({typedParameters}) => _stateMachine.Fire{genericParameters}({triggerParameter}{namedParameters});");
                 WriteTriggerMethods(context, syncTransitionSets, "sync", syncWrite);
 
                 var asyncTransitions = StateFragment.GetAsyncTransitions(context.Instance.StateFragments);
-
                 var asyncTransitionSets = _transitionConverter.ToTransitionsSetsPerTriggerAndUniqueParameters(asyncTransitions, trigger);
                 var asyncWrite = new Func<string, string, string, string, string, string>((triggerName, typedParameters, genericParameters, triggerParameter, namedParameters) => $"public Task {triggerName}Async({typedParameters}) => _stateMachine.FireAsync{genericParameters}({triggerParameter}{namedParameters});");
                 WriteTriggerMethods(context, asyncTransitionSets, "async", asyncWrite);
             }
         }
 
-        private void WriteTriggerMethods(WriteContext<StateMachine> context, Transition[][] transitionSets, string triggerType, Func<string, string, string, string, string, string> write)
+        public void WriteTriggerMethods(WriteContext<StateMachine> context, Transition[][] transitionSets, string triggerType, Func<string, string, string, string, string, string> write)
         {
             foreach (var transitionSet in transitionSets)
             {
@@ -71,7 +68,10 @@
             var allStates = StateFragment.GetAllStates(context.Instance.StateFragments);
             foreach (var state in allStates)
             {
-                WriteEntryAndExitMethods(context, state);
+                var isChoiceState = StateFragment.GetAllSuperStates(context.Instance.StateFragments)
+                    .Any(ss => ss.Name == state && ss.StereoType == StereoType.Choice);
+
+                WriteEntryAndExitMethods(context, state, isChoiceState);
 
                 var allTransitions = StateFragment.GetAllTransitions(context.Instance.StateFragments);
                 var uniqueTransitions = allTransitions
@@ -82,13 +82,14 @@
 
                 WriteInternalTransitionMethodsForState(context, uniqueTransitions, state);
 
-                WriteInboundTransitionMethodsForState(context, uniqueTransitions, state);
+                WriteInboundTransitionMethodsForState(context, uniqueTransitions, state, isChoiceState);
             }
         }
 
-        private void WriteEntryAndExitMethods(WriteContext<StateMachine> context, string state)
+        private void WriteEntryAndExitMethods(WriteContext<StateMachine> context, string state, bool isChoiceState)
         {
             var writeAsyncEntryMethod = StateFragment.HasOnlyAsyncInboundTransitions(context.Instance, state);
+
             var entryMethodName = $"On{state}Entered";
             context.Writer.WriteLine("/// <summary>");
             context.Writer.WriteLine($"/// Implement this method to handle the entry of the '{state}' state.");
@@ -99,7 +100,19 @@
                 context.Writer.WriteLine("/// </remark>");
             }
             context.Writer.WriteLine("/// </summary>");
-            context.Writer.WriteLine($"protected virtual {(writeAsyncEntryMethod ? "Task" : "void")} {entryMethodName}()");
+
+            var parameters = Array.Empty<Parameter>();
+            if (isChoiceState)
+            {
+                var superState = StateFragment.GetAllSuperStates(context.Instance.StateFragments).Single(ss => ss.Name == state);
+                parameters = new [] { new Parameter($"{state}EventArgs", "e", superState.Source) }
+                    .Concat(parameters)
+                    .ToArray();
+            }
+
+            var typedNamedParameters = _parameterConverter.ToTypedNamedVariables(parameters);
+
+            context.Writer.WriteLine($"protected virtual {(writeAsyncEntryMethod ? "Task" : "void")} {entryMethodName}({typedNamedParameters})");
             context.Writer.WriteLine("{");
             context.Writer.Indent += 1;
             if (writeAsyncEntryMethod)
@@ -133,7 +146,7 @@
             context.Writer.WriteLine();
         }
 
-        private void WriteInboundTransitionMethodsForState(WriteContext<StateMachine> context, Transition[] uniqueTransitions, string state)
+        private void WriteInboundTransitionMethodsForState(WriteContext<StateMachine> context, Transition[] uniqueTransitions, string state, bool isChoiceState)
         {
             var inboundTransitions = uniqueTransitions
                 .Where(t => t.From != t.To) // skip internal transitions.
@@ -142,7 +155,16 @@
 
             foreach (var transition in inboundTransitions)
             {
-                var typedNamedParameters = _parameterConverter.ToTypedNamedVariables(transition.Parameters);
+                var parameters = transition.Parameters;
+                if (isChoiceState)
+                {
+                    var superState = StateFragment.GetAllSuperStates(context.Instance.StateFragments).Single(ss => ss.Name == state);
+                    parameters = new [] { new Parameter($"{state}EventArgs", "e", superState.Source) }
+                            .Concat(parameters)
+                            .ToArray();
+                }
+
+                var typedNamedParameters = _parameterConverter.ToTypedNamedVariables(parameters);
 
                 var transitionMethodName = _transitionConverter.ToTransitionMethodName(transition);
                 WriteComment(context, new[] {transition}, "Implement this method to handle the transition below:");

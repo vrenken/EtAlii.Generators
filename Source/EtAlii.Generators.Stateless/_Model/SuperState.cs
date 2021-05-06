@@ -2,6 +2,7 @@ namespace EtAlii.Generators.Stateless
 {
     public class SuperState : StateFragment
     {
+        public StereoType StereoType { get; }
         public string Name { get; }
         public StateFragment[] StateFragments { get; }
 
@@ -10,11 +11,13 @@ namespace EtAlii.Generators.Stateless
         public SuperState(
             string name,
             StateFragment[] stateFragments,
-            SourcePosition source)
+            SourcePosition source,
+            StereoType stereoType)
         {
             Name = name;
             StateFragments = stateFragments;
             Source = source;
+            StereoType = stereoType;
         }
     }
 }
