@@ -2,14 +2,14 @@
 
   <PropertyGroup>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-    <CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)\$(Configuration)\$(TargetFramework)\EtAlii</CompilerGeneratedFilesOutputPath>
+    <CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)\$(Configuration)\$(TargetFramework)\GraphQL</CompilerGeneratedFilesOutputPath>
   </PropertyGroup>
 
   <!-- ===================================================== -->
 
-  <Target Name="_InjectGraphQLQueriesInAdditionalFiles" BeforeTargets="GenerateMSBuildEditorConfigFileShouldRun">
+  <Target Name="_InjectAdditionalFiles" BeforeTargets="GenerateMSBuildEditorConfigFileShouldRun">
     <ItemGroup>
-      <AdditionalFiles Include="@(GraphQLQuery)" SourceItemGroup="GraphQLQuery" />
+      <AdditionalFiles Include="@(StatelessFile)" SourceItemGroup="StatelessFile" />
     </ItemGroup>
   </Target>
 

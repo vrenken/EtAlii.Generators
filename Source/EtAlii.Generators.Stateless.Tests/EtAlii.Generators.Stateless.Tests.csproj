@@ -9,7 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.2" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.9.0" />
-    <PackageReference Include="stateless" Version="5.10.1" />
+    <PackageReference Include="stateless" Version="5.11.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +24,7 @@
   <ItemGroup>
     <StatelessFile Include="StateMachines\AsyncStateMachine.puml" />
     <StatelessFile Include="StateMachines\AsyncSubStateStateMachine.puml" />
+    <StatelessFile Include="StateMachines\ChoiceStateMachine.puml" />
     <StatelessFile Include="StateMachines\MyNestedStateMachine1.puml" />
     <StatelessFile Include="StateMachines\MyNestedStateMachine2.puml" />
     <StatelessFile Include="StateMachines\MyNestedStateMachine4.puml" />
@@ -57,8 +58,11 @@
     <Compile Update="StateMachines\AsyncSubStateStateMachine.cs">
       <DependentUpon>AsyncSubStateStateMachine.puml</DependentUpon>
     </Compile>
+    <Compile Update="StateMachines\ChoiceStateMachine.cs">
+      <DependentUpon>ChoiceStateMachine.puml</DependentUpon>
+    </Compile>
   </ItemGroup>
-
+  
   <Import Project="..\EtAlii.Generators.Stateless\Build\*.props" />
   <Import Project="..\EtAlii.Generators.Stateless\Build\*.targets" />
   <Import Project="..\EtAlii.Generators.Tests\EtAlii.Generators.Tests.projitems" Label="Shared" />

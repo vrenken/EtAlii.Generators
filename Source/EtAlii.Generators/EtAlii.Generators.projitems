@@ -15,7 +15,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)IWriter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IWriterFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ParsingErrorListener.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SourceGeneratorContext.Extension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SourceGeneratorBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WriteContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Writers\EnumWriter.cs" />

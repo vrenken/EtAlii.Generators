@@ -18,6 +18,8 @@
 
         protected override IValidator<object> CreateValidator() => new GraphQLQueryValidator();
 
+        protected override string GetExtension() => ".graphql";
+
         protected override string GetSourceItemGroup() => "GraphQLQuery";
 
         protected override DiagnosticDescriptor GetParsingExceptionRule() => DiagnosticRule.ParsingThrewException;

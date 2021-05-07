@@ -1,0 +1,11 @@
+@startuml
+'stateless namespace EtAlii.Generators.Stateless.Tests
+'stateless class ChoiceStateMachineBase
+
+[*] -> State1 : Start
+State1 : this is a description
+state State2 <<choice>>
+State1 -> State2 : Continue
+State2 -down-> State4 : Down
+State2 -up-> State3 : Up
+@enduml

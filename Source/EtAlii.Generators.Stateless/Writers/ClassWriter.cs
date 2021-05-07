@@ -5,17 +5,20 @@
         private readonly EnumWriter<StateMachine> _enumWriter;
         private readonly FieldWriter _fieldWriter;
         private readonly MethodWriter _methodWriter;
+        private readonly EventArgsWriter _eventArgsWriter;
         private readonly InstantiationWriter _instantiationWriter;
 
         public ClassWriter(
             EnumWriter<StateMachine> enumWriter,
             FieldWriter fieldWriter,
             MethodWriter methodWriter,
+            EventArgsWriter eventArgsWriter,
             InstantiationWriter instantiationWriter)
         {
             _enumWriter = enumWriter;
             _fieldWriter = fieldWriter;
             _methodWriter = methodWriter;
+            _eventArgsWriter = eventArgsWriter;
             _instantiationWriter = instantiationWriter;
         }
 
@@ -43,6 +46,9 @@
             context.Writer.WriteLine();
 
             _methodWriter.WriteTriggerMethods(context);
+            context.Writer.WriteLine();
+
+            _eventArgsWriter.WriteEventArgs(context);
             context.Writer.WriteLine();
 
             var allStates = StateFragment.GetAllStates(context.Instance.StateFragments);

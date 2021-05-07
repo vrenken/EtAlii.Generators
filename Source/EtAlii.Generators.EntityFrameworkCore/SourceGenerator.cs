@@ -22,6 +22,8 @@
 
         protected override IValidator<EntityModel> CreateValidator() => new EntityModelPlantUmlValidator();
 
+        protected override string GetExtension() => ".puml";
+
         protected override string GetSourceItemGroup() => "EfCoreModel";
 
         protected override DiagnosticDescriptor GetParsingExceptionRule() => GeneratorRule.PlantUmlProcessingThrowsException;
