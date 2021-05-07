@@ -211,6 +211,19 @@
             return new SuperState(name, Array.Empty<StateFragment>(), position, stereoType);
         }
 
+        public override object VisitState_definition_no_substates_full_name(PlantUmlParser.State_definition_no_substates_full_nameContext context)
+        {
+            var name = (string)VisitId(context.name);
+
+            var stereoTypeContext = context.stereotype();
+            var stereoType = stereoTypeContext != null
+                ? (StereoType)VisitStereotype(stereoTypeContext)
+                : StereoType.None;
+
+            var position = SourcePosition.FromContext(context);
+            return new SuperState(name, Array.Empty<StateFragment>(), position, stereoType);
+        }
+
         public override object VisitState_definition_with_substates(PlantUmlParser.State_definition_with_substatesContext context)
         {
             var name = (string)VisitId(context.name);

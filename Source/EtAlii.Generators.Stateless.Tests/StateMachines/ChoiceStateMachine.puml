@@ -4,7 +4,7 @@
 
 [*] -> State1 : Start
 State1 : this is a description
-state State2 <<choice>>
+state "This is a fancy name for State2" as State2 <<choice>>
 State1 -> State2 : Continue
 State2 -down-> State4 : Down
 State2 -up-> State3 : Up
