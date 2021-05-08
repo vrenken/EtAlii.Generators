@@ -28,9 +28,9 @@
                 context.Writer.WriteLine($"protected class {choiceSuperState.Name}EventArgs");
                 context.Writer.WriteLine("{");
                 context.Writer.Indent += 1;
-                context.Writer.WriteLine($"private readonly {StatelessWriter.StateMachineType} _stateMachine;");
+                context.Writer.WriteLine($"private readonly {context.Instance.ClassName} _stateMachine;");
                 context.Writer.WriteLine();
-                context.Writer.WriteLine($"public {choiceSuperState.Name}EventArgs({StatelessWriter.StateMachineType} stateMachine)");
+                context.Writer.WriteLine($"public {choiceSuperState.Name}EventArgs({context.Instance.ClassName} stateMachine)");
                 context.Writer.WriteLine("{");
                 context.Writer.Indent += 1;
                 context.Writer.WriteLine($"_stateMachine = stateMachine;");
@@ -53,12 +53,26 @@
                 var transitionSets = new [] { new [] { outboundTransition } };
                 if (outboundTransition.IsAsync)
                 {
-                    var asyncWrite = new Func<string, string, string, string, string, string>((triggerName, typedParameters, genericParameters, triggerParameter, namedParameters) => $"public Task {triggerName}Async({typedParameters}) => _stateMachine.FireAsync{genericParameters}({triggerParameter}{namedParameters});");
+                    var asyncWrite = new Func<string, string, string, string, string, string>((triggerName, typedParameters, _, _, namedParameters) =>
+                    {
+                        if (namedParameters.Any())
+                        {
+                            namedParameters = namedParameters.Substring(2);
+                        }
+                        return $"public Task {triggerName}Async({typedParameters}) => _stateMachine.{triggerName}Async({namedParameters});";
+                    });
                     _methodWriter.WriteTriggerMethods(context, transitionSets, "async", asyncWrite);
                 }
                 else
                 {
-                    var syncWrite = new Func<string, string, string, string, string, string>((triggerName, typedParameters, genericParameters, triggerParameter, namedParameters) => $"public void {triggerName}({typedParameters}) => _stateMachine.Fire{genericParameters}({triggerParameter}{namedParameters});");
+                    var syncWrite = new Func<string, string, string, string, string, string>((triggerName, typedParameters, _, _, namedParameters) =>
+                    {
+                        if (namedParameters.Any())
+                        {
+                            namedParameters = namedParameters.Substring(2);
+                        }
+                        return $"public void {triggerName}({typedParameters}) => _stateMachine.{triggerName}({namedParameters});";
+                    });
                     _methodWriter.WriteTriggerMethods(context, transitionSets, "sync", syncWrite);
                 }
             }

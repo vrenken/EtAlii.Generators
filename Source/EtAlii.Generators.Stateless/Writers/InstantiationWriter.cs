@@ -130,14 +130,14 @@
             if (writeAsyncEntryConfiguration)
             {
                 var line = isChoiceState
-                    ? $"\t.OnEntryAsync(() => On{state}Entered(new {state}EventArgs(_stateMachine)))"
+                    ? $"\t.OnEntryAsync(() => On{state}Entered(new {state}EventArgs(this)))"
                     : $"\t.OnEntryAsync(On{state}Entered)";
                 stateConfiguration.Add(line);
             }
             else
             {
                 var line = isChoiceState
-                    ? $"\t.OnEntry(() => On{state}Entered(new {state}EventArgs(_stateMachine)))"
+                    ? $"\t.OnEntry(() => On{state}Entered(new {state}EventArgs(this)))"
                     : $"\t.OnEntry(On{state}Entered)";
                 stateConfiguration.Add(line);
             }
@@ -195,7 +195,7 @@
                     var parameters = transition.Parameters;
                     if (isChoiceState)
                     {
-                        parameters = new [] { new Parameter($"", $"new {state}EventArgs(_stateMachine)", transition.Source) }
+                        parameters = new [] { new Parameter($"", $"new {state}EventArgs(this)", transition.Source) }
                             .Concat(parameters)
                             .ToArray();
                     }

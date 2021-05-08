@@ -16,9 +16,9 @@ namespace EtAlii.Generators.Stateless.Tests
 
         protected override void OnState3Entered() => Actions.Add("State 3 entered");
 
-        protected override void OnState3EnteredFromUpTrigger()
+        protected override void OnState3EnteredFromUpTrigger(string message)
         {
-            Actions.Add("State 3 entered from Up trigger");
+            Actions.Add($"State 3 entered from Up trigger: {message}");
             Continue();
         }
 
