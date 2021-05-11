@@ -9,7 +9,7 @@
 
   <PropertyGroup>
     <PackageId>EtAlii.Generators.Stateless</PackageId>
-    <Version>1.0.17</Version>
+    <Version>1.0.18</Version>
     <Authors>Peter Vrenken</Authors>
     <Company>EtAlii</Company>
     <PackageDescription>A PlantUML powered Stateless state machine generator</PackageDescription>
