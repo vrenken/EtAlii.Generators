@@ -17,7 +17,7 @@ AS                                                  : 'as';
 STATE                                               : 'state';
 STEREOTYPE_CHOICE                                   : 'choice';
 HIDE_EMPTY_DESCRIPTION                              : 'hide empty description';
-ID                                                  : ('A'..'Z' | 'a'..'z' | '1'..'9')+;
+ID                                                  : ('A'..'Z' | 'a'..'z' | '0'..'9' | '_')+;
 
 SETTING_NAMESPACE                                   : '\'stateless namespace';
 SETTING_CLASS                                       : '\'stateless class';
