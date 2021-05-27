@@ -1,9 +1,25 @@
 ﻿<Project>
 
   <PropertyGroup>
+    <GeneratedCodePath>.etalii\generated</GeneratedCodePath>
+    <IncludePackageReferencesDuringMarkupCompilation>true</IncludePackageReferencesDuringMarkupCompilation>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-    <CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)\$(Configuration)\$(TargetFramework)\GraphQL</CompilerGeneratedFilesOutputPath>
+    <CompilerGeneratedFilesOutputPath>$(GeneratedCodePath)</CompilerGeneratedFilesOutputPath>
   </PropertyGroup>
+
+  <Target Name="CleanSourceGeneratedFiles" AfterTargets="Clean">
+    <RemoveDir Directories="$(GeneratedCodePath)" />
+  </Target>
+  <Target Name="RemoveSourceGeneratedFiles" BeforeTargets="BeforeBuild">
+    <ItemGroup>
+      <Compile Remove="$(GeneratedCodePath)\**" />
+    </ItemGroup>
+  </Target>
+  <Target Name="AddSourceGeneratedFiles" AfterTargets="AfterBuild">
+    <ItemGroup>
+      <Compile Include="$(GeneratedCodePath)\**" Visible="False" />
+    </ItemGroup>
+  </Target>
 
   <!-- ===================================================== -->
 

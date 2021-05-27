@@ -25,7 +25,8 @@
     <Folder Include="Tests" />
   </ItemGroup>
 
-  <Import Project="..\EtAlii.Generators.Stateless\Build\*.props" />
-  <Import Project="..\EtAlii.Generators.Stateless\Build\*.targets" />
+  <Import Project="..\EtAlii.Generators.GraphQL.Client\Build\*.props" />
+  <Import Project="..\EtAlii.Generators.GraphQL.Client\Build\*.targets" />
+  <Import Project="..\EtAlii.Generators.Tests\EtAlii.Generators.Tests.projitems" Label="Shared" />
 
 </Project>

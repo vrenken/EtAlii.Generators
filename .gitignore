@@ -362,3 +362,4 @@ fabric.properties
 #==================================================================
 # SonarQube dotnet-sonarscanner
 **/.sonarqube/
+**/.etalii/generated/

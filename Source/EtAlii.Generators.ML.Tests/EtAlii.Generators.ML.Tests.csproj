@@ -64,8 +64,8 @@
     </Compile>
   </ItemGroup>
 
-  <Import Project="..\EtAlii.Generators.Stateless\Build\*.props" />
-  <Import Project="..\EtAlii.Generators.Stateless\Build\*.targets" />
+  <Import Project="..\EtAlii.Generators.ML\Build\*.props" />
+  <Import Project="..\EtAlii.Generators.ML\Build\*.targets" />
   <Import Project="..\EtAlii.Generators.Tests\EtAlii.Generators.Tests.projitems" Label="Shared" />
 
 </Project>
