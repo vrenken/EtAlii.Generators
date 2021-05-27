@@ -1,9 +1,14 @@
 ﻿<Project>
 
   <PropertyGroup>
+    <IncludePackageReferencesDuringMarkupCompilation>true</IncludePackageReferencesDuringMarkupCompilation>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     <CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)\$(Configuration)\$(TargetFramework)\Stateless</CompilerGeneratedFilesOutputPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="$(CompilerGeneratedFilesOutputPath)\**" Visible="False"  />
+  </ItemGroup>
 
   <!-- ===================================================== -->
 
