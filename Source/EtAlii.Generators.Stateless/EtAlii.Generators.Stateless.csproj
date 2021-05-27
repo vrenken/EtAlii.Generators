@@ -14,6 +14,7 @@
     <Company>EtAlii</Company>
     <PackageDescription>A PlantUML powered Stateless state machine generator</PackageDescription>
     <RepositoryUrl>https://github.com/vrenken/EtAlii.Generators</RepositoryUrl>
+    <PackageReadmeFile>Readme.md</PackageReadmeFile>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -23,6 +24,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="Readme.md" Pack="true" PackagePath="\"/>
+
     <Content Include="Build\*">
       <PackagePath>build\</PackagePath>
     </Content>
