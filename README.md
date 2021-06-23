@@ -10,19 +10,20 @@ The first attempt is to use PlantUML to visually design [Stateless](https://gith
 [![Analysis](https://github.com/vrenken/EtAlii.Generators/actions/workflows/analysis.yml/badge.svg)](https://github.com/vrenken/EtAlii.Generators/actions/workflows/analysis.yml)
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![GitHub](https://img.shields.io/github/license/vrenken/EtAlii.Generators)
 
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Ubigia&metric=bugs)](https://sonarcloud.io/dashboard?id=EtAlii.Ubigia)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Ubigia&metric=code_smells)](https://sonarcloud.io/dashboard?id=EtAlii.Ubigia)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Ubigia&metric=coverage)](https://sonarcloud.io/dashboard?id=EtAlii.Ubigia)
-[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Ubigia&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=EtAlii.Ubigia)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=bugs)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=code_smells)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=coverage)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
 
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Ubigia&metric=ncloc)](https://sonarcloud.io/dashboard?id=EtAlii.Ubigia)
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Ubigia&metric=sqale_index)](https://sonarcloud.io/dashboard?id=EtAlii.Ubigia)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Ubigia&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=EtAlii.Ubigia)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=ncloc)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=sqale_index)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
 
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Ubigia&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=EtAlii.Ubigia)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Ubigia&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=EtAlii.Ubigia)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Ubigia&metric=security_rating)](https://sonarcloud.io/dashboard?id=EtAlii.Ubigia)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Ubigia&metric=alert_status)](https://sonarcloud.io/dashboard?id=EtAlii.Ubigia)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=security_rating)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=EtAlii.Generators&metric=alert_status)](https://sonarcloud.io/dashboard?id=EtAlii.Generators)
+
 
 |Generation | Documentation | Version | Downloads |
 |:---|:---|:---|:---|
