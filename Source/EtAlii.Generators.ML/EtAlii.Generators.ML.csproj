@@ -9,9 +9,6 @@
 
   <PropertyGroup>
     <PackageId>EtAlii.Generators.ML</PackageId>
-    <Version>1.0.1</Version>
-    <Authors>Peter Vrenken</Authors>
-    <Company>EtAlii</Company>
     <PackageDescription>An ANTLR4/Roslyn powered generator able to generate typed code for TensorFlow SavedModel folders.</PackageDescription>
     <RepositoryUrl>https://github.com/vrenken/EtAlii.Generators</RepositoryUrl>
   </PropertyGroup>

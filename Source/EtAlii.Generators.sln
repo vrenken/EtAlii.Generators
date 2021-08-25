@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Globals", "_Globals", "{B3
 		..\.gitignore = ..\.gitignore
 		..\.github\workflows\analysis.yml = ..\.github\workflows\analysis.yml
 		..\.github\workflows\build.yml = ..\.github\workflows\build.yml
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
 		EtAlii.Generators.sln.DotSettings = EtAlii.Generators.sln.DotSettings
 		Global.json = Global.json
 		nuget.config = nuget.config
@@ -40,6 +42,7 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		EtAlii.Generators.Tests\EtAlii.Generators.Tests.projitems*{18108a2d-c3bb-43a4-9e70-a2567f76bd65}*SharedItemsImports = 13
 		EtAlii.Generators.Tests\EtAlii.Generators.Tests.projitems*{3f0e9c00-a404-4389-ba44-607ee0f0e29d}*SharedItemsImports = 5
+		EtAlii.Generators.Tests\EtAlii.Generators.Tests.projitems*{4d9afd07-45ef-4ddd-980e-d9fd619ecd95}*SharedItemsImports = 5
 		EtAlii.Generators\EtAlii.Generators.projitems*{567da79a-93fe-4eb5-bda2-e8ff9cc656d0}*SharedItemsImports = 13
 		EtAlii.Generators.Tests\EtAlii.Generators.Tests.projitems*{77d3dfb5-70e8-4e2f-a72b-d963424f149a}*SharedItemsImports = 5
 		EtAlii.Generators.Tests\EtAlii.Generators.Tests.projitems*{7a7e5272-b0d8-402a-9f89-d38515cff376}*SharedItemsImports = 5
@@ -88,8 +91,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7119DFFE-82E0-4D36-9B1A-11919FE47AA8}

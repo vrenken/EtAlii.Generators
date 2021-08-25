@@ -1,0 +1,11 @@
+﻿<!-- Stuff that needs to happen at the start of the MSBuild process should go in the .props file. -->
+<Project>
+  <PropertyGroup>
+    <MicrosoftCodeAnalysisNugetVersion>3.9.0</MicrosoftCodeAnalysisNugetVersion>
+    <Version>1.0.21</Version>
+    <Authors>Peter Vrenken</Authors>
+    <Company>EtAlii</Company>
+
+  </PropertyGroup>
+</Project>
+

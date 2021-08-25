@@ -9,9 +9,6 @@
 
   <PropertyGroup>
     <PackageId>EtAlii.Generators.EntityFrameworkCore</PackageId>
-    <Version>1.0.2</Version>
-    <Authors>Peter Vrenken</Authors>
-    <Company>EtAlii</Company>
     <PackageDescription>A PlantUML powered generator for EF core entities and DbContexts</PackageDescription>
     <RepositoryUrl>https://github.com/vrenken/EtAlii.Generators</RepositoryUrl>
   </PropertyGroup>

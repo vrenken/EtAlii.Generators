@@ -1,0 +1,6 @@
+﻿<!-- Stuff that needs to happen at the end of the MSBuild process should go in the .targets file. -->
+<Project>
+  <PropertyGroup>
+  </PropertyGroup>
+
+</Project>
