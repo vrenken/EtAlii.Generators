@@ -216,7 +216,6 @@ Both Stateless and PlantUML support nested states. The code generator is able to
 @startuml
 'stateless namespace EtAlii.Generators.Stateless.Tests
 'stateless class SubStateStateMachineBase
-'stateless generate partial
 'stateless using System.Text
 
 [*] -up-> State1 : Continue

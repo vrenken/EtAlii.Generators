@@ -112,15 +112,22 @@
 
             var typedNamedParameters = _parameterConverter.ToTypedNamedVariables(parameters);
 
-            context.Writer.WriteLine($"protected virtual {(writeAsyncEntryMethod ? "Task" : "void")} {entryMethodName}({typedNamedParameters})");
-            context.Writer.WriteLine("{");
-            context.Writer.Indent += 1;
-            if (writeAsyncEntryMethod)
+            if (context.Instance.GeneratePartialClass)
             {
-                context.Writer.WriteLine("return Task.CompletedTask;");
+                context.Writer.WriteLine($"protected partial {(writeAsyncEntryMethod ? "Task" : "void")} {entryMethodName}({typedNamedParameters});");
             }
-            context.Writer.Indent -= 1;
-            context.Writer.WriteLine("}");
+            else
+            {
+                context.Writer.WriteLine($"protected virtual {(writeAsyncEntryMethod ? "Task" : "void")} {entryMethodName}({typedNamedParameters})");
+                context.Writer.WriteLine("{");
+                context.Writer.Indent += 1;
+                if (writeAsyncEntryMethod)
+                {
+                    context.Writer.WriteLine("return Task.CompletedTask;");
+                }
+                context.Writer.Indent -= 1;
+                context.Writer.WriteLine("}");
+            }
             context.Writer.WriteLine();
 
             var writeAsyncExitMethod = StateFragment.HasOnlyAsyncOutboundTransitions(context.Instance, state);
@@ -134,15 +141,22 @@
                 context.Writer.WriteLine("/// </remark>");
             }
             context.Writer.WriteLine("/// </summary>");
-            context.Writer.WriteLine($"protected virtual {(writeAsyncExitMethod ? "Task" : "void")} {exitMethodName}()");
-            context.Writer.WriteLine("{");
-            context.Writer.Indent += 1;
-            if (writeAsyncExitMethod)
+            if (context.Instance.GeneratePartialClass)
             {
-                context.Writer.WriteLine("return Task.CompletedTask;");
+                context.Writer.WriteLine($"protected partial {(writeAsyncExitMethod ? "Task" : "void")} {exitMethodName}();");
             }
-            context.Writer.Indent -= 1;
-            context.Writer.WriteLine("}");
+            else
+            {
+                context.Writer.WriteLine($"protected virtual {(writeAsyncExitMethod ? "Task" : "void")} {exitMethodName}()");
+                context.Writer.WriteLine("{");
+                context.Writer.Indent += 1;
+                if (writeAsyncExitMethod)
+                {
+                    context.Writer.WriteLine("return Task.CompletedTask;");
+                }
+                context.Writer.Indent -= 1;
+                context.Writer.WriteLine("}");
+            }
             context.Writer.WriteLine();
         }
 
@@ -168,16 +182,24 @@
 
                 var transitionMethodName = _transitionConverter.ToTransitionMethodName(transition);
                 WriteComment(context, new[] {transition}, "Implement this method to handle the transition below:");
-                context.Writer.WriteLine($"protected virtual {(transition.IsAsync ? "Task" : "void")} {transitionMethodName}({typedNamedParameters})");
-                context.Writer.WriteLine("{");
-                context.Writer.Indent += 1;
-                if (transition.IsAsync)
+                if (context.Instance.GeneratePartialClass)
                 {
-                    context.Writer.WriteLine("return Task.CompletedTask;");
+                    context.Writer.WriteLine($"protected partial {(transition.IsAsync ? "Task" : "void")} {transitionMethodName}({typedNamedParameters});");
+                }
+                else
+                {
+                    context.Writer.WriteLine($"protected virtual {(transition.IsAsync ? "Task" : "void")} {transitionMethodName}({typedNamedParameters})");
+                    context.Writer.WriteLine("{");
+                    context.Writer.Indent += 1;
+                    if (transition.IsAsync)
+                    {
+                        context.Writer.WriteLine("return Task.CompletedTask;");
+                    }
+
+                    context.Writer.Indent -= 1;
+                    context.Writer.WriteLine("}");
                 }
 
-                context.Writer.Indent -= 1;
-                context.Writer.WriteLine("}");
                 context.Writer.WriteLine();
             }
         }
@@ -197,18 +219,24 @@
                 var namedParameters = _parameterConverter.ToNamedVariables(transition.Parameters);
 
                 WriteComment(context, new[] {transition}, "Implement this method to handle the transition below:");
-                context.Writer.WriteLine($"protected virtual {(transition.IsAsync ? "Task" : "void")} {transitionMethodName}({typedNamedParameters2})");
-                context.Writer.WriteLine("{");
-                context.Writer.Indent += 1;
-                if (transition.IsAsync)
+                if (context.Instance.GeneratePartialClass)
                 {
-                    context.Writer.WriteLine("return Task.CompletedTask;");
+                    context.Writer.WriteLine($"protected partial {(transition.IsAsync ? "Task" : "void")} {transitionMethodName}({typedNamedParameters2});");
                 }
+                else
+                {
+                    context.Writer.WriteLine($"protected virtual {(transition.IsAsync ? "Task" : "void")} {transitionMethodName}({typedNamedParameters2})");
+                    context.Writer.WriteLine("{");
+                    context.Writer.Indent += 1;
+                    if (transition.IsAsync)
+                    {
+                        context.Writer.WriteLine("return Task.CompletedTask;");
+                    }
 
-                context.Writer.Indent -= 1;
-                context.Writer.WriteLine("}");
-                context.Writer.WriteLine(
-                    $"private {(transition.IsAsync ? "Task" : "void")} {transitionMethodName}({typedNamedParameters1}{StatelessWriter.StateMachineType}.Transition transition) => {transitionMethodName}({namedParameters});");
+                    context.Writer.Indent -= 1;
+                    context.Writer.WriteLine("}");
+                }
+                context.Writer.WriteLine($"private {(transition.IsAsync ? "Task" : "void")} {transitionMethodName}({typedNamedParameters1}{StatelessWriter.StateMachineType}.Transition transition) => {transitionMethodName}({namedParameters});");
                 context.Writer.WriteLine();
             }
         }

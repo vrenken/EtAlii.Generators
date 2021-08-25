@@ -1,7 +1,6 @@
 @startuml
 'stateless namespace EtAlii.Generators.Stateless.Tests
 'stateless class MyNestedStateMachine1Base
-'stateless generate partial
 'stateless using System.Text
 
 [*] -> State1 << (string name) >> : Start
