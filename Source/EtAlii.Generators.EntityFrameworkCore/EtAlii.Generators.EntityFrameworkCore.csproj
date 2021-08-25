@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>EtAlii.Generators.EntityFrameworkCore</RootNamespace>
     <LangVersion>9</LangVersion>
     <ProjectGuid>9CB09670-ACB7-45C9-ADE6-E7559819B219</ProjectGuid>

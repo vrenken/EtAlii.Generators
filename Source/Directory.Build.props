@@ -1,11 +1,14 @@
 ﻿<!-- Stuff that needs to happen at the start of the MSBuild process should go in the .props file. -->
 <Project>
   <PropertyGroup>
-    <MicrosoftCodeAnalysisNugetVersion>3.9.0</MicrosoftCodeAnalysisNugetVersion>
-    <Version>1.0.22</Version>
+    <MicrosoftCodeAnalysisNugetVersion>3.10.0</MicrosoftCodeAnalysisNugetVersion>
     <Authors>Peter Vrenken</Authors>
     <Company>EtAlii</Company>
 
+    <IsTestProject Condition="$(MSBuildProjectName.EndsWith('.Tests'))">true</IsTestProject>
+
+    <TargetFramework Condition="'$(IsTestProject)' != 'true'">netstandard2.1</TargetFramework>
+    <TargetFramework Condition="'$(IsTestProject)' == 'true'">net5.0</TargetFramework>
   </PropertyGroup>
 </Project>
 

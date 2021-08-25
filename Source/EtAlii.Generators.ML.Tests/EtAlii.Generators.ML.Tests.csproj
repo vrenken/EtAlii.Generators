@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
     <OutputType>Library</OutputType>
     <ProjectGuid>77D3DFB5-70E8-4E2F-A72B-D963424F149A</ProjectGuid>
   </PropertyGroup>

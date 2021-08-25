@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>EtAlii.Generators.Stateless</RootNamespace>
     <LangVersion>9</LangVersion>
     <ProjectGuid>{ECDC1798-7EF9-4179-BB4F-891F0F1E2175}</ProjectGuid>

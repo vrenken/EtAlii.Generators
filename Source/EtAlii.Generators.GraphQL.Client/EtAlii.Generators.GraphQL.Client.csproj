@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>EtAlii.Generators.GraphQL.Client</RootNamespace>
     <LangVersion>9</LangVersion>
     <ProjectGuid>A3419E8D-B877-4E72-AC5B-D7144C3D90EE</ProjectGuid>
