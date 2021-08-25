@@ -3,7 +3,7 @@
   <PropertyGroup>
     <GeneratedCodePath>.etalii\generated</GeneratedCodePath>
     <IncludePackageReferencesDuringMarkupCompilation>true</IncludePackageReferencesDuringMarkupCompilation>
-    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <EmitCompilerGeneratedFiles>false</EmitCompilerGeneratedFiles>
     <CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)\$(GeneratedCodePath)</CompilerGeneratedFilesOutputPath>
   </PropertyGroup>
 
