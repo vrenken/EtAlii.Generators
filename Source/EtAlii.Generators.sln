@@ -36,8 +36,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EtAlii.Generators.EntityFra
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "EtAlii.Generators.Tests", "EtAlii.Generators.Tests\EtAlii.Generators.Tests.shproj", "{18108A2D-C3BB-43A4-9E70-A2567F76BD65}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{9BA2A3C6-9D92-436D-854B-ADB54E3C8B13}"
-EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		EtAlii.Generators.Tests\EtAlii.Generators.Tests.projitems*{18108a2d-c3bb-43a4-9e70-a2567f76bd65}*SharedItemsImports = 13
@@ -92,11 +90,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{7A7E5272-B0D8-402A-9F89-D38515CFF376} = {9BA2A3C6-9D92-436D-854B-ADB54E3C8B13}
-		{4D9AFD07-45EF-4DDD-980E-D9FD619ECD95} = {9BA2A3C6-9D92-436D-854B-ADB54E3C8B13}
-		{77D3DFB5-70E8-4E2F-A72B-D963424F149A} = {9BA2A3C6-9D92-436D-854B-ADB54E3C8B13}
-		{3F0E9C00-A404-4389-BA44-607EE0F0E29D} = {9BA2A3C6-9D92-436D-854B-ADB54E3C8B13}
-		{18108A2D-C3BB-43A4-9E70-A2567F76BD65} = {9BA2A3C6-9D92-436D-854B-ADB54E3C8B13}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7119DFFE-82E0-4D36-9B1A-11919FE47AA8}
