@@ -1,12 +1,10 @@
 name: Build
-
 on:
   push:
     branches:
-      - master
+      - main
       - 'release/**'
       - 'feature/**'
-
   pull_request:
     branches: [ master ]
 
