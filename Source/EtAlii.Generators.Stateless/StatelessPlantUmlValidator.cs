@@ -4,6 +4,7 @@ namespace EtAlii.Generators.Stateless
 {
     using System.Collections.Generic;
     using System.Linq;
+    using EtAlii.Generators.PlantUml;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Text;
 
@@ -69,7 +70,7 @@ namespace EtAlii.Generators.Stateless
 
                 var superStateStartTransitions = superState.StateFragments
                     .OfType<Transition>()
-                    .Where(t => t.From != t.To && t.From == StatelessWriter.BeginStateName)
+                    .Where(t => t.From != t.To && t.From == PlantUmlConstant.BeginStateName)
                     .ToArray();
 
                 var namedSuperStateStartTransitions = superStateStartTransitions
@@ -141,7 +142,7 @@ namespace EtAlii.Generators.Stateless
         {
             var allTransitions = StateFragment.GetAllTransitions(stateMachine.StateFragments);
             var startStates = allTransitions
-                .Where(t => t.From == StatelessWriter.BeginStateName)
+                .Where(t => t.From == PlantUmlConstant.BeginStateName)
                 .ToArray();
             if (startStates.Length == 0)
             {

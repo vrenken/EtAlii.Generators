@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <RootNamespace>EtAlii.Generators.Stateless</RootNamespace>
-    <LangVersion>9</LangVersion>
     <ProjectGuid>{ECDC1798-7EF9-4179-BB4F-891F0F1E2175}</ProjectGuid>
   </PropertyGroup>
 
@@ -27,30 +26,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Antlr4 Include="PlantUmlLexer.g4">
-      <Listener>false</Listener>
-      <Visitor>false</Visitor>
-      <Package>$(RootNamespace)</Package>
-      <Error>true</Error>
-    </Antlr4>
-    <Antlr4 Include="PlantUmlParser.g4">
-      <Listener>false</Listener>
-      <Visitor>true</Visitor>
-      <Package>$(RootNamespace)</Package>
-      <Error>true</Error>
-    </Antlr4>
-  </ItemGroup>
-
-  <ItemGroup>
     <AdditionalFiles Include="AnalyzerReleases.Shipped.md" />
     <AdditionalFiles Include="AnalyzerReleases.Unshipped.md" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetStatelessPackageDependencyTargetPaths</GetTargetPathDependsOn>
+  </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="$(MicrosoftCodeAnalysisNugetVersion)" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="$(MicrosoftCodeAnalysisNugetVersion)" PrivateAssets="all" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\EtAlii.Generators.PlantUml\EtAlii.Generators.PlantUml.csproj" />
   </ItemGroup>
 
-  <Import Project="..\EtAlii.Generators\EtAlii.Generators.projitems" Label="Shared" />
+  <Target Name="GetStatelessPackageDependencyTargetPaths">
+    <ItemGroup>
+      <TargetPathWithTargetPlatformMoniker Include="..\EtAlii.Generators.PlantUml\$(OutDir)\EtAlii.Generators.PlantUml.dll" IncludeRuntimeDependency="false" />
+    </ItemGroup>
+  </Target>
 
 </Project>

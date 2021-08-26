@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <RootNamespace>EtAlii.Generators.GraphQL.Client</RootNamespace>
-    <LangVersion>9</LangVersion>
     <ProjectGuid>A3419E8D-B877-4E72-AC5B-D7144C3D90EE</ProjectGuid>
   </PropertyGroup>
 
@@ -10,11 +9,6 @@
     <PackageId>EtAlii.Generators.GraphQL.Client</PackageId>
     <PackageDescription>An ANTLR4/Roslyn powered generator for typed GraphQL queries</PackageDescription>
     <RepositoryUrl>https://github.com/vrenken/EtAlii.Generators</RepositoryUrl>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <IncludeBuildOutput>false</IncludeBuildOutput> <!-- Do not include the generator as a lib dependency -->
-    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
   </PropertyGroup>
 
   <ItemGroup>
@@ -37,6 +31,8 @@
     <AdditionalFiles Include="AnalyzerReleases.Unshipped.md" />
   </ItemGroup>
 
-  <Import Project="..\EtAlii.Generators\EtAlii.Generators.projitems" Label="Shared" />
+  <ItemGroup>
+    <ProjectReference Include="..\EtAlii.Generators\EtAlii.Generators.csproj" />
+  </ItemGroup>
 
 </Project>

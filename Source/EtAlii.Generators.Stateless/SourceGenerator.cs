@@ -2,6 +2,7 @@
 {
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
+    using EtAlii.Generators.PlantUml;
     using Microsoft.CodeAnalysis;
 
     /// <summary>

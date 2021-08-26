@@ -1,4 +1,4 @@
-namespace EtAlii.Generators.Stateless
+namespace EtAlii.Generators.PlantUml
 {
     public class Transition : StateFragment
     {

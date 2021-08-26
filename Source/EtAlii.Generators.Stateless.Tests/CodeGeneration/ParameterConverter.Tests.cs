@@ -1,5 +1,6 @@
 ﻿namespace EtAlii.Generators.Stateless.Tests
 {
+    using EtAlii.Generators.PlantUml;
     using Xunit;
 
     public class ParameterConverterTests

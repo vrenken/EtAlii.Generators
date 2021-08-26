@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+<PropertyGroup>
+    <ProjectGuid>{567DA79A-93FE-4EB5-BDA2-E8FF9CC656D0}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.2" PrivateAssets="all"/>
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="$(MicrosoftCodeAnalysisNugetVersion)" PrivateAssets="all"/>
+  </ItemGroup>
+</Project>

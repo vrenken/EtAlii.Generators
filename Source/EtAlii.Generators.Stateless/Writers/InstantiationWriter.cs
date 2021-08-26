@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using EtAlii.Generators.PlantUml;
 
     public class InstantiationWriter
     {
@@ -17,7 +18,7 @@
         public void WriteStateMachineInstantiation(WriteContext<StateMachine> context)
         {
             context.Writer.WriteLine("// Time to create a new state machine instance.");
-            context.Writer.WriteLine($"_stateMachine = new {StatelessWriter.StateMachineType}(State.{StatelessWriter.BeginStateName});");
+            context.Writer.WriteLine($"_stateMachine = new {StatelessWriter.StateMachineType}(State.{PlantUmlConstant.BeginStateName});");
             context.Writer.WriteLine();
 
             WriteTriggerInstantiations(context);
@@ -107,7 +108,7 @@
                 // Write initial transition (when needed)
                 var unnamedInitialTransition = superState.StateFragments
                     .OfType<Transition>()
-                    .SingleOrDefault(t => t.From == StatelessWriter.BeginStateName && !t.HasConcreteTriggerName);
+                    .SingleOrDefault(t => t.From == PlantUmlConstant.BeginStateName && !t.HasConcreteTriggerName);
                 if (unnamedInitialTransition != null)
                 {
                     stateConfiguration.Add($"\t.InitialTransition(State.{unnamedInitialTransition.To})");
@@ -115,7 +116,7 @@
 
                 var namedInitialTransitions = superState.StateFragments
                     .OfType<Transition>()
-                    .Where(t => t.From == StatelessWriter.BeginStateName && t.HasConcreteTriggerName)
+                    .Where(t => t.From == PlantUmlConstant.BeginStateName && t.HasConcreteTriggerName)
                     .ToArray();
                 foreach(var namedInitialTransition in namedInitialTransitions)
                 {

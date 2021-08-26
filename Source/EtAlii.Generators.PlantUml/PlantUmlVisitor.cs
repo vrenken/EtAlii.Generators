@@ -1,4 +1,4 @@
-﻿namespace EtAlii.Generators.Stateless
+﻿namespace EtAlii.Generators.PlantUml
 {
     using System;
     using System.Collections.Generic;
@@ -136,33 +136,33 @@
 
         public override object VisitStates_transition_start_to(PlantUmlParser.States_transition_start_toContext context)
         {
-            var fallbackTriggerName = $"{StatelessWriter.BeginStateName}To{(string)VisitId(context.to)}";
-            var from = StatelessWriter.BeginStateName;
+            var fallbackTriggerName = $"{PlantUmlConstant.BeginStateName}To{(string)VisitId(context.to)}";
+            var from = PlantUmlConstant.BeginStateName;
             var to = (string)VisitId(context.to);
             return BuildTransition(context, from, to, context.trigger_details(), context.transition_details(), fallbackTriggerName);
         }
 
         public override object VisitStates_transition_to_start(PlantUmlParser.States_transition_to_startContext context)
         {
-            var fallbackTriggerName = $"{StatelessWriter.BeginStateName}To{(string)VisitId(context.to)}";
-            var from = StatelessWriter.BeginStateName;
+            var fallbackTriggerName = $"{PlantUmlConstant.BeginStateName}To{(string)VisitId(context.to)}";
+            var from = PlantUmlConstant.BeginStateName;
             var to = (string)VisitId(context.to);
             return BuildTransition(context, from, to, context.trigger_details(), context.transition_details(), fallbackTriggerName);
         }
 
         public override object VisitStates_transition_from_end(PlantUmlParser.States_transition_from_endContext context)
         {
-            var fallbackTriggerName = $"{(string)VisitId(context.from)}To{StatelessWriter.EndStateName}";
+            var fallbackTriggerName = $"{(string)VisitId(context.from)}To{PlantUmlConstant.EndStateName}";
             var from = (string)VisitId(context.from);
-            var to = StatelessWriter.EndStateName;
+            var to = PlantUmlConstant.EndStateName;
             return BuildTransition(context, from, to, context.trigger_details(), context.transition_details(), fallbackTriggerName);
         }
 
         public override object VisitStates_transition_end_from(PlantUmlParser.States_transition_end_fromContext context)
         {
-            var fallbackTriggerName = $"{(string)VisitId(context.from)}To{StatelessWriter.EndStateName}";
+            var fallbackTriggerName = $"{(string)VisitId(context.from)}To{PlantUmlConstant.EndStateName}";
             var from = (string)VisitId(context.from);
-            var to = StatelessWriter.EndStateName;
+            var to = PlantUmlConstant.EndStateName;
             return BuildTransition(context, from, to, context.trigger_details(), context.transition_details(), fallbackTriggerName);
         }
 

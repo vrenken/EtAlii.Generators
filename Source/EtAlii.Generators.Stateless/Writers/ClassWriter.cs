@@ -1,5 +1,7 @@
 ﻿namespace EtAlii.Generators.Stateless
 {
+    using EtAlii.Generators.PlantUml;
+
     public class ClassWriter : IWriter<StateMachine>
     {
         private readonly EnumWriter<StateMachine> _enumWriter;

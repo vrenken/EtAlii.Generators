@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <RootNamespace>EtAlii.Generators.ML</RootNamespace>
-    <LangVersion>9</LangVersion>
     <ProjectGuid>B8CEACC0-754D-48ED-BDB5-2EF21505E61C</ProjectGuid>
   </PropertyGroup>
 
@@ -10,11 +9,6 @@
     <PackageId>EtAlii.Generators.ML</PackageId>
     <PackageDescription>An ANTLR4/Roslyn powered generator able to generate typed code for TensorFlow SavedModel folders.</PackageDescription>
     <RepositoryUrl>https://github.com/vrenken/EtAlii.Generators</RepositoryUrl>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <IncludeBuildOutput>false</IncludeBuildOutput> <!-- Do not include the generator as a lib dependency -->
-    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
   </PropertyGroup>
 
   <ItemGroup>
@@ -37,6 +31,8 @@
     <AdditionalFiles Include="AnalyzerReleases.Unshipped.md" />
   </ItemGroup>
 
-  <Import Project="..\EtAlii.Generators\EtAlii.Generators.projitems" Label="Shared" />
+  <ItemGroup>
+    <ProjectReference Include="..\EtAlii.Generators\EtAlii.Generators.csproj" />
+  </ItemGroup>
 
 </Project>

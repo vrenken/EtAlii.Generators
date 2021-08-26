@@ -1,4 +1,4 @@
-﻿namespace EtAlii.Generators.Stateless
+﻿namespace EtAlii.Generators.PlantUml
 {
     /// <summary>
     /// Base class for all settings.

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Linq;
+    using EtAlii.Generators.PlantUml;
 
     public class MethodWriter
     {

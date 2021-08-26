@@ -1,4 +1,4 @@
-namespace EtAlii.Generators.Stateless
+namespace EtAlii.Generators.PlantUml
 {
     using System.Linq;
 
@@ -42,8 +42,8 @@ namespace EtAlii.Generators.Stateless
             return
                 inboundTransitions.Any() &&
                 inboundTransitions.All(t => t.IsAsync) &&
-                state != StatelessWriter.BeginStateName &&
-                state != StatelessWriter.EndStateName;
+                state != PlantUmlConstant.BeginStateName &&
+                state != PlantUmlConstant.EndStateName;
         }
 
         public static bool HasOnlyAsyncOutboundTransitions(StateMachine stateMachine, string state)
@@ -68,8 +68,8 @@ namespace EtAlii.Generators.Stateless
             return
                 outboundTransitions.Any() &&
                 outboundTransitions.All(t => t.IsAsync) &&
-                state != StatelessWriter.BeginStateName &&
-                state != StatelessWriter.EndStateName;
+                state != PlantUmlConstant.BeginStateName &&
+                state != PlantUmlConstant.EndStateName;
         }
 
         public static Transition[] GetInboundTransitions(StateFragment[] fragments, string state)
@@ -103,7 +103,7 @@ namespace EtAlii.Generators.Stateless
 
         public static SuperState GetSuperState(StateMachine stateMachine, string substate)
         {
-            if (substate == StatelessWriter.BeginStateName || substate == StatelessWriter.EndStateName)
+            if (substate == PlantUmlConstant.BeginStateName || substate == PlantUmlConstant.EndStateName)
             {
                 return null;
             }

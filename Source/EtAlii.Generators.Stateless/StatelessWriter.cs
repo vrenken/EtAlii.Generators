@@ -2,10 +2,8 @@
 
 namespace EtAlii.Generators.Stateless
 {
-    public class StatelessWriter
+    public static class StatelessWriter
     {
         public const string StateMachineType = "global::Stateless.StateMachine<State, Trigger>";
-        public const string BeginStateName = "_Begin";
-        public const string EndStateName = "_End";
     }
 }

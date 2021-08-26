@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
+    using EtAlii.Generators.PlantUml;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -59,8 +60,8 @@
 
             var notImplementedMethods = virtualMethods
                 .Where(vm => implementedMethods.All(im => !SymbolEqualityComparer.Default.Equals(im.OverriddenMethod, vm)))
-                .Where(vm => !vm.Name.StartsWith($"On{StatelessWriter.BeginStateName}"))
-                .Where(vm => !vm.Name.StartsWith($"On{StatelessWriter.EndStateName}"))
+                .Where(vm => !vm.Name.StartsWith($"On{PlantUmlConstant.BeginStateName}"))
+                .Where(vm => !vm.Name.StartsWith($"On{PlantUmlConstant.EndStateName}"))
                 .ToArray();
 
             foreach (var notImplementedMethod in notImplementedMethods)

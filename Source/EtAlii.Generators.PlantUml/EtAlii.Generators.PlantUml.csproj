@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>EtAlii.Generators.PlantUml</RootNamespace>
+    <ProjectGuid>0182ED67-91EA-4D44-A5BF-3B1D61561447</ProjectGuid>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EtAlii.Generators\EtAlii.Generators.csproj" />
+    <PackageReference Include="Antlr4BuildTasks" Version="8.14.0" PrivateAssets="all" />
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.2" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Antlr4 Include="PlantUmlLexer.g4">
+      <Generator>MSBuild:Compile</Generator>
+      <IntermediateOutputPath>obj\Debug\net5.0\</IntermediateOutputPath>
+      <GAtn>false</GAtn>
+      <Encoding>UTF-8</Encoding>
+      <Listener>false</Listener>
+      <Visitor>false</Visitor>
+      <Package>EtAlii.Generators.PlantUml</Package>
+      <DOptions>language=CSharp</DOptions>
+      <Error>true</Error>
+      <ForceAtn>false</ForceAtn>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Antlr4>
+    <Antlr4 Include="PlantUmlParser.g4">
+      <Generator>MSBuild:Compile</Generator>
+      <IntermediateOutputPath>obj\Debug\net5.0\</IntermediateOutputPath>
+      <GAtn>false</GAtn>
+      <Encoding>UTF-8</Encoding>
+      <Listener>false</Listener>
+      <Visitor>true</Visitor>
+      <Package>EtAlii.Generators.PlantUml</Package>
+      <DOptions>language=CSharp</DOptions>
+      <Error>true</Error>
+      <ForceAtn>false</ForceAtn>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Antlr4>
+  </ItemGroup>
+
+</Project>

@@ -1,6 +1,7 @@
 ﻿namespace EtAlii.Generators.Stateless
 {
     using System.Linq;
+    using EtAlii.Generators.PlantUml;
 
     public class FieldWriter
     {

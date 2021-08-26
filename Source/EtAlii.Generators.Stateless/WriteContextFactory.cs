@@ -3,6 +3,7 @@ namespace EtAlii.Generators.Stateless
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
     using System.Linq;
+    using EtAlii.Generators.PlantUml;
 
     public class WriteContextFactory : IWriteContextFactory<StateMachine>
     {

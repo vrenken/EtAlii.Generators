@@ -4,6 +4,7 @@
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
     using System.IO;
+    using EtAlii.Generators.PlantUml;
     using Microsoft.CodeAnalysis;
     using Xunit;
 

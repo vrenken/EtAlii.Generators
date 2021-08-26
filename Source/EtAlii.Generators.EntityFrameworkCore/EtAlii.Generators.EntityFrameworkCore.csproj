@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <RootNamespace>EtAlii.Generators.EntityFrameworkCore</RootNamespace>
-    <LangVersion>9</LangVersion>
     <ProjectGuid>9CB09670-ACB7-45C9-ADE6-E7559819B219</ProjectGuid>
   </PropertyGroup>
 
@@ -10,11 +9,6 @@
     <PackageId>EtAlii.Generators.EntityFrameworkCore</PackageId>
     <PackageDescription>A PlantUML powered generator for EF core entities and DbContexts</PackageDescription>
     <RepositoryUrl>https://github.com/vrenken/EtAlii.Generators</RepositoryUrl>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <IncludeBuildOutput>false</IncludeBuildOutput> <!-- Do not include the generator as a lib dependency -->
-    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
   </PropertyGroup>
 
   <ItemGroup>
@@ -43,6 +37,8 @@
     <AdditionalFiles Include="AnalyzerReleases.Unshipped.md" />
   </ItemGroup>
 
-  <Import Project="..\EtAlii.Generators\EtAlii.Generators.projitems" Label="Shared" />
+  <ItemGroup>
+    <ProjectReference Include="..\EtAlii.Generators\EtAlii.Generators.csproj" />
+  </ItemGroup>
 
 </Project>

@@ -5,6 +5,7 @@
     using System.IO;
     using System.Linq;
     using Antlr4.Runtime;
+    using EtAlii.Generators.PlantUml;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Text;
 

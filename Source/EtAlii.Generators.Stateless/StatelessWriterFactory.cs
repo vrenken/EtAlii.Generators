@@ -1,5 +1,6 @@
 ﻿namespace EtAlii.Generators.Stateless
 {
+    using EtAlii.Generators.PlantUml;
     using Microsoft.CodeAnalysis;
 
     /// <summary>

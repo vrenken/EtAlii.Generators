@@ -6,9 +6,53 @@
     <Company>EtAlii</Company>
 
     <IsTestProject Condition="$(MSBuildProjectName.EndsWith('.Tests'))">true</IsTestProject>
-
-    <TargetFramework Condition="'$(IsTestProject)' != 'true'">netstandard2.1</TargetFramework>
-    <TargetFramework Condition="'$(IsTestProject)' == 'true'">net5.0</TargetFramework>
+    <IsGeneratorProjectProject Condition="$(MSBuildProjectName.EndsWith('.Stateless')) OR
+                                          $(MSBuildProjectName.EndsWith('.GraphQL.Client')) OR
+                                          $(MSBuildProjectName.EndsWith('.EntityFrameworkCore')) OR
+                                          $(MSBuildProjectName.EndsWith('.ML'))">true</IsGeneratorProjectProject>
   </PropertyGroup>
+
+  <!-- Common properties -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>9</LangVersion>
+  </PropertyGroup>
+
+  <!-- Test project properties -->
+  <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <!-- Generator project properties -->
+  <PropertyGroup Condition="'$(IsGeneratorProjectProject)' == 'true'">
+    <IncludeBuildOutput>false</IncludeBuildOutput> <!-- Do not include the generator as a lib dependency -->
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetPackageDependencyTargetPaths</GetTargetPathDependsOn>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(IsGeneratorProjectProject)' == 'true'">
+    <PackageReference Update="NETStandard.Library" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisNugetVersion)" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="$(MicrosoftCodeAnalysisNugetVersion)" PrivateAssets="all" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <PackageReference Include="Antlr4BuildTasks" Version="8.14.0" PrivateAssets="all" />
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.2" PrivateAssets="all">
+      <GeneratePathProperty>true</GeneratePathProperty>
+    </PackageReference>
+
+    <!-- Package the generator in the analyzer directory of the nuget package -->
+    <None Include="$(OutputPath)\$(AssemblyName).dll">
+      <Visible>false</Visible>
+      <Pack>true</Pack>
+      <PackagePath>analyzers/dotnet/cs</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <Target Name="GetPackageDependencyTargetPaths" Condition="'$(IsGeneratorProjectProject)' == 'true'">
+    <ItemGroup>
+      <TargetPathWithTargetPlatformMoniker Include="$(PkgAntlr4_Runtime_Standard)\lib\netstandard2.0\Antlr4.Runtime.Standard.dll" IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="..\EtAlii.Generators\$(OutDir)\EtAlii.Generators.dll" IncludeRuntimeDependency="false" />
+    </ItemGroup>
+  </Target>
+
 </Project>
 
