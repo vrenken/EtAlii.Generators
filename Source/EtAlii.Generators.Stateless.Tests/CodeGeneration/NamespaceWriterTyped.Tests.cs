@@ -17,7 +17,7 @@
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
             var methodWriter = new MethodWriter(parameterConverter, transitionConverter);
-            var eventArgsWriter = new EventArgsWriter(methodWriter, transitionConverter);
+            var eventArgsWriter = new EventArgsWriter(methodWriter);
             var fieldWriter = new FieldWriter(parameterConverter, transitionConverter);
             var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter);
             var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter);
@@ -37,7 +37,7 @@
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
             var methodWriter = new MethodWriter(parameterConverter, transitionConverter);
-            var eventArgsWriter = new EventArgsWriter(methodWriter, transitionConverter);
+            var eventArgsWriter = new EventArgsWriter(methodWriter);
             var fieldWriter = new FieldWriter(parameterConverter, transitionConverter);
             var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter);
             var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter);
@@ -86,7 +86,7 @@
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
             var methodWriter = new MethodWriter(parameterConverter, transitionConverter);
-            var eventArgsWriter = new EventArgsWriter(methodWriter, transitionConverter);
+            var eventArgsWriter = new EventArgsWriter(methodWriter);
             var fieldWriter = new FieldWriter(parameterConverter, transitionConverter);
             var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter);
             var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter);
