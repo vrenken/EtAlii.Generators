@@ -24,11 +24,13 @@
 
         public void Write(WriteContext<StateMachine> context)
         {
-            var prefix = context.Instance.GeneratePartialClass ? "abstract partial" : "abstract";
+            var prefix = context.Instance.GeneratePartialClass ? "partial" : "abstract";
+            var action1 = context.Instance.GeneratePartialClass ? "Inherit" : "Add another partial for";
+            var action2 = context.Instance.GeneratePartialClass ? "override" : "implement";
 
             context.Writer.WriteLine("/// <summary>");
-            context.Writer.WriteLine($"/// This is the base class for the state machine as defined in '{context.OriginalFileName}'.");
-            context.Writer.WriteLine("/// Inherit the class and override the transition methods to define the necessary business behavior.");
+            context.Writer.WriteLine($"/// This is the {prefix} class for the state machine as defined in '{context.OriginalFileName}'.");
+            context.Writer.WriteLine($"/// {action1} the class and {action2} the transition methods to define the necessary business behavior.");
             context.Writer.WriteLine("/// The transitions can then be triggered by calling the corresponding trigger methods.");
             context.Writer.WriteLine("/// </summary>");
             context.Writer.WriteLine($"public {prefix} class {context.Instance.ClassName}");
