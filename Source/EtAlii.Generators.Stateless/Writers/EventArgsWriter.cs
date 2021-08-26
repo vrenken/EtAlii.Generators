@@ -7,12 +7,10 @@
     public class EventArgsWriter
     {
         private readonly MethodWriter _methodWriter;
-        private readonly TransitionConverter _transitionConverter;
 
-        public EventArgsWriter(MethodWriter methodWriter, TransitionConverter transitionConverter)
+        public EventArgsWriter(MethodWriter methodWriter)
         {
             _methodWriter = methodWriter;
-            _transitionConverter = transitionConverter;
         }
 
         public void WriteEventArgs(WriteContext<StateMachine> context)
