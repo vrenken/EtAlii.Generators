@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
     <ProjectReference Include="..\EtAlii.Generators\EtAlii.Generators.csproj" />
     <PackageReference Include="Antlr4BuildTasks" Version="8.14.0" PrivateAssets="all" />
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.2" PrivateAssets="all" />
