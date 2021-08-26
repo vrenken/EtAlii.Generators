@@ -1,7 +1,7 @@
 @startuml
-'stateless namespace EtAlii.Generators.Stateless.Tests
-'stateless class MyNestedStateMachine4Base
-'stateless using System.Text
+'namespace EtAlii.Generators.Stateless.Tests
+'class MyNestedStateMachine4Base
+'using System.Text
 
 [*] -> State1 << (string name) >> : Start
 State1 : this is a string

@@ -1,6 +1,6 @@
 @startuml
-'stateless namespace EtAlii.Generators.Stateless.Tests
-'stateless class ChoiceStateMachineBase
+'namespace EtAlii.Generators.Stateless.Tests
+'class ChoiceStateMachineBase
 
 [*] -> State1 : Start
 State1 : this is a description

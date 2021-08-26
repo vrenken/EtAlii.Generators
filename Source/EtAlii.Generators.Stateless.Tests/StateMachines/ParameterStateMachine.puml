@@ -1,7 +1,7 @@
 @startuml
-'stateless namespace EtAlii.Generators.Stateless.Tests
-'stateless class ParameterStateMachineBase
-'stateless using EtAlii.Generators.Stateless.Tests.Nested
+'namespace EtAlii.Generators.Stateless.Tests
+'class ParameterStateMachineBase
+'using EtAlii.Generators.Stateless.Tests.Nested
 
 [*] -up--> State1 : Continue1
 State1 -right-> NextState1 << (string title, int count) >> : Activate1

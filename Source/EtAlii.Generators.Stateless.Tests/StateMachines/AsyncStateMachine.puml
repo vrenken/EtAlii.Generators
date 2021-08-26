@@ -1,6 +1,6 @@
 @startuml
-'stateless namespace EtAlii.Generators.Stateless.Tests
-'stateless class AsyncStateMachineBase
+'namespace EtAlii.Generators.Stateless.Tests
+'class AsyncStateMachineBase
 
 [*] -> State1 << async >> : Start
 State1 -> State2 << async >> : Continue

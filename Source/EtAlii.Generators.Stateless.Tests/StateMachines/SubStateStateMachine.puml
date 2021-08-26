@@ -1,7 +1,7 @@
 @startuml
-'stateless namespace EtAlii.Generators.Stateless.Tests
-'stateless class SubStateStateMachineBase
-'stateless using System.Text
+'namespace EtAlii.Generators.Stateless.Tests
+'class SubStateStateMachineBase
+'using System.Text
 
 [*] -up-> State1 : Continue1
 State1 -right-> SuperState1 : Continue

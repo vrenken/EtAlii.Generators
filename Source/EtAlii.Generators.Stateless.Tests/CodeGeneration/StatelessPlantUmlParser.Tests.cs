@@ -26,10 +26,10 @@
             var log = new List<string>();
 
             var text = @"@startuml
-'stateless namespace EtAlii.Generators.Stateless.Tests
-'stateless class MyFancyStateMachineBase
-'stateless generate partial
-'stateless using System.Text
+'namespace EtAlii.Generators.Stateless.Tests
+'class MyFancyStateMachineBase
+'generate partial
+'using System.Text
 
 note This is a state machine
 ' And this is a comment
@@ -65,10 +65,10 @@ State4 : This is the final state
             var log = new List<string>();
 
             var text = @"@startuml
-'stateless namespace EtAlii.Generators.Stateless.Tests
-'stateless class MyFancyStateMachineBase
-'stateless generate partial
-'stateless using System.Text
+'namespace EtAlii.Generators.Stateless.Tests
+'class MyFancyStateMachineBase
+'generate partial
+'using System.Text
 
 [*] -> State1 << (string name) >> : Start
 State1 -> State2 << (string name) >INVALID> : Continue

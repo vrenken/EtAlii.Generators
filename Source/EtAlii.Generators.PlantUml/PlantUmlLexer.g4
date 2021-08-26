@@ -19,10 +19,10 @@ STEREOTYPE_CHOICE                                   : 'choice';
 HIDE_EMPTY_DESCRIPTION                              : 'hide empty description';
 ID                                                  : ('A'..'Z' | 'a'..'z' | '0'..'9' | '_')+;
 
-SETTING_NAMESPACE                                   : '\'stateless namespace';
-SETTING_CLASS                                       : '\'stateless class';
-SETTING_USING                                       : '\'stateless using';
-SETTING_GENERATE_PARTIAL                            : '\'stateless generate partial';
+SETTING_NAMESPACE                                   : '\'namespace';
+SETTING_CLASS                                       : '\'class';
+SETTING_USING                                       : '\'using';
+SETTING_GENERATE_PARTIAL                            : '\'generate partial';
 BOUNDARY_NODE                                       : '[*]';
 
 // String

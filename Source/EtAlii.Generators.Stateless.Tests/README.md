@@ -31,8 +31,8 @@ Usage:
 4. Put the PlantUML diagram in a file, for example `SimpleStateMachine.puml` as specified below:
    ```puml
     @startuml
-    'stateless namespace EtAlii.Generators.Stateless.Tests
-    'stateless class SimpleStateMachineBase
+    'namespace EtAlii.Generators.Stateless.Tests
+    'class SimpleStateMachineBase
 
     [*] -> State1 << async (string name) >> : Start
     State1 : this is a string
@@ -140,8 +140,8 @@ The code generation can be configured to create asynchronous methods by providin
 
 ```puml
 @startuml
-'stateless namespace EtAlii.Generators.Stateless.Tests
-'stateless class AsyncStateMachineBase
+'namespace EtAlii.Generators.Stateless.Tests
+'class AsyncStateMachineBase
 
 [*] -> State1 << async >> : Start
 State1 -> State2 << async >> : Continue
@@ -167,9 +167,9 @@ When parameter details are provided, the code generation writes both the trigger
 
 ```puml
 @startuml
-'stateless namespace EtAlii.Generators.Stateless.Tests
-'stateless class ParameterStateMachineBase
-'stateless using EtAlii.Generators.Stateless.Tests.Nested
+'namespace EtAlii.Generators.Stateless.Tests
+'class ParameterStateMachineBase
+'using EtAlii.Generators.Stateless.Tests.Nested
 
 [*] -up--> State1 : Continue
 State1 -right-> NextState1 << (string title, int count) >> : Activate1
@@ -214,9 +214,9 @@ Both Stateless and PlantUML support nested states. The code generator is able to
 
 ```puml
 @startuml
-'stateless namespace EtAlii.Generators.Stateless.Tests
-'stateless class SubStateStateMachineBase
-'stateless using System.Text
+'namespace EtAlii.Generators.Stateless.Tests
+'class SubStateStateMachineBase
+'using System.Text
 
 [*] -up-> State1 : Continue
 State1 -right-> SuperState1 : Continue
