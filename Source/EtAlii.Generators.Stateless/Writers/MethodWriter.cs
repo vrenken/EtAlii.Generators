@@ -114,7 +114,7 @@
 
             if (context.Instance.GeneratePartialClass)
             {
-                context.Writer.WriteLine($"protected partial {(writeAsyncEntryMethod ? "Task" : "void")} {entryMethodName}({typedNamedParameters});");
+                context.Writer.WriteLine($"partial {(writeAsyncEntryMethod ? "Task" : "void")} {entryMethodName}({typedNamedParameters});");
             }
             else
             {
@@ -143,7 +143,7 @@
             context.Writer.WriteLine("/// </summary>");
             if (context.Instance.GeneratePartialClass)
             {
-                context.Writer.WriteLine($"protected partial {(writeAsyncExitMethod ? "Task" : "void")} {exitMethodName}();");
+                context.Writer.WriteLine($"partial {(writeAsyncExitMethod ? "Task" : "void")} {exitMethodName}();");
             }
             else
             {
@@ -184,7 +184,7 @@
                 WriteComment(context, new[] {transition}, "Implement this method to handle the transition below:");
                 if (context.Instance.GeneratePartialClass)
                 {
-                    context.Writer.WriteLine($"protected partial {(transition.IsAsync ? "Task" : "void")} {transitionMethodName}({typedNamedParameters});");
+                    context.Writer.WriteLine($"partial {(transition.IsAsync ? "Task" : "void")} {transitionMethodName}({typedNamedParameters});");
                 }
                 else
                 {
@@ -221,7 +221,7 @@
                 WriteComment(context, new[] {transition}, "Implement this method to handle the transition below:");
                 if (context.Instance.GeneratePartialClass)
                 {
-                    context.Writer.WriteLine($"protected partial {(transition.IsAsync ? "Task" : "void")} {transitionMethodName}({typedNamedParameters2});");
+                    context.Writer.WriteLine($"partial {(transition.IsAsync ? "Task" : "void")} {transitionMethodName}({typedNamedParameters2});");
                 }
                 else
                 {
