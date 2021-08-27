@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>EtAlii.Generators.MicroMachine</RootNamespace>
+    <ProjectGuid>32af1821-2340-464c-9b07-5c83e77a1896</ProjectGuid>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>EtAlii.Generators.MicroMachine</PackageId>
+    <PackageDescription>A PlantUML powered MicroMachine state machine generator</PackageDescription>
+    <RepositoryUrl>https://github.com/vrenken/EtAlii.Generators</RepositoryUrl>
+    <PackageReadmeFile>Readme.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IncludeBuildOutput>false</IncludeBuildOutput> <!-- Do not include the generator as a lib dependency -->
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="Readme.md" Pack="true" PackagePath="\" />
+
+    <Content Include="Build\*">
+      <PackagePath>build\</PackagePath>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="AnalyzerReleases.Shipped.md" />
+    <AdditionalFiles Include="AnalyzerReleases.Unshipped.md" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetMicroMachinePackageDependencyTargetPaths</GetTargetPathDependsOn>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EtAlii.Generators.PlantUml\EtAlii.Generators.PlantUml.csproj" />
+  </ItemGroup>
+
+  <Target Name="GetMicroMachinePackageDependencyTargetPaths">
+    <ItemGroup>
+      <TargetPathWithTargetPlatformMoniker Include="..\EtAlii.Generators.PlantUml\$(OutDir)\EtAlii.Generators.PlantUml.dll" IncludeRuntimeDependency="false" />
+    </ItemGroup>
+  </Target>
+
+</Project>

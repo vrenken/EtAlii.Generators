@@ -1,0 +1,28 @@
+@startuml
+'namespace EtAlii.Generators.MicroMachine.Tests
+'class AsyncSubStateStateMachineBase
+'using System.Text
+
+[*] -up-> State1 << async >> : Continue1
+State1 -right-> SuperState1 << async >> : Continue
+
+state SuperState1 {
+    [*] -right-> SubState1 << async >>
+}
+
+[*] -right-> State2 << async >> : Continue2
+State2 -right-> SuperState2 << async >> : Continue
+
+state SuperState2 {
+    [*] -right-> SubState2 << async >> : Start
+}
+
+[*] -down-> State3 << async >> : Continue3
+state SuperState3 {
+    state SubState3
+}
+
+State3 -right-> SubState3 << async >> : Continue
+
+@enduml
+

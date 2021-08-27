@@ -1,0 +1,47 @@
+@startuml
+'namespace EtAlii.Generators.MicroMachine.Tests
+'class SubStateStateMachineBase
+'using System.Text
+
+[*] -up-> State1 : Continue1
+State1 -right-> SuperState1 : Continue
+note top on link
+Transition towards superstate with unnamed start trigger
+--
+- Only one single start trigger is supported.
+- The superstate will automatically transition
+  towards the specified substate.
+end note
+
+state SuperState1 {
+    [*] -right-> SubState1
+}
+
+[*] -right-> State2 : Continue2
+State2 -right-> SuperState2 : Continue
+note top on link
+Transition towards superstate with named start trigger
+--
+- Multiple start trigger are supported (in one single superstate).
+- The superstate will NOT automatically transition
+  towards the specified substate.
+end note
+state SuperState2 {
+    [*] -right-> SubState2 : Start
+}
+
+[*] -down-> State3 : Continue3
+state SuperState3 {
+    state SubState3
+}
+
+State3 -right-> SubState3 : Continue
+note top on link
+Transition directly towards a substate
+--
+- The superstate will automatically transition
+  towards the specified substate.
+end note
+
+@enduml
+

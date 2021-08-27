@@ -1,0 +1,16 @@
+@startuml
+'namespace EtAlii.Generators.MicroMachine.Tests
+'class MyNestedStateMachine4Base
+'using System.Text
+
+[*] -> State1 << (string name) >> : Start
+State1 : this is a string
+State1 : this is another string
+state State2 {
+    State1 --> SubState1 : Continue
+    State2 -> State2 << (string name) >> : Check
+    SubState1 -> SubState2 : Continue
+}
+State2 -down-> State3 : Continue
+State3 -down-> State4 << async >> : Continue
+@enduml

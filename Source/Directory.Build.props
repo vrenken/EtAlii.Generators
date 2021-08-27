@@ -7,6 +7,7 @@
 
     <IsTestProject Condition="$(MSBuildProjectName.EndsWith('.Tests'))">true</IsTestProject>
     <IsGeneratorProjectProject Condition="$(MSBuildProjectName.EndsWith('.Stateless')) OR
+                                          $(MSBuildProjectName.EndsWith('.MicroMachine')) OR
                                           $(MSBuildProjectName.EndsWith('.GraphQL.Client')) OR
                                           $(MSBuildProjectName.EndsWith('.EntityFrameworkCore')) OR
                                           $(MSBuildProjectName.EndsWith('.ML'))">true</IsGeneratorProjectProject>

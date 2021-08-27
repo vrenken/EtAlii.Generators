@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Rule xmlns="http://schemas.microsoft.com/build/2009/properties"
+      Name="MicroMachineRule"
+      DisplayName="MicroMachineFile"
+      PageTemplate="generic"
+      Description="MicroMachine PlantUML diagram">
+    <Rule.Categories>
+        <Category Name="General" DisplayName="General" />
+    </Rule.Categories>
+    <Rule.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="MicroMachineFile" />
+    </Rule.DataSource>
+</Rule>

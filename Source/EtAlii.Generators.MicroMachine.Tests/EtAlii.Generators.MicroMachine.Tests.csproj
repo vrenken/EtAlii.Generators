@@ -1,0 +1,67 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <ProjectGuid>b64c238d-208e-453b-84eb-ce4ffa058d12</ProjectGuid>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="stateless" Version="5.11.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Below is not a normal project reference! It introduces the MicroMachine specific code-generator. -->
+    <ProjectReference Include="..\EtAlii.Generators.MicroMachine\EtAlii.Generators.MicroMachine.csproj">
+      <PrivateAssets>all</PrivateAssets>
+      <!-- <ReferenceOutputAssembly>false</ReferenceOutputAssembly> --> <!-- We want to unit test the internals. -->
+      <OutputItemType>Analyzer</OutputItemType>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <MicroMachineFile Include="StateMachines\AsyncStateMachine.puml" />
+    <MicroMachineFile Include="StateMachines\AsyncSubStateStateMachine.puml" />
+    <MicroMachineFile Include="StateMachines\ChoiceStateMachine.puml" />
+    <MicroMachineFile Include="StateMachines\MyNestedStateMachine1.puml" />
+    <MicroMachineFile Include="StateMachines\MyNestedStateMachine2.puml" />
+    <MicroMachineFile Include="StateMachines\MyNestedStateMachine4.puml" />
+    <MicroMachineFile Include="StateMachines\ParameterStateMachine.puml" />
+    <MicroMachineFile Include="StateMachines\SimpleStateMachine.puml" />
+    <MicroMachineFile Include="StateMachines\SubStateStateMachine.puml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="StateMachines\AsyncStateMachine.cs">
+      <DependentUpon>AsyncStateMachine.puml</DependentUpon>
+    </Compile>
+    <Compile Update="StateMachines\MyNestedStateMachine1.cs">
+      <DependentUpon>MyNestedStateMachine1.puml</DependentUpon>
+    </Compile>
+    <Compile Update="StateMachines\MyNestedStateMachine2.cs">
+      <DependentUpon>MyNestedStateMachine2.puml</DependentUpon>
+    </Compile>
+    <Compile Update="StateMachines\MyNestedStateMachine4.cs">
+      <DependentUpon>MyNestedStateMachine4.puml</DependentUpon>
+    </Compile>
+    <Compile Update="StateMachines\ParameterStateMachine.cs">
+      <DependentUpon>ParameterStateMachine.puml</DependentUpon>
+    </Compile>
+    <Compile Update="StateMachines\SimpleStateMachine.cs">
+      <DependentUpon>SimpleStateMachine.puml</DependentUpon>
+    </Compile>
+    <Compile Update="StateMachines\SubStateStateMachine.cs">
+      <DependentUpon>SubStateStateMachine.puml</DependentUpon>
+    </Compile>
+    <Compile Update="StateMachines\AsyncSubStateStateMachine.cs">
+      <DependentUpon>AsyncSubStateStateMachine.puml</DependentUpon>
+    </Compile>
+    <Compile Update="StateMachines\ChoiceStateMachine.cs">
+      <DependentUpon>ChoiceStateMachine.puml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <Import Project="..\EtAlii.Generators.MicroMachine\Build\*.props" />
+  <Import Project="..\EtAlii.Generators.MicroMachine\Build\*.targets" />
+  <Import Project="..\EtAlii.Generators.Tests\EtAlii.Generators.Tests.projitems" Label="Shared" />
+
+</Project>
