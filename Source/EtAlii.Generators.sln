@@ -35,8 +35,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EtAlii.Generators.EntityFra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EtAlii.Generators.EntityFrameworkCore.Tests", "EtAlii.Generators.EntityFrameworkCore.Tests\EtAlii.Generators.EntityFrameworkCore.Tests.csproj", "{3F0E9C00-A404-4389-BA44-607EE0F0E29D}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "EtAlii.Generators.Tests", "EtAlii.Generators.Tests\EtAlii.Generators.Tests.shproj", "{18108A2D-C3BB-43A4-9E70-A2567F76BD65}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EtAlii.Generators.PlantUml", "EtAlii.Generators.PlantUml\EtAlii.Generators.PlantUml.csproj", "{0182ED67-91EA-4D44-A5BF-3B1D61561447}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EtAlii.Generators", "EtAlii.Generators\EtAlii.Generators.csproj", "{567DA79A-93FE-4EB5-BDA2-E8FF9CC656D0}"
@@ -45,15 +43,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EtAlii.Generators.MicroMach
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EtAlii.Generators.MicroMachine.Tests", "EtAlii.Generators.MicroMachine.Tests\EtAlii.Generators.MicroMachine.Tests.csproj", "{B64C238D-208E-453B-84EB-CE4FFA058D12}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EtAlii.Generators.PlantUml.Tests", "EtAlii.Generators.PlantUml.Tests\EtAlii.Generators.PlantUml.Tests.csproj", "{048D1C30-3ABA-4E2A-9268-35081175790F}"
+EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		EtAlii.Generators.Tests\EtAlii.Generators.Tests.projitems*{18108a2d-c3bb-43a4-9e70-a2567f76bd65}*SharedItemsImports = 13
-		EtAlii.Generators.Tests\EtAlii.Generators.Tests.projitems*{3f0e9c00-a404-4389-ba44-607ee0f0e29d}*SharedItemsImports = 5
-		EtAlii.Generators.Tests\EtAlii.Generators.Tests.projitems*{4d9afd07-45ef-4ddd-980e-d9fd619ecd95}*SharedItemsImports = 5
-		EtAlii.Generators.Tests\EtAlii.Generators.Tests.projitems*{77d3dfb5-70e8-4e2f-a72b-d963424f149a}*SharedItemsImports = 5
-		EtAlii.Generators.Tests\EtAlii.Generators.Tests.projitems*{7a7e5272-b0d8-402a-9f89-d38515cff376}*SharedItemsImports = 5
-		EtAlii.Generators.Tests\EtAlii.Generators.Tests.projitems*{b64c238d-208e-453b-84eb-ce4ffa058d12}*SharedItemsImports = 5
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -107,6 +99,10 @@ Global
 		{B64C238D-208E-453B-84EB-CE4FFA058D12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B64C238D-208E-453B-84EB-CE4FFA058D12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B64C238D-208E-453B-84EB-CE4FFA058D12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{048D1C30-3ABA-4E2A-9268-35081175790F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{048D1C30-3ABA-4E2A-9268-35081175790F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{048D1C30-3ABA-4E2A-9268-35081175790F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{048D1C30-3ABA-4E2A-9268-35081175790F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

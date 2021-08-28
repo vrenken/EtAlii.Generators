@@ -62,6 +62,5 @@
 
   <Import Project="..\EtAlii.Generators.MicroMachine\Build\*.props" />
   <Import Project="..\EtAlii.Generators.MicroMachine\Build\*.targets" />
-  <Import Project="..\EtAlii.Generators.Tests\EtAlii.Generators.Tests.projitems" Label="Shared" />
 
 </Project>

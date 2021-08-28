@@ -13,10 +13,9 @@
         [Fact]
         public void StatelessPlantUmlValidator_Create()
         {
-            // Arrange.
-
+            // Arrange
             // Act.
-            var parser = new StatelessPlantUmlValidator();
+            var parser = new PlantUmlStateMachineValidator();
 
             // Assert.
             Assert.NotNull(parser);
@@ -27,7 +26,7 @@
         {
             // Arrange.
             var originalFileName = "Test.puml";
-            var parser = new StatelessPlantUmlValidator();
+            var parser = new PlantUmlStateMachineValidator();
             var headers = new[]
             {
                 new Header("This is a stub header")

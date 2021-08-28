@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <ProjectGuid>048d1c30-3aba-4e2a-9268-35081175790f</ProjectGuid>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EtAlii.Generators.PlantUml\EtAlii.Generators.PlantUml.csproj" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisNugetVersion)" PrivateAssets="all" />
+  </ItemGroup>
+  
+</Project>

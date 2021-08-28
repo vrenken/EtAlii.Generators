@@ -1,4 +1,4 @@
-﻿namespace EtAlii.Generators.MicroMachine.Tests
+﻿namespace EtAlii.Generators.PlantUml.Tests
 {
     using System;
     using System.CodeDom.Compiler;
@@ -8,26 +8,26 @@
     using Microsoft.CodeAnalysis;
     using Xunit;
 
-    public class MicroMachinePlantUmlValidatorTests
+    public class PlantUmlStateMachineValidatorTests
     {
         [Fact]
-        public void MicroMachinePlantUmlValidator_Create()
+        public void PlantUmlStateMachineValidator_Create()
         {
             // Arrange.
 
             // Act.
-            var parser = new MicroMachinePlantUmlValidator();
+            var parser = new PlantUmlStateMachineValidator();
 
             // Assert.
             Assert.NotNull(parser);
         }
 
         [Fact]
-        public void MicroMachinePlantUmlValidator_Validate()
+        public void PlantUmlStateMachineValidator_Validate()
         {
             // Arrange.
             var originalFileName = "Test.puml";
-            var parser = new MicroMachinePlantUmlValidator();
+            var parser = new PlantUmlStateMachineValidator();
             var headers = new[]
             {
                 new Header("This is a stub header")

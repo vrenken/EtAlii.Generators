@@ -1,32 +1,33 @@
-﻿namespace EtAlii.Generators.MicroMachine.Tests
+﻿namespace EtAlii.Generators.PlantUml.Tests
 {
     using System.Collections.Generic;
+    using EtAlii.Generators.PlantUml;
     using Xunit;
 
-    public class MicroMachinePlantUmlParserTests
+    public class PlantUmlStateMachineParserTests
     {
         [Fact]
-        public void MicroMachinePlantUmlParser_Create()
+        public void PlantUmlStateMachineParser_Create()
         {
             // Arrange.
 
             // Act.
-            var parser = new MicroMachinePlantUmlParser();
+            var parser = new PlantUmlStateMachineParser();
 
             // Assert.
             Assert.NotNull(parser);
         }
 
         [Fact]
-        public void MicroMachinePlantUmlParser_TryParse_Valid()
+        public void PlantUmlStateMachineParser_TryParse_Valid()
         {
 
             // Arrange.
-            var parser = new MicroMachinePlantUmlParser();
+            var parser = new PlantUmlStateMachineParser();
             var log = new List<string>();
 
             var text = @"@startuml
-'namespace EtAlii.Generators.MicroMachine.Tests
+'namespace EtAlii.Generators.PlantUml.Tests
 'class MyFancyStateMachineBase
 'generate partial
 'using System.Text
@@ -50,7 +51,7 @@ State4 : This is the final state
             // Assert.
             Assert.True(result);
             Assert.NotNull(stateMachine);
-            Assert.Equal("EtAlii.Generators.MicroMachine.Tests", stateMachine.Namespace);
+            Assert.Equal("EtAlii.Generators.PlantUml.Tests", stateMachine.Namespace);
             Assert.Equal("MyFancyStateMachineBase", stateMachine.ClassName);
             Assert.NotNull(diagnostics);
             Assert.Empty(diagnostics);
@@ -58,14 +59,14 @@ State4 : This is the final state
 
 
         [Fact]
-        public void MicroMachinePlantUmlParser_TryParse_Invalid()
+        public void PlantUmlStateMachineParser_TryParse_Invalid()
         {
             // Arrange.
-            var parser = new MicroMachinePlantUmlParser();
+            var parser = new PlantUmlStateMachineParser();
             var log = new List<string>();
 
             var text = @"@startuml
-'namespace EtAlii.Generators.MicroMachine.Tests
+'namespace EtAlii.Generators.Stateless.Tests
 'class MyFancyStateMachineBase
 'generate partial
 'using System.Text

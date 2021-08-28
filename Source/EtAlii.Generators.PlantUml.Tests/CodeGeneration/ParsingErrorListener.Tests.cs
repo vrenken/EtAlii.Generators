@@ -1,4 +1,4 @@
-﻿namespace EtAlii.Generators.Stateless.Tests
+﻿namespace EtAlii.Generators.PlantUml.Tests
 {
     using System.IO;
     using EtAlii.Generators.PlantUml;

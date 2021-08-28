@@ -1,18 +1,17 @@
 // Copyright (c) Peter Vrenken. All rights reserved. See https://github.com/vrenken/EtAlii.Generators for more information and the license.
 
-namespace EtAlii.Generators.MicroMachine
+namespace EtAlii.Generators.PlantUml
 {
     using System.Collections.Generic;
     using System.Linq;
-    using EtAlii.Generators.PlantUml;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Text;
 
     /// <summary>
-    /// The central class responsible of validating both the PlantUML and MicroMachine specific requirements
+    /// The central class responsible of validating both the PlantUML and Stateless specific requirements
     /// and express them using Roslyn Diagnostic instances.
     /// </summary>
-    public class MicroMachinePlantUmlValidator : IValidator<StateMachine>
+    public class PlantUmlStateMachineValidator : IValidator<StateMachine>
     {
         public void Validate(StateMachine instance, string originalFileName, List<Diagnostic> diagnostics)
         {

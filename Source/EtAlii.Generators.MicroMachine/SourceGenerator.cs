@@ -17,11 +17,11 @@
     [Generator]
     public class SourceGenerator : SourceGeneratorBase<StateMachine>
     {
-        protected override IParser<StateMachine> CreateParser() => new MicroMachinePlantUmlParser();
+        protected override IParser<StateMachine> CreateParser() => new PlantUmlStateMachineParser();
 
         protected override IWriterFactory<StateMachine> CreateWriterFactory() => new MicroMachineWriterFactory();
 
-        protected override IValidator<StateMachine> CreateValidator() => new MicroMachinePlantUmlValidator();
+        protected override IValidator<StateMachine> CreateValidator() => new PlantUmlStateMachineValidator();
 
         protected override string GetExtension() => ".puml";
 

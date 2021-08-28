@@ -1,19 +1,18 @@
-﻿namespace EtAlii.Generators.MicroMachine
+﻿namespace EtAlii.Generators.PlantUml
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using Antlr4.Runtime;
-    using EtAlii.Generators.PlantUml;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Text;
 
     /// <summary>
-    /// The central class responsible of parsing both the PlantUML and MicroMachine specific constructions
+    /// The central class responsible of parsing both the PlantUML and Stateless specific constructions
     /// from the given input file.
     /// </summary>
-    public class MicroMachinePlantUmlParser : IParser<StateMachine>
+    public class PlantUmlStateMachineParser : IParser<StateMachine>
     {
         public bool TryParse(AdditionalText file, List<string> log, out StateMachine stateMachine, out Diagnostic[] diagnostics)
         {

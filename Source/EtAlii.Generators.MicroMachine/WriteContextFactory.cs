@@ -37,7 +37,7 @@ namespace EtAlii.Generators.MicroMachine
             log.Add("Triggers found:");
             log.AddRange(allTriggers.Select(t => $"- {t}"));
 
-            var usings = new[] {"System", "System.Threading.Tasks", "MicroMachine",}.Concat(stateMachine.Usings).ToArray();
+            var usings = new[] {"System", "System.Threading.Tasks" }.Concat(stateMachine.Usings).ToArray();
             var namespaceDetails = new NamespaceDetails(stateMachine.Namespace, usings);
             return new WriteContext(writer, originalFileName, stateMachine, namespaceDetails);
         }

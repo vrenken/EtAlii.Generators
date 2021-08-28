@@ -1,6 +1,7 @@
 ﻿namespace EtAlii.Generators.Stateless.Tests
 {
     using System.Collections.Generic;
+    using EtAlii.Generators.PlantUml;
     using Xunit;
 
     public class StatelessPlantUmlParserTests
@@ -11,7 +12,7 @@
             // Arrange.
 
             // Act.
-            var parser = new StatelessPlantUmlParser();
+            var parser = new PlantUmlStateMachineParser();
 
             // Assert.
             Assert.NotNull(parser);
@@ -22,7 +23,7 @@
         {
 
             // Arrange.
-            var parser = new StatelessPlantUmlParser();
+            var parser = new PlantUmlStateMachineParser();
             var log = new List<string>();
 
             var text = @"@startuml
@@ -61,7 +62,7 @@ State4 : This is the final state
         public void StatelessPlantUmlParser_TryParse_Invalid()
         {
             // Arrange.
-            var parser = new StatelessPlantUmlParser();
+            var parser = new PlantUmlStateMachineParser();
             var log = new List<string>();
 
             var text = @"@startuml
