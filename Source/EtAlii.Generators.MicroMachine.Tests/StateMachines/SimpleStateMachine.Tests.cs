@@ -42,18 +42,25 @@
 
             // Assert.
             var i = 0;
-            Assert.Equal(12, stateMachine.Actions.Count);
+            Assert.Equal(18, stateMachine.Actions.Count);
             Assert.Equal("State 1 entered", stateMachine.Actions[i++]);
-            Assert.Equal("State 1 entered from start trigger", stateMachine.Actions[i++]);
+            Assert.Equal("State 1 entered by Start trigger", stateMachine.Actions[i++]);
+            Assert.Equal("State 1 exited by Continue trigger", stateMachine.Actions[i++]);
             Assert.Equal("State 1 exited", stateMachine.Actions[i++]);
             Assert.Equal("State 2 entered", stateMachine.Actions[i++]);
-            Assert.Equal("State 2 entered from continue trigger", stateMachine.Actions[i++]);
-            Assert.Equal("Check trigger called", stateMachine.Actions[i++]);
+            Assert.Equal("State 2 entered by Continue trigger", stateMachine.Actions[i++]);
+            Assert.Equal("State 2 exited by Check trigger", stateMachine.Actions[i++]);
+            Assert.Equal("State 2 exited", stateMachine.Actions[i++]);
+            Assert.Equal("State 2 entered", stateMachine.Actions[i++]);
+            Assert.Equal("State 2 entered by Check trigger", stateMachine.Actions[i++]);
+            Assert.Equal("State 2 exited by Continue trigger", stateMachine.Actions[i++]);
             Assert.Equal("State 2 exited", stateMachine.Actions[i++]);
             Assert.Equal("State 3 entered", stateMachine.Actions[i++]);
-            Assert.Equal("State 3 entered from Continue trigger", stateMachine.Actions[i++]);
+            Assert.Equal("State 3 entered by Continue trigger", stateMachine.Actions[i++]);
+            Assert.Equal("State 3 exited by Continue trigger", stateMachine.Actions[i++]);
             Assert.Equal("State 3 exited", stateMachine.Actions[i++]);
-            Assert.Equal("State 4 entered", stateMachine.Actions[i]);
+            Assert.Equal("State 4 entered", stateMachine.Actions[i++]);
+            Assert.Equal("State 4 entered by Continue trigger", stateMachine.Actions[i]);
         }
     }
 }
