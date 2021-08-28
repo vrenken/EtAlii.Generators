@@ -32,5 +32,9 @@ namespace EtAlii.Generators.Stateless.Tests
         protected override void OnState2EnteredFromContinueTrigger(State2EventArgs e) => Actions.Add("State 2 entered from continue trigger");
 
         protected override void OnState4Exited() => Actions.Add("State 4 exited");
+
+        protected override void OnState4EnteredFromDownTrigger()
+        {
+        }
     }
 }

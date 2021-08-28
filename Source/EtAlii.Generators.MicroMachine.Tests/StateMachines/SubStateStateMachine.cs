@@ -1,19 +1,12 @@
 namespace EtAlii.Generators.MicroMachine.Tests
 {
     using System.Collections.Generic;
-    using System.Threading.Tasks;
 
     public class SubStateStateMachine : SubStateStateMachineBase
     {
         public List<string> Actions { get; } = new();
 
         public List<string> UnhandledTriggers { get; } = new();
-
-        public SubStateStateMachine()
-        {
-            StateMachine.OnUnhandledTrigger((state, trigger) => UnhandledTriggers.Add($"{state}-{trigger}"));
-            StateMachine.OnUnhandledTriggerAsync((state, trigger) => Task.Run(() => UnhandledTriggers.Add($"{state}-{trigger}")));
-        }
 
         protected override void OnState1Entered() => Actions.Add("State 1 entered");
 
