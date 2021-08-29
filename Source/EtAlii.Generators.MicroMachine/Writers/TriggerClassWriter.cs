@@ -4,13 +4,6 @@
 
     public class TriggerClassWriter
     {
-        private readonly MethodWriter _methodWriter;
-
-        public TriggerClassWriter(MethodWriter methodWriter)
-        {
-            _methodWriter = methodWriter;
-        }
-
         public void WriteTriggerClasses(WriteContext<StateMachine> context)
         {
             context.Writer.WriteLine("// The classes below represent the triggers as used by the methods.");

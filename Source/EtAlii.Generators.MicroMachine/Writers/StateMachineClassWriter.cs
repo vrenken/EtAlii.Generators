@@ -2,26 +2,22 @@
 {
     using EtAlii.Generators.PlantUml;
 
-    public class ClassWriter : IWriter<StateMachine>
+    public class StateMachineClassWriter : IWriter<StateMachine>
     {
         private readonly EnumWriter<StateMachine> _enumWriter;
-        private readonly FieldWriter _fieldWriter;
         private readonly MethodWriter _methodWriter;
         private readonly TriggerClassWriter _triggerClassWriter;
-        private readonly InstantiationWriter _instantiationWriter;
+        private readonly TransitionClassWriter _transitionClassWriter;
 
-        public ClassWriter(
-            EnumWriter<StateMachine> enumWriter,
-            FieldWriter fieldWriter,
+        public StateMachineClassWriter(EnumWriter<StateMachine> enumWriter,
             MethodWriter methodWriter,
             TriggerClassWriter triggerClassWriter,
-            InstantiationWriter instantiationWriter)
+            TransitionClassWriter transitionClassWriter)
         {
             _enumWriter = enumWriter;
-            _fieldWriter = fieldWriter;
             _methodWriter = methodWriter;
             _triggerClassWriter = triggerClassWriter;
-            _instantiationWriter = instantiationWriter;
+            _transitionClassWriter = transitionClassWriter;
         }
 
         public void Write(WriteContext<StateMachine> context)
@@ -42,12 +38,15 @@
             context.Writer.WriteLine($"protected {context.Instance.ClassName}.State _state;");
             context.Writer.WriteLine($"private bool _queueTransitions;");
 
-            context.Writer.WriteLine($"private readonly Queue<Action> _transactions = new Queue<Action>();");
+            context.Writer.WriteLine($"private readonly Queue<Transition> _transactions = new Queue<Transition>();");
             context.Writer.WriteLine();
 
             WriteRunOrQueueTransition(context);
 
             _methodWriter.WriteTriggerMethods(context);
+            context.Writer.WriteLine();
+
+            _transitionClassWriter.WriteTransitionClasses(context);
             context.Writer.WriteLine();
 
             _triggerClassWriter.WriteTriggerClasses(context);
@@ -69,7 +68,7 @@
 
         private void WriteRunOrQueueTransition(WriteContext<StateMachine> context)
         {
-            context.Writer.WriteLine($"private void RunOrQueueTransition(Action transition)");
+            context.Writer.WriteLine($"private void RunOrQueueTransition(Transition transition)");
             context.Writer.WriteLine("{");
             context.Writer.Indent += 1;
             context.Writer.WriteLine("if(_queueTransitions)");
@@ -86,7 +85,7 @@
             context.Writer.WriteLine($"while(_transactions.TryDequeue(out var queuedTransaction))");
             context.Writer.WriteLine("{");
             context.Writer.Indent += 1;
-            context.Writer.WriteLine($"queuedTransaction();");
+            context.Writer.WriteLine($"((SyncTransition)queuedTransaction).Handler();");
             context.Writer.Indent -= 1;
             context.Writer.WriteLine("}");
             context.Writer.WriteLine("_queueTransitions = false;");
@@ -95,18 +94,40 @@
             context.Writer.Indent -= 1;
             context.Writer.WriteLine("}");
             context.Writer.WriteLine();
-        }
 
-        private void WriteConstructor(WriteContext<StateMachine> context)
-        {
-            context.Writer.WriteLine($"protected {context.Instance.ClassName}()");
+            context.Writer.WriteLine($"private async Task RunOrQueueTransitionAsync(AsyncTransition transition)");
             context.Writer.WriteLine("{");
             context.Writer.Indent += 1;
-
-            _instantiationWriter.WriteStateMachineInstantiation(context);
-
+            context.Writer.WriteLine("if(_queueTransitions)");
+            context.Writer.WriteLine("{");
+            context.Writer.Indent += 1;
+            context.Writer.WriteLine($"_transactions.Enqueue(transition);");
             context.Writer.Indent -= 1;
             context.Writer.WriteLine("}");
+            context.Writer.WriteLine("else");
+            context.Writer.WriteLine("{");
+            context.Writer.Indent += 1;
+            context.Writer.WriteLine("_queueTransitions = true;");
+            context.Writer.WriteLine($"_transactions.Enqueue(transition);");
+            context.Writer.WriteLine($"while(_transactions.TryDequeue(out var queuedTransaction))");
+            context.Writer.WriteLine("{");
+            context.Writer.Indent += 1;
+            context.Writer.WriteLine("switch(queuedTransaction)");
+            context.Writer.WriteLine("{");
+            context.Writer.Indent += 1;
+            context.Writer.WriteLine("case SyncTransition syncTransition: syncTransition.Handler(); break;");
+            context.Writer.WriteLine("case AsyncTransition asyncTransition: await asyncTransition.Handler().ConfigureAwait(false); break;");
+            context.Writer.WriteLine("default: throw new InvalidOperationException(\"This will never happen\");");
+            context.Writer.Indent -= 1;
+            context.Writer.WriteLine("}");
+            context.Writer.Indent -= 1;
+            context.Writer.WriteLine("}");
+            context.Writer.WriteLine("_queueTransitions = false;");
+            context.Writer.Indent -= 1;
+            context.Writer.WriteLine("}");
+            context.Writer.Indent -= 1;
+            context.Writer.WriteLine("}");
+            context.Writer.WriteLine();
         }
     }
 }

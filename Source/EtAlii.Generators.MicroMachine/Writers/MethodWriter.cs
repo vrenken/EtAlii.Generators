@@ -37,13 +37,13 @@
                 var syncTransitions = StateFragment.GetSyncTransitions(context.Instance.StateFragments);
                 var syncTransitionSets = _transitionConverter.ToTransitionsSetsPerTriggerAndUniqueParameters(syncTransitions, trigger);
                 var syncWrite = new Func<string, string, string, string, string, string>((triggerName, typedParameters, genericParameters, triggerParameter, namedParameters)
-                    => $"public void {triggerName}({typedParameters}) => RunOrQueueTransition({triggerName}Transition);// {genericParameters}({triggerParameter}{namedParameters});");
+                    => $"public void {triggerName}({typedParameters}) => RunOrQueueTransition(new SyncTransition({triggerName}Transition));// {genericParameters}({triggerParameter}{namedParameters});");
                 WriteTriggerMethods(context, syncTransitionSets, "sync", syncWrite);
 
                 var asyncTransitions = StateFragment.GetAsyncTransitions(context.Instance.StateFragments);
                 var asyncTransitionSets = _transitionConverter.ToTransitionsSetsPerTriggerAndUniqueParameters(asyncTransitions, trigger);
                 var asyncWrite = new Func<string, string, string, string, string, string>((triggerName, typedParameters, genericParameters, triggerParameter, namedParameters)
-                    => $"public Task {triggerName}Async({typedParameters}) => RunOrQueueTransition({triggerName}Transition);// {genericParameters}({triggerParameter}{namedParameters});");
+                    => $"public Task {triggerName}Async({typedParameters}) => RunOrQueueTransitionAsync(new AsyncTransition({triggerName}Transition));// {genericParameters}({triggerParameter}{namedParameters});");
                 WriteTriggerMethods(context, asyncTransitionSets, "async", asyncWrite);
             }
         }
@@ -58,7 +58,7 @@
             context.Writer.Indent += 1;
 
             var transitions = StateFragment.GetAllTransitions(context.Instance.StateFragments)
-                .Where(t => t.Trigger == trigger )
+                .Where(t => t.Trigger == trigger)
                 .ToArray();
 
             foreach (var transition in transitions)

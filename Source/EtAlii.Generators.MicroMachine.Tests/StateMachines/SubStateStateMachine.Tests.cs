@@ -16,7 +16,7 @@
             Assert.NotNull(stateMachine);
         }
 
-        [Fact]
+        [Fact(Skip = "Nested states are not yet supported by the MicroMachine generator")]
         public void SubStateStateMachine_Run_01()
         {
             // Arrange.
@@ -38,7 +38,7 @@
             Assert.Equal("OnSubState1Entered(ContinueTrigger trigger)", stateMachine.Transitions[i]);
         }
 
-        [Fact]
+        [Fact(Skip = "Nested states are not yet supported by the MicroMachine generator")]
         public void SubStateStateMachine_Run_02()
         {
             // Arrange.

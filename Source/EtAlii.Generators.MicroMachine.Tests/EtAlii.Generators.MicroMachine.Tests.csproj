@@ -19,21 +19,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="StateMachines\AsyncStateMachine.puml" />
     <None Include="StateMachines\AsyncSubStateStateMachine.puml" />
     <None Include="StateMachines\ChoiceStateMachine.puml" />
     <None Include="StateMachines\MyNestedStateMachine1.puml" />
     <None Include="StateMachines\MyNestedStateMachine2.puml" />
     <None Include="StateMachines\MyNestedStateMachine4.puml" />
     <None Include="StateMachines\ParameterStateMachine.puml" />
-    <None Include="StateMachines\AsyncStateMachine.Tests.cs" />
     <None Include="StateMachines\AsyncSubStateStateMachine.Tests.cs" />
-    <Compile Remove="StateMachines\AsyncStateMachine.Tests.cs" />
-    <Compile Remove="StateMachines\AsyncSubStateStateMachine.Tests.cs" />
-    <Compile Remove="StateMachines\AsyncStateMachine.cs" />
-    <None Include="StateMachines\AsyncStateMachine.cs">
-      <DependentUpon>AsyncStateMachine.puml</DependentUpon>
-    </None>
+
     <Compile Remove="StateMachines\AsyncSubStateStateMachine.cs" />
     <None Include="StateMachines\AsyncSubStateStateMachine.cs">
       <DependentUpon>AsyncSubStateStateMachine.puml</DependentUpon>
@@ -58,6 +51,8 @@
     <None Include="StateMachines\ParameterStateMachine.cs">
       <DependentUpon>ParameterStateMachine.puml</DependentUpon>
     </None>
+    <Compile Remove="StateMachines\AsyncStateMachine.Tests.cs" />
+    <None Include="StateMachines\AsyncStateMachine.Tests.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -69,6 +64,14 @@
     <Compile Update="StateMachines\SubStateStateMachine.cs">
       <DependentUpon>SubStateStateMachine.puml</DependentUpon>
     </Compile>
+
+    <Compile Remove="StateMachines\AsyncSubStateStateMachine.Tests.cs" />
+    <Compile Remove="StateMachines\AsyncStateMachine.cs" />
+    <None Include="StateMachines\AsyncStateMachine.puml" />
+    <None Update="StateMachines\AsyncStateMachine.cs">
+      <DependentUpon>AsyncStateMachine.puml</DependentUpon>
+    </None>
+
   </ItemGroup>
 
   <Import Project="..\EtAlii.Generators.MicroMachine\Build\*.targets" />

@@ -24,11 +24,10 @@
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
             var methodWriter = new MethodWriter(parameterConverter, transitionConverter);
-            var triggerClassWriter = new TriggerClassWriter(methodWriter);
-            var fieldWriter = new FieldWriter(parameterConverter, transitionConverter);
-            var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter);
-            var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, triggerClassWriter, instantiationWriter);
-            return new NamespaceWriter<StateMachine>(context => classWriter.Write(context));
+            var transitionClassWriter = new TransitionClassWriter();
+            var triggerClassWriter = new TriggerClassWriter();
+            var stateMachineClassWriter = new StateMachineClassWriter(enumWriter, methodWriter, triggerClassWriter, transitionClassWriter);
+            return new NamespaceWriter<StateMachine>(context => stateMachineClassWriter.Write(context));
         }
     }
 }
