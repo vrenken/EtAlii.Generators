@@ -12,6 +12,7 @@
     <PackageReference Include="Antlr4BuildTasks" Version="8.14.0" PrivateAssets="all" />
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.2" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisNugetVersion)" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="$(MicrosoftCodeAnalysisNugetVersion)" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>

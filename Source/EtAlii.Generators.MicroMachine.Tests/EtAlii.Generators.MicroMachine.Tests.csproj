@@ -1,5 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\EtAlii.Generators.MicroMachine\Build\*.props" />
+
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <ProjectGuid>b64c238d-208e-453b-84eb-ce4ffa058d12</ProjectGuid>
@@ -78,7 +80,6 @@
     </Compile>
   </ItemGroup>
 
-  <Import Project="..\EtAlii.Generators.MicroMachine\Build\*.props" />
   <Import Project="..\EtAlii.Generators.MicroMachine\Build\*.targets" />
 
 </Project>

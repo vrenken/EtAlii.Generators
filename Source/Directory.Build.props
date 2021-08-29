@@ -1,16 +1,18 @@
 ﻿<!-- Stuff that needs to happen at the start of the MSBuild process should go in the .props file. -->
 <Project>
   <PropertyGroup>
-    <MicrosoftCodeAnalysisNugetVersion>3.9.0</MicrosoftCodeAnalysisNugetVersion>
+    <!-- Currently (29-8-2021) the only version that compiles both the generator and test projects under Rider and Visual Studio is 3.8.0.
+         All other variations cause problems. -->
+    <MicrosoftCodeAnalysisNugetVersion>3.8.0</MicrosoftCodeAnalysisNugetVersion>
     <Authors>Peter Vrenken</Authors>
     <Company>EtAlii</Company>
 
     <IsTestProject>$(MSBuildProjectName.EndsWith('.Tests'))</IsTestProject>
-    <IsGeneratorProjectProject Condition="$(MSBuildProjectName.EndsWith('.Stateless')) OR
+    <IsGeneratorProject Condition="$(MSBuildProjectName.EndsWith('.Stateless')) OR
                                           $(MSBuildProjectName.EndsWith('.MicroMachine')) OR
                                           $(MSBuildProjectName.EndsWith('.GraphQL.Client')) OR
                                           $(MSBuildProjectName.EndsWith('.EntityFrameworkCore')) OR
-                                          $(MSBuildProjectName.EndsWith('.ML'))">true</IsGeneratorProjectProject>
+                                          $(MSBuildProjectName.EndsWith('.ML'))">true</IsGeneratorProject>
   </PropertyGroup>
 
   <!-- Common properties -->
@@ -40,16 +42,16 @@
   </ItemGroup>
 
   <!-- Generator project properties -->
-  <PropertyGroup Condition="'$(IsGeneratorProjectProject)' == 'true'">
+  <PropertyGroup Condition="'$(IsGeneratorProject)' == 'true'">
     <IncludeBuildOutput>false</IncludeBuildOutput> <!-- Do not include the generator as a lib dependency -->
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetPackageDependencyTargetPaths</GetTargetPathDependsOn>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(IsGeneratorProjectProject)' == 'true'">
-    <PackageReference Update="NETStandard.Library" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisNugetVersion)" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="$(MicrosoftCodeAnalysisNugetVersion)" PrivateAssets="all" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+  <ItemGroup Condition="'$(IsGeneratorProject)' == 'true'">
+    <PackageReference Update="NETStandard.Library" PrivateAssets="all" ReferenceOutputAssembly="false" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisNugetVersion)" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="$(MicrosoftCodeAnalysisNugetVersion)" />
     <PackageReference Include="Antlr4BuildTasks" Version="8.14.0" PrivateAssets="all" />
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.2" PrivateAssets="all">
       <GeneratePathProperty>true</GeneratePathProperty>
@@ -63,7 +65,7 @@
     </None>
   </ItemGroup>
 
-  <Target Name="GetPackageDependencyTargetPaths" Condition="'$(IsGeneratorProjectProject)' == 'true'">
+  <Target Name="GetPackageDependencyTargetPaths" Condition="'$(IsGeneratorProject)' == 'true'">
     <ItemGroup>
       <TargetPathWithTargetPlatformMoniker Include="$(PkgAntlr4_Runtime_Standard)\lib\netstandard2.0\Antlr4.Runtime.Standard.dll" IncludeRuntimeDependency="false" />
       <TargetPathWithTargetPlatformMoniker Include="..\EtAlii.Generators\$(OutDir)\EtAlii.Generators.dll" IncludeRuntimeDependency="false" />

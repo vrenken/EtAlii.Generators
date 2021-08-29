@@ -39,11 +39,29 @@
             context.Writer.WriteLine("{");
             context.Writer.Indent += 1;
 
-            // context.Writer.WriteLine($"protected {MicroMachineWriter.StateMachineType} StateMachine => _stateMachine;");
-            // context.Writer.WriteLine($"private readonly {MicroMachineWriter.StateMachineType} _stateMachine;");
             context.Writer.WriteLine($"protected {context.Instance.ClassName}.State _state;");
 
-            context.Writer.WriteLine($"private readonly Queue<Action> _triggers = new Queue<Action>();");
+            context.Writer.WriteLine($"private readonly Queue<Action> _transactions = new Queue<Action>();");
+            context.Writer.WriteLine();
+
+            context.Writer.WriteLine($"private void RunOrQueueTransition(Action transition)");
+            context.Writer.WriteLine("{");
+            context.Writer.Indent += 1;
+            context.Writer.WriteLine($"var deQueue = _transactions.Count > 0;");
+            context.Writer.WriteLine($"_transactions.Enqueue(transition);");
+            context.Writer.WriteLine($"if (deQueue)");
+            context.Writer.WriteLine("{");
+            context.Writer.Indent += 1;
+            context.Writer.WriteLine($"while(_transactions.TryDequeue(out var queuedTransaction))");
+            context.Writer.WriteLine("{");
+            context.Writer.Indent += 1;
+            context.Writer.WriteLine($"queuedTransaction();");
+            context.Writer.Indent -= 1;
+            context.Writer.WriteLine("}");
+            context.Writer.Indent -= 1;
+            context.Writer.WriteLine("}");
+            context.Writer.Indent -= 1;
+            context.Writer.WriteLine("}");
             context.Writer.WriteLine();
 
             // _fieldWriter.WriteAllTriggerFields(context);
