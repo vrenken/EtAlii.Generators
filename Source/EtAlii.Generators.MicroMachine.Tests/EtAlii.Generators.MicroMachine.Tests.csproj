@@ -63,12 +63,6 @@
     <None Include="StateMachines\ParameterStateMachine.cs">
       <DependentUpon>ParameterStateMachine.puml</DependentUpon>
     </None>
-    <Compile Update="StateMachines\SimpleStateMachine.Generated_2.cs">
-      <DependentUpon>SimpleStateMachine.puml</DependentUpon>
-    </Compile>
-    <Compile Update="StateMachines\SimpleStateMachine.Generated.cs">
-      <DependentUpon>SimpleStateMachine.puml</DependentUpon>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>

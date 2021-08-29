@@ -31,18 +31,63 @@
             var allTriggers = StateFragment.GetAllTriggers(context.Instance.StateFragments);
             foreach (var trigger in allTriggers)
             {
+                WriteTransitionMethod(context, trigger);
+
                 var syncTransitions = StateFragment.GetSyncTransitions(context.Instance.StateFragments);
                 var syncTransitionSets = _transitionConverter.ToTransitionsSetsPerTriggerAndUniqueParameters(syncTransitions, trigger);
                 var syncWrite = new Func<string, string, string, string, string, string>((triggerName, typedParameters, genericParameters, triggerParameter, namedParameters)
-                    => $"public void {triggerName}({typedParameters}) {{ }}// _stateMachine.Fire{genericParameters}({triggerParameter}{namedParameters});");
+                    => $"public void {triggerName}({typedParameters}) => RunOrQueueTransition({triggerName}Transition);// {genericParameters}({triggerParameter}{namedParameters});");
                 WriteTriggerMethods(context, syncTransitionSets, "sync", syncWrite);
 
                 var asyncTransitions = StateFragment.GetAsyncTransitions(context.Instance.StateFragments);
                 var asyncTransitionSets = _transitionConverter.ToTransitionsSetsPerTriggerAndUniqueParameters(asyncTransitions, trigger);
                 var asyncWrite = new Func<string, string, string, string, string, string>((triggerName, typedParameters, genericParameters, triggerParameter, namedParameters)
-                    => $"public Task {triggerName}Async({typedParameters}) {{ }}// _stateMachine.FireAsync{genericParameters}({triggerParameter}{namedParameters});");
+                    => $"public Task {triggerName}Async({typedParameters}) => RunOrQueueTransition({triggerName}Transition);// {genericParameters}({triggerParameter}{namedParameters});");
                 WriteTriggerMethods(context, asyncTransitionSets, "async", asyncWrite);
             }
+        }
+
+        private void WriteTransitionMethod(WriteContext<StateMachine> context, string trigger)
+        {
+            context.Writer.WriteLine($"private void {trigger}Transition()");
+            context.Writer.WriteLine("{");
+            context.Writer.Indent += 1;
+            context.Writer.WriteLine("switch (_state)");
+            context.Writer.WriteLine("{");
+            context.Writer.Indent += 1;
+
+            var transitions = StateFragment.GetAllTransitions(context.Instance.StateFragments)
+                .Where(t => t.Trigger == trigger )
+                .ToArray();
+
+            foreach (var transition in transitions)
+            {
+                WriteTransitionStateCase(context, transition);
+            }
+            context.Writer.WriteLine("default:");
+            context.Writer.Indent += 1;
+            context.Writer.WriteLine($"throw new NotSupportedException($\"Trigger {trigger} is not supported in state {{_state}}\");");
+            context.Writer.Indent -= 1;
+            context.Writer.Indent -= 1;
+            context.Writer.WriteLine("}");
+            context.Writer.Indent -= 1;
+            context.Writer.WriteLine("}");
+        }
+
+        private void WriteTransitionStateCase(WriteContext<StateMachine> context, Transition transition)
+        {
+            var triggerVariableName = $"trigger{transition.From}";
+
+            context.Writer.WriteLine($"case State.{transition.From}:");
+            context.Writer.Indent += 1;
+            context.Writer.WriteLine($"_state = State.{transition.To};");
+            context.Writer.WriteLine($"Trigger {triggerVariableName} = new {transition.Trigger}Trigger();");
+            context.Writer.WriteLine($"On{transition.From}Exited(({transition.Trigger}Trigger){triggerVariableName});");
+            context.Writer.WriteLine($"On{transition.From}Exited({triggerVariableName});");
+            context.Writer.WriteLine($"On{transition.To}Entered({triggerVariableName});");
+            context.Writer.WriteLine($"On{transition.To}Entered(({transition.Trigger}Trigger){triggerVariableName});");
+            context.Writer.WriteLine("break;");
+            context.Writer.Indent -= 1;
         }
 
         private void WriteTriggerMethods(WriteContext<StateMachine> context, Transition[][] transitionSets, string triggerType, Func<string, string, string, string, string, string> write)
