@@ -8,10 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="stateless" Version="5.11.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <!-- Below is not a normal project reference! It introduces the MicroMachine specific code-generator. -->
     <ProjectReference Include="..\EtAlii.Generators.MicroMachine\EtAlii.Generators.MicroMachine.csproj">
       <PrivateAssets>all</PrivateAssets>
@@ -28,7 +24,10 @@
     <None Include="StateMachines\MyNestedStateMachine2.puml" />
     <None Include="StateMachines\MyNestedStateMachine4.puml" />
     <None Include="StateMachines\ParameterStateMachine.puml" />
-    <None Include="StateMachines\SimpleStateMachine.puml" />
+
+<!--    <None Include="StateMachines\SimpleStateMachine.puml" />-->
+    <MicroMachineFile Include="StateMachines\SimpleStateMachine.puml" />
+
     <None Include="StateMachines\SubStateStateMachine.puml" />
     <Compile Remove="StateMachines\AsyncStateMachine.Tests.cs" />
     <None Include="StateMachines\AsyncStateMachine.Tests.cs" />
@@ -62,6 +61,12 @@
     <None Include="StateMachines\ParameterStateMachine.cs">
       <DependentUpon>ParameterStateMachine.puml</DependentUpon>
     </None>
+    <Compile Update="StateMachines\SimpleStateMachine.Generated_2.cs">
+      <DependentUpon>SimpleStateMachine.puml</DependentUpon>
+    </Compile>
+    <Compile Update="StateMachines\SimpleStateMachine.Generated.cs">
+      <DependentUpon>SimpleStateMachine.puml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

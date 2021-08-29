@@ -17,10 +17,10 @@
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
             var methodWriter = new MethodWriter(parameterConverter, transitionConverter);
-            var eventArgsWriter = new EventArgsWriter(methodWriter);
+            var triggerClassWriter = new TriggerClassWriter(methodWriter);
             var fieldWriter = new FieldWriter(parameterConverter, transitionConverter);
             var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter);
-            var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter);
+            var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, triggerClassWriter, instantiationWriter);
 
             // Act.
             var writer = new NamespaceWriter<StateMachine>(context => classWriter.Write(context));
@@ -37,10 +37,10 @@
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
             var methodWriter = new MethodWriter(parameterConverter, transitionConverter);
-            var eventArgsWriter = new EventArgsWriter(methodWriter);
+            var triggerClassWriter = new TriggerClassWriter(methodWriter);
             var fieldWriter = new FieldWriter(parameterConverter, transitionConverter);
             var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter);
-            var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter);
+            var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, triggerClassWriter, instantiationWriter);
             var writer = new NamespaceWriter<StateMachine>(context => classWriter.Write(context));
             var originalFileName = "Test.puml";
             var log = new List<string>();
@@ -86,10 +86,10 @@
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
             var methodWriter = new MethodWriter(parameterConverter, transitionConverter);
-            var eventArgsWriter = new EventArgsWriter(methodWriter);
+            var triggerClassWriter = new TriggerClassWriter(methodWriter);
             var fieldWriter = new FieldWriter(parameterConverter, transitionConverter);
             var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter);
-            var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter);
+            var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, triggerClassWriter, instantiationWriter);
             var writer = new NamespaceWriter<StateMachine>(context => classWriter.Write(context));
             var originalFileName = "Test.puml";
             var log = new List<string>();

@@ -7,20 +7,20 @@
         private readonly EnumWriter<StateMachine> _enumWriter;
         private readonly FieldWriter _fieldWriter;
         private readonly MethodWriter _methodWriter;
-        private readonly EventArgsWriter _eventArgsWriter;
+        private readonly TriggerClassWriter _triggerClassWriter;
         private readonly InstantiationWriter _instantiationWriter;
 
         public ClassWriter(
             EnumWriter<StateMachine> enumWriter,
             FieldWriter fieldWriter,
             MethodWriter methodWriter,
-            EventArgsWriter eventArgsWriter,
+            TriggerClassWriter triggerClassWriter,
             InstantiationWriter instantiationWriter)
         {
             _enumWriter = enumWriter;
             _fieldWriter = fieldWriter;
             _methodWriter = methodWriter;
-            _eventArgsWriter = eventArgsWriter;
+            _triggerClassWriter = triggerClassWriter;
             _instantiationWriter = instantiationWriter;
         }
 
@@ -39,29 +39,32 @@
             context.Writer.WriteLine("{");
             context.Writer.Indent += 1;
 
-            context.Writer.WriteLine($"protected {MicroMachineWriter.StateMachineType} StateMachine => _stateMachine;");
-            context.Writer.WriteLine($"private readonly {MicroMachineWriter.StateMachineType} _stateMachine;");
+            // context.Writer.WriteLine($"protected {MicroMachineWriter.StateMachineType} StateMachine => _stateMachine;");
+            // context.Writer.WriteLine($"private readonly {MicroMachineWriter.StateMachineType} _stateMachine;");
+            context.Writer.WriteLine($"protected {context.Instance.ClassName}.State _state;");
+
+            context.Writer.WriteLine($"private readonly Queue<Action> _triggers = new Queue<Action>();");
             context.Writer.WriteLine();
 
-            _fieldWriter.WriteAllTriggerFields(context);
-            context.Writer.WriteLine();
+            // _fieldWriter.WriteAllTriggerFields(context);
+            // context.Writer.WriteLine();
 
-            WriteConstructor(context);
-            context.Writer.WriteLine();
+            // WriteConstructor(context);
+            // context.Writer.WriteLine();
 
             _methodWriter.WriteTriggerMethods(context);
             context.Writer.WriteLine();
 
-            _eventArgsWriter.WriteEventArgs(context);
+            _triggerClassWriter.WriteTriggerClasses(context);
             context.Writer.WriteLine();
 
             var allStates = StateFragment.GetAllStates(context.Instance.StateFragments);
             _enumWriter.Write(context, new []{ "Of course each state machine needs a set of states."}, "State", allStates);
             context.Writer.WriteLine();
 
-            var allTriggers = StateFragment.GetAllTriggers(context.Instance.StateFragments);
-            _enumWriter.Write(context, new []{ "And all state machine need something that trigger them."}, "Trigger", allTriggers);
-            context.Writer.WriteLine();
+            // var allTriggers = StateFragment.GetAllTriggers(context.Instance.StateFragments);
+            // _enumWriter.Write(context, new []{ "And all state machine need something that trigger them."}, "Trigger", allTriggers);
+            // context.Writer.WriteLine();
 
             _methodWriter.WriteTransitionMethods(context);
 

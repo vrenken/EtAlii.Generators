@@ -3,6 +3,7 @@
   <PropertyGroup>
     <RootNamespace>EtAlii.Generators.MicroMachine</RootNamespace>
     <ProjectGuid>32af1821-2340-464c-9b07-5c83e77a1896</ProjectGuid>
+    <IsRoslynComponent>true</IsRoslynComponent>
   </PropertyGroup>
 
   <PropertyGroup>
