@@ -26,7 +26,7 @@
     <None Include="StateMachines\ParameterStateMachine.puml" />
 
 <!--    <None Include="StateMachines\SimpleStateMachine.puml" />-->
-    <MicroMachineFile Include="StateMachines\SimpleStateMachine.puml" />
+    <MicroMachine Include="StateMachines\SimpleStateMachine.puml" />
 
     <None Include="StateMachines\SubStateStateMachine.puml" />
     <Compile Remove="StateMachines\AsyncStateMachine.Tests.cs" />

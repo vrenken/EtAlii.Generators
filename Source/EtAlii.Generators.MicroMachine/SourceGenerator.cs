@@ -25,7 +25,7 @@
 
         protected override string GetExtension() => ".puml";
 
-        protected override string GetSourceItemGroup() => "MicroMachineFile";
+        protected override string GetSourceItemGroup() => "MicroMachine";
 
         protected override DiagnosticDescriptor GetParsingExceptionRule() => GeneratorRule.PlantUmlStateMachineProcessingThrowsException;
 

@@ -9,7 +9,7 @@
 
   <Target Name="_InjectAdditionalFiles" BeforeTargets="GenerateMSBuildEditorConfigFileShouldRun">
     <ItemGroup>
-      <AdditionalFiles Include="@(MicroMachineFile)" SourceItemGroup="MicroMachineFile" />
+      <AdditionalFiles Include="@(MicroMachine)" SourceItemGroup="MicroMachine" />
     </ItemGroup>
   </Target>
 

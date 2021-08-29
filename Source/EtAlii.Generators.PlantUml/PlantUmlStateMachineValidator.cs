@@ -8,7 +8,7 @@ namespace EtAlii.Generators.PlantUml
     using Microsoft.CodeAnalysis.Text;
 
     /// <summary>
-    /// The central class responsible of validating both the PlantUML and Stateless specific requirements
+    /// The central class responsible of validating PlantUML specific state machine requirements
     /// and express them using Roslyn Diagnostic instances.
     /// </summary>
     public class PlantUmlStateMachineValidator : IValidator<StateMachine>

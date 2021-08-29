@@ -66,7 +66,7 @@ State4 : This is the final state
             var log = new List<string>();
 
             var text = @"@startuml
-'namespace EtAlii.Generators.Stateless.Tests
+'namespace EtAlii.Generators.PlantUml.Tests
 'class MyFancyStateMachineBase
 'generate partial
 'using System.Text

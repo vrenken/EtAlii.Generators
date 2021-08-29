@@ -17,18 +17,11 @@ Usage:
     </ItemGroup>
    ```
 
-2. Also add the MicroMachine NuGet package to the target project:
-   ```csproj
-     <ItemGroup>
-       <PackageReference Include="stateless" Version="5.10.1" />
-     </ItemGroup>
-   ```
-
-3. Come up with a fancy PlantUML state machine diagram, for example:
+2. Come up with a fancy PlantUML state machine diagram, for example:
 
     ![StateMachines/SimpleStateMachine.puml](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/vrenken/EtAlii.Generators/main/Source/EtAlii.Generators.MicroMachine.Tests/StateMachines/SimpleStateMachine.puml)
 
-4. Put the PlantUML diagram in a file, for example `SimpleStateMachine.puml` as specified below:
+3. Put the PlantUML diagram in a file, for example `SimpleStateMachine.puml` as specified below:
    ```puml
     @startuml
     'namespace EtAlii.Generators.MicroMachine.Tests
@@ -44,19 +37,19 @@ Usage:
     State3 -up-> State4 : Continue
     @enduml
    ```
-   Make sure to notice the stateless parameters added at the start of the file. They help the code generation process understand which class/namespace to generate.
+   Make sure to notice the special parameters added at the start of the file. They help the code generation process understand which class/namespace to generate.
 
 
-5. Reference the file from the project (.csproj) as a `MicroMachineFile` entry:
+4. Reference the file from the project (.csproj) as a `MicroMachine` entry:
    ```csproj
      <ItemGroup>
-       <MicroMachineFile Include="MyFancyStateMachine.puml" />
+       <MicroMachine Include="MyFancyStateMachine.puml" />
      </ItemGroup>
    ```
-6. Compile the project - Antlr is used to parse the puml file and instruct the Roslyn generator to create C# state machine code according to the states, triggers and transitions defined in the diagram.
+5. Compile the project - Antlr is used to parse the puml file and instruct the Roslyn generator to create C# state machine code according to the states, triggers and transitions defined in the diagram.
 
 
-7. Add a class file to implement the needed state machine behavior.
+6. Add a class file to implement the needed state machine behavior.
    ```cs
     namespace EtAlii.Generators.MicroMachine.Tests
     {
@@ -72,7 +65,7 @@ Usage:
         }
     }
    ```
-8. Create and trigger the state machine from somewhere in your code, for example as done in the Main method below.
+7. Create and trigger the state machine from somewhere in your code, for example as done in the Main method below.
    ```cs
     namespace EtAlii.Generators.MicroMachine.Tests
     {
@@ -90,10 +83,10 @@ Usage:
         }
     }
    ```
-9. Enjoy the magic that code-generation can bring to your project.
+8. Enjoy the magic that code-generation can bring to your project.
 
 
-10. Star this project if you like it :-)
+9. Star this project if you like it :-)
 
 ## Supported MicroMachine/PlantUML features.
 
@@ -204,7 +197,7 @@ end note
 ```
 Please take notice:
 - When no parameter names are given the code generation tries to come up with a fitting set. Don't use this and use only fully qualified parameter names as the generated names will only cause confusion.
-- When parameters are specified as custom types don't forget to add the `stateless using` statement to make the code generation aware of the namespace the custom types live in.
+- When parameters are specified as custom types don't forget to add the `using` statement to make the code generation aware of the namespace the custom types live in.
 
 ### Nested states.
 

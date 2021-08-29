@@ -3,16 +3,16 @@
     xmlns="http://schemas.microsoft.com/build/2009/properties">
 
     <ContentType
-        Name="MicroMachineFile"
+        Name="MicroMachine"
         DisplayName="MicroMachine PlantUML diagram"
-        ItemType="MicroMachineFile" />
+        ItemType="MicroMachine" />
 
     <ItemType
-        Name="MicroMachineFile"
+        Name="MicroMachine"
         DisplayName="MicroMachine PlantUML diagram"/>
 
     <FileExtension
         Name=".puml"
-        ContentType="MicroMachineFile" />
+        ContentType="MicroMachine" />
 
 </ProjectSchemaDefinitions>

@@ -9,7 +9,7 @@
     using Microsoft.CodeAnalysis.Text;
 
     /// <summary>
-    /// The central class responsible of parsing both the PlantUML and Stateless specific constructions
+    /// The central class responsible of parsing PlantUML specific state machine constructions
     /// from the given input file.
     /// </summary>
     public class PlantUmlStateMachineParser : IParser<StateMachine>
