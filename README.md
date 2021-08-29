@@ -2,7 +2,7 @@
 
 ## Introduction
 Code generation is fun and when done right extremely helpful. This project aims to use a combination of [ANTLR](https://github.com/antlr/antlr4) and [Roslyn source generators](https://github.com/dotnet/roslyn/blob/main/docs/features/source-generators.cookbook.md) to simplify usage of some of the more mainstream frameworks/libraries.
-The first attempt is to use PlantUML to visually design [Stateless](https://github.com/dotnet-state-machine/stateless) state machines.
+The first attempt is to use PlantUML to visually design state machines. The current implementations support [Stateless](https://github.com/dotnet-state-machine/stateless) and 'flat' (i.e. no NuGet library dependency) state machines.
 
 ## Project status
 
