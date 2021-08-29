@@ -1,6 +1,7 @@
 ﻿namespace EtAlii.Generators.MicroMachine
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using EtAlii.Generators.PlantUml;
 
@@ -82,13 +83,37 @@
             context.Writer.Indent += 1;
             context.Writer.WriteLine($"_state = State.{transition.To};");
             context.Writer.WriteLine($"Trigger {triggerVariableName} = new {transition.Trigger}Trigger();");
+
             context.Writer.WriteLine($"On{transition.From}Exited(({transition.Trigger}Trigger){triggerVariableName});");
             context.Writer.WriteLine($"On{transition.From}Exited({triggerVariableName});");
+            var fromState = transition.From;
+            while (StateFragment.GetSuperState(context.Instance, fromState) is var superState && superState != null)
+            {
+                context.Writer.WriteLine($"On{superState.Name}Exited({triggerVariableName});");
+                fromState = superState.Name;
+            }
+
+            var enterLines = new List<string>();
+            var toState = transition.To;
+            while (StateFragment.GetSuperState(context.Instance, toState) is var superState && superState != null)
+            {
+                enterLines.Add($"On{superState.Name}Entered({triggerVariableName});");
+                toState = superState.Name;
+            }
+            enterLines.Reverse();
+            foreach (var enterLine in enterLines)
+            {
+                context.Writer.WriteLine(enterLine);
+            }
+
             context.Writer.WriteLine($"On{transition.To}Entered({triggerVariableName});");
             context.Writer.WriteLine($"On{transition.To}Entered(({transition.Trigger}Trigger){triggerVariableName});");
+
             context.Writer.WriteLine("break;");
             context.Writer.Indent -= 1;
         }
+
+
 
         private void WriteTriggerMethods(WriteContext<StateMachine> context, Transition[][] transitionSets, string triggerType, Func<string, string, string, string, string, string> write)
         {

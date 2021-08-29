@@ -1,63 +1,58 @@
 namespace EtAlii.Generators.MicroMachine.Tests
 {
+    using System;
     using System.Collections.Generic;
+    using System.Runtime.CompilerServices;
 
     public class SubStateStateMachine : SubStateStateMachineBase
     {
-        public List<string> Actions { get; } = new();
+        public List<string> Transitions { get; } = new();
 
-        public List<string> UnhandledTriggers { get; } = new();
+        private void LogTransition(Type triggerType, [CallerMemberName] string methodName = null) => Transitions.Add($"{methodName}({triggerType.Name} trigger)");
 
-        protected override void OnState1Entered() => Actions.Add("State 1 entered");
+        protected override void OnState1Entered(Trigger trigger) => LogTransition(typeof(Trigger));
+        protected override void OnState1Entered(Continue1Trigger trigger) => LogTransition(typeof(Continue1Trigger));
+        protected override void OnState1Exited(Trigger trigger) => LogTransition(typeof(Trigger));
+        protected override void OnState1Exited(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
 
-        protected override void OnState1Exited() => Actions.Add("State 1 exited");
 
-        protected override void OnState2Entered() => Actions.Add("State 2 entered");
+        protected override void OnState2Entered(Trigger trigger) => LogTransition(typeof(Trigger));
+        protected override void OnState2Entered(Continue2Trigger trigger) => LogTransition(typeof(Continue2Trigger));
+        protected override void OnState2Exited(Trigger trigger) => LogTransition(typeof(Trigger));
+        protected override void OnState2Exited(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
 
-        protected override void OnState2Exited() => Actions.Add("State 2 exited");
 
-        protected override void OnState3Entered() => Actions.Add("State 3 entered");
+        protected override void OnState3Entered(Trigger trigger) => LogTransition(typeof(Trigger));
+        protected override void OnState3Entered(Continue3Trigger trigger) => LogTransition(typeof(Continue3Trigger));
+        protected override void OnState3Exited(Trigger trigger) => LogTransition(typeof(Trigger));
+        protected override void OnState3Exited(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
 
-        protected override void OnState3Exited() => Actions.Add("State 3 exited");
 
-        protected override void OnSuperState1Entered() => Actions.Add("SuperState 1 entered");
+        protected override void OnSuperState1Entered(Trigger trigger) => LogTransition(typeof(Trigger));
+        protected override void OnSuperState1Entered(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
+        protected override void OnSuperState1Exited(Trigger trigger) => LogTransition(typeof(Trigger));
 
-        protected override void OnSuperState1Exited() => Actions.Add("SuperState 1 exited");
 
-        protected override void OnSuperState2Entered() => Actions.Add("SuperState 2 entered");
+        protected override void OnSuperState2Entered(Trigger trigger) => LogTransition(typeof(Trigger));
+        protected override void OnSuperState2Entered(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
+        protected override void OnSuperState2Exited(Trigger trigger) => LogTransition(typeof(Trigger));
 
-        protected override void OnSuperState2Exited() => Actions.Add("SuperState 2 exited");
+        protected override void OnSuperState3Entered(Trigger trigger) => LogTransition(typeof(Trigger));
+        protected override void OnSuperState3Exited(Trigger trigger) => LogTransition(typeof(Trigger));
+        // TODO
+        //protected override void OnSuperState3Entered(ContinueTrigger trigger) => LogTrigger(typeof(ContinueTrigger));
 
-        protected override void OnSubState1Entered() => Actions.Add("SubState 1 entered");
+        protected override void OnSubState1Entered(Trigger trigger) => LogTransition(typeof(Trigger));
+        protected override void OnSubState1Entered(_BeginToSubState1Trigger trigger) => LogTransition(typeof(_BeginToSubState1Trigger));
+        protected override void OnSubState1Exited(Trigger trigger) => LogTransition(typeof(Trigger));
 
-        protected override void OnSubState2Entered() => Actions.Add("SubState 2 entered");
+        protected override void OnSubState2Entered(Trigger trigger) => LogTransition(typeof(Trigger));
+        protected override void OnSubState2Entered(StartTrigger trigger) => LogTransition(typeof(StartTrigger));
+        protected override void OnSubState2Exited(Trigger trigger) => LogTransition(typeof(Trigger));
 
-        protected override void OnSubState3Entered() => Actions.Add("SubState 3 entered");
+        protected override void OnSubState3Entered(Trigger trigger) => LogTransition(typeof(Trigger));
+        protected override void OnSubState3Entered(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
+        protected override void OnSubState3Exited(Trigger trigger) => LogTransition(typeof(Trigger));
 
-        protected override void OnSuperState3Entered() => Actions.Add("SuperState 3 entered");
-
-        protected override void OnSuperState3Exited() => Actions.Add("SuperState 3 exited");
-
-        protected override void OnState1EnteredFromContinue1Trigger() => Actions.Add("State 1 entered from continue 1 trigger");
-
-        protected override void OnState2EnteredFromContinue2Trigger() => Actions.Add("State 2 entered from continue 2 trigger");
-
-        protected override void OnState3EnteredFromContinue3Trigger() => Actions.Add("State 3 entered from continue 3 trigger");
-
-        protected override void OnSubState1Exited() => Actions.Add("SubState 1 exited");
-
-        protected override void OnSubState1EnteredFrom_BeginToSubState1Trigger() => Actions.Add("SubState 1 entered from _BeginToSubState trigger");
-
-        protected override void OnSubState2Exited() => Actions.Add("SubState 2 exited");
-
-        protected override void OnSubState2EnteredFromStartTrigger() => Actions.Add("SubState 2 entered from start trigger");
-
-        protected override void OnSubState3Exited() => Actions.Add("SubState 3 exited");
-
-        protected override void OnSubState3EnteredFromContinueTrigger() => Actions.Add("SubState 3 entered from continue trigger");
-
-        protected override void OnSuperState1EnteredFromContinueTrigger() => Actions.Add("SuperState 1 entered from continue trigger");
-
-        protected override void OnSuperState2EnteredFromContinueTrigger() => Actions.Add("SuperState 2 entered from continue trigger");
     }
 }
