@@ -6,6 +6,8 @@
 - Generates methods+MicroMachine configuration (When configured in PlantUML).
 - Roslyn warnings when the diagram contains constructions that MicroMachine cannot honor.
 - Roslyn code fixes for when the transitions in the diagram are not implemented in the code base.
+- **No need for any other state machine library: All states, triggers and transition logic is generated within your project.**
+- Super fast as there is in contrast with other state machines only minimal state management logic overhead.
 
 ## How to start.
 Usage:
