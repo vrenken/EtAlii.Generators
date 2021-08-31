@@ -48,21 +48,21 @@
             context.Writer.WriteLine(baseClassName != null ? $"protected class {className} : {baseClassName}" : $"protected class {className}");
             context.Writer.WriteLine("{");
             context.Writer.Indent += 1;
-            foreach (var parameter in parameters)
+
+            var properties = _parameterConverter.ToProperties(parameters);
+            foreach (var property in properties)
             {
-                var parameterName = _parameterConverter.ToParameterName(parameter);
-                var camelCaseParameterName = _parameterConverter.ToCamelCase(parameterName);
-                context.Writer.WriteLine($"public {parameter.Type} {camelCaseParameterName} {{get; private set;}}");
+                context.Writer.WriteLine(property);
             }
-            context.Writer.WriteLine("public {className}({typedParameters})");
+            context.Writer.WriteLine();
+            context.Writer.WriteLine($"public {className}({typedParameters})");
             context.Writer.WriteLine("{");
             context.Writer.Indent += 1;
 
-            foreach (var parameter in parameters)
+            var propertyAssignments = _parameterConverter.ToPropertyAssignments(parameters);
+            foreach (var propertyAssignment in propertyAssignments)
             {
-                var parameterName = _parameterConverter.ToParameterName(parameter);
-                var camelCaseParameterName = _parameterConverter.ToCamelCase(parameterName);
-                context.Writer.WriteLine($"this.{camelCaseParameterName} = {parameterName}");
+                context.Writer.WriteLine(propertyAssignment);
             }
 
             context.Writer.Indent -= 1;

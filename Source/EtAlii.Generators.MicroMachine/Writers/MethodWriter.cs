@@ -45,7 +45,7 @@
             }
         }
 
-        private void WriteTransitionMethod(WriteContext<StateMachine> context, string trigger, string typedParameters)
+        private void WriteTransitionMethod(WriteContext<StateMachine> context, string trigger, string typedParameters, string namedParameters)
         {
             context.Writer.WriteLine($"private void {trigger}Transition({typedParameters})");
             context.Writer.WriteLine("{");
@@ -60,7 +60,7 @@
 
             foreach (var transition in transitions)
             {
-                WriteTransitionStateCase(context, transition);
+                WriteTransitionStateCase(context, transition, namedParameters);
             }
 
             context.Writer.WriteLine("default:");
@@ -73,7 +73,7 @@
             context.Writer.WriteLine("}");
         }
 
-        private void WriteTransitionStateCase(WriteContext<StateMachine> context, Transition transition)
+        private void WriteTransitionStateCase(WriteContext<StateMachine> context, Transition transition, string namedParameters)
         {
             var parentSuperState = StateFragment.GetSuperState(context.Instance, transition.To);
             var stateName = parentSuperState != null && transition.From == PlantUmlConstant.BeginStateName
@@ -86,7 +86,7 @@
             context.Writer.WriteLine($"case State.{stateName}:");
             context.Writer.Indent += 1;
             context.Writer.WriteLine($"_state = State.{transition.To};");
-            context.Writer.WriteLine($"Trigger {triggerVariableName} = new {triggerTypeName}();");
+            context.Writer.WriteLine($"Trigger {triggerVariableName} = new {triggerTypeName}({namedParameters});");
 
             var chain = MethodChain.Create(context, stateName, transition.Trigger, transition.To);
 
@@ -122,6 +122,7 @@
                     .SingleOrDefault(t => t.From == PlantUmlConstant.BeginStateName);
                 if (unnamedInboundTransition != null)
                 {
+                    context.Writer.WriteLine("// We also need to activate the first substate.");
                     context.Writer.WriteLine($"_state = State.{unnamedInboundTransition.To};");
                     context.Writer.WriteLine($"On{unnamedInboundTransition.To}Entered({triggerVariableName});");
                 }
@@ -139,10 +140,10 @@
                 var parameters = firstTransition.Parameters;
                 var typedParameters = _parameterConverter.ToTypedNamedVariables(parameters);
                 var genericParameters = _parameterConverter.ToGenericParameters(parameters);
-                var namedParameters = parameters.Any() ? $", {_parameterConverter.ToNamedVariables(parameters)}" : string.Empty;
+                var namedParameters = parameters.Any() ? _parameterConverter.ToNamedVariables(parameters) : string.Empty;
                 var triggerParameter = _transitionConverter.ToTriggerParameter(firstTransition);
 
-                WriteTransitionMethod(context, firstTransition.Trigger, typedParameters);
+                WriteTransitionMethod(context, firstTransition.Trigger, typedParameters, namedParameters);
 
                 WriteComment(context, transitionSet, $"Depending on the current state, call this method to trigger one of the {triggerType} transitions below:");
                 context.Writer.WriteLine(write(firstTransition.Trigger, typedParameters, genericParameters, triggerParameter, namedParameters));

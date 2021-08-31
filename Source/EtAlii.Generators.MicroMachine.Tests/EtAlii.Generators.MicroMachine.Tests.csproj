@@ -56,9 +56,6 @@
     <None Update="StateMachines\AsyncStateMachine.cs">
       <DependentUpon>AsyncStateMachine.puml</DependentUpon>
     </None>
-    <Compile Update="StateMachines\ParameterStateMachine.Generated.cs">
-      <DependentUpon>ParameterStateMachine.puml</DependentUpon>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>

@@ -29,6 +29,32 @@
             return string.Join(", ", result);
         }
 
+        public string[] ToProperties(Parameter[] parameters)
+        {
+            var result = new List<string>();
+            for (var i = 0; i < parameters.Length; i++)
+            {
+                var type = parameters[i].Type;
+                var name = parameters[i].HasName ? ToPascalCase(parameters[i].Name) : $"@{ToPascalCase(parameters[i].Type)}{i}";
+                result.Add($"public {type} {name} {{ get; private set; }}");
+            }
+
+            return result.ToArray();
+        }
+
+        public string[] ToPropertyAssignments(Parameter[] parameters)
+        {
+            var result = new List<string>();
+            for (var i = 0; i < parameters.Length; i++)
+            {
+                var propertyName = parameters[i].HasName ? ToPascalCase(parameters[i].Name) : $"@{ToPascalCase(parameters[i].Type)}{i}";
+                var variableName = parameters[i].HasName ? parameters[i].Name : $"@{ToCamelCase(parameters[i].Type)}{i}";
+
+                result.Add($"this.{propertyName} = {variableName};");
+            }
+            return result.ToArray();
+        }
+
         public string ToNamedVariables(Parameter[] parameters)
         {
             var result = new List<string>();
@@ -40,7 +66,7 @@
             return string.Join(", ", result);
         }
 
-        private string ToPascalCase(string s)
+        public string ToPascalCase(string s)
         {
             var span = new Span<char>(s.ToCharArray());
             span[0] = char.ToUpper(span[0]);
