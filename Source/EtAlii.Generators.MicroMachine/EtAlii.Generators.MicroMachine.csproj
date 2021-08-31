@@ -41,6 +41,7 @@
   <Target Name="GetMicroMachinePackageDependencyTargetPaths">
     <ItemGroup>
       <TargetPathWithTargetPlatformMoniker Include="..\EtAlii.Generators.PlantUml\$(OutDir)\EtAlii.Generators.PlantUml.dll" IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="..\EtAlii.Generators\$(OutDir)\EtAlii.Generators.dll" IncludeRuntimeDependency="false" />
     </ItemGroup>
   </Target>
 
