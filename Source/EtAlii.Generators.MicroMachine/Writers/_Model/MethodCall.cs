@@ -2,15 +2,15 @@
 {
     public class MethodCall
     {
-        public string MethodName { get; }
-        public string Cast { get; }
+        public string State { get; }
         public bool IsAsync { get; }
+        public bool IsSuperState { get; }
 
-        public MethodCall(string methodName, string cast, bool isAsync)
+        public MethodCall(string state, bool isSuperState, bool isAsync)
         {
-            MethodName = methodName;
+            State = state;
+            IsSuperState = isSuperState;
             IsAsync = isAsync;
-            Cast = cast ?? string.Empty;
         }
     }
 }

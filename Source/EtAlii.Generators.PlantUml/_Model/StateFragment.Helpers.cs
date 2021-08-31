@@ -1,5 +1,6 @@
 namespace EtAlii.Generators.PlantUml
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     public abstract partial class StateFragment
@@ -101,6 +102,19 @@ namespace EtAlii.Generators.PlantUml
                 .ToArray();
         }
 
+        public static SuperState[] GetAllSuperStates(StateMachine stateMachine, string substate)
+        {
+            var result = new List<SuperState>();
+
+            while (GetSuperState(stateMachine, substate) is var superState && superState != null)
+            {
+                result.Add(superState);
+                substate = superState.Name;
+            }
+
+            return result.ToArray();
+        }
+
         public static SuperState GetSuperState(StateMachine stateMachine, string substate)
         {
             if (substate == PlantUmlConstant.BeginStateName || substate == PlantUmlConstant.EndStateName)
@@ -186,6 +200,7 @@ namespace EtAlii.Generators.PlantUml
                 .ToArray();
             return allStates;
         }
+
         public static string[] GetAllStates(StateFragment[] fragments)
         {
             var transitionStates = GetAllTransitions(fragments)

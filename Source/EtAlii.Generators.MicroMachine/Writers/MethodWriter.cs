@@ -1,7 +1,6 @@
 ﻿namespace EtAlii.Generators.MicroMachine
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using EtAlii.Generators.PlantUml;
 
@@ -65,6 +64,7 @@
             {
                 WriteTransitionStateCase(context, transition);
             }
+
             context.Writer.WriteLine("default:");
             context.Writer.Indent += 1;
             context.Writer.WriteLine($"throw new NotSupportedException($\"Trigger {trigger} is not supported in state {{_state}}\");");
@@ -77,43 +77,61 @@
 
         private void WriteTransitionStateCase(WriteContext<StateMachine> context, Transition transition)
         {
-            var triggerVariableName = $"trigger{transition.From}";
+            var parentSuperState = StateFragment.GetSuperState(context.Instance, transition.To);
+            var stateName = parentSuperState != null && transition.From == PlantUmlConstant.BeginStateName
+                ? parentSuperState.Name
+                : transition.From;
 
-            context.Writer.WriteLine($"case State.{transition.From}:");
+            var triggerVariableName = $"trigger{stateName}";
+            var triggerTypeName = $"{transition.Trigger}Trigger";
+
+            context.Writer.WriteLine($"case State.{stateName}:");
             context.Writer.Indent += 1;
             context.Writer.WriteLine($"_state = State.{transition.To};");
-            context.Writer.WriteLine($"Trigger {triggerVariableName} = new {transition.Trigger}Trigger();");
+            context.Writer.WriteLine($"Trigger {triggerVariableName} = new {triggerTypeName}();");
 
-            context.Writer.WriteLine($"On{transition.From}Exited(({transition.Trigger}Trigger){triggerVariableName});");
-            context.Writer.WriteLine($"On{transition.From}Exited({triggerVariableName});");
-            var fromState = transition.From;
-            while (StateFragment.GetSuperState(context.Instance, fromState) is var superState && superState != null)
+            var chain = MethodChain.Create(context, stateName, transition.Trigger, transition.To);
+
+            foreach (var call in chain.ExitCalls)
             {
-                context.Writer.WriteLine($"On{superState.Name}Exited({triggerVariableName});");
-                fromState = superState.Name;
+                if (!call.IsSuperState)
+                {
+                    context.Writer.WriteLine($"On{call.State}Exited(({triggerTypeName}){triggerVariableName});");
+                }
+                context.Writer.WriteLine($"On{call.State}Exited({triggerVariableName});");
+            }
+            foreach (var call in chain.EntryCalls)
+            {
+                context.Writer.WriteLine($"On{call.State}Entered({triggerVariableName});");
+                if (!call.IsSuperState)
+                {
+                    context.Writer.WriteLine($"On{call.State}Entered(({triggerTypeName}){triggerVariableName});");
+                }
             }
 
-            var enterLines = new List<string>();
-            var toState = transition.To;
-            while (StateFragment.GetSuperState(context.Instance, toState) is var superState && superState != null)
+            var toSuperState = StateFragment
+                .GetAllSuperStates(context.Instance.StateFragments)
+                .SingleOrDefault(ss => ss.Name == transition.To);
+            if (toSuperState != null)
             {
-                enterLines.Add($"On{superState.Name}Entered({triggerVariableName});");
-                toState = superState.Name;
-            }
-            enterLines.Reverse();
-            foreach (var enterLine in enterLines)
-            {
-                context.Writer.WriteLine(enterLine);
-            }
+                var subTransitions = toSuperState.StateFragments
+                    .OfType<Transition>()
+                    .ToArray();
 
-            context.Writer.WriteLine($"On{transition.To}Entered({triggerVariableName});");
-            context.Writer.WriteLine($"On{transition.To}Entered(({transition.Trigger}Trigger){triggerVariableName});");
+                var unnamedInboundTransition = subTransitions
+                    .Where(t => !t.HasConcreteTriggerName)
+                    .Where(t => t.Parameters.Length == 0)
+                    .SingleOrDefault(t => t.From == PlantUmlConstant.BeginStateName);
+                if (unnamedInboundTransition != null)
+                {
+                    context.Writer.WriteLine($"_state = State.{unnamedInboundTransition.To};");
+                    context.Writer.WriteLine($"On{unnamedInboundTransition.To}Entered({triggerVariableName});");
+                }
+            }
 
             context.Writer.WriteLine("break;");
             context.Writer.Indent -= 1;
         }
-
-
 
         private void WriteTriggerMethods(WriteContext<StateMachine> context, Transition[][] transitionSets, string triggerType, Func<string, string, string, string, string, string> write)
         {

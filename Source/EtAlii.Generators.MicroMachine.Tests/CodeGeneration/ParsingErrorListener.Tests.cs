@@ -1,6 +1,7 @@
 ﻿namespace EtAlii.Generators.MicroMachine.Tests
 {
     using System.IO;
+    using EtAlii.Generators.PlantUml;
     using Xunit;
 
     public class PlantUmlErrorListenerTests

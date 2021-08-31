@@ -53,6 +53,7 @@
     </None>
     <Compile Remove="StateMachines\AsyncStateMachine.Tests.cs" />
     <None Include="StateMachines\AsyncStateMachine.Tests.cs" />
+    <Compile Remove="StateMachines\SubStateStateMachine.Generated.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -60,6 +61,7 @@
     <Compile Update="StateMachines\SimpleStateMachine.cs">
       <DependentUpon>SimpleStateMachine.puml</DependentUpon>
     </Compile>
+
     <MicroMachine Include="StateMachines\SubStateStateMachine.puml" />
     <Compile Update="StateMachines\SubStateStateMachine.cs">
       <DependentUpon>SubStateStateMachine.puml</DependentUpon>
