@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Below is not a normal project reference! It introduces the Stateless specific code-generator. -->
+    <!-- Below is not a normal project reference! It introduces the EF Core specific code-generator. -->
     <ProjectReference Include="..\EtAlii.Generators.EntityFrameworkCore\EtAlii.Generators.EntityFrameworkCore.csproj">
       <PrivateAssets>all</PrivateAssets>
       <!-- <ReferenceOutputAssembly>false</ReferenceOutputAssembly> --> <!-- We want to unit test the internals. -->

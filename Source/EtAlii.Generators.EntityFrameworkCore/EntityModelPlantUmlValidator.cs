@@ -13,6 +13,7 @@ namespace EtAlii.Generators.EntityFrameworkCore
     {
         public void Validate(EntityModel instance, string originalFileName, List<Diagnostic> diagnostics)
         {
+            // We don't know what is needed to validate the EF model.
         }
     }
 }

@@ -12,15 +12,15 @@
     [Generator]
     public class SourceGenerator : SourceGeneratorBase<object>
     {
-        protected override IParser<object> CreateParser() => new GraphQLQueryParser();
+        protected override IParser<object> CreateParser() => new MachineLearningQueryParser();
 
-        protected override IWriterFactory<object> CreateWriterFactory() => new GraphQLQueryWriterFactory();
+        protected override IWriterFactory<object> CreateWriterFactory() => new MachineLearningQueryWriterFactory();
 
-        protected override IValidator<object> CreateValidator() => new GraphQLQueryValidator();
+        protected override IValidator<object> CreateValidator() => new MachineLearningQueryValidator();
 
         protected override string GetExtension() => ".ml";
 
-        protected override string GetSourceItemGroup() => "StatelessFile";
+        protected override string GetSourceItemGroup() => "MLFile";
 
         protected override DiagnosticDescriptor GetParsingExceptionRule() => DiagnosticRule.ParsingThrewException;
 

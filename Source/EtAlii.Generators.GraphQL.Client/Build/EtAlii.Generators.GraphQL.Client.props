@@ -9,7 +9,7 @@
 
   <Target Name="_InjectAdditionalFiles" BeforeTargets="GenerateMSBuildEditorConfigFileShouldRun">
     <ItemGroup>
-      <AdditionalFiles Include="@(StatelessFile)" SourceItemGroup="StatelessFile" />
+      <AdditionalFiles Include="@(GraphQLFile)" SourceItemGroup="GraphQLFile" />
     </ItemGroup>
   </Target>
 

@@ -2,7 +2,7 @@
 
 namespace EtAlii.Generators.ML
 {
-    public class GraphQLQueryWriterFactory : IWriterFactory<object>, IWriter<object>
+    public class MachineLearningQueryWriterFactory : IWriterFactory<object>, IWriter<object>
     {
         public IWriter<object> Create()
         {

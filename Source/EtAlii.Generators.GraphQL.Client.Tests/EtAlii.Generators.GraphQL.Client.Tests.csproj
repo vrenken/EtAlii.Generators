@@ -6,10 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="stateless" Version="5.11.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <!-- Below is not a normal project reference! It introduces the GraphQL query specific code-generator. -->
     <ProjectReference Include="..\EtAlii.Generators.GraphQL.Client\EtAlii.Generators.GraphQL.Client.csproj">
       <PrivateAssets>all</PrivateAssets>

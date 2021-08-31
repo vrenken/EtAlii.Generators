@@ -9,10 +9,11 @@ namespace EtAlii.Generators.ML
     /// The central class responsible of validating the query requirements
     /// and express them using Roslyn Diagnostic instances.
     /// </summary>
-    public class GraphQLQueryValidator : IValidator<object>
+    public class MachineLearningQueryValidator : IValidator<object>
     {
         public void Validate(object instance, string originalFileName, List<Diagnostic> diagnostics)
         {
+            // We don't know what is needed to validate the ML model.
         }
     }
 }

@@ -30,10 +30,11 @@
             var toIsChildOfFrom = toParents.Any(toParent => toParent.Name == fromState);
             var fromIsChildOfTo = fromParents.Any(fromParent => fromParent.Name == toState);
 
-            // 2. - Pick the state itself.
             if (!toIsChildOfFrom)
             {
+                // 2. - Pick the state itself.
                 exitCalls.Add(new MethodCall(fromState, false, false));
+                // 3. - Pick any state except beyond the shared superstate.
                 foreach (var fromParent in fromParents)
                 {
                     var shouldWriteExitState = fromParent.Name != toState;
@@ -46,9 +47,9 @@
                 }
             }
 
-            // 4. - Pick the state itself.
             if (!fromIsChildOfTo)
             {
+                // 4. - Pick the state itself.
                 entryCalls.Add(new MethodCall(toState, false, false));
                 // 5. - Pick any state except the shared superstate.
                 foreach (var toParent in toParents)

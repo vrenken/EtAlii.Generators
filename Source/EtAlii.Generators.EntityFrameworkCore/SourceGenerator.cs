@@ -5,7 +5,7 @@
     using Microsoft.CodeAnalysis;
 
     /// <summary>
-    /// A code generator able to create Stateless source code from PlantUML diagrams.
+    /// A code generator able to create EF Core source code from PlantUML diagrams.
     /// </summary>
     /// <remarks>
     /// The concepts below are not supported yet:

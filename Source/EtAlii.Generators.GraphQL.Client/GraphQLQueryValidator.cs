@@ -13,6 +13,7 @@ namespace EtAlii.Generators.GraphQL.Client
     {
         public void Validate(object instance, string originalFileName, List<Diagnostic> diagnostics)
         {
+            // We don't know what is needed to validate the GraphQL model.
         }
     }
 }

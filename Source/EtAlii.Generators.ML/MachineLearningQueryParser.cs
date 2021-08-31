@@ -11,7 +11,7 @@
     /// The central class responsible of parsing both the PlantUML and Stateless specific constructions
     /// from the given input file.
     /// </summary>
-    public class GraphQLQueryParser : IParser<object>
+    public class MachineLearningQueryParser : IParser<object>
     {
         public bool TryParse(AdditionalText file, List<string> log, out object stateMachine, out Diagnostic[] diagnostics)
         {
