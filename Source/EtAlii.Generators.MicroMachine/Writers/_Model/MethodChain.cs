@@ -1,6 +1,5 @@
 ﻿namespace EtAlii.Generators.MicroMachine
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using EtAlii.Generators.PlantUml;
@@ -28,7 +27,6 @@
             // 1. - Find the biggest shared superstate / or the complete state machine.
             var fromParents = StateFragment.GetAllSuperStates(context.Instance, fromState);
             var toParents = StateFragment.GetAllSuperStates(context.Instance, toState);
-            var sharedParent = Array.Find(fromParents, fromParent => toParents.Any(toParent => SuperStatesAreEqual(fromParent, toParent)));
             var toIsChildOfFrom = toParents.Any(toParent => toParent.Name == fromState);
             var fromIsChildOfTo = fromParents.Any(fromParent => fromParent.Name == toState);
 
@@ -38,8 +36,6 @@
                 exitCalls.Add(new MethodCall(fromState, false, false));
                 foreach (var fromParent in fromParents)
                 {
-                    //var shouldWriteExitState = false;
-                    //shouldWriteExitState |= sharedParent != null && SuperStatesAreEqual(fromParent, sharedParent);
                     var shouldWriteExitState = fromParent.Name != toState;
 
                     if (!shouldWriteExitState)
@@ -57,8 +53,6 @@
                 // 5. - Pick any state except the shared superstate.
                 foreach (var toParent in toParents)
                 {
-                    //var shouldWriteEntryState = false;
-                    //shouldWriteEntryState |= sharedParent != null && SuperStatesAreEqual(toParent, sharedParent);
                     var shouldWriteEntryState = toParent.Name != fromState;
 
                     if (!shouldWriteEntryState)
