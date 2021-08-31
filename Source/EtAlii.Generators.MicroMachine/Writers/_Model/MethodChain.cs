@@ -68,7 +68,5 @@
 
             return new MethodChain { ExitCalls = exitCalls.ToArray(), EntryCalls = entryCalls.ToArray() };
         }
-
-        private static bool SuperStatesAreEqual(SuperState s1, SuperState s2) => s1.Source.Line == s2.Source.Line && s1.Source.Column == s2.Source.Column;
     }
 }
