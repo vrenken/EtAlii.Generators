@@ -72,7 +72,7 @@
       <DependentUpon>SubStateStateMachine.puml</DependentUpon>
     </Compile>
 
-    <None Include="StateMachines\ParameterStateMachine.puml" />
+    <MicroMachine Include="StateMachines\ParameterStateMachine.puml" />
     <Compile Update="StateMachines\ParameterStateMachine.cs">
       <DependentUpon>ParameterStateMachine.puml</DependentUpon>
     </Compile>

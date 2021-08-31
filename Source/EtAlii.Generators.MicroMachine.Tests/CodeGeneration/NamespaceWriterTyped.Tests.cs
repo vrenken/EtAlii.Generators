@@ -18,7 +18,7 @@
             var enumWriter = new EnumWriter<StateMachine>();
             var methodWriter = new MethodWriter(parameterConverter, transitionConverter);
             var transitionClassWriter = new TransitionClassWriter();
-            var triggerClassWriter = new TriggerClassWriter();
+            var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter);
             var stateMachineClassWriter = new StateMachineClassWriter(enumWriter, methodWriter, triggerClassWriter, transitionClassWriter);
 
             // Act.
@@ -37,7 +37,7 @@
             var enumWriter = new EnumWriter<StateMachine>();
             var methodWriter = new MethodWriter(parameterConverter, transitionConverter);
             var transitionClassWriter = new TransitionClassWriter();
-            var triggerClassWriter = new TriggerClassWriter();
+            var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter);
             var stateMachineClassWriter = new StateMachineClassWriter(enumWriter, methodWriter, triggerClassWriter, transitionClassWriter);
             var writer = new NamespaceWriter<StateMachine>(context => stateMachineClassWriter.Write(context));
             var originalFileName = "Test.puml";
@@ -85,7 +85,7 @@
             var enumWriter = new EnumWriter<StateMachine>();
             var methodWriter = new MethodWriter(parameterConverter, transitionConverter);
             var transitionClassWriter = new TransitionClassWriter();
-            var triggerClassWriter = new TriggerClassWriter();
+            var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter);
             var stateMachineClassWriter = new StateMachineClassWriter(enumWriter, methodWriter, triggerClassWriter, transitionClassWriter);
             var writer = new NamespaceWriter<StateMachine>(context => stateMachineClassWriter.Write(context));
             var originalFileName = "Test.puml";
