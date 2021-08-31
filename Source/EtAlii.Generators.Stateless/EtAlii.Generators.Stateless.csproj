@@ -24,8 +24,21 @@
       <PackagePath>build\</PackagePath>
     </Content>
 
-    <Content Include="..\EtAlii.Generators\$(OutDir)\EtAlii.Generators.dll" PackagePath="\analyzers\dotnet\cs" />
-    <Content Include="..\EtAlii.Generators.PlantUml\$(OutDir)\EtAlii.Generators.PlantUml.dll" PackagePath="\analyzers\dotnet\cs" />
+    <None Include="..\EtAlii.Generators\$(OutDir)\EtAlii.Generators.dll" >
+      <Visible>false</Visible>
+      <Pack>true</Pack>
+      <PackagePath>\analyzers\dotnet\cs</PackagePath>
+    </None>
+    <None Include="..\EtAlii.Generators.PlantUml\$(OutDir)\EtAlii.Generators.PlantUml.dll" >
+      <Visible>false</Visible>
+      <Pack>true</Pack>
+      <PackagePath>\analyzers\dotnet\cs</PackagePath>
+    </None>
+    <None Include="$(PkgAntlr4_Runtime_Standard)\lib\netstandard2.0\Antlr4.Runtime.Standard.dll" >
+      <Visible>false</Visible>
+      <Pack>true</Pack>
+      <PackagePath>\analyzers\dotnet\cs</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
