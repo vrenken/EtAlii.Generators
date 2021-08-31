@@ -13,7 +13,7 @@ end note
 
 
 [*] -right-> State2 : Continue2
-State2 -right-> NextState2 << (string, int, float) >> : Continue
+State2 -right-> NextState2 << (string, int, float) >> : Activate2
 note top on link
 Transition towards another state with UNNAMED parameters.
 --
@@ -25,7 +25,7 @@ end note
 
 [*] -down--> State3 : Continue3
 
-State3 -right-> NextState3 << (Customer customer, Project project) >> : Continue
+State3 -right-> NextState3 << (Customer customer, Project project) >> : Activate3
 note top on link
 Transition towards another state with custom parameter types.
 --

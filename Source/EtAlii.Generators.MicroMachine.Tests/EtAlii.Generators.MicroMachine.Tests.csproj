@@ -24,7 +24,6 @@
     <None Include="StateMachines\MyNestedStateMachine1.puml" />
     <None Include="StateMachines\MyNestedStateMachine2.puml" />
     <None Include="StateMachines\MyNestedStateMachine4.puml" />
-    <None Include="StateMachines\ParameterStateMachine.puml" />
     <None Include="StateMachines\AsyncSubStateStateMachine.Tests.cs" />
 
     <Compile Remove="StateMachines\AsyncSubStateStateMachine.cs" />
@@ -47,13 +46,19 @@
     <None Include="StateMachines\MyNestedStateMachine4.cs">
       <DependentUpon>MyNestedStateMachine4.puml</DependentUpon>
     </None>
-    <Compile Remove="StateMachines\ParameterStateMachine.cs" />
-    <None Include="StateMachines\ParameterStateMachine.cs">
-      <DependentUpon>ParameterStateMachine.puml</DependentUpon>
-    </None>
     <Compile Remove="StateMachines\AsyncStateMachine.Tests.cs" />
     <None Include="StateMachines\AsyncStateMachine.Tests.cs" />
     <Compile Remove="StateMachines\SubStateStateMachine.Generated.cs" />
+
+    <Compile Remove="StateMachines\AsyncSubStateStateMachine.Tests.cs" />
+    <Compile Remove="StateMachines\AsyncStateMachine.cs" />
+    <None Include="StateMachines\AsyncStateMachine.puml" />
+    <None Update="StateMachines\AsyncStateMachine.cs">
+      <DependentUpon>AsyncStateMachine.puml</DependentUpon>
+    </None>
+    <Compile Update="StateMachines\ParameterStateMachine.Generated.cs">
+      <DependentUpon>ParameterStateMachine.puml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -67,12 +72,10 @@
       <DependentUpon>SubStateStateMachine.puml</DependentUpon>
     </Compile>
 
-    <Compile Remove="StateMachines\AsyncSubStateStateMachine.Tests.cs" />
-    <Compile Remove="StateMachines\AsyncStateMachine.cs" />
-    <None Include="StateMachines\AsyncStateMachine.puml" />
-    <None Update="StateMachines\AsyncStateMachine.cs">
-      <DependentUpon>AsyncStateMachine.puml</DependentUpon>
-    </None>
+    <None Include="StateMachines\ParameterStateMachine.puml" />
+    <Compile Update="StateMachines\ParameterStateMachine.cs">
+      <DependentUpon>ParameterStateMachine.puml</DependentUpon>
+    </Compile>
 
   </ItemGroup>
 
