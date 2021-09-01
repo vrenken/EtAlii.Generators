@@ -59,7 +59,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <MicroMachine Include="StateMachines\SimplePartialStateMachine.puml" />
     <MicroMachine Include="StateMachines\SimpleStateMachine.puml" />
     <Compile Update="StateMachines\SimpleStateMachine.cs">
       <DependentUpon>SimpleStateMachine.puml</DependentUpon>
@@ -75,6 +74,10 @@
       <DependentUpon>ParameterStateMachine.puml</DependentUpon>
     </Compile>
 
+    <MicroMachine Include="StateMachines\SimplePartialStateMachine.puml" />
+    <Compile Update="StateMachines\SimplePartialStateMachine.cs">
+      <DependentUpon>SimplePartialStateMachine.puml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <Import Project="..\EtAlii.Generators.MicroMachine\Build\*.targets" />

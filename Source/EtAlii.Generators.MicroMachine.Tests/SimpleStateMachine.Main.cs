@@ -8,7 +8,7 @@ namespace EtAlii.Generators.MicroMachine.Tests
         {
             var stateMachine = new SimpleStateMachine();
             stateMachine.Start();
-            Console.WriteLine(stateMachine.Actions[0]);
+            Console.WriteLine(stateMachine.Transitions[0]);
             stateMachine.Continue();
         }
     }

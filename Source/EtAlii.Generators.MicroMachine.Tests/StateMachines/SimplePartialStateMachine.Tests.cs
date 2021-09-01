@@ -42,25 +42,25 @@
 
             // Assert.
             var i = 0;
-            Assert.Equal(18, stateMachine.Actions.Count);
-            Assert.Equal("State 1 entered", stateMachine.Actions[i++]);
-            Assert.Equal("State 1 entered by Start trigger", stateMachine.Actions[i++]);
-            Assert.Equal("State 1 exited by Continue trigger", stateMachine.Actions[i++]);
-            Assert.Equal("State 1 exited", stateMachine.Actions[i++]);
-            Assert.Equal("State 2 entered", stateMachine.Actions[i++]);
-            Assert.Equal("State 2 entered by Continue trigger", stateMachine.Actions[i++]);
-            Assert.Equal("State 2 exited by Check trigger", stateMachine.Actions[i++]);
-            Assert.Equal("State 2 exited", stateMachine.Actions[i++]);
-            Assert.Equal("State 2 entered", stateMachine.Actions[i++]);
-            Assert.Equal("State 2 entered by Check trigger", stateMachine.Actions[i++]);
-            Assert.Equal("State 2 exited by Continue trigger", stateMachine.Actions[i++]);
-            Assert.Equal("State 2 exited", stateMachine.Actions[i++]);
-            Assert.Equal("State 3 entered", stateMachine.Actions[i++]);
-            Assert.Equal("State 3 entered by Continue trigger", stateMachine.Actions[i++]);
-            Assert.Equal("State 3 exited by Continue trigger", stateMachine.Actions[i++]);
-            Assert.Equal("State 3 exited", stateMachine.Actions[i++]);
-            Assert.Equal("State 4 entered", stateMachine.Actions[i++]);
-            Assert.Equal("State 4 entered by Continue trigger", stateMachine.Actions[i]);
+            Assert.Equal(18, stateMachine.Transitions.Count);
+            Assert.Equal("OnState1Entered(Trigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnState1Entered(StartTrigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnState1Exited(ContinueTrigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnState1Exited(Trigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnState2Entered(Trigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnState2Entered(ContinueTrigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnState2Exited(CheckTrigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnState2Exited(Trigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnState2Entered(Trigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnState2Entered(CheckTrigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnState2Exited(ContinueTrigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnState2Exited(Trigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnState3Entered(Trigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnState3Entered(ContinueTrigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnState3Exited(ContinueTrigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnState3Exited(Trigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnState4Entered(Trigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnState4Entered(ContinueTrigger trigger)", stateMachine.Transitions[i]);
         }
     }
 }
