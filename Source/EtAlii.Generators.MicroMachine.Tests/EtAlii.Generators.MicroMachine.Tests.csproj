@@ -59,6 +59,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <MicroMachine Include="StateMachines\SimplePartialStateMachine.puml" />
     <MicroMachine Include="StateMachines\SimpleStateMachine.puml" />
     <Compile Update="StateMachines\SimpleStateMachine.cs">
       <DependentUpon>SimpleStateMachine.puml</DependentUpon>
