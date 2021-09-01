@@ -1,6 +1,7 @@
 ﻿namespace EtAlii.Generators.MicroMachine
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using EtAlii.Generators.PlantUml;
 
@@ -157,6 +158,8 @@
         /// <param name="context"></param>
         public void WriteTransitionMethods(WriteContext<StateMachine> context)
         {
+            var writtenMethods = new List<string>();
+
             var allStates = StateFragment.GetAllStates(context.Instance.StateFragments);
             foreach (var state in allStates)
             {
@@ -165,32 +168,41 @@
 
                 var writeAsyncEntryMethod = StateFragment.HasOnlyAsyncInboundTransitions(context.Instance, state);
 
-                WriteEntryMethod(context, state, null, writeAsyncEntryMethod);
-                WriteExitMethod(context, state, null, writeAsyncEntryMethod);
+                WriteEntryMethod(context, state, null, writeAsyncEntryMethod, writtenMethods);
+                WriteExitMethod(context, state, null, writeAsyncEntryMethod, writtenMethods);
 
                 var inboundTransitions = StateFragment.GetInboundTransitions(context.Instance.StateFragments, state);
                 foreach (var inboundTransition in inboundTransitions)
                 {
-                    WriteEntryMethod(context, state, inboundTransition.Trigger, writeAsyncEntryMethod);
+                    WriteEntryMethod(context, state, inboundTransition.Trigger, writeAsyncEntryMethod, writtenMethods);
                 }
                 var outboundTransitions = StateFragment.GetOutboundTransitions(context.Instance, state);
                 foreach (var outboundTransition in outboundTransitions)
                 {
-                    WriteExitMethod(context, state, outboundTransition.Trigger, writeAsyncEntryMethod);
+                    WriteExitMethod(context, state, outboundTransition.Trigger, writeAsyncEntryMethod, writtenMethods);
                 }
                 var internalTransitions = StateFragment.GetInternalTransitions(context.Instance.StateFragments, state);
                 foreach (var internalTransition in internalTransitions)
                 {
-                    WriteEntryMethod(context, state, internalTransition.Trigger, writeAsyncEntryMethod);
-                    WriteExitMethod(context, state, internalTransition.Trigger, writeAsyncEntryMethod);
+                    WriteEntryMethod(context, state, internalTransition.Trigger, writeAsyncEntryMethod, writtenMethods);
+                    WriteExitMethod(context, state, internalTransition.Trigger, writeAsyncEntryMethod, writtenMethods);
                 }
             }
         }
 
-        private static void WriteExitMethod(WriteContext<StateMachine> context, string state, string trigger, bool writeAsyncEntryMethod)
+        private static void WriteExitMethod(WriteContext<StateMachine> context, string state, string trigger, bool writeAsyncEntryMethod, List<string> writtenMethods)
         {
             var writeAsyncExitMethod = StateFragment.HasOnlyAsyncOutboundTransitions(context.Instance, state);
             var exitMethodName = $"On{state}Exited";
+            var triggerName = trigger == null ? $"Trigger" : $"{trigger}Trigger";
+
+            var key = $"{exitMethodName}({triggerName} trigger)";
+            if (writtenMethods.Contains(key))
+            {
+                return;
+            }
+            writtenMethods.Add(key);
+
             context.Writer.WriteLine("/// <summary>");
             if (trigger == null)
             {
@@ -208,7 +220,6 @@
             }
             context.Writer.WriteLine("/// </summary>");
 
-            var triggerName = trigger == null ? $"Trigger" : $"{trigger}Trigger";
 
             if (context.Instance.GeneratePartialClass)
             {
@@ -231,9 +242,18 @@
             context.Writer.WriteLine();
         }
 
-        private void WriteEntryMethod(WriteContext<StateMachine> context, string state, string trigger, bool writeAsyncEntryMethod)
+        private void WriteEntryMethod(WriteContext<StateMachine> context, string state, string trigger, bool writeAsyncEntryMethod, List<string> writtenMethods)
         {
             var entryMethodName = $"On{state}Entered";
+            var triggerName = trigger == null ? "Trigger" : $"{trigger}Trigger";
+
+            var key = $"{entryMethodName}({triggerName} trigger)";
+            if (writtenMethods.Contains(key))
+            {
+                return;
+            }
+            writtenMethods.Add(key);
+
             context.Writer.WriteLine("/// <summary>");
             if (trigger == null)
             {
@@ -251,9 +271,6 @@
             }
 
             context.Writer.WriteLine("/// </summary>");
-
-
-            var triggerName = trigger == null ? "Trigger" : $"{trigger}Trigger";
 
             if (context.Instance.GeneratePartialClass)
             {

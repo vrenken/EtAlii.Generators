@@ -78,6 +78,11 @@
     <Compile Update="StateMachines\SimplePartialStateMachine.cs">
       <DependentUpon>SimplePartialStateMachine.puml</DependentUpon>
     </Compile>
+
+    <MicroMachine Include="StateMachines\ExternalTest1StateMachine.puml" />
+    <Compile Update="StateMachines\ExternalTest1StateMachine.cs">
+      <DependentUpon>ExternalTestStateMachine.puml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <Import Project="..\EtAlii.Generators.MicroMachine\Build\*.targets" />

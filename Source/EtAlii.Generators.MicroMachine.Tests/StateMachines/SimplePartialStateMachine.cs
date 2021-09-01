@@ -1,3 +1,5 @@
+// ReSharper disable UnusedMember.Local
+// ReSharper disable UnusedParameterInPartialMethod
 namespace EtAlii.Generators.MicroMachine.Tests
 {
     using System;
