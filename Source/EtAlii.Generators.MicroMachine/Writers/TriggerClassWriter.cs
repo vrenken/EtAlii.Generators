@@ -42,8 +42,6 @@
 
             var parameters = firstTransition.Parameters;
             var typedParameters = _parameterConverter.ToTypedNamedVariables(parameters);
-            var genericParameters = _parameterConverter.ToGenericParameters(parameters);
-            var namedParameters = parameters.Any() ? $", {_parameterConverter.ToNamedVariables(parameters)}" : string.Empty;
 
             context.Writer.WriteLine(baseClassName != null ? $"protected class {className} : {baseClassName}" : $"protected class {className}");
             context.Writer.WriteLine("{");
