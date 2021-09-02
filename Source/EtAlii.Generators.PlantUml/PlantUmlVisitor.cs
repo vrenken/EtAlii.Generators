@@ -14,10 +14,12 @@
     public class PlantUmlVisitor : PlantUmlParserBaseVisitor<object>
     {
         private readonly string _originalFileName;
+        private readonly IStateMachineLifetime _lifetime;
 
-        public PlantUmlVisitor(string originalFileName)
+        public PlantUmlVisitor(string originalFileName, IStateMachineLifetime lifetime)
         {
             _originalFileName = originalFileName;
+            _lifetime = lifetime;
         }
 
         public override object VisitState_machine(PlantUmlParser.State_machineContext context)
@@ -136,33 +138,33 @@
 
         public override object VisitStates_transition_start_to(PlantUmlParser.States_transition_start_toContext context)
         {
-            var fallbackTriggerName = $"{PlantUmlConstant.BeginStateName}To{(string)VisitId(context.to)}";
-            var from = PlantUmlConstant.BeginStateName;
+            var fallbackTriggerName = $"{_lifetime.BeginStateName}To{(string)VisitId(context.to)}";
+            var from = _lifetime.BeginStateName;
             var to = (string)VisitId(context.to);
             return BuildTransition(context, from, to, context.trigger_details(), context.transition_details(), fallbackTriggerName);
         }
 
         public override object VisitStates_transition_to_start(PlantUmlParser.States_transition_to_startContext context)
         {
-            var fallbackTriggerName = $"{PlantUmlConstant.BeginStateName}To{(string)VisitId(context.to)}";
-            var from = PlantUmlConstant.BeginStateName;
+            var fallbackTriggerName = $"{_lifetime.BeginStateName}To{(string)VisitId(context.to)}";
+            var from = _lifetime.BeginStateName;
             var to = (string)VisitId(context.to);
             return BuildTransition(context, from, to, context.trigger_details(), context.transition_details(), fallbackTriggerName);
         }
 
         public override object VisitStates_transition_from_end(PlantUmlParser.States_transition_from_endContext context)
         {
-            var fallbackTriggerName = $"{(string)VisitId(context.from)}To{PlantUmlConstant.EndStateName}";
+            var fallbackTriggerName = $"{(string)VisitId(context.from)}To{_lifetime.EndStateName}";
             var from = (string)VisitId(context.from);
-            var to = PlantUmlConstant.EndStateName;
+            var to = _lifetime.EndStateName;
             return BuildTransition(context, from, to, context.trigger_details(), context.transition_details(), fallbackTriggerName);
         }
 
         public override object VisitStates_transition_end_from(PlantUmlParser.States_transition_end_fromContext context)
         {
-            var fallbackTriggerName = $"{(string)VisitId(context.from)}To{PlantUmlConstant.EndStateName}";
+            var fallbackTriggerName = $"{(string)VisitId(context.from)}To{_lifetime.EndStateName}";
             var from = (string)VisitId(context.from);
-            var to = PlantUmlConstant.EndStateName;
+            var to = _lifetime.EndStateName;
             return BuildTransition(context, from, to, context.trigger_details(), context.transition_details(), fallbackTriggerName);
         }
 

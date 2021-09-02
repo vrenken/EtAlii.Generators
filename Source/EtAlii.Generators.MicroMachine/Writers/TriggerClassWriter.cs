@@ -7,10 +7,12 @@
     {
         private readonly TransitionConverter _transitionConverter;
         private readonly ParameterConverter _parameterConverter;
+        private readonly StateFragmentHelper _stateFragmentHelper;
 
-        public TriggerClassWriter(ParameterConverter parameterConverter, TransitionConverter transitionConverter)
+        public TriggerClassWriter(ParameterConverter parameterConverter, TransitionConverter transitionConverter, StateFragmentHelper stateFragmentHelper)
         {
             _transitionConverter = transitionConverter;
+            _stateFragmentHelper = stateFragmentHelper;
             _parameterConverter = parameterConverter;
         }
 
@@ -19,7 +21,7 @@
             context.Writer.WriteLine("// The classes below represent the triggers as used by the methods.");
             context.Writer.WriteLine();
 
-            var triggers = StateFragment
+            var triggers = _stateFragmentHelper
                 .GetAllTriggers(context.Instance.StateFragments);
 
             var baseClassName = "Trigger";
@@ -34,7 +36,7 @@
 
         private void WriteClass(string className, string baseClassName, WriteContext<StateMachine> context, string trigger)
         {
-            var transitions = StateFragment.GetAllTransitions(context.Instance.StateFragments);
+            var transitions = _stateFragmentHelper.GetAllTransitions(context.Instance.StateFragments);
 
             var transitionSets = _transitionConverter.ToTransitionsSetsPerTriggerAndUniqueParameters(transitions, trigger);
             var transitionSet = transitionSets.First();

@@ -1,11 +1,11 @@
 namespace EtAlii.Generators.PlantUml
 {
-    public abstract partial class StateFragment
+    public abstract class StateFragment
     {
         // ReSharper disable once EmptyConstructor
         protected StateFragment()
         {
-            // As the StateFragment is used both as a static helper class and base class for fragment types we need to make its constructor protected.
+            // As the StateFragment is used both as a base class for fragment types we need to make its constructor protected.
         }
     }
 }

@@ -9,19 +9,22 @@
         private readonly MethodWriter _methodWriter;
         private readonly EventArgsWriter _eventArgsWriter;
         private readonly InstantiationWriter _instantiationWriter;
+        private readonly StateFragmentHelper _stateFragmentHelper;
 
         public ClassWriter(
             EnumWriter<StateMachine> enumWriter,
             FieldWriter fieldWriter,
             MethodWriter methodWriter,
             EventArgsWriter eventArgsWriter,
-            InstantiationWriter instantiationWriter)
+            InstantiationWriter instantiationWriter,
+            StateFragmentHelper stateFragmentHelper)
         {
             _enumWriter = enumWriter;
             _fieldWriter = fieldWriter;
             _methodWriter = methodWriter;
             _eventArgsWriter = eventArgsWriter;
             _instantiationWriter = instantiationWriter;
+            _stateFragmentHelper = stateFragmentHelper;
         }
 
         public void Write(WriteContext<StateMachine> context)
@@ -55,11 +58,11 @@
             _eventArgsWriter.WriteEventArgs(context);
             context.Writer.WriteLine();
 
-            var allStates = StateFragment.GetAllStates(context.Instance.StateFragments);
+            var allStates = _stateFragmentHelper.GetAllStates(context.Instance.StateFragments);
             _enumWriter.Write(context, new []{ "Of course each state machine needs a set of states."}, "State", allStates);
             context.Writer.WriteLine();
 
-            var allTriggers = StateFragment.GetAllTriggers(context.Instance.StateFragments);
+            var allTriggers = _stateFragmentHelper.GetAllTriggers(context.Instance.StateFragments);
             _enumWriter.Write(context, new []{ "And all state machine need something that trigger them."}, "Trigger", allTriggers);
             context.Writer.WriteLine();
 

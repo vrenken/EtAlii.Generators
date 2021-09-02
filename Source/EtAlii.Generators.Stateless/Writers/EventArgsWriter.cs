@@ -7,10 +7,12 @@
     public class EventArgsWriter
     {
         private readonly MethodWriter _methodWriter;
+        private readonly StateFragmentHelper _stateFragmentHelper;
 
-        public EventArgsWriter(MethodWriter methodWriter)
+        public EventArgsWriter(MethodWriter methodWriter, StateFragmentHelper stateFragmentHelper)
         {
             _methodWriter = methodWriter;
+            _stateFragmentHelper = stateFragmentHelper;
         }
 
         public void WriteEventArgs(WriteContext<StateMachine> context)
@@ -18,7 +20,7 @@
             context.Writer.WriteLine("// The classes below represent the EventArgs as used by some of the methods.");
             context.Writer.WriteLine();
 
-            var choiceSuperStates = StateFragment
+            var choiceSuperStates = _stateFragmentHelper
                 .GetAllSuperStates(context.Instance.StateFragments)
                 .Where(ss => ss.StereoType == StereoType.Choice);
 
@@ -45,7 +47,7 @@
 
         private void WriteMethods(WriteContext<StateMachine> context, SuperState choiceSuperState)
         {
-            var outboundTransitions = StateFragment.GetOutboundTransitions(context.Instance, choiceSuperState.Name);
+            var outboundTransitions = _stateFragmentHelper.GetOutboundTransitions(context.Instance, choiceSuperState.Name);
 
             foreach (var outboundTransition in outboundTransitions)
             {

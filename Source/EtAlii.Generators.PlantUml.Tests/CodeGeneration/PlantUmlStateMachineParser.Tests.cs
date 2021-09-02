@@ -10,9 +10,10 @@
         public void PlantUmlStateMachineParser_Create()
         {
             // Arrange.
+            var lifetime = new PlantUmlTestMachineLifetime();
 
             // Act.
-            var parser = new PlantUmlStateMachineParser();
+            var parser = new PlantUmlStateMachineParser(lifetime);
 
             // Assert.
             Assert.NotNull(parser);
@@ -23,7 +24,8 @@
         {
 
             // Arrange.
-            var parser = new PlantUmlStateMachineParser();
+            var lifetime = new PlantUmlTestMachineLifetime();
+            var parser = new PlantUmlStateMachineParser(lifetime);
             var log = new List<string>();
 
             var text = @"@startuml
@@ -62,7 +64,8 @@ State4 : This is the final state
         public void PlantUmlStateMachineParser_TryParse_Invalid()
         {
             // Arrange.
-            var parser = new PlantUmlStateMachineParser();
+            var lifetime = new PlantUmlTestMachineLifetime();
+            var parser = new PlantUmlStateMachineParser(lifetime);
             var log = new List<string>();
 
             var text = @"@startuml

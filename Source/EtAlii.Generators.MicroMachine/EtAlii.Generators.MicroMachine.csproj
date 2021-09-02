@@ -25,17 +25,17 @@
       <PackagePath>build\</PackagePath>
     </Content>
 
-    <None Include="..\EtAlii.Generators\$(OutDir)\EtAlii.Generators.dll" >
+    <None Include="..\EtAlii.Generators\$(OutDir)\EtAlii.Generators.dll">
       <Visible>false</Visible>
       <Pack>true</Pack>
       <PackagePath>\analyzers\dotnet\cs</PackagePath>
     </None>
-    <None Include="..\EtAlii.Generators.PlantUml\$(OutDir)\EtAlii.Generators.PlantUml.dll" >
+    <None Include="..\EtAlii.Generators.PlantUml\$(OutDir)\EtAlii.Generators.PlantUml.dll">
       <Visible>false</Visible>
       <Pack>true</Pack>
       <PackagePath>\analyzers\dotnet\cs</PackagePath>
     </None>
-    <None Include="$(PkgAntlr4_Runtime_Standard)\lib\netstandard2.0\Antlr4.Runtime.Standard.dll" >
+    <None Include="$(PkgAntlr4_Runtime_Standard)\lib\netstandard2.0\Antlr4.Runtime.Standard.dll">
       <Visible>false</Visible>
       <Pack>true</Pack>
       <PackagePath>\analyzers\dotnet\cs</PackagePath>

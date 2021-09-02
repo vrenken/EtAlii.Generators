@@ -8,16 +8,19 @@
         private readonly MethodWriter _methodWriter;
         private readonly TriggerClassWriter _triggerClassWriter;
         private readonly TransitionClassWriter _transitionClassWriter;
+        private readonly StateFragmentHelper _stateFragmentHelper;
 
         public StateMachineClassWriter(EnumWriter<StateMachine> enumWriter,
             MethodWriter methodWriter,
             TriggerClassWriter triggerClassWriter,
-            TransitionClassWriter transitionClassWriter)
+            TransitionClassWriter transitionClassWriter,
+            StateFragmentHelper stateFragmentHelper)
         {
             _enumWriter = enumWriter;
             _methodWriter = methodWriter;
             _triggerClassWriter = triggerClassWriter;
             _transitionClassWriter = transitionClassWriter;
+            _stateFragmentHelper = stateFragmentHelper;
         }
 
         public void Write(WriteContext<StateMachine> context)
@@ -52,7 +55,7 @@
             _triggerClassWriter.WriteTriggerClasses(context);
             context.Writer.WriteLine();
 
-            var allStates = StateFragment.GetAllStates(context.Instance.StateFragments);
+            var allStates = _stateFragmentHelper.GetAllStates(context.Instance.StateFragments);
             _enumWriter.Write(context, new []{ "Of course each state machine needs a set of states."}, "State", allStates);
             context.Writer.WriteLine();
 

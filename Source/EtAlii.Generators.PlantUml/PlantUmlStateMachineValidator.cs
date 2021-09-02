@@ -13,6 +13,15 @@ namespace EtAlii.Generators.PlantUml
     /// </summary>
     public class PlantUmlStateMachineValidator : IValidator<StateMachine>
     {
+        private readonly IStateMachineLifetime _lifetime;
+        private readonly StateFragmentHelper _stateFragmentHelper;
+
+        public PlantUmlStateMachineValidator(IStateMachineLifetime lifetime, StateFragmentHelper stateFragmentHelper)
+        {
+            _lifetime = lifetime;
+            _stateFragmentHelper = stateFragmentHelper;
+        }
+
         public void Validate(StateMachine instance, string originalFileName, List<Diagnostic> diagnostics)
         {
             CheckForStartStates(instance, originalFileName, diagnostics);
@@ -28,7 +37,7 @@ namespace EtAlii.Generators.PlantUml
 
         private void CheckForDuplicateTriggers(StateMachine stateMachine, string originalFileName, List<Diagnostic> diagnostics)
         {
-            var transitionsWithDuplicateTriggers = StateFragment
+            var transitionsWithDuplicateTriggers = _stateFragmentHelper
                 .GetAllTransitions(stateMachine.StateFragments)
                 .GroupBy(t => t.From)
                 .SelectMany(sg =>
@@ -53,11 +62,11 @@ namespace EtAlii.Generators.PlantUml
 
         private void CheckSubstatesEntryTransition(StateMachine stateMachine, string originalFileName, List<Diagnostic> diagnostics)
         {
-            var superStates = StateFragment.GetAllSuperStates(stateMachine.StateFragments);
+            var superStates = _stateFragmentHelper.GetAllSuperStates(stateMachine.StateFragments);
             foreach (var superState in superStates)
             {
-                var allSubstates = StateFragment.GetAllSubStates(superState);
-                var allTransitions = StateFragment.GetAllTransitions(stateMachine.StateFragments);
+                var allSubstates = _stateFragmentHelper.GetAllSubStates(superState);
+                var allTransitions = _stateFragmentHelper.GetAllTransitions(stateMachine.StateFragments);
 
                 var directTransitionsToSubState = allTransitions
                     .Where(t => t.From != superState.Name && allSubstates.Contains(t.To) && !allSubstates.Contains(t.From))
@@ -69,7 +78,7 @@ namespace EtAlii.Generators.PlantUml
 
                 var superStateStartTransitions = superState.StateFragments
                     .OfType<Transition>()
-                    .Where(t => t.From != t.To && t.From == PlantUmlConstant.BeginStateName)
+                    .Where(t => t.From != t.To && t.From == _lifetime.BeginStateName)
                     .ToArray();
 
                 var namedSuperStateStartTransitions = superStateStartTransitions
@@ -104,9 +113,9 @@ namespace EtAlii.Generators.PlantUml
             }
         }
 
-        private static void CheckForUnnamedTriggers(StateMachine stateMachine, string originalFileName, List<Diagnostic> diagnostics)
+        private void CheckForUnnamedTriggers(StateMachine stateMachine, string originalFileName, List<Diagnostic> diagnostics)
         {
-            var allTransitions = StateFragment.GetAllTransitions(stateMachine.StateFragments);
+            var allTransitions = _stateFragmentHelper.GetAllTransitions(stateMachine.StateFragments);
             var transitionsWithUnnamedTrigger = allTransitions
                 .Where(t => !t.HasConcreteTriggerName)
                 .ToArray();
@@ -120,9 +129,9 @@ namespace EtAlii.Generators.PlantUml
             }
         }
 
-        private static void CheckForUnnamedParameters(StateMachine stateMachine, string originalFileName, List<Diagnostic> diagnostics)
+        private void CheckForUnnamedParameters(StateMachine stateMachine, string originalFileName, List<Diagnostic> diagnostics)
         {
-            var allTransitions = StateFragment.GetAllTransitions(stateMachine.StateFragments);
+            var allTransitions = _stateFragmentHelper.GetAllTransitions(stateMachine.StateFragments);
             var unnamedParameters = allTransitions
                 .Where(t => t.Parameters.Any(p => !p.HasName))
                 .Select(t => t.Parameters.First(p => !p.HasName))
@@ -137,11 +146,11 @@ namespace EtAlii.Generators.PlantUml
             }
         }
 
-        private static void CheckForStartStates(StateMachine stateMachine, string originalFileName, List<Diagnostic> diagnostics)
+        private void CheckForStartStates(StateMachine stateMachine, string originalFileName, List<Diagnostic> diagnostics)
         {
-            var allTransitions = StateFragment.GetAllTransitions(stateMachine.StateFragments);
+            var allTransitions = _stateFragmentHelper.GetAllTransitions(stateMachine.StateFragments);
             var startStates = allTransitions
-                .Where(t => t.From == PlantUmlConstant.BeginStateName)
+                .Where(t => t.From == _lifetime.BeginStateName)
                 .ToArray();
             if (startStates.Length == 0)
             {

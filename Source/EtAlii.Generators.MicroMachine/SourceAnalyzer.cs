@@ -10,6 +10,7 @@
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class SourceAnalyzer : DiagnosticAnalyzer
     {
+        private readonly IStateMachineLifetime _lifetime = new MicroStateMachineLifetime();
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.CreateRange(AnalyzerRule.AllRules);
 
         public override void Initialize(AnalysisContext context)
@@ -60,8 +61,8 @@
 
             var notImplementedMethods = virtualMethods
                 .Where(vm => implementedMethods.All(im => !SymbolEqualityComparer.Default.Equals(im.OverriddenMethod, vm)))
-                .Where(vm => !vm.Name.StartsWith($"On{PlantUmlConstant.BeginStateName}"))
-                .Where(vm => !vm.Name.StartsWith($"On{PlantUmlConstant.EndStateName}"))
+                .Where(vm => !vm.Name.StartsWith($"On{_lifetime.BeginStateName}"))
+                .Where(vm => !vm.Name.StartsWith($"On{_lifetime.EndStateName}"))
                 .ToArray();
 
             foreach (var notImplementedMethod in notImplementedMethods)

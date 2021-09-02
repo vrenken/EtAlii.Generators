@@ -17,11 +17,20 @@
     [Generator]
     public class SourceGenerator : SourceGeneratorBase<StateMachine>
     {
-        protected override IParser<StateMachine> CreateParser() => new PlantUmlStateMachineParser();
+        private readonly IStateMachineLifetime _lifetime;
+        private readonly StateFragmentHelper _stateFragmentHelper;
 
-        protected override IWriterFactory<StateMachine> CreateWriterFactory() => new StatelessWriterFactory();
+        public SourceGenerator()
+        {
+            _lifetime = new StatelessMachineLifetime();
+            _stateFragmentHelper = new StateFragmentHelper(_lifetime);
+        }
 
-        protected override IValidator<StateMachine> CreateValidator() => new PlantUmlStateMachineValidator();
+        protected override IParser<StateMachine> CreateParser() => new PlantUmlStateMachineParser(new StatelessMachineLifetime());
+
+        protected override IWriterFactory<StateMachine> CreateWriterFactory() => new StatelessWriterFactory(_lifetime, _stateFragmentHelper);
+
+        protected override IValidator<StateMachine> CreateValidator() => new PlantUmlStateMachineValidator(_lifetime, _stateFragmentHelper);
 
         protected override string GetExtension() => ".puml";
 
@@ -29,9 +38,6 @@
 
         protected override DiagnosticDescriptor GetParsingExceptionRule() => GeneratorRule.PlantUmlStateMachineProcessingThrowsException;
 
-        protected override WriteContext<StateMachine> CreateWriteContext(StateMachine instance, IndentedTextWriter writer, string originalFileName, List<string> log)
-        {
-            return new WriteContextFactory().Create(writer, originalFileName, log, instance);
-        }
+        protected override WriteContext<StateMachine> CreateWriteContext(StateMachine instance, IndentedTextWriter writer, string originalFileName, List<string> log) =>  new WriteContextFactory(_stateFragmentHelper).Create(writer, originalFileName, log, instance);
     }
 }

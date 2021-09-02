@@ -15,6 +15,15 @@
     [Generator]
     public class StatelessWriterFactory : IWriterFactory<StateMachine>
     {
+        private readonly IStateMachineLifetime _lifetime;
+        private readonly StateFragmentHelper _stateFragmentHelper;
+
+        public StatelessWriterFactory(IStateMachineLifetime lifetime, StateFragmentHelper stateFragmentHelper)
+        {
+            _lifetime = lifetime;
+            _stateFragmentHelper = stateFragmentHelper;
+        }
+
         public IWriter<StateMachine> Create()
         {
             // Layman's dependency injection:
@@ -23,11 +32,11 @@
             var parameterConverter = new ParameterConverter();
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
-            var methodWriter = new MethodWriter(parameterConverter, transitionConverter);
-            var eventArgsWriter = new EventArgsWriter(methodWriter);
-            var fieldWriter = new FieldWriter(parameterConverter, transitionConverter);
-            var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter);
-            var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter);
+            var methodWriter = new MethodWriter(parameterConverter, transitionConverter, _stateFragmentHelper);
+            var eventArgsWriter = new EventArgsWriter(methodWriter, _stateFragmentHelper);
+            var fieldWriter = new FieldWriter(parameterConverter, transitionConverter, _stateFragmentHelper);
+            var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter, _lifetime, _stateFragmentHelper);
+            var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter, _stateFragmentHelper);
             return new NamespaceWriter<StateMachine>(context => classWriter.Write(context));
         }
     }

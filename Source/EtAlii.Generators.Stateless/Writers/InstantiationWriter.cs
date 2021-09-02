@@ -8,17 +8,21 @@
     {
         private readonly ParameterConverter _parameterConverter;
         private readonly TransitionConverter _transitionConverter;
+        private readonly IStateMachineLifetime _lifetime;
+        private readonly StateFragmentHelper _stateFragmentHelper;
 
-        public InstantiationWriter(ParameterConverter parameterConverter, TransitionConverter transitionConverter)
+        public InstantiationWriter(ParameterConverter parameterConverter, TransitionConverter transitionConverter, IStateMachineLifetime lifetime, StateFragmentHelper stateFragmentHelper)
         {
             _parameterConverter = parameterConverter;
             _transitionConverter = transitionConverter;
+            _lifetime = lifetime;
+            _stateFragmentHelper = stateFragmentHelper;
         }
 
         public void WriteStateMachineInstantiation(WriteContext<StateMachine> context)
         {
             context.Writer.WriteLine("// Time to create a new state machine instance.");
-            context.Writer.WriteLine($"_stateMachine = new {StatelessWriter.StateMachineType}(State.{PlantUmlConstant.BeginStateName});");
+            context.Writer.WriteLine($"_stateMachine = new {StatelessWriter.StateMachineType}(State.{_lifetime.BeginStateName});");
             context.Writer.WriteLine();
 
             WriteTriggerInstantiations(context);
@@ -29,7 +33,7 @@
         private void WriteTriggerInstantiations(WriteContext<StateMachine> context)
         {
             // We only need to write a trigger construction calls for all relations that have parameters.
-            var uniqueTransitionsWithParameters = StateFragment.GetUniqueParameterTransitions(context.Instance.StateFragments)
+            var uniqueTransitionsWithParameters = _stateFragmentHelper.GetUniqueParameterTransitions(context.Instance.StateFragments)
                 .Where(t => t.Parameters.Any())
                 .ToArray();
 
@@ -53,7 +57,7 @@
         {
             context.Writer.WriteLine("// Then we need to configure the state machine.");
 
-            var allStates = StateFragment.GetAllStates(context.Instance.StateFragments);
+            var allStates = _stateFragmentHelper.GetAllStates(context.Instance.StateFragments);
             foreach (var state in allStates)
             {
                 WriteStateConstruction(context, state);
@@ -65,7 +69,7 @@
 
             var stateConfiguration = new List<string>();
 
-            var isChoiceState = StateFragment.GetAllSuperStates(context.Instance.StateFragments)
+            var isChoiceState = _stateFragmentHelper.GetAllSuperStates(context.Instance.StateFragments)
                 .Any(ss => ss.Name == state && ss.StereoType == StereoType.Choice);
 
             WriteEntryAndExitConfiguration(context, state, stateConfiguration, isChoiceState);
@@ -90,7 +94,7 @@
 
         private void WriteSubstate(WriteContext<StateMachine> context, string state, List<string> stateConfiguration)
         {
-            var superState = StateFragment.GetSuperState(context.Instance, state);
+            var superState = _stateFragmentHelper.GetSuperState(context.Instance, state);
             if (superState != null)
             {
                 stateConfiguration.Add($"\t.SubstateOf(State.{superState.Name})");
@@ -99,7 +103,7 @@
 
         private void WriteSuperState(WriteContext<StateMachine> context, string state, List<string> stateConfiguration)
         {
-            var superState = StateFragment
+            var superState = _stateFragmentHelper
                 .GetAllSuperStates(context.Instance.StateFragments)
                 .SingleOrDefault(s => s.Name == state);
 
@@ -108,7 +112,7 @@
                 // Write initial transition (when needed)
                 var unnamedInitialTransition = superState.StateFragments
                     .OfType<Transition>()
-                    .SingleOrDefault(t => t.From == PlantUmlConstant.BeginStateName && !t.HasConcreteTriggerName);
+                    .SingleOrDefault(t => t.From == _lifetime.BeginStateName && !t.HasConcreteTriggerName);
                 if (unnamedInitialTransition != null)
                 {
                     stateConfiguration.Add($"\t.InitialTransition(State.{unnamedInitialTransition.To})");
@@ -116,7 +120,7 @@
 
                 var namedInitialTransitions = superState.StateFragments
                     .OfType<Transition>()
-                    .Where(t => t.From == PlantUmlConstant.BeginStateName && t.HasConcreteTriggerName)
+                    .Where(t => t.From == _lifetime.BeginStateName && t.HasConcreteTriggerName)
                     .ToArray();
                 foreach(var namedInitialTransition in namedInitialTransitions)
                 {
@@ -127,7 +131,7 @@
 
         private void WriteEntryAndExitConfiguration(WriteContext<StateMachine> context, string state, List<string> stateConfiguration, bool isChoiceState)
         {
-            var writeAsyncEntryConfiguration = StateFragment.HasOnlyAsyncInboundTransitions(context.Instance, state);
+            var writeAsyncEntryConfiguration = _stateFragmentHelper.HasOnlyAsyncInboundTransitions(context.Instance, state);
             if (writeAsyncEntryConfiguration)
             {
                 var line = isChoiceState
@@ -143,7 +147,7 @@
                 stateConfiguration.Add(line);
             }
 
-            var writeAsyncExitConfiguration = StateFragment.HasOnlyAsyncOutboundTransitions(context.Instance, state);
+            var writeAsyncExitConfiguration = _stateFragmentHelper.HasOnlyAsyncOutboundTransitions(context.Instance, state);
             if (writeAsyncExitConfiguration)
             {
                 stateConfiguration.Add($"\t.OnExitAsync(On{state}Exited)");
@@ -156,7 +160,7 @@
 
         private void WriteInternalTransitions(WriteContext<StateMachine> context, string state, List<string> stateConfiguration)
         {
-            var lines = StateFragment
+            var lines = _stateFragmentHelper
                 .GetInternalTransitions(context.Instance.StateFragments, state)
                 .GroupBy(t => t.Trigger)
                 .Select(g => g.First())
@@ -177,7 +181,7 @@
         }
         private void WriteOutboundTransitions(WriteContext<StateMachine> context, string state, List<string> stateConfiguration)
         {
-            var lines = StateFragment
+            var lines = _stateFragmentHelper
                 .GetOutboundTransitions(context.Instance, state)
                 .Select(transition => $"\t.Permit(Trigger.{transition.Trigger}, State.{transition.To})")
                 .ToArray();
@@ -186,7 +190,7 @@
 
         private void WriteInboundTransitions(WriteContext<StateMachine> context, string state, List<string> stateConfiguration, bool isChoiceState)
         {
-            var lines = StateFragment
+            var lines = _stateFragmentHelper
                 .GetInboundTransitions(context.Instance.StateFragments, state)
                 .Select(transition =>
                 {

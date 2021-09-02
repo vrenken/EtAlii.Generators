@@ -15,6 +15,15 @@
     [Generator]
     public class MicroMachineWriterFactory : IWriterFactory<StateMachine>
     {
+        private readonly IStateMachineLifetime _lifetime;
+        private readonly StateFragmentHelper _stateFragmentHelper;
+
+        public MicroMachineWriterFactory(IStateMachineLifetime lifetime, StateFragmentHelper stateFragmentHelper)
+        {
+            _lifetime = lifetime;
+            _stateFragmentHelper = stateFragmentHelper;
+        }
+
         public IWriter<StateMachine> Create()
         {
             // Layman's dependency injection:
@@ -23,10 +32,10 @@
             var parameterConverter = new ParameterConverter();
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
-            var methodWriter = new MethodWriter(parameterConverter, transitionConverter);
+            var methodWriter = new MethodWriter(parameterConverter, transitionConverter, _lifetime, _stateFragmentHelper);
             var transitionClassWriter = new TransitionClassWriter();
-            var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter);
-            var stateMachineClassWriter = new StateMachineClassWriter(enumWriter, methodWriter, triggerClassWriter, transitionClassWriter);
+            var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter, _stateFragmentHelper);
+            var stateMachineClassWriter = new StateMachineClassWriter(enumWriter, methodWriter, triggerClassWriter, transitionClassWriter, _stateFragmentHelper);
             return new NamespaceWriter<StateMachine>(context => stateMachineClassWriter.Write(context));
         }
     }

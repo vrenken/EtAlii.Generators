@@ -13,14 +13,16 @@
         public void NamespaceWriterTyped_Create()
         {
             // Arrange.
+            var lifetime = new StatelessMachineLifetime();
+            var stateFragmentHelper = new StateFragmentHelper(lifetime);
             var parameterConverter = new ParameterConverter();
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
-            var methodWriter = new MethodWriter(parameterConverter, transitionConverter);
-            var eventArgsWriter = new EventArgsWriter(methodWriter);
-            var fieldWriter = new FieldWriter(parameterConverter, transitionConverter);
-            var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter);
-            var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter);
+            var methodWriter = new MethodWriter(parameterConverter, transitionConverter, stateFragmentHelper);
+            var eventArgsWriter = new EventArgsWriter(methodWriter, stateFragmentHelper);
+            var fieldWriter = new FieldWriter(parameterConverter, transitionConverter, stateFragmentHelper);
+            var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper);
+            var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter, stateFragmentHelper);
 
             // Act.
             var writer = new NamespaceWriter<StateMachine>(context => classWriter.Write(context));
@@ -33,14 +35,16 @@
         public void NamespaceWriterTyped_Write_Simple()
         {
             // Arrange.
+            var lifetime = new StatelessMachineLifetime();
+            var stateFragmentHelper = new StateFragmentHelper(lifetime);
             var parameterConverter = new ParameterConverter();
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
-            var methodWriter = new MethodWriter(parameterConverter, transitionConverter);
-            var eventArgsWriter = new EventArgsWriter(methodWriter);
-            var fieldWriter = new FieldWriter(parameterConverter, transitionConverter);
-            var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter);
-            var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter);
+            var methodWriter = new MethodWriter(parameterConverter, transitionConverter, stateFragmentHelper);
+            var eventArgsWriter = new EventArgsWriter(methodWriter, stateFragmentHelper);
+            var fieldWriter = new FieldWriter(parameterConverter, transitionConverter, stateFragmentHelper);
+            var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper);
+            var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter, stateFragmentHelper);
             var writer = new NamespaceWriter<StateMachine>(context => classWriter.Write(context));
             var originalFileName = "Test.puml";
             var log = new List<string>();
@@ -66,8 +70,8 @@
             var stateMachine = new StateMachine(headers, settings, fragments);
 
             using var stringWriter = new StringWriter();
-            using var indentedTriter = new IndentedTextWriter(stringWriter);
-            var writeContext = new WriteContextFactory().Create(indentedTriter, originalFileName, log, stateMachine);
+            using var indentedTextWriter = new IndentedTextWriter(stringWriter);
+            var writeContext = new WriteContextFactory(stateFragmentHelper).Create(indentedTextWriter, originalFileName, log, stateMachine);
 
             // Act.
             writer.Write(writeContext);
@@ -82,14 +86,16 @@
         public void NamespaceWriterTyped_Write_Internal()
         {
             // Arrange.
+            var lifetime = new StatelessMachineLifetime();
+            var stateFragmentHelper = new StateFragmentHelper(lifetime);
             var parameterConverter = new ParameterConverter();
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
-            var methodWriter = new MethodWriter(parameterConverter, transitionConverter);
-            var eventArgsWriter = new EventArgsWriter(methodWriter);
-            var fieldWriter = new FieldWriter(parameterConverter, transitionConverter);
-            var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter);
-            var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter);
+            var methodWriter = new MethodWriter(parameterConverter, transitionConverter, stateFragmentHelper);
+            var eventArgsWriter = new EventArgsWriter(methodWriter, stateFragmentHelper);
+            var fieldWriter = new FieldWriter(parameterConverter, transitionConverter, stateFragmentHelper);
+            var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper);
+            var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter, stateFragmentHelper);
             var writer = new NamespaceWriter<StateMachine>(context => classWriter.Write(context));
             var originalFileName = "Test.puml";
             var log = new List<string>();
@@ -116,8 +122,8 @@
             var stateMachine = new StateMachine(headers, settings, fragments);
 
             using var stringWriter = new StringWriter();
-            using var indentedTriter = new IndentedTextWriter(stringWriter);
-            var writeContext = new WriteContextFactory().Create(indentedTriter, originalFileName, log, stateMachine);
+            using var indentedTextWriter = new IndentedTextWriter(stringWriter);
+            var writeContext = new WriteContextFactory(stateFragmentHelper).Create(indentedTextWriter, originalFileName, log, stateMachine);
 
             // Act.
             writer.Write(writeContext);

@@ -14,6 +14,13 @@
     /// </summary>
     public class PlantUmlStateMachineParser : IParser<StateMachine>
     {
+        private readonly IStateMachineLifetime _lifetime;
+
+        public PlantUmlStateMachineParser(IStateMachineLifetime lifetime)
+        {
+            _lifetime = lifetime;
+        }
+
         public bool TryParse(AdditionalText file, List<string> log, out StateMachine stateMachine, out Diagnostic[] diagnostics)
         {
             var success = false;
@@ -36,7 +43,7 @@
                 var parsingContext = parser.state_machine();
 
                 var originalFileName = Path.GetFileName(file.Path);
-                var visitor = new PlantUmlVisitor(originalFileName);
+                var visitor = new PlantUmlVisitor(originalFileName, _lifetime);
 
                 stateMachine = visitor.VisitState_machine(parsingContext) as StateMachine;
 

@@ -3,9 +3,16 @@ namespace EtAlii.Generators.PlantUml
     using System.Collections.Generic;
     using System.Linq;
 
-    public abstract partial class StateFragment
+    public class StateFragmentHelper
     {
-        public static Transition[] GetOutboundTransitions(StateMachine stateMachine, string state)
+        private readonly IStateMachineLifetime _lifetime;
+
+        public StateFragmentHelper(IStateMachineLifetime lifetime)
+        {
+            _lifetime = lifetime;
+        }
+
+        public Transition[] GetOutboundTransitions(StateMachine stateMachine, string state)
         {
             var superState = GetSuperState(stateMachine, state);
             return superState != null
@@ -21,7 +28,7 @@ namespace EtAlii.Generators.PlantUml
                     .ToArray();
         }
 
-        public static bool HasOnlyAsyncInboundTransitions(StateMachine stateMachine, string state)
+        public bool HasOnlyAsyncInboundTransitions(StateMachine stateMachine, string state)
         {
             var inboundTransitions = GetInboundTransitions(stateMachine.StateFragments, state);
 
@@ -43,11 +50,11 @@ namespace EtAlii.Generators.PlantUml
             return
                 inboundTransitions.Any() &&
                 inboundTransitions.All(t => t.IsAsync) &&
-                state != PlantUmlConstant.BeginStateName &&
-                state != PlantUmlConstant.EndStateName;
+                state != _lifetime.BeginStateName &&
+                state != _lifetime.EndStateName;
         }
 
-        public static bool HasOnlyAsyncOutboundTransitions(StateMachine stateMachine, string state)
+        public bool HasOnlyAsyncOutboundTransitions(StateMachine stateMachine, string state)
         {
             var outboundTransitions = GetOutboundTransitions(stateMachine, state);
 
@@ -69,11 +76,11 @@ namespace EtAlii.Generators.PlantUml
             return
                 outboundTransitions.Any() &&
                 outboundTransitions.All(t => t.IsAsync) &&
-                state != PlantUmlConstant.BeginStateName &&
-                state != PlantUmlConstant.EndStateName;
+                state != _lifetime.BeginStateName &&
+                state != _lifetime.EndStateName;
         }
 
-        public static Transition[] GetInboundTransitions(StateFragment[] fragments, string state)
+        public Transition[] GetInboundTransitions(StateFragment[] fragments, string state)
         {
             return GetAllTransitions(fragments)
                 .Where(t => t.To == state)
@@ -81,28 +88,28 @@ namespace EtAlii.Generators.PlantUml
                 .ToArray();
         }
 
-        public static Transition[] GetInternalTransitions(StateFragment[] fragments, string state)
+        public Transition[] GetInternalTransitions(StateFragment[] fragments, string state)
         {
             return GetAllTransitions(fragments)
                 .Where(t => t.To == state && t.To == t.From)
                 .ToArray();
         }
 
-        public static Transition[] GetSyncTransitions(StateFragment[] fragments)
+        public Transition[] GetSyncTransitions(StateFragment[] fragments)
         {
             return GetAllTransitions(fragments)
                 .Where(t => !t.IsAsync)
                 .ToArray();
         }
 
-        public static Transition[] GetAsyncTransitions(StateFragment[] fragments)
+        public Transition[] GetAsyncTransitions(StateFragment[] fragments)
         {
             return GetAllTransitions(fragments)
                 .Where(t => t.IsAsync)
                 .ToArray();
         }
 
-        public static SuperState[] GetAllSuperStates(StateMachine stateMachine, string substate)
+        public SuperState[] GetAllSuperStates(StateMachine stateMachine, string substate)
         {
             var result = new List<SuperState>();
 
@@ -115,9 +122,9 @@ namespace EtAlii.Generators.PlantUml
             return result.ToArray();
         }
 
-        public static SuperState GetSuperState(StateMachine stateMachine, string substate)
+        public SuperState GetSuperState(StateMachine stateMachine, string substate)
         {
-            if (substate == PlantUmlConstant.BeginStateName || substate == PlantUmlConstant.EndStateName)
+            if (substate == _lifetime.BeginStateName || substate == _lifetime.EndStateName)
             {
                 return null;
             }
@@ -133,7 +140,7 @@ namespace EtAlii.Generators.PlantUml
                 });
         }
 
-        public static string[] GetAllTriggers(StateFragment[] fragments)
+        public string[] GetAllTriggers(StateFragment[] fragments)
         {
             return GetAllTransitions(fragments)
                 .Select(t => t.Trigger)
@@ -142,7 +149,7 @@ namespace EtAlii.Generators.PlantUml
                 .ToArray();
         }
 
-        public static Transition[] GetAllTransitions(StateFragment[] fragments)
+        public Transition[] GetAllTransitions(StateFragment[] fragments)
         {
             var transitions = fragments
                 .OfType<Transition>()
@@ -163,7 +170,7 @@ namespace EtAlii.Generators.PlantUml
         /// </summary>
         /// <param name="fragments"></param>
         /// <returns></returns>
-        public static Transition[] GetUniqueParameterTransitions(StateFragment[] fragments)
+        public Transition[] GetUniqueParameterTransitions(StateFragment[] fragments)
         {
             return GetAllTransitions(fragments)
                 .Select(t => new { Transition = t, ParametersAsKey = $"{t.Trigger}{string.Join(", ", t.Parameters.Select(p => p.Type))}" })
@@ -172,7 +179,7 @@ namespace EtAlii.Generators.PlantUml
                 .ToArray();
         }
 
-        public static string[] GetAllSubStates(SuperState superState)
+        public string[] GetAllSubStates(SuperState superState)
         {
             var transitionStates = superState.StateFragments
                 .OfType<Transition>()
@@ -201,7 +208,7 @@ namespace EtAlii.Generators.PlantUml
             return allStates;
         }
 
-        public static string[] GetAllStates(StateFragment[] fragments)
+        public string[] GetAllStates(StateFragment[] fragments)
         {
             var transitionStates = GetAllTransitions(fragments)
                 .SelectMany(t => new[] { t.From, t.To })
@@ -229,7 +236,7 @@ namespace EtAlii.Generators.PlantUml
             return allStates;
         }
 
-        public static SuperState[] GetAllSuperStates(StateFragment[] fragments)
+        public SuperState[] GetAllSuperStates(StateFragment[] fragments)
         {
             var superStates = fragments
                 .OfType<SuperState>()

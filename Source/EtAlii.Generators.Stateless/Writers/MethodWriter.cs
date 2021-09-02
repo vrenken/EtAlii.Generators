@@ -8,10 +8,12 @@
     {
         private readonly ParameterConverter _parameterConverter;
         private readonly TransitionConverter _transitionConverter;
+        private readonly StateFragmentHelper _stateFragmentHelper;
 
-        public MethodWriter(ParameterConverter parameterConverter, TransitionConverter transitionConverter)
+        public MethodWriter(ParameterConverter parameterConverter, TransitionConverter transitionConverter, StateFragmentHelper stateFragmentHelper)
         {
             _transitionConverter = transitionConverter;
+            _stateFragmentHelper = stateFragmentHelper;
             _parameterConverter = parameterConverter;
         }
 
@@ -28,15 +30,15 @@
             context.Writer.WriteLine("// and cause the state machine to transition to another state.");
             context.Writer.WriteLine();
 
-            var allTriggers = StateFragment.GetAllTriggers(context.Instance.StateFragments);
+            var allTriggers = _stateFragmentHelper.GetAllTriggers(context.Instance.StateFragments);
             foreach (var trigger in allTriggers)
             {
-                var syncTransitions = StateFragment.GetSyncTransitions(context.Instance.StateFragments);
+                var syncTransitions = _stateFragmentHelper.GetSyncTransitions(context.Instance.StateFragments);
                 var syncTransitionSets = _transitionConverter.ToTransitionsSetsPerTriggerAndUniqueParameters(syncTransitions, trigger);
                 var syncWrite = new Func<string, string, string, string, string, string>((triggerName, typedParameters, genericParameters, triggerParameter, namedParameters) => $"public void {triggerName}({typedParameters}) => _stateMachine.Fire{genericParameters}({triggerParameter}{namedParameters});");
                 WriteTriggerMethods(context, syncTransitionSets, "sync", syncWrite);
 
-                var asyncTransitions = StateFragment.GetAsyncTransitions(context.Instance.StateFragments);
+                var asyncTransitions = _stateFragmentHelper.GetAsyncTransitions(context.Instance.StateFragments);
                 var asyncTransitionSets = _transitionConverter.ToTransitionsSetsPerTriggerAndUniqueParameters(asyncTransitions, trigger);
                 var asyncWrite = new Func<string, string, string, string, string, string>((triggerName, typedParameters, genericParameters, triggerParameter, namedParameters) => $"public Task {triggerName}Async({typedParameters}) => _stateMachine.FireAsync{genericParameters}({triggerParameter}{namedParameters});");
                 WriteTriggerMethods(context, asyncTransitionSets, "async", asyncWrite);
@@ -66,15 +68,15 @@
         /// <param name="context"></param>
         public void WriteTransitionMethods(WriteContext<StateMachine> context)
         {
-            var allStates = StateFragment.GetAllStates(context.Instance.StateFragments);
+            var allStates = _stateFragmentHelper.GetAllStates(context.Instance.StateFragments);
             foreach (var state in allStates)
             {
-                var isChoiceState = StateFragment.GetAllSuperStates(context.Instance.StateFragments)
+                var isChoiceState = _stateFragmentHelper.GetAllSuperStates(context.Instance.StateFragments)
                     .Any(ss => ss.Name == state && ss.StereoType == StereoType.Choice);
 
                 WriteEntryAndExitMethods(context, state, isChoiceState);
 
-                var allTransitions = StateFragment.GetAllTransitions(context.Instance.StateFragments);
+                var allTransitions = _stateFragmentHelper.GetAllTransitions(context.Instance.StateFragments);
                 var uniqueTransitions = allTransitions
                     .Select(t => new { Transition = t, ParametersAsKey = $"{t.To}{t.Trigger}{string.Join(", ", t.Parameters.Select(p => p.Type))}" })
                     .GroupBy(item => item.ParametersAsKey)
@@ -89,7 +91,7 @@
 
         private void WriteEntryAndExitMethods(WriteContext<StateMachine> context, string state, bool isChoiceState)
         {
-            var writeAsyncEntryMethod = StateFragment.HasOnlyAsyncInboundTransitions(context.Instance, state);
+            var writeAsyncEntryMethod = _stateFragmentHelper.HasOnlyAsyncInboundTransitions(context.Instance, state);
 
             var entryMethodName = $"On{state}Entered";
             context.Writer.WriteLine("/// <summary>");
@@ -105,7 +107,7 @@
             var parameters = Array.Empty<Parameter>();
             if (isChoiceState)
             {
-                var superState = StateFragment.GetAllSuperStates(context.Instance.StateFragments).Single(ss => ss.Name == state);
+                var superState = _stateFragmentHelper.GetAllSuperStates(context.Instance.StateFragments).Single(ss => ss.Name == state);
                 parameters = new [] { new Parameter($"{state}EventArgs", "e", superState.Source) }
                     .Concat(parameters)
                     .ToArray();
@@ -131,7 +133,7 @@
             }
             context.Writer.WriteLine();
 
-            var writeAsyncExitMethod = StateFragment.HasOnlyAsyncOutboundTransitions(context.Instance, state);
+            var writeAsyncExitMethod = _stateFragmentHelper.HasOnlyAsyncOutboundTransitions(context.Instance, state);
             var exitMethodName = $"On{state}Exited";
             context.Writer.WriteLine("/// <summary>");
             context.Writer.WriteLine($"/// Implement this method to handle the exit of the '{state}' state.");
@@ -173,7 +175,7 @@
                 var parameters = transition.Parameters;
                 if (isChoiceState)
                 {
-                    var superState = StateFragment.GetAllSuperStates(context.Instance.StateFragments).Single(ss => ss.Name == state);
+                    var superState = _stateFragmentHelper.GetAllSuperStates(context.Instance.StateFragments).Single(ss => ss.Name == state);
                     parameters = new [] { new Parameter($"{state}EventArgs", "e", superState.Source) }
                             .Concat(parameters)
                             .ToArray();

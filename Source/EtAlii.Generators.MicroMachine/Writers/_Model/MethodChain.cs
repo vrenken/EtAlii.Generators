@@ -9,8 +9,7 @@
         public MethodCall[] ExitCalls { get; private set; }
         public MethodCall[] EntryCalls { get; private set; }
 
-
-        public static MethodChain Create(WriteContext<StateMachine> context, string fromState, string trigger, string toState)
+        public static MethodChain Create(WriteContext<StateMachine> context, StateFragmentHelper stateFragmentHelper, string fromState, string trigger, string toState)
         {
             var exitCalls = new List<MethodCall>();
             var entryCalls = new List<MethodCall>();
@@ -25,8 +24,8 @@
             // 6. - Reverse the order.
 
             // 1. - Find the biggest shared superstate / or the complete state machine.
-            var fromParents = StateFragment.GetAllSuperStates(context.Instance, fromState);
-            var toParents = StateFragment.GetAllSuperStates(context.Instance, toState);
+            var fromParents = stateFragmentHelper.GetAllSuperStates(context.Instance, fromState);
+            var toParents = stateFragmentHelper.GetAllSuperStates(context.Instance, toState);
             var toIsChildOfFrom = toParents.Any(toParent => toParent.Name == fromState);
             var fromIsChildOfTo = fromParents.Any(fromParent => fromParent.Name == toState);
 

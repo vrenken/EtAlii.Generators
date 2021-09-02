@@ -7,12 +7,15 @@
     {
         private readonly ParameterConverter _parameterConverter;
         private readonly TransitionConverter _transitionConverter;
+        private readonly StateFragmentHelper _stateFragmentHelper;
+
         public FieldWriter(
             ParameterConverter parameterConverter,
-            TransitionConverter transitionConverter)
+            TransitionConverter transitionConverter, StateFragmentHelper stateFragmentHelper)
         {
             _parameterConverter = parameterConverter;
             _transitionConverter = transitionConverter;
+            _stateFragmentHelper = stateFragmentHelper;
         }
 
         /// <summary>
@@ -21,7 +24,7 @@
         public void WriteAllTriggerFields(WriteContext<StateMachine> context)
         {
             // We only need to write a trigger member for all relations that have parameters.
-            var uniqueTransitionsWithParameters = StateFragment.GetUniqueParameterTransitions(context.Instance.StateFragments)
+            var uniqueTransitionsWithParameters = _stateFragmentHelper.GetUniqueParameterTransitions(context.Instance.StateFragments)
                 .Where(t => t.Parameters.Any())
                 .ToArray();
 
