@@ -4,9 +4,9 @@ namespace EtAlii.Generators.Stateless
 {
     using EtAlii.Generators.PlantUml;
 
-    public class StatelessMachineLifetime : IStateMachineLifetime
+    public class StatelessMachineLifetime : StateMachineLifetimeBase, IStateMachineLifetime
     {
-        public string BeginStateName { get; } = "_Begin";
-        public string EndStateName { get; } = "_End";
+        public string BeginStateName => "_Begin";
+        public string EndStateName => "_End";
     }
 }

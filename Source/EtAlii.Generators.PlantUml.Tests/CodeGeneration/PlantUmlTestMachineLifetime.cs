@@ -2,9 +2,9 @@
 
 namespace EtAlii.Generators.PlantUml.Tests
 {
-    public class PlantUmlTestMachineLifetime : IStateMachineLifetime
+    public class PlantUmlTestMachineLifetime : StateMachineLifetimeBase, IStateMachineLifetime
     {
-        public string BeginStateName { get; } = "_Begin";
-        public string EndStateName { get; } = "_End";
+        public string BeginStateName => "_Begin";
+        public string EndStateName => "_End";
     }
 }

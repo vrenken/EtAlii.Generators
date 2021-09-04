@@ -12,29 +12,29 @@ namespace EtAlii.Generators.MicroMachine.Tests
 
         private void LogTransition(Type triggerType, [CallerMemberName] string methodName = null) => Transitions.Add($"{methodName}({triggerType.Name} trigger)");
 
-        partial void On_BeginEntered(Trigger trigger) => LogTransition(typeof(Trigger));
+        partial void On_IdleEntered(Trigger trigger) => LogTransition(typeof(Trigger));
 
-        partial void On_BeginExited(Trigger trigger) => LogTransition(typeof(Trigger));
+        partial void On_IdleExited(Trigger trigger) => LogTransition(typeof(Trigger));
 
-        partial void On_BeginExited(StartTrigger trigger) => LogTransition(typeof(StartTrigger));
+        partial void On_IdleExited(StartTrigger trigger) => LogTransition(typeof(StartTrigger));
 
-        partial void On_EndEntered(Trigger trigger) => LogTransition(typeof(Trigger));
+        // partial void On_IdleEntered(Trigger trigger) => LogTransition(typeof(Trigger));
+        //
+        // partial void On_IdleExited(Trigger trigger) => LogTransition(typeof(Trigger));
 
-        partial void On_EndExited(Trigger trigger) => LogTransition(typeof(Trigger));
+        partial void On_IdleEntered(WaitUntilCoinSoldInUsdtTransferTo_IdleTrigger trigger) => LogTransition(typeof(WaitUntilCoinSoldInUsdtTransferTo_IdleTrigger));
 
-        partial void On_EndEntered(WaitUntilCoinSoldInUsdtTransferTo_EndTrigger trigger) => LogTransition(typeof(WaitUntilCoinSoldInUsdtTransferTo_EndTrigger));
+        partial void On_IdleEntered(WaitUntilCoinBoughtInUsdtTransferTo_IdleTrigger trigger) => LogTransition(typeof(WaitUntilCoinBoughtInUsdtTransferTo_IdleTrigger));
 
-        partial void On_EndEntered(WaitUntilCoinBoughtInUsdtTransferTo_EndTrigger trigger) => LogTransition(typeof(WaitUntilCoinBoughtInUsdtTransferTo_EndTrigger));
+        partial void On_IdleEntered(WaitUntilCoinSoldAsSymbolPairTo_IdleTrigger trigger) => LogTransition(typeof(WaitUntilCoinSoldAsSymbolPairTo_IdleTrigger));
 
-        partial void On_EndEntered(WaitUntilCoinSoldAsSymbolPairTo_EndTrigger trigger) => LogTransition(typeof(WaitUntilCoinSoldAsSymbolPairTo_EndTrigger));
-
-        partial void On_EndEntered(WaitUntilCoinBoughtTo_EndTrigger trigger) => LogTransition(typeof(WaitUntilCoinBoughtTo_EndTrigger));
+        partial void On_IdleEntered(WaitUntilCoinBoughtTo_IdleTrigger trigger) => LogTransition(typeof(WaitUntilCoinBoughtTo_IdleTrigger));
 
         partial void OnBuyCurrentCoinInUsdtTransferEntered(Trigger trigger) => LogTransition(typeof(Trigger));
 
         partial void OnBuyCurrentCoinInUsdtTransferExited(Trigger trigger) => LogTransition(typeof(Trigger));
 
-        partial void OnBuyCurrentCoinInUsdtTransferEntered(_BeginToBuyCurrentCoinInUsdtTransferTrigger trigger) => LogTransition(typeof(_BeginToBuyCurrentCoinInUsdtTransferTrigger));
+        partial void OnBuyCurrentCoinInUsdtTransferEntered(_IdleToBuyCurrentCoinInUsdtTransferTrigger trigger) => LogTransition(typeof(_IdleToBuyCurrentCoinInUsdtTransferTrigger));
 
         partial void OnBuyCurrentCoinInUsdtTransferExited(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
 
@@ -64,7 +64,7 @@ namespace EtAlii.Generators.MicroMachine.Tests
 
         partial void OnDetermineSymbolPairExited(Trigger trigger) => LogTransition(typeof(Trigger));
 
-        partial void OnDetermineSymbolPairEntered(_BeginToDetermineSymbolPairTrigger trigger) => LogTransition(typeof(_BeginToDetermineSymbolPairTrigger));
+        partial void OnDetermineSymbolPairEntered(_IdleToDetermineSymbolPairTrigger trigger) => LogTransition(typeof(_IdleToDetermineSymbolPairTrigger));
 
         partial void OnDetermineSymbolPairExited(IsNoSymbolPairTrigger trigger) => LogTransition(typeof(IsNoSymbolPairTrigger));
 
@@ -100,7 +100,7 @@ namespace EtAlii.Generators.MicroMachine.Tests
 
         partial void OnSellCurrentCoinInUsdtTransferExited(Trigger trigger) => LogTransition(typeof(Trigger));
 
-        partial void OnSellCurrentCoinInUsdtTransferEntered(_BeginToSellCurrentCoinInUsdtTransferTrigger trigger) => LogTransition(typeof(_BeginToSellCurrentCoinInUsdtTransferTrigger));
+        partial void OnSellCurrentCoinInUsdtTransferEntered(_IdleToSellCurrentCoinInUsdtTransferTrigger trigger) => LogTransition(typeof(_IdleToSellCurrentCoinInUsdtTransferTrigger));
 
         partial void OnSellCurrentCoinInUsdtTransferExited(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
 
@@ -154,7 +154,7 @@ namespace EtAlii.Generators.MicroMachine.Tests
 
         partial void OnWaitUntilCoinBoughtEntered(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
 
-        partial void OnWaitUntilCoinBoughtExited(WaitUntilCoinBoughtTo_EndTrigger trigger) => LogTransition(typeof(WaitUntilCoinBoughtTo_EndTrigger));
+        partial void OnWaitUntilCoinBoughtExited(WaitUntilCoinBoughtTo_IdleTrigger trigger) => LogTransition(typeof(WaitUntilCoinBoughtTo_IdleTrigger));
 
         partial void OnWaitUntilCoinBoughtInUsdtTransferEntered(Trigger trigger) => LogTransition(typeof(Trigger));
 
@@ -162,7 +162,7 @@ namespace EtAlii.Generators.MicroMachine.Tests
 
         partial void OnWaitUntilCoinBoughtInUsdtTransferEntered(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
 
-        partial void OnWaitUntilCoinBoughtInUsdtTransferExited(WaitUntilCoinBoughtInUsdtTransferTo_EndTrigger trigger) => LogTransition(typeof(WaitUntilCoinBoughtInUsdtTransferTo_EndTrigger));
+        partial void OnWaitUntilCoinBoughtInUsdtTransferExited(WaitUntilCoinBoughtInUsdtTransferTo_IdleTrigger trigger) => LogTransition(typeof(WaitUntilCoinBoughtInUsdtTransferTo_IdleTrigger));
 
         partial void OnWaitUntilCoinSoldEntered(Trigger trigger) => LogTransition(typeof(Trigger));
 
@@ -178,7 +178,7 @@ namespace EtAlii.Generators.MicroMachine.Tests
 
         partial void OnWaitUntilCoinSoldAsSymbolPairEntered(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
 
-        partial void OnWaitUntilCoinSoldAsSymbolPairExited(WaitUntilCoinSoldAsSymbolPairTo_EndTrigger trigger) => LogTransition(typeof(WaitUntilCoinSoldAsSymbolPairTo_EndTrigger));
+        partial void OnWaitUntilCoinSoldAsSymbolPairExited(WaitUntilCoinSoldAsSymbolPairTo_IdleTrigger trigger) => LogTransition(typeof(WaitUntilCoinSoldAsSymbolPairTo_IdleTrigger));
 
         partial void OnWaitUntilCoinSoldInUsdtTransferEntered(Trigger trigger) => LogTransition(typeof(Trigger));
 
@@ -186,6 +186,6 @@ namespace EtAlii.Generators.MicroMachine.Tests
 
         partial void OnWaitUntilCoinSoldInUsdtTransferEntered(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
 
-        partial void OnWaitUntilCoinSoldInUsdtTransferExited(WaitUntilCoinSoldInUsdtTransferTo_EndTrigger trigger) => LogTransition(typeof(WaitUntilCoinSoldInUsdtTransferTo_EndTrigger));
+        partial void OnWaitUntilCoinSoldInUsdtTransferExited(WaitUntilCoinSoldInUsdtTransferTo_IdleTrigger trigger) => LogTransition(typeof(WaitUntilCoinSoldInUsdtTransferTo_IdleTrigger));
     }
 }

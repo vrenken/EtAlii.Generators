@@ -5,7 +5,6 @@
     using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
-    using Antlr4.Runtime;
 
     /// <summary>
     /// An implementation of the visitor generated using the Antlr4 g4 parser and lexer.
@@ -62,12 +61,8 @@
 
         public override object VisitTransition_details(PlantUmlParser.Transition_detailsContext context)
         {
-            var triggerNameContext = context.trigger_name();
-            var name = triggerNameContext?.GetText().Replace(" ", "");
-
-            return new TransitionDetails(name, name != null);
+            return _lifetime.BuildTransitionDetails(context);
         }
-
         public override object VisitParameters_definition_named(PlantUmlParser.Parameters_definition_namedContext context)
         {
             var parameters = new List<Parameter>();
@@ -108,16 +103,7 @@
 
         public override object VisitTrigger_details(PlantUmlParser.Trigger_detailsContext context)
         {
-            var parameters = Array.Empty<Parameter>();
-            var parameterContext = context.parameters_definition();
-            if (parameterContext != null)
-            {
-                parameters = (Parameter[])VisitParameters_definition(context.parameters_definition());
-            }
-
-            var isAsync = context.ASYNC() != null;
-
-            return new TriggerDetails(isAsync, parameters);
+            return _lifetime.BuildTriggerDetails(context, this);
         }
 
         public override object VisitStates_transition_from_to(PlantUmlParser.States_transition_from_toContext context)
@@ -125,7 +111,7 @@
             var fallbackTriggerName = $"{(string)VisitId(context.from)}To{(string)VisitId(context.to)}";
             var from = (string)VisitId(context.from);
             var to = (string)VisitId(context.to);
-            return BuildTransition(context, from, to, context.trigger_details(), context.transition_details(), fallbackTriggerName);
+            return _lifetime.BuildTransition(context, from, to, context.trigger_details(), context.transition_details(), fallbackTriggerName, this);
         }
 
         public override object VisitStates_transition_to_from(PlantUmlParser.States_transition_to_fromContext context)
@@ -133,7 +119,7 @@
             var fallbackTriggerName = $"{(string)VisitId(context.from)}To{(string)VisitId(context.to)}";
             var from = (string)VisitId(context.from);
             var to = (string)VisitId(context.to);
-            return BuildTransition(context, from, to, context.trigger_details(), context.transition_details(), fallbackTriggerName);
+            return _lifetime.BuildTransition(context, from, to, context.trigger_details(), context.transition_details(), fallbackTriggerName, this);
         }
 
         public override object VisitStates_transition_start_to(PlantUmlParser.States_transition_start_toContext context)
@@ -141,7 +127,7 @@
             var fallbackTriggerName = $"{_lifetime.BeginStateName}To{(string)VisitId(context.to)}";
             var from = _lifetime.BeginStateName;
             var to = (string)VisitId(context.to);
-            return BuildTransition(context, from, to, context.trigger_details(), context.transition_details(), fallbackTriggerName);
+            return _lifetime.BuildTransition(context, from, to, context.trigger_details(), context.transition_details(), fallbackTriggerName, this);
         }
 
         public override object VisitStates_transition_to_start(PlantUmlParser.States_transition_to_startContext context)
@@ -149,7 +135,7 @@
             var fallbackTriggerName = $"{_lifetime.BeginStateName}To{(string)VisitId(context.to)}";
             var from = _lifetime.BeginStateName;
             var to = (string)VisitId(context.to);
-            return BuildTransition(context, from, to, context.trigger_details(), context.transition_details(), fallbackTriggerName);
+            return _lifetime.BuildTransition(context, from, to, context.trigger_details(), context.transition_details(), fallbackTriggerName, this);
         }
 
         public override object VisitStates_transition_from_end(PlantUmlParser.States_transition_from_endContext context)
@@ -157,7 +143,7 @@
             var fallbackTriggerName = $"{(string)VisitId(context.from)}To{_lifetime.EndStateName}";
             var from = (string)VisitId(context.from);
             var to = _lifetime.EndStateName;
-            return BuildTransition(context, from, to, context.trigger_details(), context.transition_details(), fallbackTriggerName);
+            return _lifetime.BuildTransition(context, from, to, context.trigger_details(), context.transition_details(), fallbackTriggerName, this);
         }
 
         public override object VisitStates_transition_end_from(PlantUmlParser.States_transition_end_fromContext context)
@@ -165,32 +151,7 @@
             var fallbackTriggerName = $"{(string)VisitId(context.from)}To{_lifetime.EndStateName}";
             var from = (string)VisitId(context.from);
             var to = _lifetime.EndStateName;
-            return BuildTransition(context, from, to, context.trigger_details(), context.transition_details(), fallbackTriggerName);
-        }
-
-        private Transition BuildTransition(
-            ParserRuleContext context,
-            string from,
-            string to,
-            PlantUmlParser.Trigger_detailsContext triggerDetailsContext,
-            PlantUmlParser.Transition_detailsContext transitionDetailsContext,
-            string fallbackTriggerName)
-        {
-            var triggerDetails = triggerDetailsContext != null
-                ? (TriggerDetails)VisitTrigger_details(triggerDetailsContext)
-                : new TriggerDetails(false, Array.Empty<Parameter>());
-
-            var transitionDetails = transitionDetailsContext != null
-                ? (TransitionDetails)VisitTransition_details(transitionDetailsContext)
-                : new TransitionDetails(fallbackTriggerName, false);
-
-            if (!transitionDetails.HasConcreteName)
-            {
-                transitionDetails.Name = fallbackTriggerName;
-            }
-
-            var position = SourcePosition.FromContext(context);
-            return new Transition(from, to, transitionDetails, triggerDetails, position);
+            return _lifetime.BuildTransition(context, from, to, context.trigger_details(), context.transition_details(), fallbackTriggerName, this);
         }
 
         public override object VisitStates_description(PlantUmlParser.States_descriptionContext context) => new StateDescription((string)VisitId(context.id()), context.text?.Text ?? string.Empty);

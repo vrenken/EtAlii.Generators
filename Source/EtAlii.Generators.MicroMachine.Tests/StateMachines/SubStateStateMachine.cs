@@ -43,7 +43,7 @@ namespace EtAlii.Generators.MicroMachine.Tests
         //protected override void OnSuperState3Entered(ContinueTrigger trigger) => LogTrigger(typeof(ContinueTrigger));
 
         protected override void OnSubState1Entered(Trigger trigger) => LogTransition(typeof(Trigger));
-        protected override void OnSubState1Entered(_BeginToSubState1Trigger trigger) => LogTransition(typeof(_BeginToSubState1Trigger));
+        protected override void OnSubState1Entered(_IdleToSubState1Trigger trigger) => LogTransition(typeof(_IdleToSubState1Trigger));
         protected override void OnSubState1Exited(Trigger trigger) => LogTransition(typeof(Trigger));
 
         protected override void OnSubState2Entered(Trigger trigger) => LogTransition(typeof(Trigger));

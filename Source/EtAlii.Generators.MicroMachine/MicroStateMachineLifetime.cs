@@ -4,10 +4,9 @@ namespace EtAlii.Generators.MicroMachine
 {
     using EtAlii.Generators.PlantUml;
 
-    public class MicroStateMachineLifetime : IStateMachineLifetime
+    public class MicroStateMachineLifetime : StateMachineLifetimeBase, IStateMachineLifetime
     {
-        public string BeginStateName { get; } = "_Begin";
-        public string EndStateName { get; } = "_End";
-
+        public string BeginStateName => "_Idle";
+        public string EndStateName => "_Idle";
     }
 }
