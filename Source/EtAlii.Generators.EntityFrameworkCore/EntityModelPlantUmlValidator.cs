@@ -11,7 +11,7 @@ namespace EtAlii.Generators.EntityFrameworkCore
     /// </summary>
     public class EntityModelPlantUmlValidator : IValidator<EntityModel>
     {
-        public void Validate(EntityModel instance, string originalFileName, List<Diagnostic> diagnostics)
+        public void Validate(EntityModel instance, string fullPathToFile, List<Diagnostic> diagnostics)
         {
             // We don't know what is needed to validate the EF model.
         }

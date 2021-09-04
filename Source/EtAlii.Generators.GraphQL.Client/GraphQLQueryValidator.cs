@@ -11,7 +11,7 @@ namespace EtAlii.Generators.GraphQL.Client
     /// </summary>
     public class GraphQLQueryValidator : IValidator<object>
     {
-        public void Validate(object instance, string originalFileName, List<Diagnostic> diagnostics)
+        public void Validate(object instance, string fullPathToFile, List<Diagnostic> diagnostics)
         {
             // We don't know what is needed to validate the GraphQL model.
         }

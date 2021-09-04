@@ -7,6 +7,6 @@ namespace EtAlii.Generators
 
     public interface IValidator<in TInstance>
     {
-        void Validate(TInstance instance, string originalFileName, List<Diagnostic> diagnostics);
+        void Validate(TInstance instance, string fullPathToFile, List<Diagnostic> diagnostics);
     }
 }

@@ -11,7 +11,7 @@ namespace EtAlii.Generators.ML
     /// </summary>
     public class MachineLearningQueryValidator : IValidator<object>
     {
-        public void Validate(object instance, string originalFileName, List<Diagnostic> diagnostics)
+        public void Validate(object instance, string fullPathToFile, List<Diagnostic> diagnostics)
         {
             // We don't know what is needed to validate the ML model.
         }

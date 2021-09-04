@@ -80,9 +80,10 @@ namespace EtAlii.Generators
                     try
                     {
                         var originalFileName = Path.GetFileName(file.Path);
+                        var fullPathToFile = file.Path;
                         var fileName = Path.ChangeExtension(originalFileName, "Generated.cs");
 
-                        validator.Validate(instance, originalFileName, diagnostics);
+                        validator.Validate(instance, fullPathToFile, diagnostics);
 
                         using var stringWriter = new StringWriter();
                         using var indentedWriter = new IndentedTextWriter(stringWriter);

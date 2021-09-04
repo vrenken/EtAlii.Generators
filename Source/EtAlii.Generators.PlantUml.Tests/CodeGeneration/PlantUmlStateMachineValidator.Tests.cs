@@ -30,7 +30,7 @@
             // Arrange.
             var lifetime = new PlantUmlTestMachineLifetime();
             var stateFragmentHelper = new StateFragmentHelper(lifetime);
-            var originalFileName = "Test.puml";
+            var fullPathToFile =  "Test.puml";
             var parser = new PlantUmlStateMachineValidator(lifetime, stateFragmentHelper);
             var headers = new[]
             {
@@ -56,7 +56,7 @@
             var diagnostics = new List<Diagnostic>();
 
             // Act.
-            parser.Validate(stateMachine, originalFileName, diagnostics);
+            parser.Validate(stateMachine, fullPathToFile, diagnostics);
 
             // Assert.
             Assert.NotEmpty(diagnostics);

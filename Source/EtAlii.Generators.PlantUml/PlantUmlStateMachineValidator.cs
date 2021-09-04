@@ -22,20 +22,20 @@ namespace EtAlii.Generators.PlantUml
             _stateFragmentHelper = stateFragmentHelper;
         }
 
-        public void Validate(StateMachine instance, string originalFileName, List<Diagnostic> diagnostics)
+        public void Validate(StateMachine instance, string fullPathToFile, List<Diagnostic> diagnostics)
         {
-            CheckForStartStates(instance, originalFileName, diagnostics);
+            CheckForStartStates(instance, fullPathToFile, diagnostics);
 
-            CheckForDuplicateTriggers(instance, originalFileName, diagnostics);
+            CheckForDuplicateTriggers(instance, fullPathToFile, diagnostics);
 
-            CheckForUnnamedParameters(instance, originalFileName, diagnostics);
+            CheckForUnnamedParameters(instance, fullPathToFile, diagnostics);
 
-            CheckForUnnamedTriggers(instance, originalFileName, diagnostics);
+            CheckForUnnamedTriggers(instance, fullPathToFile, diagnostics);
 
-            CheckSubstatesEntryTransition(instance, originalFileName, diagnostics);
+            CheckSubstatesEntryTransition(instance, fullPathToFile, diagnostics);
         }
 
-        private void CheckForDuplicateTriggers(StateMachine stateMachine, string originalFileName, List<Diagnostic> diagnostics)
+        private void CheckForDuplicateTriggers(StateMachine stateMachine, string fullPathToFile, List<Diagnostic> diagnostics)
         {
             var transitionsWithDuplicateTriggers = _stateFragmentHelper
                 .GetAllTransitions(stateMachine.StateFragments)
@@ -53,14 +53,14 @@ namespace EtAlii.Generators.PlantUml
             foreach (var transitionWithDuplicateTriggers in transitionsWithDuplicateTriggers)
             {
                 var source = transitionWithDuplicateTriggers.Source;
-                var location = source.ToLocation(originalFileName);
+                var location = source.ToLocation(fullPathToFile);
                 var diagnostic = Diagnostic.Create(GeneratorRule.DuplicateTriggers, location, transitionWithDuplicateTriggers.Trigger, transitionWithDuplicateTriggers.Count, transitionWithDuplicateTriggers.State);
 
                 diagnostics.Add(diagnostic);
             }
         }
 
-        private void CheckSubstatesEntryTransition(StateMachine stateMachine, string originalFileName, List<Diagnostic> diagnostics)
+        private void CheckSubstatesEntryTransition(StateMachine stateMachine, string fullPathToFile, List<Diagnostic> diagnostics)
         {
             var superStates = _stateFragmentHelper.GetAllSuperStates(stateMachine.StateFragments);
             foreach (var superState in superStates)
@@ -98,7 +98,7 @@ namespace EtAlii.Generators.PlantUml
                 if (unnamedSuperStateStartTransitions.Any() && directTransitionsToSubState.Any())
                 {
                     // As we cannot guarantee an adequate sequential order of execution we don't support both unnamed start transitions and direct substate transitions.
-                    var location = superState.Source.ToLocation(originalFileName);
+                    var location = superState.Source.ToLocation(fullPathToFile);
                     var diagnostic = Diagnostic.Create(GeneratorRule.SuperstateHasBothUnnamedAndDirectTransitionsDefined, location, superState.Source.Text);
                     diagnostics.Add(diagnostic);
                 }
@@ -106,14 +106,14 @@ namespace EtAlii.Generators.PlantUml
                 // ~NAMED UNNAMED+ ~DIRECT
                 if (!namedSuperStateStartTransitions.Any() && unnamedSuperStateStartTransitions.Any() && !directTransitionsToSubState.Any() && unnamedSuperStateStartTransitions.Length > 1)
                 {
-                    var location = superState.Source.ToLocation(originalFileName);
+                    var location = superState.Source.ToLocation(fullPathToFile);
                     var diagnostic = Diagnostic.Create(GeneratorRule.SuperstateHasMultipleUnnamedStartTransitionsDefined, location, superState.Source.Text);
                     diagnostics.Add(diagnostic);
                 }
             }
         }
 
-        private void CheckForUnnamedTriggers(StateMachine stateMachine, string originalFileName, List<Diagnostic> diagnostics)
+        private void CheckForUnnamedTriggers(StateMachine stateMachine, string fullPathToFile, List<Diagnostic> diagnostics)
         {
             var allTransitions = _stateFragmentHelper.GetAllTransitions(stateMachine.StateFragments);
             var transitionsWithUnnamedTrigger = allTransitions
@@ -122,14 +122,14 @@ namespace EtAlii.Generators.PlantUml
 
             foreach (var transitionWithUnnamedTrigger in transitionsWithUnnamedTrigger)
             {
-                var location = transitionWithUnnamedTrigger.Source.ToLocation(originalFileName);
+                var location = transitionWithUnnamedTrigger.Source.ToLocation(fullPathToFile);
                 var diagnostic = Diagnostic.Create(GeneratorRule.UnnamedTrigger, location, transitionWithUnnamedTrigger.Source.Text);
 
                 diagnostics.Add(diagnostic);
             }
         }
 
-        private void CheckForUnnamedParameters(StateMachine stateMachine, string originalFileName, List<Diagnostic> diagnostics)
+        private void CheckForUnnamedParameters(StateMachine stateMachine, string fullPathToFile, List<Diagnostic> diagnostics)
         {
             var allTransitions = _stateFragmentHelper.GetAllTransitions(stateMachine.StateFragments);
             var unnamedParameters = allTransitions
@@ -139,14 +139,14 @@ namespace EtAlii.Generators.PlantUml
 
             foreach (var unnamedParameter in unnamedParameters)
             {
-                var location = unnamedParameter.Source.ToLocation(originalFileName);
+                var location = unnamedParameter.Source.ToLocation(fullPathToFile);
                 var diagnostic = Diagnostic.Create(GeneratorRule.UnnamedParameter, location, unnamedParameter.Source.Text);
 
                 diagnostics.Add(diagnostic);
             }
         }
 
-        private void CheckForStartStates(StateMachine stateMachine, string originalFileName, List<Diagnostic> diagnostics)
+        private void CheckForStartStates(StateMachine stateMachine, string fullPathToFile, List<Diagnostic> diagnostics)
         {
             var allTransitions = _stateFragmentHelper.GetAllTransitions(stateMachine.StateFragments);
             var startStates = allTransitions
@@ -154,7 +154,7 @@ namespace EtAlii.Generators.PlantUml
                 .ToArray();
             if (startStates.Length == 0)
             {
-                var location = Location.Create(originalFileName, new TextSpan(), new LinePositionSpan());
+                var location = Location.Create(fullPathToFile, new TextSpan(), new LinePositionSpan());
                 var diagnostic = Diagnostic.Create(GeneratorRule.NoStartStatesDefined, location);
                 diagnostics.Add(diagnostic);
             }
