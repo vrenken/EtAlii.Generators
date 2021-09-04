@@ -12,15 +12,39 @@ namespace EtAlii.Generators.MicroMachine.Tests
 
         private void LogTransition(Type triggerType, [CallerMemberName] string methodName = null) => Transitions.Add($"{methodName}({triggerType.Name} trigger)");
 
+        partial void OnStartEntered(Trigger trigger) => LogTransition(typeof(Trigger));
+        partial void OnStartEntered(StartTrigger trigger) => LogTransition(typeof(StartTrigger));
+        partial void OnStartExited(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
+        partial void OnStartExited(Trigger trigger) => LogTransition(typeof(Trigger));
+
+
+        partial void OnGetSituationEntered(Trigger trigger) => LogTransition(typeof(Trigger));
+        partial void OnGetSituationEntered(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
+        partial void OnGetSituationExited(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
+        partial void OnGetSituationExited(ErrorTrigger trigger) => LogTransition(typeof(ErrorTrigger));
+        partial void OnGetSituationExited(Trigger trigger) => LogTransition(typeof(Trigger));
+
+
+        partial void OnDetermineCoinToBetOnEntered(Trigger trigger) => LogTransition(typeof(Trigger));
+        partial void OnDetermineCoinToBetOnEntered(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
+        partial void OnDetermineCoinToBetOnExited(CurrentCoinHasBestTrendTrigger trigger) => LogTransition(typeof(CurrentCoinHasBestTrendTrigger));
+        partial void OnDetermineCoinToBetOnExited(OtherCoinHasBetterTrendTrigger trigger) => LogTransition(typeof(OtherCoinHasBetterTrendTrigger));
+        partial void OnDetermineCoinToBetOnExited(AllCoinsHaveDownwardTrendsTrigger trigger) => LogTransition(typeof(AllCoinsHaveDownwardTrendsTrigger));
+        partial void OnDetermineCoinToBetOnExited(NoPreviousCoinTrigger trigger) => LogTransition(typeof(NoPreviousCoinTrigger));
+        partial void OnDetermineCoinToBetOnExited(Trigger trigger) => LogTransition(typeof(Trigger));
+
+
+        partial void OnDetermineSymbolPairEntered(Trigger trigger) => LogTransition(typeof(Trigger));
+        partial void OnDetermineSymbolPairEntered(_IdleToDetermineSymbolPairTrigger trigger) => LogTransition(typeof(_IdleToDetermineSymbolPairTrigger));
+        partial void OnDetermineSymbolPairExited(IsNoSymbolPairTrigger trigger) => LogTransition(typeof(IsNoSymbolPairTrigger));
+        partial void OnDetermineSymbolPairExited(Trigger trigger) => LogTransition(typeof(Trigger));
+
+
         partial void On_IdleEntered(Trigger trigger) => LogTransition(typeof(Trigger));
 
         partial void On_IdleExited(Trigger trigger) => LogTransition(typeof(Trigger));
 
         partial void On_IdleExited(StartTrigger trigger) => LogTransition(typeof(StartTrigger));
-
-        // partial void On_IdleEntered(Trigger trigger) => LogTransition(typeof(Trigger));
-        //
-        // partial void On_IdleExited(Trigger trigger) => LogTransition(typeof(Trigger));
 
         partial void On_IdleEntered(WaitUntilCoinSoldInUsdtTransferTo_IdleTrigger trigger) => LogTransition(typeof(WaitUntilCoinSoldInUsdtTransferTo_IdleTrigger));
 
@@ -46,39 +70,8 @@ namespace EtAlii.Generators.MicroMachine.Tests
 
         partial void OnBuyOtherCoinExited(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
 
-        partial void OnDetermineCoinToBetOnEntered(Trigger trigger) => LogTransition(typeof(Trigger));
-
-        partial void OnDetermineCoinToBetOnExited(Trigger trigger) => LogTransition(typeof(Trigger));
-
-        partial void OnDetermineCoinToBetOnEntered(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
-
-        partial void OnDetermineCoinToBetOnExited(CurrentCoinHasBestTrendTrigger trigger) => LogTransition(typeof(CurrentCoinHasBestTrendTrigger));
-
-        partial void OnDetermineCoinToBetOnExited(OtherCoinHasBetterTrendTrigger trigger) => LogTransition(typeof(OtherCoinHasBetterTrendTrigger));
-
-        partial void OnDetermineCoinToBetOnExited(AllCoinsHaveDownwardTrendsTrigger trigger) => LogTransition(typeof(AllCoinsHaveDownwardTrendsTrigger));
-
-        partial void OnDetermineCoinToBetOnExited(NoPreviousCoinTrigger trigger) => LogTransition(typeof(NoPreviousCoinTrigger));
-
-        partial void OnDetermineSymbolPairEntered(Trigger trigger) => LogTransition(typeof(Trigger));
-
-        partial void OnDetermineSymbolPairExited(Trigger trigger) => LogTransition(typeof(Trigger));
-
-        partial void OnDetermineSymbolPairEntered(_IdleToDetermineSymbolPairTrigger trigger) => LogTransition(typeof(_IdleToDetermineSymbolPairTrigger));
-
-        partial void OnDetermineSymbolPairExited(IsNoSymbolPairTrigger trigger) => LogTransition(typeof(IsNoSymbolPairTrigger));
 
         partial void OnDetermineSymbolPairExited(IsSymbolPairTrigger trigger) => LogTransition(typeof(IsSymbolPairTrigger));
-
-        partial void OnGetSituationEntered(Trigger trigger) => LogTransition(typeof(Trigger));
-
-        partial void OnGetSituationExited(Trigger trigger) => LogTransition(typeof(Trigger));
-
-        partial void OnGetSituationEntered(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
-
-        partial void OnGetSituationExited(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
-
-        partial void OnGetSituationExited(ErrorTrigger trigger) => LogTransition(typeof(ErrorTrigger));
 
         partial void OnSellAsSymbolPairEntered(Trigger trigger) => LogTransition(typeof(Trigger));
 
@@ -104,14 +97,6 @@ namespace EtAlii.Generators.MicroMachine.Tests
 
         partial void OnSellCurrentCoinInUsdtTransferExited(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
 
-        partial void OnStartEntered(Trigger trigger) => LogTransition(typeof(Trigger));
-
-        partial void OnStartExited(Trigger trigger) => LogTransition(typeof(Trigger));
-
-        partial void OnStartEntered(StartTrigger trigger) => LogTransition(typeof(StartTrigger));
-
-        partial void OnStartExited(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
-
         partial void OnTransferFromUsdtEntered(Trigger trigger) => LogTransition(typeof(Trigger));
 
         partial void OnTransferFromUsdtExited(Trigger trigger) => LogTransition(typeof(Trigger));
@@ -136,17 +121,14 @@ namespace EtAlii.Generators.MicroMachine.Tests
 
         partial void OnTransferToUsdtExited(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
 
-        partial void OnWaitEntered(Trigger trigger) => LogTransition(typeof(Trigger));
 
+        partial void OnWaitEntered(Trigger trigger) => LogTransition(typeof(Trigger));
+        partial void OnWaitEntered(ErrorTrigger trigger) => LogTransition(typeof(ErrorTrigger));
+        partial void OnWaitEntered(CurrentCoinHasBestTrendTrigger trigger) => LogTransition(typeof(CurrentCoinHasBestTrendTrigger));
+        partial void OnWaitEntered(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
+        partial void OnWaitExited(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
         partial void OnWaitExited(Trigger trigger) => LogTransition(typeof(Trigger));
 
-        partial void OnWaitEntered(ErrorTrigger trigger) => LogTransition(typeof(ErrorTrigger));
-
-        partial void OnWaitEntered(CurrentCoinHasBestTrendTrigger trigger) => LogTransition(typeof(CurrentCoinHasBestTrendTrigger));
-
-        partial void OnWaitEntered(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
-
-        partial void OnWaitExited(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
 
         partial void OnWaitUntilCoinBoughtEntered(Trigger trigger) => LogTransition(typeof(Trigger));
 
