@@ -19,44 +19,45 @@
   </ItemGroup>
 
   <ItemGroup>
-    <StatelessFile Include="StateMachines\AsyncStateMachine.puml" />
-    <StatelessFile Include="StateMachines\AsyncSubStateStateMachine.puml" />
-    <StatelessFile Include="StateMachines\ChoiceStateMachine.puml" />
-    <StatelessFile Include="StateMachines\MyNestedStateMachine1.puml" />
-    <StatelessFile Include="StateMachines\MyNestedStateMachine2.puml" />
-    <StatelessFile Include="StateMachines\MyNestedStateMachine4.puml" />
-    <StatelessFile Include="StateMachines\ParameterStateMachine.puml" />
     <StatelessFile Include="StateMachines\SimpleStateMachine.puml" />
-    <StatelessFile Include="StateMachines\SubStateStateMachine.puml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="StateMachines\AsyncStateMachine.cs">
-      <DependentUpon>AsyncStateMachine.puml</DependentUpon>
-    </Compile>
-    <Compile Update="StateMachines\MyNestedStateMachine1.cs">
-      <DependentUpon>MyNestedStateMachine1.puml</DependentUpon>
-    </Compile>
-    <Compile Update="StateMachines\MyNestedStateMachine2.cs">
-      <DependentUpon>MyNestedStateMachine2.puml</DependentUpon>
-    </Compile>
-    <Compile Update="StateMachines\MyNestedStateMachine4.cs">
-      <DependentUpon>MyNestedStateMachine4.puml</DependentUpon>
-    </Compile>
-    <Compile Update="StateMachines\ParameterStateMachine.cs">
-      <DependentUpon>ParameterStateMachine.puml</DependentUpon>
-    </Compile>
     <Compile Update="StateMachines\SimpleStateMachine.cs">
       <DependentUpon>SimpleStateMachine.puml</DependentUpon>
     </Compile>
+    <StatelessFile Include="StateMachines\SubStateStateMachine.puml" />
     <Compile Update="StateMachines\SubStateStateMachine.cs">
       <DependentUpon>SubStateStateMachine.puml</DependentUpon>
     </Compile>
+    <StatelessFile Include="StateMachines\AsyncSubStateStateMachine.puml" />
     <Compile Update="StateMachines\AsyncSubStateStateMachine.cs">
       <DependentUpon>AsyncSubStateStateMachine.puml</DependentUpon>
     </Compile>
+    <StatelessFile Include="StateMachines\ChoiceStateMachine.puml" />
     <Compile Update="StateMachines\ChoiceStateMachine.cs">
       <DependentUpon>ChoiceStateMachine.puml</DependentUpon>
+    </Compile>
+    <StatelessFile Include="StateMachines\AsyncStateMachine.puml" />
+    <Compile Update="StateMachines\AsyncStateMachine.cs">
+      <DependentUpon>AsyncStateMachine.puml</DependentUpon>
+    </Compile>
+    <StatelessFile Include="StateMachines\MyNestedStateMachine1.puml" />
+    <Compile Update="StateMachines\MyNestedStateMachine1.cs">
+      <DependentUpon>MyNestedStateMachine1.puml</DependentUpon>
+    </Compile>
+    <StatelessFile Include="StateMachines\MyNestedStateMachine2.puml" />
+    <Compile Update="StateMachines\MyNestedStateMachine2.cs">
+      <DependentUpon>MyNestedStateMachine2.puml</DependentUpon>
+    </Compile>
+    <StatelessFile Include="StateMachines\MyNestedStateMachine4.puml" />
+    <Compile Update="StateMachines\MyNestedStateMachine4.cs">
+      <DependentUpon>MyNestedStateMachine4.puml</DependentUpon>
+    </Compile>
+    <StatelessFile Include="StateMachines\ParameterStateMachine.puml" />
+    <Compile Update="StateMachines\ParameterStateMachine.cs">
+      <DependentUpon>ParameterStateMachine.puml</DependentUpon>
+    </Compile>
+    <StatelessFile Include="StateMachines\ExternalTest1StateMachine.puml" />
+    <Compile Update="StateMachines\ExternalTest1StateMachine.cs">
+      <DependentUpon>ExternalTest1StateMachine.puml</DependentUpon>
     </Compile>
   </ItemGroup>
 

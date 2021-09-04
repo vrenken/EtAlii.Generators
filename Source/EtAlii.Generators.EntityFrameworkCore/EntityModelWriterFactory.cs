@@ -1,7 +1,6 @@
 ﻿namespace EtAlii.Generators.EntityFrameworkCore
 {
     using System;
-    using Microsoft.CodeAnalysis;
 
     /// <summary>
     /// A code generator able to create EF Core source code from PlantUML diagrams.
@@ -12,7 +11,6 @@
     /// - Global transitions
     /// - Same named triggers with differently named parameters.
     /// </remarks>
-    [Generator]
     public class EntityModelWriterFactory : IWriterFactory<EntityModel>
     {
         public IWriter<EntityModel> Create()

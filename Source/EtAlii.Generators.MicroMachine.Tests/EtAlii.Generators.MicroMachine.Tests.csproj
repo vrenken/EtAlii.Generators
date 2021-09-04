@@ -81,7 +81,7 @@
 
     <MicroMachine Include="StateMachines\ExternalTest1StateMachine.puml" />
     <Compile Update="StateMachines\ExternalTest1StateMachine.cs">
-      <DependentUpon>ExternalTestStateMachine.puml</DependentUpon>
+      <DependentUpon>ExternalTest1StateMachine.puml</DependentUpon>
     </Compile>
   </ItemGroup>
 

@@ -69,7 +69,12 @@ namespace EtAlii.Generators.PlantUml
                 var allTransitions = _stateFragmentHelper.GetAllTransitions(stateMachine.StateFragments);
 
                 var directTransitionsToSubState = allTransitions
-                    .Where(t => t.From != superState.Name && allSubstates.Contains(t.To) && !allSubstates.Contains(t.From))
+                    .Where(
+                        t => t.From != superState.Name &&
+                        allSubstates.Contains(t.To) &&
+                        !allSubstates.Contains(t.From) &&
+                        t.To != _lifetime.BeginStateName &&
+                        t.To != _lifetime.EndStateName)
                     .ToArray();
 
                 var transitionsToSuperState = allTransitions
@@ -99,7 +104,12 @@ namespace EtAlii.Generators.PlantUml
                 {
                     // As we cannot guarantee an adequate sequential order of execution we don't support both unnamed start transitions and direct substate transitions.
                     var location = superState.Source.ToLocation(fullPathToFile);
-                    var diagnostic = Diagnostic.Create(GeneratorRule.SuperstateHasBothUnnamedAndDirectTransitionsDefined, location, superState.Source.Text);
+
+                    var additionalSourceLocations = unnamedSuperStateStartTransitions
+                        .Select(t => t.Source.ToLocation(fullPathToFile))
+                        .Concat(namedSuperStateStartTransitions.Select(t => t.Source.ToLocation(fullPathToFile)))
+                        .AsEnumerable();
+                    var diagnostic = Diagnostic.Create(GeneratorRule.SuperstateHasBothUnnamedAndDirectTransitionsDefined, location, additionalSourceLocations, null, superState.Source.Text);
                     diagnostics.Add(diagnostic);
                 }
 

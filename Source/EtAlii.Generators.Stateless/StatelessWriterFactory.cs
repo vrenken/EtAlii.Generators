@@ -1,7 +1,6 @@
 ﻿namespace EtAlii.Generators.Stateless
 {
     using EtAlii.Generators.PlantUml;
-    using Microsoft.CodeAnalysis;
 
     /// <summary>
     /// A code generator able to create Stateless source code from PlantUML diagrams.
@@ -12,7 +11,6 @@
     /// - Global transitions
     /// - Same named triggers with differently named parameters.
     /// </remarks>
-    [Generator]
     public class StatelessWriterFactory : IWriterFactory<StateMachine>
     {
         private readonly IStateMachineLifetime _lifetime;
