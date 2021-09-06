@@ -42,7 +42,6 @@ namespace EtAlii.Generators
             // Because of that we ignore everything except files with the configured extension.
             var additionalFiles = context.AdditionalFiles
                 .Where(file => Path.GetExtension(file.Path).Equals(extension, StringComparison.OrdinalIgnoreCase))
-                .ToArray()
                 .Where(f =>
                 {
                     try
