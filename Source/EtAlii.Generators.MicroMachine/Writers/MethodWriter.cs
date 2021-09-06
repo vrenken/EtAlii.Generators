@@ -137,7 +137,7 @@
             context.Writer.Indent -= 1;
         }
 
-        private void WriteTriggerMethods(WriteContext<StateMachine> context, Transition[][] transitionSets, string triggerType, Func<string, string, string, string, string, string> write)
+        private void WriteTriggerMethods(WriteContext<StateMachine> context, IEnumerable<Transition[]> transitionSets, string triggerType, Func<string, string, string, string, string, string> write)
         {
             foreach (var transitionSet in transitionSets)
             {

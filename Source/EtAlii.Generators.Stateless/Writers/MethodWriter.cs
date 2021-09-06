@@ -1,6 +1,7 @@
 ﻿namespace EtAlii.Generators.Stateless
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using EtAlii.Generators.PlantUml;
 
@@ -45,7 +46,7 @@
             }
         }
 
-        public void WriteTriggerMethods(WriteContext<StateMachine> context, Transition[][] transitionSets, string triggerType, Func<string, string, string, string, string, string> write)
+        public void WriteTriggerMethods(WriteContext<StateMachine> context, IEnumerable<Transition[]> transitionSets, string triggerType, Func<string, string, string, string, string, string> write)
         {
             foreach (var transitionSet in transitionSets)
             {

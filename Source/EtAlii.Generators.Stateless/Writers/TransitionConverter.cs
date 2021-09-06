@@ -2,6 +2,7 @@
 
 namespace EtAlii.Generators.Stateless
 {
+    using System.Collections.Generic;
     using System.Linq;
     using EtAlii.Generators.PlantUml;
 
@@ -14,7 +15,7 @@ namespace EtAlii.Generators.Stateless
             _parameterConverter = parameterConverter;
         }
 
-        public Transition[][] ToTransitionsSetsPerTriggerAndUniqueParameters(Transition[] transitions, string trigger)
+        public IEnumerable<Transition[]> ToTransitionsSetsPerTriggerAndUniqueParameters(Transition[] transitions, string trigger)
         {
             return transitions
                 .Where(t => t.Trigger == trigger)

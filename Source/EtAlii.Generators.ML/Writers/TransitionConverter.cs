@@ -2,6 +2,7 @@
 
 namespace EtAlii.Generators.ML
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     public class TransitionConverter
@@ -13,7 +14,7 @@ namespace EtAlii.Generators.ML
             _parameterConverter = parameterConverter;
         }
 
-        public Transition[][] ToTransitionsSetsPerTriggerAndUniqueParameters(Transition[] transitions, string trigger)
+        public IEnumerable<Transition[]> ToTransitionsSetsPerTriggerAndUniqueParameters(Transition[] transitions, string trigger)
         {
             return transitions
                 .Where(t => t.Trigger == trigger)
