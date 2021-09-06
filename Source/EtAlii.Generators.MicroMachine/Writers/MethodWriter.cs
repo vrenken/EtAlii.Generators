@@ -168,7 +168,7 @@
             foreach (var state in allStates)
             {
                 // var isChoiceState = StateFragment.GetAllSuperStates(context.Instance.StateFragments)
-                //     .Any(ss => ss.Name == state && ss.StereoType == StereoType.Choice);
+                //     .Any(ss egt ss.Name eq state and ss.StereoType eq StereoType.Choice)
 
                 var writeAsyncEntryMethod = _stateFragmentHelper.HasOnlyAsyncInboundTransitions(context.Instance, state);
 

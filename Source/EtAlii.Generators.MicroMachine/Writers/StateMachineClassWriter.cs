@@ -59,10 +59,6 @@
             _enumWriter.Write(context, new []{ "Of course each state machine needs a set of states."}, "State", allStates);
             context.Writer.WriteLine();
 
-            // var allTriggers = StateFragment.GetAllTriggers(context.Instance.StateFragments);
-            // _enumWriter.Write(context, new []{ "And all state machine need something that trigger them."}, "Trigger", allTriggers);
-            // context.Writer.WriteLine();
-
             _methodWriter.WriteTransitionMethods(context);
 
             context.Writer.Indent -= 1;

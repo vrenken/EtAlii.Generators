@@ -81,40 +81,5 @@
             context.Writer.WriteLine("}");
             context.Writer.WriteLine();
         }
-
-
-    //     private void WriteMethods(WriteContext<StateMachine> context, SuperState choiceSuperState)
-    //     {
-    //         var outboundTransitions = StateFragment.GetOutboundTransitions(context.Instance, choiceSuperState.Name);
-    //
-    //         foreach (var outboundTransition in outboundTransitions)
-    //         {
-    //             var transitionSets = new [] { new [] { outboundTransition } };
-    //             if (outboundTransition.IsAsync)
-    //             {
-    //                 var asyncWrite = new Func<string, string, string, string, string, string>((triggerName, typedParameters, _, _, namedParameters) =>
-    //                 {
-    //                     if (namedParameters.Any())
-    //                     {
-    //                         namedParameters = namedParameters.Substring(2);
-    //                     }
-    //                     return $"public Task {triggerName}Async({typedParameters}) => _stateMachine.{triggerName}Async({namedParameters});";
-    //                 });
-    //                 _methodWriter.WriteTriggerMethods(context, transitionSets, "async", asyncWrite);
-    //             }
-    //             else
-    //             {
-    //                 var syncWrite = new Func<string, string, string, string, string, string>((triggerName, typedParameters, _, _, namedParameters) =>
-    //                 {
-    //                     if (namedParameters.Any())
-    //                     {
-    //                         namedParameters = namedParameters.Substring(2);
-    //                     }
-    //                     return $"public void {triggerName}({typedParameters}) => _stateMachine.{triggerName}({namedParameters});";
-    //                 });
-    //                 _methodWriter.WriteTriggerMethods(context, transitionSets, "sync", syncWrite);
-    //             }
-    //         }
-    //     }
     }
 }

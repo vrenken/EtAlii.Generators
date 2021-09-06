@@ -47,7 +47,6 @@ namespace EtAlii.Generators
                     try
                     {
                         var options = context.AnalyzerConfigOptions.GetOptions(f);
-                        //return true;
                         if (options.TryGetValue(SourceItemGroupMetadata, out var sig))
                         {
                             log.Add($"Found SourceItemGroup: {Path.GetFileName(f.Path)} {sig}");
