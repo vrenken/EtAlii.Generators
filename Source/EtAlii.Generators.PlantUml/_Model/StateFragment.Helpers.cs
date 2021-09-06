@@ -122,6 +122,15 @@ namespace EtAlii.Generators.PlantUml
             return result.ToArray();
         }
 
+        public SuperState[] GetAllSuperStates(StateFragment[] fragments)
+        {
+            var superStates = fragments
+                .OfType<SuperState>()
+                .SelectMany(ss => GetAllSuperStates(ss.StateFragments).Concat(new[] {ss}))
+                .ToArray();
+            return superStates;
+        }
+
         public SuperState GetSuperState(StateMachine stateMachine, string substate)
         {
             if (substate == _lifetime.BeginStateName || substate == _lifetime.EndStateName)
@@ -234,15 +243,6 @@ namespace EtAlii.Generators.PlantUml
                 .Distinct() // That is, of course without any doubles.
                 .ToArray();
             return allStates;
-        }
-
-        public SuperState[] GetAllSuperStates(StateFragment[] fragments)
-        {
-            var superStates = fragments
-                .OfType<SuperState>()
-                .SelectMany(ss => GetAllSuperStates(ss.StateFragments).Concat(new[] {ss}))
-                .ToArray();
-            return superStates;
         }
     }
 }
