@@ -13,14 +13,14 @@ Usage:
 1. Add the analyzer NuGet package to the target project:
    ```csproj
     <ItemGroup>
-        <PackageReference Update="EtAlii.Generators.Stateless" Version="1.0.7" PrivateAssets="all" />
+        <PackageReference Update="EtAlii.Generators.Stateless" Version="1.4.3" PrivateAssets="all" />
     </ItemGroup>
    ```
 
 2. Also add the Stateless NuGet package to the target project:
    ```csproj
      <ItemGroup>
-       <PackageReference Include="stateless" Version="5.10.1" />
+       <PackageReference Include="stateless" Version="5.11.0" />
      </ItemGroup>
    ```
 

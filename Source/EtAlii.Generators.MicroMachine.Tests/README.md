@@ -15,7 +15,7 @@ Usage:
 1. Add the analyzer NuGet package to the target project:
    ```csproj
     <ItemGroup>
-        <PackageReference Update="EtAlii.Generators.MicroMachine" Version="1.0.7" PrivateAssets="all" />
+        <PackageReference Update="EtAlii.Generators.MicroMachine" Version="1.4.3" PrivateAssets="all" />
     </ItemGroup>
    ```
 
@@ -27,7 +27,8 @@ Usage:
    ```puml
     @startuml
     'namespace EtAlii.Generators.MicroMachine.Tests
-    'class SimpleStateMachineBase
+    'class SimpleStateMachine
+    'generate partial
 
     [*] -> State1 << async (string name) >> : Start
     State1 : this is a string
@@ -57,13 +58,13 @@ Usage:
     {
         using System.Collections.Generic;
 
-        public class SimpleStateMachine : SimpleStateMachineBase
+        public partial class SimpleStateMachine
         {
             public List<string> Actions { get; } = new List<string>();
 
-            protected override void OnState1Entered() => Actions.Add("State 1 entered");
+            partial void OnState1Entered() => Actions.Add("State 1 entered");
 
-            protected override void OnState1Exited() => Actions.Add("State 1 exited");
+            partial void OnState1Exited() => Actions.Add("State 1 exited");
         }
     }
    ```
@@ -136,7 +137,8 @@ The code generation can be configured to create asynchronous methods by providin
 ```puml
 @startuml
 'namespace EtAlii.Generators.MicroMachine.Tests
-'class AsyncStateMachineBase
+'class AsyncStateMachine
+'generate partial
 
 [*] -> State1 << async >> : Start
 State1 -> State2 << async >> : Continue
@@ -163,7 +165,8 @@ When parameter details are provided, the code generation writes both the trigger
 ```puml
 @startuml
 'namespace EtAlii.Generators.MicroMachine.Tests
-'class ParameterStateMachineBase
+'class ParameterStateMachine
+'generate partial
 'using EtAlii.Generators.MicroMachine.Tests.Nested
 
 [*] -up--> State1 : Continue
@@ -210,7 +213,8 @@ Both MicroMachine and PlantUML support nested states. The code generator is able
 ```puml
 @startuml
 'namespace EtAlii.Generators.MicroMachine.Tests
-'class SubStateStateMachineBase
+'class SubStateStateMachine
+'generate partial
 'using System.Text
 
 [*] -up-> State1 : Continue
