@@ -52,6 +52,9 @@
   <ItemGroup>
     <ProjectReference Include="..\EtAlii.Generators.PlantUml\EtAlii.Generators.PlantUml.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="Antlr4BuildTasks" Version="8.16.0" />
+  </ItemGroup>
 
   <Target Name="GetStatelessPackageDependencyTargetPaths">
     <ItemGroup>

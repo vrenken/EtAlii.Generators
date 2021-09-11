@@ -41,4 +41,8 @@
     <ProjectReference Include="..\EtAlii.Generators\EtAlii.Generators.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="Antlr4BuildTasks" Version="8.16.0" />
+  </ItemGroup>
+
 </Project>
