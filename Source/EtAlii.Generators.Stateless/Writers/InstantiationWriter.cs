@@ -69,11 +69,8 @@
 
             var stateConfiguration = new List<string>();
 
-            var isChoiceState = _stateFragmentHelper.GetAllSuperStates(context.Instance.StateFragments)
-                .Any(ss => ss.Name == state && ss.StereoType == StereoType.Choice);
-
-            WriteEntryAndExitConfiguration(context, state, stateConfiguration, isChoiceState);
-            WriteInboundTransitions(context, state, stateConfiguration, isChoiceState);
+            WriteEntryAndExitConfiguration(context, state, stateConfiguration);
+            WriteInboundTransitions(context, state, stateConfiguration);
             WriteInternalTransitions(context, state, stateConfiguration);
             WriteOutboundTransitions(context, state, stateConfiguration);
             WriteSuperState(context, state, stateConfiguration);
@@ -129,19 +126,19 @@
             }
         }
 
-        private void WriteEntryAndExitConfiguration(WriteContext<StateMachine> context, string state, List<string> stateConfiguration, bool isChoiceState)
+        private void WriteEntryAndExitConfiguration(WriteContext<StateMachine> context, string state, List<string> stateConfiguration)
         {
             var writeAsyncEntryConfiguration = _stateFragmentHelper.HasOnlyAsyncInboundTransitions(context.Instance, state);
             if (writeAsyncEntryConfiguration)
             {
-                var line = isChoiceState
+                var line = context.Instance.GenerateTriggerChoices
                     ? $"\t.OnEntryAsync(() => On{state}Entered(new {state}EventArgs(this)))"
                     : $"\t.OnEntryAsync(On{state}Entered)";
                 stateConfiguration.Add(line);
             }
             else
             {
-                var line = isChoiceState
+                var line = context.Instance.GenerateTriggerChoices
                     ? $"\t.OnEntry(() => On{state}Entered(new {state}EventArgs(this)))"
                     : $"\t.OnEntry(On{state}Entered)";
                 stateConfiguration.Add(line);
@@ -188,7 +185,7 @@
             stateConfiguration.AddRange(lines);
         }
 
-        private void WriteInboundTransitions(WriteContext<StateMachine> context, string state, List<string> stateConfiguration, bool isChoiceState)
+        private void WriteInboundTransitions(WriteContext<StateMachine> context, string state, List<string> stateConfiguration)
         {
             var lines = _stateFragmentHelper
                 .GetInboundTransitions(context.Instance.StateFragments, state)
@@ -198,16 +195,16 @@
                     var genericParameters = _parameterConverter.ToGenericParameters(transition.Parameters);
                     var lambdaParameters = _parameterConverter.ToNamedVariables(transition.Parameters);
                     var parameters = transition.Parameters;
-                    if (isChoiceState)
+                    if (context.Instance.GenerateTriggerChoices)
                     {
                         parameters = new [] { new Parameter($"", $"new {state}EventArgs(this)", transition.Source) }
                             .Concat(parameters)
                             .ToArray();
                     }
-                    var namedParameters = _parameterConverter.ToNamedVariables(parameters);
+                    var namedParameters = _parameterConverter.ToNamedVariables(parameters, context.Instance.GenerateTriggerChoices ? 1 : 0);
                     var transitionMethodName = _transitionConverter.ToTransitionMethodName(transition);
 
-                    return isChoiceState
+                    return context.Instance.GenerateTriggerChoices
                         ? $"\t.OnEntryFrom{(transition.IsAsync ? "Async" : "")}{genericParameters}({triggerParameter}, ({lambdaParameters}) => {transitionMethodName}({namedParameters}))"
                         : $"\t.OnEntryFrom{(transition.IsAsync ? "Async" : "")}{genericParameters}({triggerParameter}, {transitionMethodName})";
                 })

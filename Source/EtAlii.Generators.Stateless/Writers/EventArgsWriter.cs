@@ -20,34 +20,37 @@
             context.Writer.WriteLine("// The classes below represent the EventArgs as used by some of the methods.");
             context.Writer.WriteLine();
 
-            var choiceSuperStates = _stateFragmentHelper
-                .GetAllSuperStates(context.Instance.StateFragments)
-                .Where(ss => ss.StereoType == StereoType.Choice);
-
-            foreach (var choiceSuperState in choiceSuperStates)
+            if(context.Instance.GenerateTriggerChoices)
             {
-                context.Writer.WriteLine($"protected class {choiceSuperState.Name}EventArgs");
-                context.Writer.WriteLine("{");
-                context.Writer.Indent += 1;
-                context.Writer.WriteLine($"private readonly {context.Instance.ClassName} _stateMachine;");
-                context.Writer.WriteLine();
-                context.Writer.WriteLine($"public {choiceSuperState.Name}EventArgs({context.Instance.ClassName} stateMachine)");
-                context.Writer.WriteLine("{");
-                context.Writer.Indent += 1;
-                context.Writer.WriteLine($"_stateMachine = stateMachine;");
-                context.Writer.Indent -= 1;
-                context.Writer.WriteLine("}");
-                context.Writer.WriteLine("");
-                WriteMethods(context, choiceSuperState);
-                context.Writer.Indent -= 1;
-                context.Writer.WriteLine("}");
-                context.Writer.WriteLine();
+                var allStates = _stateFragmentHelper
+                    .GetAllStates(context.Instance.StateFragments)
+                    .ToArray();
+
+                foreach (var state in allStates)
+                {
+                    context.Writer.WriteLine($"protected class {state}EventArgs");
+                    context.Writer.WriteLine("{");
+                    context.Writer.Indent += 1;
+                    context.Writer.WriteLine($"private readonly {context.Instance.ClassName} _stateMachine;");
+                    context.Writer.WriteLine();
+                    context.Writer.WriteLine($"public {state}EventArgs({context.Instance.ClassName} stateMachine)");
+                    context.Writer.WriteLine("{");
+                    context.Writer.Indent += 1;
+                    context.Writer.WriteLine($"_stateMachine = stateMachine;");
+                    context.Writer.Indent -= 1;
+                    context.Writer.WriteLine("}");
+                    context.Writer.WriteLine("");
+                    WriteMethods(context, state);
+                    context.Writer.Indent -= 1;
+                    context.Writer.WriteLine("}");
+                    context.Writer.WriteLine();
+                }
             }
         }
 
-        private void WriteMethods(WriteContext<StateMachine> context, SuperState choiceSuperState)
+        private void WriteMethods(WriteContext<StateMachine> context, string state)
         {
-            var outboundTransitions = _stateFragmentHelper.GetOutboundTransitions(context.Instance, choiceSuperState.Name);
+            var outboundTransitions = _stateFragmentHelper.GetOutboundTransitions(context.Instance, state);
 
             foreach (var outboundTransition in outboundTransitions)
             {

@@ -29,12 +29,12 @@
             return string.Join(", ", result);
         }
 
-        public string ToNamedVariables(Parameter[] parameters)
+        public string ToNamedVariables(Parameter[] parameters, int offset = 0)
         {
             var result = new List<string>();
             for (var i = 0; i < parameters.Length; i++)
             {
-                var name = parameters[i].HasName ? parameters[i].Name : $"@{ToCamelCase(parameters[i].Type)}{i}";
+                var name = parameters[i].HasName ? parameters[i].Name : $"@{ToCamelCase(parameters[i].Type)}{i - offset}";
                 result.Add($"{name}");
             }
             return string.Join(", ", result);

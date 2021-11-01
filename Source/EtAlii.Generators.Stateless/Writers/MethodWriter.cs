@@ -72,10 +72,7 @@
             var allStates = _stateFragmentHelper.GetAllStates(context.Instance.StateFragments);
             foreach (var state in allStates)
             {
-                var isChoiceState = _stateFragmentHelper.GetAllSuperStates(context.Instance.StateFragments)
-                    .Any(ss => ss.Name == state && ss.StereoType == StereoType.Choice);
-
-                WriteEntryAndExitMethods(context, state, isChoiceState);
+                WriteEntryAndExitMethods(context, state);
 
                 var allTransitions = _stateFragmentHelper.GetAllTransitions(context.Instance.StateFragments);
                 var uniqueTransitions = allTransitions
@@ -86,11 +83,11 @@
 
                 WriteInternalTransitionMethodsForState(context, uniqueTransitions, state);
 
-                WriteInboundTransitionMethodsForState(context, uniqueTransitions, state, isChoiceState);
+                WriteInboundTransitionMethodsForState(context, uniqueTransitions, state);
             }
         }
 
-        private void WriteEntryAndExitMethods(WriteContext<StateMachine> context, string state, bool isChoiceState)
+        private void WriteEntryAndExitMethods(WriteContext<StateMachine> context, string state)
         {
             var writeAsyncEntryMethod = _stateFragmentHelper.HasOnlyAsyncInboundTransitions(context.Instance, state);
 
@@ -106,10 +103,9 @@
             context.Writer.WriteLine("/// </summary>");
 
             var parameters = Array.Empty<Parameter>();
-            if (isChoiceState)
+            if (context.Instance.GenerateTriggerChoices)
             {
-                var superState = _stateFragmentHelper.GetAllSuperStates(context.Instance.StateFragments).Single(ss => ss.Name == state);
-                parameters = new [] { new Parameter($"{state}EventArgs", "e", superState.Source) }
+                parameters = new [] { new Parameter($"{state}EventArgs", "e", new SourcePosition(0, 0, "")) }
                     .Concat(parameters)
                     .ToArray();
             }
@@ -164,7 +160,7 @@
             context.Writer.WriteLine();
         }
 
-        private void WriteInboundTransitionMethodsForState(WriteContext<StateMachine> context, Transition[] uniqueTransitions, string state, bool isChoiceState)
+        private void WriteInboundTransitionMethodsForState(WriteContext<StateMachine> context, Transition[] uniqueTransitions, string state)
         {
             var inboundTransitions = uniqueTransitions
                 .Where(t => t.From != t.To) // skip internal transitions.
@@ -174,12 +170,11 @@
             foreach (var transition in inboundTransitions)
             {
                 var parameters = transition.Parameters;
-                if (isChoiceState)
+                if (context.Instance.GenerateTriggerChoices)
                 {
-                    var superState = _stateFragmentHelper.GetAllSuperStates(context.Instance.StateFragments).Single(ss => ss.Name == state);
-                    parameters = new [] { new Parameter($"{state}EventArgs", "e", superState.Source) }
-                            .Concat(parameters)
-                            .ToArray();
+                    parameters = new[] { new Parameter($"{state}EventArgs", "e", new SourcePosition(0, 0, "")) }
+                        .Concat(parameters)
+                        .ToArray();
                 }
 
                 var typedNamedParameters = _parameterConverter.ToTypedNamedVariables(parameters);

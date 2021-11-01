@@ -20,6 +20,11 @@
         public bool GeneratePartialClass { get; }
 
         /// <summary>
+        /// When set to true the choices per state will be aggregated and made available.
+        /// </summary>
+        public bool GenerateTriggerChoices { get; }
+
+        /// <summary>
         /// The namespaces that should be added as usings at the root of the file.
         /// </summary>
         public string[] Usings { get; }
@@ -58,6 +63,9 @@
             GeneratePartialClass = Settings
                 .OfType<GeneratePartialClassSetting>()
                 .SingleOrDefault()?.Value ?? false;
+            GenerateTriggerChoices = Settings
+                .OfType<GenerateTriggerChoices>()
+                .SingleOrDefault()?.Value ?? true;
         }
     }
 }
