@@ -28,12 +28,14 @@
             // No need to introduce a whole new package here as it'll only make the analyzer more bloated.
             // For now the simple composition below also works absolutely fine.
             var parameterConverter = new ParameterConverter();
+            var stateFragmentHelper = new StateFragmentHelper(_lifetime);
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
             var methodWriter = new MethodWriter(parameterConverter, transitionConverter, _lifetime, _stateFragmentHelper);
             var transitionClassWriter = new TransitionClassWriter();
             var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter, _stateFragmentHelper);
-            var stateMachineClassWriter = new StateMachineClassWriter(enumWriter, methodWriter, triggerClassWriter, transitionClassWriter, _stateFragmentHelper);
+            var choicesWriter = new ChoicesWriter(methodWriter, stateFragmentHelper);
+            var stateMachineClassWriter = new ClassWriter(enumWriter, methodWriter, triggerClassWriter, transitionClassWriter, _stateFragmentHelper, parameterConverter, choicesWriter);
             return new NamespaceWriter<StateMachine>(context => stateMachineClassWriter.Write(context));
         }
     }

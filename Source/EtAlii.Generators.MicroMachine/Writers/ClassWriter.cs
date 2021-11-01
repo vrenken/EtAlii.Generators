@@ -1,26 +1,33 @@
 ﻿namespace EtAlii.Generators.MicroMachine
 {
+    using System.Linq;
     using EtAlii.Generators.PlantUml;
 
-    public class StateMachineClassWriter : IWriter<StateMachine>
+    public class ClassWriter : IWriter<StateMachine>
     {
         private readonly EnumWriter<StateMachine> _enumWriter;
         private readonly MethodWriter _methodWriter;
         private readonly TriggerClassWriter _triggerClassWriter;
         private readonly TransitionClassWriter _transitionClassWriter;
         private readonly StateFragmentHelper _stateFragmentHelper;
+        private readonly ParameterConverter _parameterConverter;
+        private readonly ChoicesWriter _choicesWriter;
 
-        public StateMachineClassWriter(EnumWriter<StateMachine> enumWriter,
+        public ClassWriter(EnumWriter<StateMachine> enumWriter,
             MethodWriter methodWriter,
             TriggerClassWriter triggerClassWriter,
             TransitionClassWriter transitionClassWriter,
-            StateFragmentHelper stateFragmentHelper)
+            StateFragmentHelper stateFragmentHelper,
+            ParameterConverter parameterConverter,
+            ChoicesWriter choicesWriter)
         {
             _enumWriter = enumWriter;
             _methodWriter = methodWriter;
             _triggerClassWriter = triggerClassWriter;
             _transitionClassWriter = transitionClassWriter;
             _stateFragmentHelper = stateFragmentHelper;
+            _parameterConverter = parameterConverter;
+            _choicesWriter = choicesWriter;
         }
 
         public void Write(WriteContext<StateMachine> context)
@@ -38,15 +45,16 @@
             context.Writer.WriteLine("{");
             context.Writer.Indent += 1;
 
-            context.Writer.WriteLine($"protected {context.Instance.ClassName}.State _state;");
-            context.Writer.WriteLine($"private bool _queueTransitions;");
-
-            context.Writer.WriteLine($"private readonly Queue<Transition> _transactions = new Queue<Transition>();");
+            WriteFieldsAndProperties(context);
             context.Writer.WriteLine();
 
+            WriteConstuctor(context);
             WriteRunOrQueueTransition(context);
 
             _methodWriter.WriteTriggerMethods(context);
+            context.Writer.WriteLine();
+
+            _choicesWriter.WriteChoices(context);
             context.Writer.WriteLine();
 
             _transitionClassWriter.WriteTransitionClasses(context);
@@ -63,6 +71,47 @@
 
             context.Writer.Indent -= 1;
             context.Writer.WriteLine("}");
+        }
+
+        private void WriteFieldsAndProperties(WriteContext<StateMachine> context)
+        {
+            context.Writer.WriteLine($"protected {context.Instance.ClassName}.State _state;");
+            context.Writer.WriteLine($"private bool _queueTransitions;");
+            context.Writer.WriteLine($"private readonly Queue<Transition> _transactions = new Queue<Transition>();");
+
+            if (context.Instance.GenerateTriggerChoices)
+            {
+                var states = _stateFragmentHelper
+                    .GetAllStates(context.Instance.StateFragments)
+                    .ToArray();
+                foreach (var state in states)
+                {
+                    context.Writer.WriteLine($"private readonly {context.Instance.ClassName}.{state}Choices _{_parameterConverter.ToCamelCase(state)}Choices;");
+                }
+            }
+
+            context.Writer.WriteLine();
+        }
+        private void WriteConstuctor(WriteContext<StateMachine> context)
+        {
+            context.Writer.WriteLine($"public {context.Instance.ClassName}()");
+            context.Writer.WriteLine("{");
+            context.Writer.Indent += 1;
+
+            if (context.Instance.GenerateTriggerChoices)
+            {
+                var states = _stateFragmentHelper
+                    .GetAllStates(context.Instance.StateFragments)
+                    .ToArray();
+                foreach (var state in states)
+                {
+                    context.Writer.WriteLine($"_{_parameterConverter.ToCamelCase(state)}Choices = new {context.Instance.ClassName}.{state}Choices(this);");
+                }
+            }
+
+            context.Writer.Indent -= 1;
+            context.Writer.WriteLine("}");
+            context.Writer.WriteLine();
         }
 
         private void WriteRunOrQueueTransition(WriteContext<StateMachine> context)

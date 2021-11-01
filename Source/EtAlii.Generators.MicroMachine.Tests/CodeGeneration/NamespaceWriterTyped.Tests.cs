@@ -21,7 +21,8 @@
             var methodWriter = new MethodWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper);
             var transitionClassWriter = new TransitionClassWriter();
             var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter, stateFragmentHelper);
-            var stateMachineClassWriter = new StateMachineClassWriter(enumWriter, methodWriter, triggerClassWriter, transitionClassWriter, stateFragmentHelper);
+            var choicesWriter = new ChoicesWriter(methodWriter, stateFragmentHelper);
+            var stateMachineClassWriter = new ClassWriter(enumWriter, methodWriter, triggerClassWriter, transitionClassWriter, stateFragmentHelper, parameterConverter, choicesWriter);
 
             // Act.
             var writer = new NamespaceWriter<StateMachine>(context => stateMachineClassWriter.Write(context));
@@ -42,7 +43,8 @@
             var methodWriter = new MethodWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper);
             var transitionClassWriter = new TransitionClassWriter();
             var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter, stateFragmentHelper);
-            var stateMachineClassWriter = new StateMachineClassWriter(enumWriter, methodWriter, triggerClassWriter, transitionClassWriter, stateFragmentHelper);
+            var choicesWriter = new ChoicesWriter(methodWriter, stateFragmentHelper);
+            var stateMachineClassWriter = new ClassWriter(enumWriter, methodWriter, triggerClassWriter, transitionClassWriter, stateFragmentHelper, parameterConverter, choicesWriter);
             var writer = new NamespaceWriter<StateMachine>(context => stateMachineClassWriter.Write(context));
             var originalFileName = "Test.puml";
             var log = new List<string>();
@@ -92,7 +94,8 @@
             var methodWriter = new MethodWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper);
             var transitionClassWriter = new TransitionClassWriter();
             var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter, stateFragmentHelper);
-            var stateMachineClassWriter = new StateMachineClassWriter(enumWriter, methodWriter, triggerClassWriter, transitionClassWriter, stateFragmentHelper);
+            var choicesWriter = new ChoicesWriter(methodWriter, stateFragmentHelper);
+            var stateMachineClassWriter = new ClassWriter(enumWriter, methodWriter, triggerClassWriter, transitionClassWriter, stateFragmentHelper, parameterConverter, choicesWriter);
             var writer = new NamespaceWriter<StateMachine>(context => stateMachineClassWriter.Write(context));
             var originalFileName = "Test.puml";
             var log = new List<string>();

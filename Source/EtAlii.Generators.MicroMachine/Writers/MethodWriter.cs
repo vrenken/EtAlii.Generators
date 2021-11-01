@@ -105,10 +105,13 @@
             }
             foreach (var call in chain.EntryCalls)
             {
-                context.Writer.WriteLine($"On{call.State}Entered({triggerVariableName});");
+                var choice = context.Instance.GenerateTriggerChoices
+                    ? $", _{_parameterConverter.ToCamelCase(call.State)}Choices"
+                    : "";
+                context.Writer.WriteLine($"On{call.State}Entered({triggerVariableName}{choice});");
                 if (!call.IsSuperState)
                 {
-                    context.Writer.WriteLine($"On{call.State}Entered(({triggerTypeName}){triggerVariableName});");
+                    context.Writer.WriteLine($"On{call.State}Entered(({triggerTypeName}){triggerVariableName}{choice});");
                 }
             }
 
@@ -127,9 +130,13 @@
                     .SingleOrDefault(t => t.From == _lifetime.BeginStateName);
                 if (unnamedInboundTransition != null)
                 {
+                    var choice = context.Instance.GenerateTriggerChoices
+                        ? $", _{_parameterConverter.ToCamelCase(unnamedInboundTransition.To)}Choices"
+                        : "";
+
                     context.Writer.WriteLine("// We also need to activate the first substate.");
                     context.Writer.WriteLine($"_state = State.{unnamedInboundTransition.To};");
-                    context.Writer.WriteLine($"On{unnamedInboundTransition.To}Entered({triggerVariableName});");
+                    context.Writer.WriteLine($"On{unnamedInboundTransition.To}Entered({triggerVariableName}{choice});");
                 }
             }
 
@@ -137,7 +144,7 @@
             context.Writer.Indent -= 1;
         }
 
-        private void WriteTriggerMethods(WriteContext<StateMachine> context, IEnumerable<Transition[]> transitionSets, string triggerType, Func<string, string, string, string, string, string> write)
+        public void WriteTriggerMethods(WriteContext<StateMachine> context, IEnumerable<Transition[]> transitionSets, string triggerType, Func<string, string, string, string, string, string> write, bool writeTransitionMethods = true)
         {
             foreach (var transitionSet in transitionSets)
             {
@@ -148,7 +155,10 @@
                 var namedParameters = parameters.Any() ? _parameterConverter.ToNamedVariables(parameters) : string.Empty;
                 var triggerParameter = _transitionConverter.ToTriggerParameter(firstTransition);
 
-                WriteTransitionMethod(context, firstTransition.Trigger, typedParameters, namedParameters);
+                if (writeTransitionMethods)
+                {
+                    WriteTransitionMethod(context, firstTransition.Trigger, typedParameters, namedParameters);
+                }
 
                 WriteComment(context, transitionSet, $"Depending on the current state, call this method to trigger one of the {triggerType} transitions below:");
                 context.Writer.WriteLine(write(firstTransition.Trigger, typedParameters, genericParameters, triggerParameter, namedParameters));
@@ -224,7 +234,6 @@
             }
             context.Writer.WriteLine("/// </summary>");
 
-
             if (context.Instance.GeneratePartialClass)
             {
                 context.Writer.WriteLine($"partial {(writeAsyncExitMethod ? "Task" : "void")} {exitMethodName}({triggerName} trigger);");
@@ -276,13 +285,18 @@
 
             context.Writer.WriteLine("/// </summary>");
 
+
+            var choices = context.Instance.GenerateTriggerChoices
+                ? $", {state}Choices choices"
+                : "";
+
             if (context.Instance.GeneratePartialClass)
             {
-                context.Writer.WriteLine($"partial {(writeAsyncEntryMethod ? "Task" : "void")} {entryMethodName}({triggerName} trigger);");
+                context.Writer.WriteLine($"partial {(writeAsyncEntryMethod ? "Task" : "void")} {entryMethodName}({triggerName} trigger{choices});");
             }
             else
             {
-                context.Writer.WriteLine($"protected virtual {(writeAsyncEntryMethod ? "Task" : "void")} {entryMethodName}({triggerName} trigger)");
+                context.Writer.WriteLine($"protected virtual {(writeAsyncEntryMethod ? "Task" : "void")} {entryMethodName}({triggerName} trigger{choices})");
                 context.Writer.WriteLine("{");
                 context.Writer.Indent += 1;
                 if (writeAsyncEntryMethod)
