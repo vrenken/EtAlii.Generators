@@ -54,6 +54,7 @@
 
         public override object VisitSetting_class(PlantUmlParser.Setting_classContext context) => new ClassNameSetting((string)VisitId(context.name));
         public override object VisitSetting_generate_partial(PlantUmlParser.Setting_generate_partialContext context) => new GeneratePartialClassSetting(true);
+        public override object VisitSetting_generate_choices(PlantUmlParser.Setting_generate_choicesContext context) => new GenerateTriggerChoices(true);
         public override object VisitSetting_namespace(PlantUmlParser.Setting_namespaceContext context) => new NamespaceSetting(context.@namespace().GetText());
         public override object VisitSetting_using(PlantUmlParser.Setting_usingContext context) => new UsingSetting(context.@namespace().GetText());
 

@@ -32,11 +32,13 @@ namespace                               : id (DOT id)*;
 setting_namespace                       : SETTING_NAMESPACE WHITESPACE+ namespace;
 setting_class                           : SETTING_CLASS WHITESPACE+ name=id;
 setting_generate_partial                : SETTING_GENERATE_PARTIAL;
+setting_generate_choices                : SETTING_GENERATE_CHOICES;
 setting_using                           : SETTING_USING WHITESPACE+ namespace;
 setting
     : setting_namespace
     | setting_class
     | setting_generate_partial
+    | setting_generate_choices
     | setting_using
     ;
 

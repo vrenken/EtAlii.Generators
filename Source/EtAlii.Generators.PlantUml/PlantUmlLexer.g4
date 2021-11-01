@@ -23,6 +23,7 @@ SETTING_NAMESPACE                                   : '\'namespace';
 SETTING_CLASS                                       : '\'class';
 SETTING_USING                                       : '\'using';
 SETTING_GENERATE_PARTIAL                            : '\'generate partial';
+SETTING_GENERATE_CHOICES                            : '\'generate choices';
 BOUNDARY_NODE                                       : '[*]';
 
 // String
