@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <ProjectGuid>{7A7E5272-B0D8-402A-9F89-D38515CFF376}</ProjectGuid>
+    <NoWarn>SL1006,SL1004</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

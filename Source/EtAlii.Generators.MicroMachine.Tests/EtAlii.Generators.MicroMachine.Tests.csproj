@@ -7,6 +7,7 @@
     <ProjectGuid>b64c238d-208e-453b-84eb-ce4ffa058d12</ProjectGuid>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     <CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)\$(Configuration)\.etalii</CompilerGeneratedFilesOutputPath>
+    <NoWarn>SL1006,SL1004</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,20 +20,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <MicroMachine Include="StateMachines\MyNestedStateMachine4.puml" />
-    <Compile Update="StateMachines\MyNestedStateMachine4.cs">
+    <None Include="StateMachines\MyNestedStateMachine4.puml" />
+    <None Update="StateMachines\MyNestedStateMachine4.cs">
       <DependentUpon>MyNestedStateMachine4.puml</DependentUpon>
-    </Compile>
+    </None>
 
-    <MicroMachine Include="StateMachines\MyNestedStateMachine2.puml" />
-    <Compile Update="StateMachines\MyNestedStateMachine2.cs">
+    <None Include="StateMachines\MyNestedStateMachine2.puml" />
+    <None Update="StateMachines\MyNestedStateMachine2.cs">
       <DependentUpon>MyNestedStateMachine2.puml</DependentUpon>
-    </Compile>
+    </None>
 
-    <MicroMachine Include="StateMachines\MyNestedStateMachine1.puml" />
-    <Compile Update="StateMachines\MyNestedStateMachine1.cs">
+    <None Include="StateMachines\MyNestedStateMachine1.puml" />
+    <None Update="StateMachines\MyNestedStateMachine1.cs">
       <DependentUpon>MyNestedStateMachine1.puml</DependentUpon>
-    </Compile>
+    </None>
 
     <MicroMachine Include="StateMachines\ChoiceStateMachine.puml" />
     <Compile Update="StateMachines\ChoiceStateMachine.cs">
