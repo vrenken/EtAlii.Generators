@@ -8,6 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EtAlii.Generators.PlantUml\EtAlii.Generators.PlantUml.csproj" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisNugetVersion)" PrivateAssets="all" />
+    <PackageReference Include="Serilog" Version="2.10.0"  PrivateAssets="all"/>
   </ItemGroup>
 
 </Project>
