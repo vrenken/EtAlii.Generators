@@ -1,7 +1,6 @@
 ﻿namespace EtAlii.Generators.MicroMachine
 {
     using System.CodeDom.Compiler;
-    using System.Collections.Generic;
     using EtAlii.Generators.PlantUml;
     using Microsoft.CodeAnalysis;
 
@@ -38,6 +37,6 @@
 
         protected override DiagnosticDescriptor GetParsingExceptionRule() => GeneratorRule.PlantUmlStateMachineProcessingThrowsException;
 
-        protected override WriteContext<StateMachine> CreateWriteContext(StateMachine instance, IndentedTextWriter writer, string originalFileName, List<string> log) =>  new WriteContextFactory(_stateFragmentHelper).Create(writer, originalFileName, log, instance);
+        protected override WriteContext<StateMachine> CreateWriteContext(StateMachine instance, IndentedTextWriter writer, string originalFileName) =>  new WriteContextFactory(_stateFragmentHelper).Create(writer, originalFileName, instance);
     }
 }

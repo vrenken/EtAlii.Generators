@@ -2,7 +2,6 @@
 {
     using System;
     using System.CodeDom.Compiler;
-    using System.Collections.Generic;
     using System.IO;
     using EtAlii.Generators.PlantUml;
     using Xunit;
@@ -47,7 +46,6 @@
             var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter, stateFragmentHelper);
             var writer = new NamespaceWriter<StateMachine>(context => classWriter.Write(context));
             var originalFileName = "Test.puml";
-            var log = new List<string>();
 
             var headers = new[]
             {
@@ -71,7 +69,7 @@
 
             using var stringWriter = new StringWriter();
             using var indentedTextWriter = new IndentedTextWriter(stringWriter);
-            var writeContext = new WriteContextFactory(stateFragmentHelper).Create(indentedTextWriter, originalFileName, log, stateMachine);
+            var writeContext = new WriteContextFactory(stateFragmentHelper).Create(indentedTextWriter, originalFileName, stateMachine);
 
             // Act.
             writer.Write(writeContext);
@@ -98,7 +96,6 @@
             var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter, stateFragmentHelper);
             var writer = new NamespaceWriter<StateMachine>(context => classWriter.Write(context));
             var originalFileName = "Test.puml";
-            var log = new List<string>();
 
             var headers = new[]
             {
@@ -123,7 +120,7 @@
 
             using var stringWriter = new StringWriter();
             using var indentedTextWriter = new IndentedTextWriter(stringWriter);
-            var writeContext = new WriteContextFactory(stateFragmentHelper).Create(indentedTextWriter, originalFileName, log, stateMachine);
+            var writeContext = new WriteContextFactory(stateFragmentHelper).Create(indentedTextWriter, originalFileName, stateMachine);
 
             // Act.
             writer.Write(writeContext);

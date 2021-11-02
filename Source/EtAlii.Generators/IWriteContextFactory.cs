@@ -3,10 +3,9 @@
 namespace EtAlii.Generators
 {
     using System.CodeDom.Compiler;
-    using System.Collections.Generic;
 
     public interface IWriteContextFactory<T>
     {
-        WriteContext<T> Create(IndentedTextWriter writer, string originalFileName, List<string> log, T instance);
+        WriteContext<T> Create(IndentedTextWriter writer, string originalFileName, T instance);
     }
 }

@@ -6,6 +6,7 @@
     using Antlr4.Runtime;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Text;
+    using Serilog;
 
     /// <summary>
     /// The central class responsible of parsing both the PlantUML and Stateless specific constructions
@@ -13,7 +14,9 @@
     /// </summary>
     public class GraphQLQueryParser : IParser<object>
     {
-        public bool TryParse(AdditionalText file, List<string> log, out object stateMachine, out Diagnostic[] diagnostics)
+        private readonly ILogger _log = Log.ForContext<GraphQLQueryParser>();
+
+        public bool TryParse(AdditionalText file, out object stateMachine, out Diagnostic[] diagnostics)
         {
             var success = false;
             var diagnosticErrors = new List<Diagnostic>();
@@ -21,9 +24,9 @@
             {
                 var plantUmlText = file.GetText()?.ToString();
 
-                log.Add("========================");
-                log.Add($"Parsing GraphQL query file: {file.Path}");
-                log.Add(plantUmlText);
+                _log
+                    .ForContext("FileContent", plantUmlText)
+                    .Information("Parsing GraphQL query {File}", file.Path);
 
                 var inputStream = new AntlrInputStream(plantUmlText);
                 var lexer = new GraphQLLexer(inputStream);
@@ -39,14 +42,14 @@
 
                 if (parser.NumberOfSyntaxErrors != 0)
                 {
-                    log.Add($"NumberOfSyntaxErrors: {parser.NumberOfSyntaxErrors}");
+                    _log.Information("File parsed with {NumberOfSyntaxErrors}", parser.NumberOfSyntaxErrors);
 
                     diagnosticErrors.AddRange(errorListener.Diagnostics);
                 }
 
                 if (parsingContext.exception != null)
                 {
-                    log.Add($"Parser exception: {parsingContext.exception.Message}");
+                    _log.Fatal(parsingContext.exception, "Parsing threw an exception");
                     var location = Location.Create(file.Path, TextSpan.FromBounds(0,0), new LinePositionSpan(LinePosition.Zero, LinePosition.Zero));
                     var diagnostic = Diagnostic.Create(DiagnosticRule.ParsingThrewException, location, parsingContext.exception.Message, parsingContext.exception.StackTrace);
                     diagnosticErrors.Add(diagnostic);
@@ -55,19 +58,17 @@
                 success = !diagnosticErrors.Any();
                 if (success)
                 {
-                    log.Add("Parsed GraphQL query");
+                    _log.Information("Successfully parsed GraphQL query file");
                 }
                 else
                 {
-                    log.Add("Failed parsing GraphQL query");
-
+                    _log.Error("Unable to parse GraphQL query file");
                     stateMachine = null;
                 }
             }
             catch (Exception e)
             {
-                log.Add($"Unable to parse GraphQL query: {e.Message}");
-                log.Add($"{e.StackTrace}");
+                _log.Fatal(e, "Failure parsing GraphQL query file");
 
                 var location = Location.Create(file.Path, new TextSpan(), new LinePositionSpan());
                 var diagnostic = Diagnostic.Create(DiagnosticRule.ParsingThrewException, location, e.Message, e.StackTrace);

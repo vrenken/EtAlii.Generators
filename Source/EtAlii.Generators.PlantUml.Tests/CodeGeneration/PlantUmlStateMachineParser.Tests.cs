@@ -1,6 +1,5 @@
 ﻿namespace EtAlii.Generators.PlantUml.Tests
 {
-    using System.Collections.Generic;
     using EtAlii.Generators.PlantUml;
     using Xunit;
 
@@ -26,7 +25,6 @@
             // Arrange.
             var lifetime = new PlantUmlTestMachineLifetime();
             var parser = new PlantUmlStateMachineParser(lifetime);
-            var log = new List<string>();
 
             var text = @"@startuml
 'namespace EtAlii.Generators.PlantUml.Tests
@@ -48,7 +46,7 @@ State4 : This is the final state
             var file = new TestAdditionalTextFile(text, "Test.puml");
 
             // Act.
-            var result = parser.TryParse(file, log, out var stateMachine, out var diagnostics);
+            var result = parser.TryParse(file, out var stateMachine, out var diagnostics);
 
             // Assert.
             Assert.True(result);
@@ -66,7 +64,6 @@ State4 : This is the final state
             // Arrange.
             var lifetime = new PlantUmlTestMachineLifetime();
             var parser = new PlantUmlStateMachineParser(lifetime);
-            var log = new List<string>();
 
             var text = @"@startuml
 'namespace EtAlii.Generators.PlantUml.Tests
@@ -82,7 +79,7 @@ State2 -up-> State3 : Continue
             var file = new TestAdditionalTextFile(text, "Test.puml");
 
             // Act.
-            var result = parser.TryParse(file, log, out var stateMachine, out var diagnostics);
+            var result = parser.TryParse(file, out var stateMachine, out var diagnostics);
 
             // Assert.
             Assert.False(result);

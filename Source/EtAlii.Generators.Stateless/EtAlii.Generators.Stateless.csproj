@@ -39,6 +39,63 @@
       <Pack>true</Pack>
       <PackagePath>\analyzers\dotnet\cs</PackagePath>
     </None>
+
+<!--    <None Include="$(PkgSerilog)\lib\netstandard2.1\Serilog.dll" >-->
+<!--      <Visible>false</Visible>-->
+<!--      <Pack>true</Pack>-->
+<!--      <PackagePath>\analyzers\dotnet\cs</PackagePath>-->
+<!--    </None>-->
+<!--    <None Include="$(PkgSerilog_Sinks_Seq)\lib\netstandard2.0\Serilog.Sinks.Seq.dll" >-->
+<!--      <Visible>false</Visible>-->
+<!--      <Pack>true</Pack>-->
+<!--      <PackagePath>\analyzers\dotnet\cs</PackagePath>-->
+<!--    </None>-->
+<!--    <None Include="$(PkgSerilog_Sinks_PeriodicBatching)\lib\netstandard2.0\Serilog.Sinks.PeriodicBatching.dll" >-->
+<!--      <Visible>false</Visible>-->
+<!--      <Pack>true</Pack>-->
+<!--      <PackagePath>\analyzers\dotnet\cs</PackagePath>-->
+<!--    </None>-->
+<!--    <None Include="$(PkgSerilog_Formatting_Compact)\lib\netstandard2.0\Serilog.Formatting.Compact.dll" >-->
+<!--      <Visible>false</Visible>-->
+<!--      <Pack>true</Pack>-->
+<!--      <PackagePath>\analyzers\dotnet\cs</PackagePath>-->
+<!--    </None>-->
+<!--    <None Include="$(PkgMicrosoft_Extensions_Configuration)\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll" >-->
+<!--      <Visible>false</Visible>-->
+<!--      <Pack>true</Pack>-->
+<!--      <PackagePath>\analyzers\dotnet\cs</PackagePath>-->
+<!--    </None>-->
+<!--    <None Include="$(PkgMicrosoft_Extensions_Configuration_Abstractions)\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll" >-->
+<!--      <Visible>false</Visible>-->
+<!--      <Pack>true</Pack>-->
+<!--      <PackagePath>\analyzers\dotnet\cs</PackagePath>-->
+<!--    </None>-->
+<!--    <None Include="$(PkgMicrosoft_Extensions_Configuration_Binder)\lib\netstandard2.0\Microsoft.Extensions.Configuration.Binder.dll" >-->
+<!--      <Visible>false</Visible>-->
+<!--      <Pack>true</Pack>-->
+<!--      <PackagePath>\analyzers\dotnet\cs</PackagePath>-->
+<!--    </None>-->
+<!--    <None Include="$(PkgMicrosoft_Extensions_Primitives)\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll" >-->
+<!--      <Visible>false</Visible>-->
+<!--      <Pack>true</Pack>-->
+<!--      <PackagePath>\analyzers\dotnet\cs</PackagePath>-->
+<!--    </None>-->
+<!--    <None Include="$(PkgMicrosoft_Extensions_DependencyInjection)\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.dll" >-->
+<!--      <Visible>false</Visible>-->
+<!--      <Pack>true</Pack>-->
+<!--      <PackagePath>\analyzers\dotnet\cs</PackagePath>-->
+<!--    </None>-->
+<!--    <None Include="$(PkgMicrosoft_Extensions_DependencyInjection_Abstractions)\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll" >-->
+<!--      <Visible>false</Visible>-->
+<!--      <Pack>true</Pack>-->
+<!--      <PackagePath>\analyzers\dotnet\cs</PackagePath>-->
+<!--    </None>-->
+<!--    <None Include="$(PkgMicrosoft_Bcl_AsyncInterfaces)\lib\netstandard2.1\Microsoft.Bcl.AsyncInterfaces.dll" >-->
+<!--      <Visible>false</Visible>-->
+<!--      <Pack>true</Pack>-->
+<!--      <PackagePath>\analyzers\dotnet\cs</PackagePath>-->
+<!--    </None>-->
+
   </ItemGroup>
 
   <ItemGroup>

@@ -9,14 +9,16 @@ namespace EtAlii.Generators
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Text;
+    using Serilog;
+    using Serilog.Core;
 
-    public abstract class SourceGeneratorBase<T> : ISourceGenerator
+    public abstract partial class SourceGeneratorBase<T> : ISourceGenerator
     {
         private const string SourceItemGroupMetadata = "build_metadata.AdditionalFiles.SourceItemGroup";
 
         protected abstract IParser<T> CreateParser();
         protected abstract IWriterFactory<T> CreateWriterFactory();
-        protected abstract WriteContext<T> CreateWriteContext(T instance, IndentedTextWriter writer, string originalFileName, List<string> log);
+        protected abstract WriteContext<T> CreateWriteContext(T instance, IndentedTextWriter writer, string originalFileName);
         protected abstract IValidator<T> CreateValidator();
 
         protected abstract string GetSourceItemGroup();
@@ -25,11 +27,13 @@ namespace EtAlii.Generators
 
         protected abstract DiagnosticDescriptor GetParsingExceptionRule();
 
+        private ILogger _logger;
+        private Logger _rootLogger;
+
         public void Execute(GeneratorExecutionContext context)
         {
-            // For testing and troubleshooting we'll use a simple list of strings that will be dumped to a file
-            // at the end of the process.
-            var log = new List<string>();
+            // For testing and troubleshooting we'll use localised Seq logging. This should become deactivated outside of the primary development system.
+            SetupLogging();
 
             // For actual troubleshooting of the source diagrams we use the Roslyn specific Diagnostics pattern.
             var diagnostics = new List<Diagnostic>();
@@ -47,19 +51,19 @@ namespace EtAlii.Generators
                     try
                     {
                         var options = context.AnalyzerConfigOptions.GetOptions(f);
-                        if (options.TryGetValue(SourceItemGroupMetadata, out var sig))
+                        if (options.TryGetValue(SourceItemGroupMetadata, out var sourceItemGroupMetadata))
                         {
-                            log.Add($"Found SourceItemGroup: {Path.GetFileName(f.Path)} {sig}");
-                            return sig.Equals(sourceItemGroup, StringComparison.OrdinalIgnoreCase);
+                            _logger.Information("Found {SourceItemGroup} {SourceItemGroupMetadata}", Path.GetFileName(f.Path), sourceItemGroupMetadata);
+                            return sourceItemGroupMetadata.Equals(sourceItemGroup, StringComparison.OrdinalIgnoreCase);
                         }
                         else
                         {
-                            log.Add($"FAILED finding SourceItemGroup: {Path.GetFileName(f.Path)}");
+                            _logger.Error("Failed finding {SourceItemGroup}", Path.GetFileName(f.Path));
                         }
                     }
                     catch (Exception e)
                     {
-                        log.Add($"EXCEPTION finding SourceItemGroup: {e.Message}");
+                        _logger.Fatal(e, "Exception while finding SourceItemGroup");
                     }
                     return false;
                 })
@@ -73,7 +77,7 @@ namespace EtAlii.Generators
             foreach(var file in additionalFiles)
             {
                 // First thing to do is parse the file and build an in-memory model.
-                if (parser.TryParse(file, log, out var instance, out var parseDiagnostics))
+                if (parser.TryParse(file, out var instance, out var parseDiagnostics))
                 {
                     try
                     {
@@ -86,7 +90,7 @@ namespace EtAlii.Generators
                         using var stringWriter = new StringWriter();
                         using var indentedWriter = new IndentedTextWriter(stringWriter);
 
-                        var writeContext = CreateWriteContext(instance, indentedWriter, originalFileName, log);
+                        var writeContext = CreateWriteContext(instance, indentedWriter, originalFileName);
                         writer.Write(writeContext);
 
                         var content = stringWriter.ToString();
@@ -94,8 +98,7 @@ namespace EtAlii.Generators
                     }
                     catch (Exception e)
                     {
-                        log.Add($"File writing throws exception: {e.Message}");
-                        log.Add($"{e.StackTrace}");
+                        _logger.Fatal(e, "File writing threw an exception");
 
                         var location = Location.Create(file.Path, new TextSpan(), new LinePositionSpan());
                         var diagnostic = Diagnostic.Create(parsingExceptionRule, location, e.Message, e.StackTrace);
@@ -111,10 +114,6 @@ namespace EtAlii.Generators
                     context.ReportDiagnostic(diagnostic);
                 }
             }
-
-            log = log.SelectMany(l => l.Replace("\r\n", "\n").Split(new[] { "\n" }, StringSplitOptions.None)).ToList();
-            log = log.Select(l => $"// {l}").ToList();
-            context.AddSource( "Log.txt", string.Join("\n",log));
         }
 
         public void Initialize(GeneratorInitializationContext context)

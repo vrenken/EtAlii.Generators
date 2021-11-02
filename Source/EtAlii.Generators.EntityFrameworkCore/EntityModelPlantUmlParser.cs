@@ -7,6 +7,7 @@
     using Antlr4.Runtime;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Text;
+    using Serilog;
 
     /// <summary>
     /// The central class responsible of parsing both the PlantUML and EntityFramework specific constructions
@@ -14,7 +15,9 @@
     /// </summary>
     public class EntityModelPlantUmlParser : IParser<EntityModel>
     {
-        public bool TryParse(AdditionalText file, List<string> log, out EntityModel model, out Diagnostic[] diagnostics)
+        private readonly ILogger _log = Log.ForContext<EntityModelPlantUmlParser>();
+
+        public bool TryParse(AdditionalText file, out EntityModel model, out Diagnostic[] diagnostics)
         {
             var success = false;
             var diagnosticErrors = new List<Diagnostic>();
@@ -22,9 +25,9 @@
             {
                 var plantUmlText = file.GetText()?.ToString();
 
-                log.Add("========================");
-                log.Add($"Parsing PlantUml file: {file.Path}");
-                log.Add(plantUmlText);
+                _log
+                    .ForContext("FileContent", plantUmlText)
+                    .Information("Parsing PlantUml {File}", file.Path);
 
                 var inputStream = new AntlrInputStream(plantUmlText);
                 var lexer = new PlantUmlLexer(inputStream);
@@ -42,14 +45,14 @@
 
                 if (parser.NumberOfSyntaxErrors != 0)
                 {
-                    log.Add($"NumberOfSyntaxErrors: {parser.NumberOfSyntaxErrors}");
+                    _log.Information("File parsed with {NumberOfSyntaxErrors}", parser.NumberOfSyntaxErrors);
 
                     diagnosticErrors.AddRange(errorListener.Diagnostics);
                 }
 
                 if (parsingContext.exception != null)
                 {
-                    log.Add($"Parser exception: {parsingContext.exception.Message}");
+                    _log.Fatal(parsingContext.exception, "Parsing threw an exception");
                     var location = Location.Create(file.Path, TextSpan.FromBounds(0,0), new LinePositionSpan(LinePosition.Zero, LinePosition.Zero));
                     var diagnostic = Diagnostic.Create(GeneratorRule.ParsingThrewException, location, parsingContext.exception.Message, parsingContext.exception.StackTrace);
                     diagnosticErrors.Add(diagnostic);
@@ -58,19 +61,17 @@
                 success = !diagnosticErrors.Any();
                 if (success)
                 {
-                    log.Add("Parsed PlantUml");
+                    _log.Information("Successfully parsed PlantUml file");
                 }
                 else
                 {
-                    log.Add("Failed parsed PlantUml");
-
+                    _log.Error("Unable to parse PlantUml file");
                     model = null;
                 }
             }
             catch (Exception e)
             {
-                log.Add($"Unable to parse PlantUml: {e.Message}");
-                log.Add($"{e.StackTrace}");
+                _log.Fatal(e, "Failure parsing PlantUml file");
 
                 var location = Location.Create(file.Path, new TextSpan(), new LinePositionSpan());
                 var diagnostic = Diagnostic.Create(GeneratorRule.ParsingThrewException, location, e.Message, e.StackTrace);

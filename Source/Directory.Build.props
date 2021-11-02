@@ -17,13 +17,13 @@
 
   <!-- Common properties -->
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>9</LangVersion>
   </PropertyGroup>
 
   <!-- Test project properties -->
   <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(IsTestProject)' == 'true'">
@@ -43,17 +43,53 @@
 
   <!-- Generator project properties -->
   <PropertyGroup Condition="'$(IsGeneratorProject)' == 'true'">
+    <IsRoslynComponent>true</IsRoslynComponent>
     <IncludeBuildOutput>false</IncludeBuildOutput> <!-- Do not include the generator as a lib dependency -->
+    <PackProject>true</PackProject>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetPackageDependencyTargetPaths</GetTargetPathDependsOn>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(IsGeneratorProject)' == 'true'">
     <PackageReference Update="NETStandard.Library" PrivateAssets="all" ReferenceOutputAssembly="false" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisNugetVersion)" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="$(MicrosoftCodeAnalysisNugetVersion)" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisNugetVersion)" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="$(MicrosoftCodeAnalysisNugetVersion)" PrivateAssets="all" />
     <PackageReference Include="Antlr4BuildTasks" Version="8.14.0" PrivateAssets="all" />
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.2" PrivateAssets="all">
+      <GeneratePathProperty>true</GeneratePathProperty>
+    </PackageReference>
+    <PackageReference Include="Serilog" Version="2.10.0" PrivateAssets="all">
+      <GeneratePathProperty>true</GeneratePathProperty>
+    </PackageReference>
+    <PackageReference Include="Serilog.Sinks.Seq" Version="5.0.1" PrivateAssets="all">
+      <GeneratePathProperty>true</GeneratePathProperty>
+    </PackageReference>
+    <PackageReference Include="Serilog.Formatting.Compact" Version="1.1.0" PrivateAssets="all">
+      <GeneratePathProperty>true</GeneratePathProperty>
+    </PackageReference>
+    <PackageReference Include="Serilog.Sinks.PeriodicBatching" Version="2.3.0" PrivateAssets="all">
+      <GeneratePathProperty>true</GeneratePathProperty>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" PrivateAssets="all">
+      <GeneratePathProperty>true</GeneratePathProperty>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" PrivateAssets="all">
+      <GeneratePathProperty>true</GeneratePathProperty>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Primitives" Version="5.0.0" PrivateAssets="all">
+      <GeneratePathProperty>true</GeneratePathProperty>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" PrivateAssets="all">
+      <GeneratePathProperty>true</GeneratePathProperty>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" PrivateAssets="all">
+      <GeneratePathProperty>true</GeneratePathProperty>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="5.0.0" PrivateAssets="all">
+      <GeneratePathProperty>true</GeneratePathProperty>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" PrivateAssets="all">
       <GeneratePathProperty>true</GeneratePathProperty>
     </PackageReference>
 
@@ -67,8 +103,20 @@
 
   <Target Name="GetPackageDependencyTargetPaths" Condition="'$(IsGeneratorProject)' == 'true'">
     <ItemGroup>
-      <TargetPathWithTargetPlatformMoniker Include="$(PkgAntlr4_Runtime_Standard)\lib\netstandard2.0\Antlr4.Runtime.Standard.dll" IncludeRuntimeDependency="false" />
       <TargetPathWithTargetPlatformMoniker Include="..\EtAlii.Generators\$(OutDir)\EtAlii.Generators.dll" IncludeRuntimeDependency="false" />
+
+      <TargetPathWithTargetPlatformMoniker Include="$(PkgAntlr4_Runtime_Standard)\lib\netstandard2.0\Antlr4.Runtime.Standard.dll" IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="$(PkgSerilog)\lib\netstandard2.1\Serilog.dll" IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="$(PkgSerilog_Sinks_Seq)\lib\netstandard2.0\Serilog.Sinks.Seq.dll" IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="$(PkgSerilog_Sinks_PeriodicBatching)\lib\netstandard2.0\Serilog.Sinks.PeriodicBatching.dll" IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="$(PkgSerilog_Formatting_Compact)\lib\netstandard2.0\Serilog.Formatting.Compact.dll" IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="$(PkgMicrosoft_Extensions_Configuration)\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll" IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="$(PkgMicrosoft_Extensions_Configuration_Abstractions)\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll" IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="$(PkgMicrosoft_Extensions_Configuration_Binder)\lib\netstandard2.0\Microsoft.Extensions.Configuration.Binder.dll" IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="$(PkgMicrosoft_Extensions_Primitives)\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll" IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="$(PkgMicrosoft_Extensions_DependencyInjection)\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.dll" IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="$(PkgMicrosoft_Extensions_DependencyInjection_Abstractions)\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll" IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="$(PkgMicrosoft_Bcl_AsyncInterfaces)\lib\netstandard2.1\Microsoft.Bcl.AsyncInterfaces.dll" IncludeRuntimeDependency="false" />
     </ItemGroup>
   </Target>
 

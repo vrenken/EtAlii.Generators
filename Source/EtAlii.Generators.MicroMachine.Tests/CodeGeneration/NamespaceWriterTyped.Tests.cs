@@ -2,7 +2,6 @@
 {
     using System;
     using System.CodeDom.Compiler;
-    using System.Collections.Generic;
     using System.IO;
     using EtAlii.Generators.PlantUml;
     using Xunit;
@@ -47,7 +46,6 @@
             var stateMachineClassWriter = new ClassWriter(enumWriter, methodWriter, triggerClassWriter, transitionClassWriter, stateFragmentHelper, parameterConverter, choicesWriter);
             var writer = new NamespaceWriter<StateMachine>(context => stateMachineClassWriter.Write(context));
             var originalFileName = "Test.puml";
-            var log = new List<string>();
 
             var headers = new[]
             {
@@ -71,7 +69,7 @@
 
             using var stringWriter = new StringWriter();
             using var indentedTriter = new IndentedTextWriter(stringWriter);
-            var writeContext = new WriteContextFactory(stateFragmentHelper).Create(indentedTriter, originalFileName, log, stateMachine);
+            var writeContext = new WriteContextFactory(stateFragmentHelper).Create(indentedTriter, originalFileName, stateMachine);
 
             // Act.
             writer.Write(writeContext);
@@ -98,7 +96,6 @@
             var stateMachineClassWriter = new ClassWriter(enumWriter, methodWriter, triggerClassWriter, transitionClassWriter, stateFragmentHelper, parameterConverter, choicesWriter);
             var writer = new NamespaceWriter<StateMachine>(context => stateMachineClassWriter.Write(context));
             var originalFileName = "Test.puml";
-            var log = new List<string>();
 
             var headers = new[]
             {
@@ -123,7 +120,7 @@
 
             using var stringWriter = new StringWriter();
             using var indentedTriter = new IndentedTextWriter(stringWriter);
-            var writeContext = new WriteContextFactory(stateFragmentHelper).Create(indentedTriter, originalFileName, log, stateMachine);
+            var writeContext = new WriteContextFactory(stateFragmentHelper).Create(indentedTriter, originalFileName, stateMachine);
 
             // Act.
             writer.Write(writeContext);

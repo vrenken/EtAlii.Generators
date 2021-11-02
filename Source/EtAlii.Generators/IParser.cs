@@ -2,11 +2,10 @@
 
 namespace EtAlii.Generators
 {
-    using System.Collections.Generic;
     using Microsoft.CodeAnalysis;
 
     public interface IParser<TInstance>
     {
-        bool TryParse(AdditionalText file, List<string> log, out TInstance instance, out Diagnostic[] diagnostics);
+        bool TryParse(AdditionalText file, out TInstance instance, out Diagnostic[] diagnostics);
     }
 }

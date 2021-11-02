@@ -1,7 +1,6 @@
 ﻿namespace EtAlii.Generators.ML
 {
     using System.CodeDom.Compiler;
-    using System.Collections.Generic;
     using Microsoft.CodeAnalysis;
 
     /// <summary>
@@ -24,9 +23,9 @@
 
         protected override DiagnosticDescriptor GetParsingExceptionRule() => DiagnosticRule.ParsingThrewException;
 
-        protected override WriteContext<object> CreateWriteContext(object instance, IndentedTextWriter writer, string originalFileName, List<string> log)
+        protected override WriteContext<object> CreateWriteContext(object instance, IndentedTextWriter writer, string originalFileName)
         {
-            return new WriteContextFactory().Create(writer, originalFileName, log, instance);
+            return new WriteContextFactory().Create(writer, originalFileName, instance);
         }
     }
 }

@@ -1,7 +1,6 @@
 namespace EtAlii.Generators.EntityFrameworkCore
 {
     using System.CodeDom.Compiler;
-    using System.Collections.Generic;
     using System.Linq;
 
     public class WriteContextFactory : IWriteContextFactory<EntityModel>
@@ -9,7 +8,7 @@ namespace EtAlii.Generators.EntityFrameworkCore
         /// <summary>
         /// Create a context with commonly used instances and data that we can easily pass through the whole writing callstack.
         /// </summary>
-        public WriteContext<EntityModel> Create(IndentedTextWriter writer, string originalFileName, List<string> log, EntityModel model)
+        public WriteContext<EntityModel> Create(IndentedTextWriter writer, string originalFileName, EntityModel model)
         {
             var usings = new[]
             {

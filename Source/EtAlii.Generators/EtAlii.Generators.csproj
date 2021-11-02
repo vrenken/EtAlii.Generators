@@ -3,7 +3,9 @@
     <ProjectGuid>{567DA79A-93FE-4EB5-BDA2-E8FF9CC656D0}</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.2" PrivateAssets="all"/>
-    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="$(MicrosoftCodeAnalysisNugetVersion)" PrivateAssets="all"/>
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.2" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="$(MicrosoftCodeAnalysisNugetVersion)" PrivateAssets="all" />
+    <PackageReference Include="Serilog" Version="2.10.0"  PrivateAssets="all"/>
+    <PackageReference Include="Serilog.Sinks.Seq" Version="5.0.1"  PrivateAssets="all"/>
   </ItemGroup>
 </Project>
