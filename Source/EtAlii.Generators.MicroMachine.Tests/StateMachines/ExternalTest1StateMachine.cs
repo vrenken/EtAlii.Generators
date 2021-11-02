@@ -70,7 +70,6 @@ namespace EtAlii.Generators.MicroMachine.Tests
 
         partial void OnBuyOtherCoinExited(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
 
-
         partial void OnDetermineSymbolPairExited(IsSymbolPairTrigger trigger) => LogTransition(typeof(IsSymbolPairTrigger));
 
         partial void OnSellAsSymbolPairEntered(Trigger trigger, SellAsSymbolPairChoices choices) => LogTransition(typeof(Trigger));

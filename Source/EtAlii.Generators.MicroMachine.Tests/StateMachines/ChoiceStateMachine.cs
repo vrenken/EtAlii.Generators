@@ -1,36 +1,41 @@
 namespace EtAlii.Generators.MicroMachine.Tests
 {
+    using System;
     using System.Collections.Generic;
+    using System.Runtime.CompilerServices;
 
     public class ChoiceStateMachine : ChoiceStateMachineBase
     {
-        public List<string> Actions { get; } = new();
+        public List<string> Transitions { get; } = new();
 
-        protected override void OnState1Entered() => Actions.Add("State 1 entered");
+        private void LogTransition(Type triggerType, [CallerMemberName] string methodName = null) => Transitions.Add($"{methodName}({triggerType.Name} trigger)");
 
-        protected override void OnState1Exited() => Actions.Add("State 1 exited");
 
-        protected override void OnState2Entered(State2EventArgs e) => Actions.Add("State 2 entered");
+        protected override void OnState1Entered(Trigger trigger, State1Choices choices) => LogTransition(typeof(Trigger));
 
-        protected override void OnState2Exited() => Actions.Add("State 2 exited");
+        protected override void OnState1Exited(Trigger trigger) => LogTransition(typeof(Trigger));
 
-        protected override void OnState3Entered() => Actions.Add("State 3 entered");
+        protected override void OnState2Entered(Trigger trigger, State2Choices choices) => LogTransition(typeof(Trigger));
 
-        protected override void OnState3EnteredFromUpTrigger(string message)
+        protected override void OnState2Exited(Trigger trigger) => LogTransition(typeof(Trigger));
+
+        protected override void OnState3Entered(Trigger trigger, State3Choices choices) => LogTransition(typeof(Trigger));
+
+        protected override void OnState3Entered(UpTrigger trigger, State3Choices choices)
         {
-            Actions.Add($"State 3 entered from Up trigger: {message}");
+            LogTransition(typeof(UpTrigger));
             Continue();
         }
 
+        protected override void OnState3Exited(Trigger trigger) => LogTransition(typeof(Trigger));
 
-        protected override void OnState3Exited() => Actions.Add("State 3 exited");
+        protected override void OnState4Entered(Trigger trigger, State4Choices choices) => LogTransition(typeof(Trigger));
+        protected override void OnState4Entered(DownTrigger trigger, State4Choices choices) => LogTransition(typeof(DownTrigger));
 
-        protected override void OnState4Entered() => Actions.Add("State 4 entered");
+        protected override void OnState1Entered(StartTrigger trigger, State1Choices choices) => LogTransition(typeof(StartTrigger));
 
-        protected override void OnState1EnteredFromStartTrigger() => Actions.Add("State 1 entered from start trigger");
+        protected override void OnState2Entered(ContinueTrigger trigger, State2Choices choices) => LogTransition(typeof(ContinueTrigger));
 
-        protected override void OnState2EnteredFromContinueTrigger(State2EventArgs e) => Actions.Add("State 2 entered from continue trigger");
-
-        protected override void OnState4Exited() => Actions.Add("State 4 exited");
+        protected override void OnState4Exited(Trigger trigger) => LogTransition(typeof(Trigger));
     }
 }

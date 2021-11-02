@@ -19,31 +19,25 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="StateMachines\ChoiceStateMachine.puml" />
-    <None Include="StateMachines\MyNestedStateMachine1.puml" />
-    <None Include="StateMachines\MyNestedStateMachine2.puml" />
-    <None Include="StateMachines\MyNestedStateMachine4.puml" />
-
-    <Compile Remove="StateMachines\ChoiceStateMachine.cs" />
-    <None Include="StateMachines\ChoiceStateMachine.cs">
-      <DependentUpon>ChoiceStateMachine.puml</DependentUpon>
-    </None>
-    <Compile Remove="StateMachines\MyNestedStateMachine1.cs" />
-    <None Include="StateMachines\MyNestedStateMachine1.cs">
-      <DependentUpon>MyNestedStateMachine1.puml</DependentUpon>
-    </None>
-    <Compile Remove="StateMachines\MyNestedStateMachine2.cs" />
-    <None Include="StateMachines\MyNestedStateMachine2.cs">
-      <DependentUpon>MyNestedStateMachine2.puml</DependentUpon>
-    </None>
-    <Compile Remove="StateMachines\MyNestedStateMachine4.cs" />
-    <None Include="StateMachines\MyNestedStateMachine4.cs">
+    <MicroMachine Include="StateMachines\MyNestedStateMachine4.puml" />
+    <Compile Update="StateMachines\MyNestedStateMachine4.cs">
       <DependentUpon>MyNestedStateMachine4.puml</DependentUpon>
-    </None>
-    <Compile Remove="StateMachines\SubStateStateMachine.Generated.cs" />
-  </ItemGroup>
+    </Compile>
 
-  <ItemGroup>
+    <MicroMachine Include="StateMachines\MyNestedStateMachine2.puml" />
+    <Compile Update="StateMachines\MyNestedStateMachine2.cs">
+      <DependentUpon>MyNestedStateMachine2.puml</DependentUpon>
+    </Compile>
+
+    <MicroMachine Include="StateMachines\MyNestedStateMachine1.puml" />
+    <Compile Update="StateMachines\MyNestedStateMachine1.cs">
+      <DependentUpon>MyNestedStateMachine1.puml</DependentUpon>
+    </Compile>
+
+    <MicroMachine Include="StateMachines\ChoiceStateMachine.puml" />
+    <Compile Update="StateMachines\ChoiceStateMachine.cs">
+      <DependentUpon>ChoiceStateMachine.puml</DependentUpon>
+    </Compile>
 
     <MicroMachine Include="StateMachines\AsyncSubStateStateMachine.puml" />
     <Compile Update="StateMachines\AsyncSubStateStateMachine.cs">
