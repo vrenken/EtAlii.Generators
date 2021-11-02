@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <PackageReference Include="stateless" Version="5.11.0" />
-    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.0.0" />
   </ItemGroup>
 
   <ItemGroup>
