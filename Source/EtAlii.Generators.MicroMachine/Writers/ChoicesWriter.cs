@@ -58,12 +58,12 @@
                 if (outboundTransition.IsAsync)
                 {
                     var asyncWrite = new Func<string, string, string, string, string, string>((triggerName, typedParameters, _, _, namedParameters) => $"public Task {triggerName}Async({typedParameters}) => _stateMachine.{triggerName}Async({namedParameters});");
-                    _methodWriter.WriteTriggerMethods(context, transitionSets, "async", asyncWrite, false);
+                    _methodWriter.WriteTriggerMethods(context, transitionSets, "async", asyncWrite);
                 }
                 else
                 {
                     var syncWrite = new Func<string, string, string, string, string, string>((triggerName, typedParameters, _, _, namedParameters) => $"public void {triggerName}({typedParameters}) => _stateMachine.{triggerName}({namedParameters});");
-                    _methodWriter.WriteTriggerMethods(context, transitionSets, "sync", syncWrite, false);
+                    _methodWriter.WriteTriggerMethods(context, transitionSets, "sync", syncWrite);
                 }
             }
 
@@ -75,12 +75,12 @@
                 if (internalTransition.IsAsync)
                 {
                     var asyncWrite = new Func<string, string, string, string, string, string>((triggerName, typedParameters, _, _, namedParameters) => $"public Task {triggerName}Async({typedParameters}) => _stateMachine.{triggerName}Async({namedParameters});");
-                    _methodWriter.WriteTriggerMethods(context, transitionSets, "async", asyncWrite, false);
+                    _methodWriter.WriteTriggerMethods(context, transitionSets, "async", asyncWrite);
                 }
                 else
                 {
                     var syncWrite = new Func<string, string, string, string, string, string>((triggerName, typedParameters, _, _, namedParameters) => $"public void {triggerName}({typedParameters}) => _stateMachine.{triggerName}({namedParameters});");
-                    _methodWriter.WriteTriggerMethods(context, transitionSets, "sync", syncWrite, false);
+                    _methodWriter.WriteTriggerMethods(context, transitionSets, "sync", syncWrite);
                 }
             }
 

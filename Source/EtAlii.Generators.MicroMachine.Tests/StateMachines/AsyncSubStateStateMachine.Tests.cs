@@ -15,7 +15,6 @@
 
             // Assert.
             Assert.NotNull(stateMachine);
-            Assert.Empty(stateMachine.UnhandledTriggers);
         }
 
         [Fact]
@@ -30,17 +29,16 @@
 
             // Assert.
             var i = 0;
-            Assert.Empty(stateMachine.UnhandledTriggers);
-            Assert.Equal(6, stateMachine.Actions.Count);
-            Assert.Equal("State 1 entered", stateMachine.Actions[i++]);
-            Assert.Equal("State 1 entered from continue 1 trigger", stateMachine.Actions[i++]);
-            Assert.Equal("State 1 exited", stateMachine.Actions[i++]);
-            Assert.Equal("SuperState 1 entered", stateMachine.Actions[i++]);
-            Assert.Equal("SuperState 1 entered from continue trigger", stateMachine.Actions[i++]);
-            Assert.Equal("SubState 1 entered", stateMachine.Actions[i]);
+            Assert.Equal("OnState1Entered(Trigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnState1Entered(Continue1Trigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnState1Exited(Trigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnSuperState1Entered(Trigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnSuperState1Entered(ContinueTrigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnSubState1Entered(Trigger trigger)", stateMachine.Transitions[i]);
+            Assert.Equal(6, stateMachine.Transitions.Count);
         }
 
-        [Fact(Skip = "This test makes a bug visible in the MicroMachine project. We're about to propose a fix.")]
+        [Fact]
         public async Task AsyncSubStateStateMachine_Run_02()
         {
             // Arrange.
@@ -53,14 +51,14 @@
 
             // Assert.
             var i = 0;
-            Assert.Empty(stateMachine.UnhandledTriggers);
-            Assert.Equal(8, stateMachine.Actions.Count);
-            Assert.Equal("State 2 entered", stateMachine.Actions[i++]);
-            Assert.Equal("State 2 entered from continue 2 trigger", stateMachine.Actions[i++]);
-            Assert.Equal("State 2 exited", stateMachine.Actions[i++]);
-            Assert.Equal("SuperState 2 entered", stateMachine.Actions[i++]);
-            Assert.Equal("SuperState 2 entered from continue trigger", stateMachine.Actions[i++]);
-            Assert.Equal("SubState 2 entered", stateMachine.Actions[i]);
+            Assert.Equal("OnState2Entered(Trigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnState2Entered(Continue2Trigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnState2Exited(Trigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnSuperState2Entered(Trigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnSuperState2Entered(ContinueTrigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnSubState2Entered(Trigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnSubState2Entered(StartTrigger trigger)", stateMachine.Transitions[i]);
+            Assert.Equal(7, stateMachine.Transitions.Count);
         }
 
         [Fact]
@@ -75,13 +73,13 @@
 
             // Assert.
             var i = 0;
-            Assert.Empty(stateMachine.UnhandledTriggers);
-            Assert.Equal(6, stateMachine.Actions.Count);
-            Assert.Equal("State 3 entered", stateMachine.Actions[i++]);
-            Assert.Equal("State 3 entered from continue 3 trigger", stateMachine.Actions[i++]);
-            Assert.Equal("State 3 exited", stateMachine.Actions[i++]);
-            Assert.Equal("SuperState 3 entered", stateMachine.Actions[i++]);
-            Assert.Equal("SubState 3 entered", stateMachine.Actions[i]);
+            Assert.Equal("OnState3Entered(Trigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnState3Entered(Continue3Trigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnState3Exited(Trigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnSuperState3Entered(Trigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnSubState3Entered(Trigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnSubState3Entered(ContinueTrigger trigger)", stateMachine.Transitions[i]);
+            Assert.Equal(6, stateMachine.Transitions.Count);
         }
     }
 }

@@ -2,7 +2,6 @@
 
 namespace EtAlii.Generators.MicroMachine
 {
-    using System.Collections.Generic;
     using System.Linq;
     using EtAlii.Generators.PlantUml;
 
@@ -15,7 +14,7 @@ namespace EtAlii.Generators.MicroMachine
             _parameterConverter = parameterConverter;
         }
 
-        public IEnumerable<Transition[]> ToTransitionsSetsPerTriggerAndUniqueParameters(Transition[] transitions, string trigger)
+        public Transition[][] ToTransitionsSetsPerTriggerAndUniqueParameters(Transition[] transitions, string trigger)
         {
             return transitions
                 .Where(t => t.Trigger == trigger)
@@ -40,7 +39,7 @@ namespace EtAlii.Generators.MicroMachine
                 : $"Trigger.{transition.Trigger}";
         }
 
-        public string ToTriggerMemberName(Transition transition)
+        private string ToTriggerMemberName(Transition transition)
         {
             var parametersCombinedWithAnd = transition.Parameters.Any()
                 ? $"With{string.Join("And", transition.Parameters.Select(_parameterConverter.ToParameterName))}"

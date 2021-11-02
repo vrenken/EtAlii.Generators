@@ -1,48 +1,43 @@
 namespace EtAlii.Generators.MicroMachine.Tests
 {
+    using System;
     using System.Collections.Generic;
+    using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
 
     public class AsyncStateMachine : AsyncStateMachineBase
     {
-        public List<string> Actions { get; } = new();
+        public List<string> Transitions { get; } = new();
 
-        public List<string> UnhandledTriggers { get; } = new();
+        private void LogTransition(Type triggerType, [CallerMemberName] string methodName = null) => Transitions.Add($"{methodName}({triggerType.Name} trigger)");
 
-        public AsyncStateMachine()
+        protected override Task OnState1Entered(Trigger trigger, State1Choices choices) => Task.Run(() => LogTransition(typeof(Trigger)));
+
+        protected override Task OnState1Entered(StartTrigger trigger, State1Choices choices) => Task.Run(() => LogTransition(typeof(StartTrigger)));
+
+        protected override Task OnState1Exited(Trigger trigger) => Task.Run(() => LogTransition(typeof(Trigger)));
+
+        protected override Task OnState2Entered(Trigger trigger, State2Choices choices) => Task.Run(() => LogTransition(typeof(Trigger)));
+
+        protected override void OnState2Exited(Trigger trigger) => LogTransition(typeof(Trigger));
+
+        protected override Task OnState3Entered(Trigger trigger, State3Choices choices) => Task.Run(() => LogTransition(typeof(Trigger)));
+
+        protected override async Task OnState3Entered(ContinueTrigger trigger, State3Choices choices)
         {
-            StateMachine.OnUnhandledTrigger((state, trigger) => UnhandledTriggers.Add($"{state}-{trigger}"));
-            StateMachine.OnUnhandledTriggerAsync((state, trigger) => Task.Run(() => UnhandledTriggers.Add($"{state}-{trigger}")));
-        }
-
-        protected override Task OnState1Entered() => Task.Run(() => Actions.Add("State 1 entered"));
-
-        protected override Task OnState1Exited() => Task.Run(() => Actions.Add("State 1 exited"));
-
-        protected override Task OnState2Entered() => Task.Run(() => Actions.Add("State 2 entered"));
-
-        protected override void OnState2Exited() => Actions.Add("State 2 exited");
-
-        protected override Task OnState3Entered() => Task.Run(() => Actions.Add("State 3 entered"));
-
-        protected override async Task OnState3EnteredFromContinueTrigger()
-        {
-            Actions.Add("State 3 entered from Continue trigger");
+            LogTransition(typeof(ContinueTrigger));
             await ContinueAsync().ConfigureAwait(false);
         }
 
-        protected override void OnState2InternalCheckTrigger() => Actions.Add("Check trigger called");
+        protected override Task OnState2Entered(CheckTrigger trigger, State2Choices choices) => Task.Run(() => LogTransition(typeof(CheckTrigger)));
 
-        protected override void OnState3Exited() => Actions.Add("State 3 exited");
+        protected override Task OnState2Entered(ContinueTrigger trigger, State2Choices choices) => Task.Run(() => LogTransition(typeof(ContinueTrigger)));
 
-        protected override void OnState4Entered() => Actions.Add("State 4 entered");
+        protected override void OnState3Exited(Trigger trigger) => LogTransition(typeof(Trigger));
 
-        protected override Task OnState1EnteredFromStartTrigger() => Task.Run(() => Actions.Add("State 1 entered from start trigger"));
+        protected override void OnState4Entered(Trigger trigger, State4Choices choices) => LogTransition(typeof(Trigger));
 
-        protected override Task OnState2EnteredFromContinueTrigger() => Task.Run(() => Actions.Add("State 2 entered from start trigger"));
-
-        protected override void OnState4Exited() => Actions.Add("State 4 exited");
-
-        protected override void OnState4EnteredFromContinueTrigger() => Actions.Add("State 4 entered from continue trigger");
+        protected override void OnState4Entered(ContinueTrigger trigger, State4Choices choices) => LogTransition(typeof(ContinueTrigger));
+        protected override void OnState4Exited(Trigger trigger) => LogTransition(typeof(Trigger));
     }
 }

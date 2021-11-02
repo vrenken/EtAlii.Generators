@@ -32,7 +32,7 @@
             if (!toIsChildOfFrom)
             {
                 // 2. - Pick the state itself.
-                exitCalls.Add(new MethodCall(fromState, false, false));
+                exitCalls.Add(new MethodCall(fromState, false));
                 // 3. - Pick any state except beyond the shared superstate.
                 foreach (var fromParent in fromParents)
                 {
@@ -42,14 +42,14 @@
                     {
                         break;
                     }
-                    exitCalls.Add(new MethodCall(fromParent.Name, true, false));
+                    exitCalls.Add(new MethodCall(fromParent.Name, true));
                 }
             }
 
             if (!fromIsChildOfTo)
             {
                 // 4. - Pick the state itself.
-                entryCalls.Add(new MethodCall(toState, false, false));
+                entryCalls.Add(new MethodCall(toState, false));
                 // 5. - Pick any state except the shared superstate.
                 foreach (var toParent in toParents)
                 {
@@ -60,7 +60,7 @@
                         break;
                     }
 
-                    entryCalls.Add(new MethodCall(toParent.Name, true, false));
+                    entryCalls.Add(new MethodCall(toParent.Name, true));
                 }
                 // 6. - Reverse the order.
                 entryCalls.Reverse();

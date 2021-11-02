@@ -33,26 +33,45 @@
             context.Writer.WriteLine("// and cause the state machine to transition to another state.");
             context.Writer.WriteLine();
 
-            var allTriggers = _stateFragmentHelper.GetAllTriggers(context.Instance.StateFragments);
+            var allTriggers = _stateFragmentHelper
+                .GetAllTriggers(context.Instance.StateFragments)
+                .Distinct()
+                .ToArray();
             foreach (var trigger in allTriggers)
             {
                 var syncTransitions = _stateFragmentHelper.GetSyncTransitions(context.Instance.StateFragments);
                 var syncTransitionSets = _transitionConverter.ToTransitionsSetsPerTriggerAndUniqueParameters(syncTransitions, trigger);
                 var syncWrite = new Func<string, string, string, string, string, string>((triggerName, typedParameters, genericParameters, triggerParameter, namedParameters)
                     => $"public void {triggerName}({typedParameters}) => RunOrQueueTransition(new SyncTransition(() => {triggerName}Transition({namedParameters})));// {genericParameters}({triggerParameter}{namedParameters});");
+                WriteTransitionMethod(context, syncTransitionSets);
                 WriteTriggerMethods(context, syncTransitionSets, "sync", syncWrite);
 
                 var asyncTransitions = _stateFragmentHelper.GetAsyncTransitions(context.Instance.StateFragments);
                 var asyncTransitionSets = _transitionConverter.ToTransitionsSetsPerTriggerAndUniqueParameters(asyncTransitions, trigger);
                 var asyncWrite = new Func<string, string, string, string, string, string>((triggerName, typedParameters, genericParameters, triggerParameter, namedParameters)
-                    => $"public Task {triggerName}Async({typedParameters}) => RunOrQueueTransitionAsync(new AsyncTransition(() => {triggerName}Transition({namedParameters})));// {genericParameters}({triggerParameter}{namedParameters});");
+                    => $"public Task {triggerName}Async({typedParameters}) => RunOrQueueTransitionAsync(new AsyncTransition(() => {triggerName}TransitionAsync({namedParameters})));// {genericParameters}({triggerParameter}{namedParameters});");
+                WriteTransitionMethod(context, asyncTransitionSets);
                 WriteTriggerMethods(context, asyncTransitionSets, "async", asyncWrite);
             }
         }
 
-        private void WriteTransitionMethod(WriteContext<StateMachine> context, string trigger, string typedParameters, string namedParameters)
+        private void WriteTransitionMethod(WriteContext<StateMachine> context, Transition[][] transitionSet)
         {
-            context.Writer.WriteLine($"private void {trigger}Transition({typedParameters})");
+            if (transitionSet.FirstOrDefault() is not { } transitionSetTransitions)
+            {
+                return;
+            }
+
+            if (transitionSetTransitions.FirstOrDefault() is not { } transition)
+            {
+                return;
+            }
+
+            var parameters = transition.Parameters;
+            var typedParameters = _parameterConverter.ToTypedNamedVariables(parameters);
+            var namedParameters = parameters.Any() ? _parameterConverter.ToNamedVariables(parameters) : string.Empty;
+
+            context.Writer.WriteLine($"private {(transition.IsAsync ? "async Task" : "void")} {transition.Trigger}Transition{(transition.IsAsync ? "Async" : "")}({typedParameters})");
             context.Writer.WriteLine("{");
             context.Writer.Indent += 1;
             context.Writer.WriteLine("switch (_state)");
@@ -60,17 +79,17 @@
             context.Writer.Indent += 1;
 
             var transitions = _stateFragmentHelper.GetAllTransitions(context.Instance.StateFragments)
-                .Where(t => t.Trigger == trigger)
+                .Where(t => t.Trigger == transition.Trigger)
                 .ToArray();
 
-            foreach (var transition in transitions)
+            foreach (var tr in transitions)
             {
-                WriteTransitionStateCase(context, transition, namedParameters);
+                WriteTransitionStateCase(context, tr, namedParameters, transition.IsAsync);
             }
 
             context.Writer.WriteLine("default:");
             context.Writer.Indent += 1;
-            context.Writer.WriteLine($"throw new NotSupportedException($\"Trigger {trigger} is not supported in state {{_state}}\");");
+            context.Writer.WriteLine($"throw new NotSupportedException($\"Trigger {transition.Trigger} is not supported in state {{_state}}\");");
             context.Writer.Indent -= 1;
             context.Writer.Indent -= 1;
             context.Writer.WriteLine("}");
@@ -78,7 +97,7 @@
             context.Writer.WriteLine("}");
         }
 
-        private void WriteTransitionStateCase(WriteContext<StateMachine> context, Transition transition, string namedParameters)
+        private void WriteTransitionStateCase(WriteContext<StateMachine> context, Transition transition, string namedParameters, bool isAsync)
         {
             var parentSuperState = _stateFragmentHelper.GetSuperState(context.Instance, transition.To);
             var stateName = parentSuperState != null && transition.From == _lifetime.BeginStateName
@@ -97,21 +116,49 @@
 
             foreach (var call in chain.ExitCalls)
             {
+                var writeAsync = _stateFragmentHelper.HasOnlyAsyncOutboundTransitions(context.Instance, call.State);
+
+                string prefix, postFix;
+                if (isAsync)
+                {
+                    prefix = writeAsync ? "await " : "";
+                    postFix = writeAsync ? ".ConfigureAwait(false)" : "";
+                }
+                else
+                {
+                    prefix = writeAsync ? "Task.Run(() => " : "";
+                    postFix = writeAsync ? ").Wait()" : "";
+                }
+
                 if (!call.IsSuperState)
                 {
-                    context.Writer.WriteLine($"On{call.State}Exited(({triggerTypeName}){triggerVariableName});");
+                    context.Writer.WriteLine($"{prefix}On{call.State}Exited(({triggerTypeName}){triggerVariableName}){postFix};");
                 }
-                context.Writer.WriteLine($"On{call.State}Exited({triggerVariableName});");
+                context.Writer.WriteLine($"{prefix}On{call.State}Exited({triggerVariableName}){postFix};");
             }
             foreach (var call in chain.EntryCalls)
             {
+                var writeAsync = _stateFragmentHelper.HasOnlyAsyncInboundTransitions(context.Instance, call.State);
+
+                string prefix, postFix;
+                if (isAsync)
+                {
+                    prefix = writeAsync ? "await " : "";
+                    postFix = writeAsync ? ".ConfigureAwait(false)" : "";
+                }
+                else
+                {
+                    prefix = writeAsync ? "Task.Run(() => " : "";
+                    postFix = writeAsync ? ").Wait()" : "";
+                }
+
                 var choice = context.Instance.GenerateTriggerChoices
                     ? $", _{_parameterConverter.ToCamelCase(call.State)}Choices"
                     : "";
-                context.Writer.WriteLine($"On{call.State}Entered({triggerVariableName}{choice});");
+                context.Writer.WriteLine($"{prefix}On{call.State}Entered({triggerVariableName}{choice}){postFix};");
                 if (!call.IsSuperState)
                 {
-                    context.Writer.WriteLine($"On{call.State}Entered(({triggerTypeName}){triggerVariableName}{choice});");
+                    context.Writer.WriteLine($"{prefix}On{call.State}Entered(({triggerTypeName}){triggerVariableName}{choice}){postFix};");
                 }
             }
 
@@ -134,9 +181,23 @@
                         ? $", _{_parameterConverter.ToCamelCase(unnamedInboundTransition.To)}Choices"
                         : "";
 
+                    var writeAsync = _stateFragmentHelper.HasOnlyAsyncInboundTransitions(context.Instance, unnamedInboundTransition.To);
+
+                    string prefix, postFix;
+                    if (isAsync)
+                    {
+                        prefix = writeAsync ? "await " : "";
+                        postFix = writeAsync ? ".ConfigureAwait(false)" : "";
+                    }
+                    else
+                    {
+                        prefix = writeAsync ? "Task.Run(() => " : "";
+                        postFix = writeAsync ? ").Wait()" : "";
+                    }
+
                     context.Writer.WriteLine("// We also need to activate the first substate.");
                     context.Writer.WriteLine($"_state = State.{unnamedInboundTransition.To};");
-                    context.Writer.WriteLine($"On{unnamedInboundTransition.To}Entered({triggerVariableName}{choice});");
+                    context.Writer.WriteLine($"{prefix}On{unnamedInboundTransition.To}Entered({triggerVariableName}{choice}){postFix};");
                 }
             }
 
@@ -144,7 +205,7 @@
             context.Writer.Indent -= 1;
         }
 
-        public void WriteTriggerMethods(WriteContext<StateMachine> context, IEnumerable<Transition[]> transitionSets, string triggerType, Func<string, string, string, string, string, string> write, bool writeTransitionMethods = true)
+        public void WriteTriggerMethods(WriteContext<StateMachine> context, IEnumerable<Transition[]> transitionSets, string triggerType, Func<string, string, string, string, string, string> write)
         {
             foreach (var transitionSet in transitionSets)
             {
@@ -154,11 +215,6 @@
                 var genericParameters = _parameterConverter.ToGenericParameters(parameters);
                 var namedParameters = parameters.Any() ? _parameterConverter.ToNamedVariables(parameters) : string.Empty;
                 var triggerParameter = _transitionConverter.ToTriggerParameter(firstTransition);
-
-                if (writeTransitionMethods)
-                {
-                    WriteTransitionMethod(context, firstTransition.Trigger, typedParameters, namedParameters);
-                }
 
                 WriteComment(context, transitionSet, $"Depending on the current state, call this method to trigger one of the {triggerType} transitions below:");
                 context.Writer.WriteLine(write(firstTransition.Trigger, typedParameters, genericParameters, triggerParameter, namedParameters));
@@ -181,9 +237,10 @@
                 //     .Any(ss egt ss.Name eq state and ss.StereoType eq StereoType.Choice)
 
                 var writeAsyncEntryMethod = _stateFragmentHelper.HasOnlyAsyncInboundTransitions(context.Instance, state);
+                var writeAsyncExitMethod = _stateFragmentHelper.HasOnlyAsyncOutboundTransitions(context.Instance, state);
 
                 WriteEntryMethod(context, state, null, writeAsyncEntryMethod, writtenMethods);
-                WriteExitMethod(context, state, null, writeAsyncEntryMethod, writtenMethods);
+                WriteExitMethod(context, state, null, writeAsyncExitMethod, writtenMethods);
 
                 var inboundTransitions = _stateFragmentHelper.GetInboundTransitions(context.Instance.StateFragments, state);
                 foreach (var inboundTransition in inboundTransitions)
@@ -193,13 +250,13 @@
                 var outboundTransitions = _stateFragmentHelper.GetOutboundTransitions(context.Instance, state);
                 foreach (var outboundTransition in outboundTransitions)
                 {
-                    WriteExitMethod(context, state, outboundTransition.Trigger, writeAsyncEntryMethod, writtenMethods);
+                    WriteExitMethod(context, state, outboundTransition.Trigger, writeAsyncExitMethod, writtenMethods);
                 }
                 var internalTransitions = _stateFragmentHelper.GetInternalTransitions(context.Instance.StateFragments, state);
                 foreach (var internalTransition in internalTransitions)
                 {
                     WriteEntryMethod(context, state, internalTransition.Trigger, writeAsyncEntryMethod, writtenMethods);
-                    WriteExitMethod(context, state, internalTransition.Trigger, writeAsyncEntryMethod, writtenMethods);
+                    WriteExitMethod(context, state, internalTransition.Trigger, writeAsyncExitMethod, writtenMethods);
                 }
             }
         }
