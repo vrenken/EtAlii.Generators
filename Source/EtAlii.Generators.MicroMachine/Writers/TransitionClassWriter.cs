@@ -1,11 +1,16 @@
 ﻿namespace EtAlii.Generators.MicroMachine
 {
     using EtAlii.Generators.PlantUml;
+    using Serilog;
 
     public class TransitionClassWriter
     {
+        private readonly ILogger _log = Log.ForContext<TransitionClassWriter>();
+
         public void WriteTransitionClasses(WriteContext<StateMachine> context)
         {
+            _log.Information("Writing transition classes for {ClassName}", context.Instance.ClassName);
+
             context.Writer.WriteLine("// The classes below represent the transitions as used by the state machine.");
             context.Writer.WriteLine();
 

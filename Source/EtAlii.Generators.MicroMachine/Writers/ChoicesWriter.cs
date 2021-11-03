@@ -3,11 +3,13 @@
     using System;
     using System.Linq;
     using EtAlii.Generators.PlantUml;
+    using Serilog;
 
     public class ChoicesWriter
     {
         private readonly MethodWriter _methodWriter;
         private readonly StateFragmentHelper _stateFragmentHelper;
+        private readonly ILogger _log = Log.ForContext<ChoicesWriter>();
 
         public ChoicesWriter(MethodWriter methodWriter, StateFragmentHelper stateFragmentHelper)
         {
@@ -17,6 +19,8 @@
 
         public void WriteChoices(WriteContext<StateMachine> context)
         {
+            _log.Information("Writing choice classes for {ClassName}", context.Instance.ClassName);
+
             if(context.Instance.GenerateTriggerChoices)
             {
                 context.Writer.WriteLine("// The classes below represent the choices as available to transition from one state to the other.");

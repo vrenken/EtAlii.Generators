@@ -2,12 +2,14 @@
 {
     using System.Linq;
     using EtAlii.Generators.PlantUml;
+    using Serilog;
 
     public class TriggerClassWriter
     {
         private readonly TransitionConverter _transitionConverter;
         private readonly ParameterConverter _parameterConverter;
         private readonly StateFragmentHelper _stateFragmentHelper;
+        private readonly ILogger _log = Log.ForContext<TriggerClassWriter>();
 
         public TriggerClassWriter(ParameterConverter parameterConverter, TransitionConverter transitionConverter, StateFragmentHelper stateFragmentHelper)
         {
@@ -18,6 +20,8 @@
 
         public void WriteTriggerClasses(WriteContext<StateMachine> context)
         {
+            _log.Information("Writing trigger classes for {ClassName}", context.Instance.ClassName);
+
             context.Writer.WriteLine("// The classes below represent the triggers as used by the methods.");
             context.Writer.WriteLine();
 

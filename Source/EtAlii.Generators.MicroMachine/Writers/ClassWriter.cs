@@ -79,6 +79,8 @@
 
         private void WriteFieldsAndProperties(WriteContext<StateMachine> context)
         {
+            _log.Information("Writing fields and properties for {ClassName}", context.Instance.ClassName);
+
             context.Writer.WriteLine($"protected {context.Instance.ClassName}.State _state;");
             context.Writer.WriteLine($"private bool _queueTransitions;");
             context.Writer.WriteLine($"private readonly Queue<Transition> _transactions = new Queue<Transition>();");
@@ -98,6 +100,8 @@
         }
         private void WriteConstuctor(WriteContext<StateMachine> context)
         {
+            _log.Information("Writing constructor for {ClassName}", context.Instance.ClassName);
+
             context.Writer.WriteLine($"public {context.Instance.ClassName}()");
             context.Writer.WriteLine("{");
             context.Writer.Indent += 1;
@@ -120,6 +124,8 @@
 
         private void WriteRunOrQueueTransition(WriteContext<StateMachine> context)
         {
+            _log.Information("Writing run or queue transition method for {ClassName}", context.Instance.ClassName);
+
             context.Writer.WriteLine($"private void RunOrQueueTransition(Transition transition)");
             context.Writer.WriteLine("{");
             context.Writer.Indent += 1;

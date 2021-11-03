@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using EtAlii.Generators.PlantUml;
+    using Serilog;
 
     public class MethodWriter
     {
@@ -11,6 +12,7 @@
         private readonly TransitionConverter _transitionConverter;
         private readonly IStateMachineLifetime _lifetime;
         private readonly StateFragmentHelper _stateFragmentHelper;
+        private readonly ILogger _log = Log.ForContext<MethodWriter>();
 
         public MethodWriter(ParameterConverter parameterConverter, TransitionConverter transitionConverter, IStateMachineLifetime lifetime, StateFragmentHelper stateFragmentHelper)
         {
@@ -29,6 +31,8 @@
         /// </summary>
         public void WriteTriggerMethods(WriteContext<StateMachine> context)
         {
+            _log.Information("Writing trigger methods for {ClassName}", context.Instance.ClassName);
+
             context.Writer.WriteLine("// The methods below can be each called to fire a specific trigger");
             context.Writer.WriteLine("// and cause the state machine to transition to another state.");
             context.Writer.WriteLine();
@@ -228,6 +232,8 @@
         /// <param name="context"></param>
         public void WriteTransitionMethods(WriteContext<StateMachine> context)
         {
+            _log.Information("Writing transition methods for {ClassName}", context.Instance.ClassName);
+
             var writtenMethods = new List<string>();
 
             var allStates = _stateFragmentHelper.GetAllStates(context.Instance.StateFragments);
