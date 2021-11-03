@@ -1,14 +1,15 @@
 // Copyright (c) Peter Vrenken. All rights reserved. See https://github.com/vrenken/EtAlii.Generators for more information and the license.
-
 namespace EtAlii.Generators
 {
+    using Serilog;
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Reflection;
-    using Serilog;
 
     public partial class SourceGeneratorBase<T>
     {
+        private ILogger _log;
+
         [SuppressMessage(
             category: "Sonar Code Smell",
             checkId: "S5332:Using http protocol is insecure. Use https instead",
@@ -27,7 +28,8 @@ namespace EtAlii.Generators
 
             var executingAssemblyName = Assembly.GetCallingAssembly().GetName();
 
-            loggerConfiguration.MinimumLevel.Verbose()
+            loggerConfiguration
+                .MinimumLevel.Verbose()
                 .Enrich.FromLogContext()
                 // These ones do not give elegant results during unit tests.
                 // .Enrich.WithAssemblyName()
@@ -43,15 +45,22 @@ namespace EtAlii.Generators
                 loggerConfiguration.WriteTo.Seq("http://seq.avalon:5341");
             }
 
-            _rootLogger = loggerConfiguration
+            Log.Logger = loggerConfiguration
                 .CreateLogger();
-            _logger = _rootLogger
+            _log = Log.Logger
                 .ForContext("SourceContext", "SourceGenerator")
                 .ForContext("CodeGeneration", Guid.NewGuid());
 
-            _logger.Information("Setting up SchemaPocoGenerator");
+            _log.Information("Logging setup finished");
 
-            AppDomain.CurrentDomain.UnhandledException += (_, e) => _logger.Fatal(e.ExceptionObject as Exception, "Fatal exception while creating SchemaPocoGenerator");
+            AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+        }
+
+        private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            AppDomain.CurrentDomain.UnhandledException -= OnUnhandledException;
+
+            _log.Fatal(e.ExceptionObject as Exception, "Unhandled fatal exception");
         }
     }
 }

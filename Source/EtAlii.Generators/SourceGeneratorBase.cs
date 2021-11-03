@@ -9,8 +9,6 @@ namespace EtAlii.Generators
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.Text;
-    using Serilog;
-    using Serilog.Core;
 
     public abstract partial class SourceGeneratorBase<T> : ISourceGenerator
     {
@@ -26,9 +24,6 @@ namespace EtAlii.Generators
         protected abstract string GetExtension();
 
         protected abstract DiagnosticDescriptor GetParsingExceptionRule();
-
-        private ILogger _logger;
-        private Logger _rootLogger;
 
         public void Execute(GeneratorExecutionContext context)
         {
@@ -53,17 +48,17 @@ namespace EtAlii.Generators
                         var options = context.AnalyzerConfigOptions.GetOptions(f);
                         if (options.TryGetValue(SourceItemGroupMetadata, out var sourceItemGroupMetadata))
                         {
-                            _logger.Information("Found {SourceItemGroup} {SourceItemGroupMetadata}", Path.GetFileName(f.Path), sourceItemGroupMetadata);
+                            _log.Information("Found {SourceItemGroup} {SourceItemGroupMetadata}", Path.GetFileName(f.Path), sourceItemGroupMetadata);
                             return sourceItemGroupMetadata.Equals(sourceItemGroup, StringComparison.OrdinalIgnoreCase);
                         }
                         else
                         {
-                            _logger.Error("Failed finding {SourceItemGroup}", Path.GetFileName(f.Path));
+                            _log.Error("Failed finding {SourceItemGroup}", Path.GetFileName(f.Path));
                         }
                     }
                     catch (Exception e)
                     {
-                        _logger.Fatal(e, "Exception while finding SourceItemGroup");
+                        _log.Fatal(e, "Exception while finding SourceItemGroup");
                     }
                     return false;
                 })
@@ -90,6 +85,7 @@ namespace EtAlii.Generators
                         using var stringWriter = new StringWriter();
                         using var indentedWriter = new IndentedTextWriter(stringWriter);
 
+                        _log.Information("Creating WriteContext");
                         var writeContext = CreateWriteContext(instance, indentedWriter, originalFileName);
                         writer.Write(writeContext);
 
@@ -98,7 +94,7 @@ namespace EtAlii.Generators
                     }
                     catch (Exception e)
                     {
-                        _logger.Fatal(e, "File writing threw an exception");
+                        _log.Fatal(e, "File writing threw an exception");
 
                         var location = Location.Create(file.Path, new TextSpan(), new LinePositionSpan());
                         var diagnostic = Diagnostic.Create(parsingExceptionRule, location, e.Message, e.StackTrace);

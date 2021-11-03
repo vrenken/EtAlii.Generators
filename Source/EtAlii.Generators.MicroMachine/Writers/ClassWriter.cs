@@ -2,6 +2,7 @@
 {
     using System.Linq;
     using EtAlii.Generators.PlantUml;
+    using Serilog;
 
     public class ClassWriter : IWriter<StateMachine>
     {
@@ -12,6 +13,7 @@
         private readonly StateFragmentHelper _stateFragmentHelper;
         private readonly ParameterConverter _parameterConverter;
         private readonly ChoicesWriter _choicesWriter;
+        private readonly ILogger _log = Log.ForContext<ClassWriter>();
 
         public ClassWriter(EnumWriter<StateMachine> enumWriter,
             MethodWriter methodWriter,
@@ -32,6 +34,8 @@
 
         public void Write(WriteContext<StateMachine> context)
         {
+            _log.Information("Writing class {ClassName}", context.Instance.ClassName);
+
             var prefix = context.Instance.GeneratePartialClass ? "partial" : "abstract";
             var action1 = context.Instance.GeneratePartialClass ? "Inherit" : "Add another partial for";
             var action2 = context.Instance.GeneratePartialClass ? "override" : "implement";

@@ -9,7 +9,7 @@ namespace EtAlii.Generators.Stateless
     public class WriteContextFactory : IWriteContextFactory<StateMachine>
     {
         private readonly StateFragmentHelper _stateFragmentHelper;
-        private readonly ILogger _logger = Log.ForContext<WriteContextFactory>();
+        private readonly ILogger _log = Log.ForContext<WriteContextFactory>();
 
         public WriteContextFactory(StateFragmentHelper stateFragmentHelper)
         {
@@ -34,21 +34,21 @@ namespace EtAlii.Generators.Stateless
                     : " ";
                 return $"- {t.From} -> {t.To}{stereoType}: {t.Trigger}";
             }), "");
-            _logger
+            _log
                 .ForContext("Transitions", transitionsAsText)
                 .Information("Found {TransitionCount} transitions", allTransitions.Length);
 
             // We want to dump all unique states defined in the diagram.
             var allStates = _stateFragmentHelper.GetAllStates(stateMachine.StateFragments);
             var statesAsText = string.Join(Environment.NewLine, allStates.Select(s => $"- {s}"));
-            _logger
+            _log
                 .ForContext("States", statesAsText)
                 .Information("Found {StateCount} states", allStates.Length);
 
             // We want to also dump all unique triggers defined in the diagram.
             var allTriggers = _stateFragmentHelper.GetAllTriggers(stateMachine.StateFragments);
             var triggersAsText = string.Join(Environment.NewLine, allTriggers.Select(t => $"- {t}"));
-            _logger
+            _log
                 .ForContext("Triggers", triggersAsText)
                 .Information("Found {TriggerCount} triggers", allTriggers.Length);
 
