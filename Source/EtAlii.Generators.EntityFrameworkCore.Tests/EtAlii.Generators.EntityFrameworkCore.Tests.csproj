@@ -1,5 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\EtAlii.Generators.EntityFrameworkCore\Build\*.props" />
+
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <ProjectGuid>3F0E9C00-A404-4389-BA44-607EE0F0E29D</ProjectGuid>
@@ -32,7 +34,6 @@
     </Compile>
   </ItemGroup>
 
-  <Import Project="..\EtAlii.Generators.EntityFrameworkCore\Build\*.props" />
   <Import Project="..\EtAlii.Generators.EntityFrameworkCore\Build\*.targets" />
 
 </Project>
