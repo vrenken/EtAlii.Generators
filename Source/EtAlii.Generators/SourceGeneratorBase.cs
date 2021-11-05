@@ -27,6 +27,7 @@ namespace EtAlii.Generators
 
         public void Execute(GeneratorExecutionContext context)
         {
+            using (Correlation.Begin(CorrelationType.SourceGeneration))
             // For testing and troubleshooting we'll use localised Seq logging. This should become deactivated outside of the primary development system.
             SetupLogging();
 

@@ -5,6 +5,7 @@ namespace EtAlii.Generators
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Reflection;
+    using Serilog.Core;
 
     public partial class SourceGeneratorBase<T>
     {
@@ -37,19 +38,23 @@ namespace EtAlii.Generators
                 // Let's do it ourselves.
                 .Enrich.WithProperty("RootAssemblyName", executingAssemblyName.Name)
                 .Enrich.WithProperty("RootAssemblyVersion", executingAssemblyName.Version)
-                .Enrich.WithProperty("UniqueProcessId", Guid.NewGuid()); // An int process ID is not enough
+                .Enrich.WithProperty("UniqueProcessId", ShortId.GetId()); // An int process ID is not enough
 
             // I know, ugly patch, but it works. And it's better than making all global generators try to phone home...
             if (Environment.MachineName == "FRACTAL")
             {
                 loggerConfiguration.WriteTo.Seq("http://seq.avalon:5341");
+                Log.Logger = loggerConfiguration
+                    .CreateLogger();
+            }
+            else
+            {
+                Log.Logger = Logger.None;
             }
 
-            Log.Logger = loggerConfiguration
-                .CreateLogger();
             _log = Log.Logger
                 .ForContext("SourceContext", "SourceGenerator")
-                .ForContext("CodeGeneration", Guid.NewGuid());
+                .ForContext("CodeGeneration", ShortId.GetId());
 
             _log.Information("Logging setup finished");
 
