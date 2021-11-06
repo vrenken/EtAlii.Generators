@@ -12,6 +12,12 @@ jobs:
     name: SonarCloud analysis
     runs-on: windows-latest
     steps:
+      # Setup .NET
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.302
+
         # Setup .NET
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
