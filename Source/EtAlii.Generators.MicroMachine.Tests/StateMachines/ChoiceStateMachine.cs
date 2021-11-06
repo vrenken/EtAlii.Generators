@@ -21,11 +21,7 @@ namespace EtAlii.Generators.MicroMachine.Tests
 
         protected override void OnState3Entered(Trigger trigger, State3Choices choices) => LogTransition(typeof(Trigger));
 
-        protected override void OnState3Entered(UpTrigger trigger, State3Choices choices)
-        {
-            LogTransition(typeof(UpTrigger));
-            Continue();
-        }
+        protected override void OnState3Entered(UpTrigger trigger, State3Choices choices) => LogTransition(typeof(UpTrigger));
 
         protected override void OnState3Exited(Trigger trigger) => LogTransition(typeof(Trigger));
 
