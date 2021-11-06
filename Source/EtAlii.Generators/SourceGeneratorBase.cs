@@ -98,7 +98,7 @@ namespace EtAlii.Generators
                         {
                             _log.Fatal(e, "File writing threw an exception");
 
-                            var location = Location.Create(file.Path, new TextSpan(), new LinePositionSpan());
+                            var location = Location.Create(file.Path!, new TextSpan(), new LinePositionSpan());
                             var diagnostic = Diagnostic.Create(parsingExceptionRule, location, e.Message, e.StackTrace);
                             diagnostics.Add(diagnostic);
                         }

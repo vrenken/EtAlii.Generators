@@ -53,7 +53,7 @@
                 if (parsingContext.exception != null)
                 {
                     _log.Fatal(parsingContext.exception, "Parsing threw an exception");
-                    var location = Location.Create(file.Path, TextSpan.FromBounds(0,0), new LinePositionSpan(LinePosition.Zero, LinePosition.Zero));
+                    var location = Location.Create(file.Path!, TextSpan.FromBounds(0,0), new LinePositionSpan(LinePosition.Zero, LinePosition.Zero));
                     var diagnostic = Diagnostic.Create(GeneratorRule.ParsingThrewException, location, parsingContext.exception.Message, parsingContext.exception.StackTrace);
                     diagnosticErrors.Add(diagnostic);
                 }
@@ -73,7 +73,7 @@
             {
                 _log.Fatal(e, "Failure parsing PlantUml file");
 
-                var location = Location.Create(file.Path, new TextSpan(), new LinePositionSpan());
+                var location = Location.Create(file.Path!, new TextSpan(), new LinePositionSpan());
                 var diagnostic = Diagnostic.Create(GeneratorRule.ParsingThrewException, location, e.Message, e.StackTrace);
                 diagnosticErrors.Add(diagnostic);
 
