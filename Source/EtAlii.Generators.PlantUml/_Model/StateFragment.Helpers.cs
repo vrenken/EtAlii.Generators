@@ -2,10 +2,12 @@ namespace EtAlii.Generators.PlantUml
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Serilog;
 
     public class StateFragmentHelper
     {
         private readonly IStateMachineLifetime _lifetime;
+        private readonly ILogger _log = Log.ForContext<StateFragmentHelper>();
 
         public StateFragmentHelper(IStateMachineLifetime lifetime)
         {
@@ -111,34 +113,52 @@ namespace EtAlii.Generators.PlantUml
 
         public SuperState[] GetAllSuperStates(StateMachine stateMachine, string substate)
         {
+#if DEBUG
+            _log.Debug("Finding all super states for: {SubState}", substate);
+#endif
+
             var result = new List<SuperState>();
 
-            while (GetSuperState(stateMachine, substate) is var superState && superState != null)
+            var superState = GetSuperState(stateMachine, substate);
+            if (superState != null)
             {
-                result.Add(superState);
-                substate = superState.Name;
+                do
+                {
+                    result.Add(superState);
+                    substate = superState.Name;
+                    superState = GetSuperState(stateMachine, substate);
+
+                } while (superState != null);
             }
 
             return result.ToArray();
         }
 
+        private readonly Dictionary<StateFragment[], SuperState[]> _allSuperStates = new ();
         public SuperState[] GetAllSuperStates(StateFragment[] fragments)
         {
-            var superStates = fragments
-                .OfType<SuperState>()
-                .SelectMany(ss => GetAllSuperStates(ss.StateFragments).Concat(new[] {ss}))
-                .ToArray();
+            if(!_allSuperStates.TryGetValue(fragments, out var superStates))
+            {
+                _allSuperStates[fragments] = superStates = fragments
+                    .OfType<SuperState>()
+                    .SelectMany(ss => GetAllSuperStates(ss.StateFragments).Concat(new[] {ss}))
+                    .ToArray();
+
+            }
             return superStates;
         }
 
         public SuperState GetSuperState(StateMachine stateMachine, string substate)
         {
+#if DEBUG
+            _log.Debug("Finding super state for: {SubState}", substate);
+#endif
             if (substate == _lifetime.BeginStateName || substate == _lifetime.EndStateName)
             {
                 return null;
             }
 
-            return GetAllSuperStates(stateMachine.StateFragments)
+            var superState = GetAllSuperStates(stateMachine.StateFragments)
                 .SingleOrDefault(ss =>
                 {
                     var isDefined = ss.StateFragments.OfType<StateDescription>().Any(sd => sd.State == substate);
@@ -147,6 +167,7 @@ namespace EtAlii.Generators.PlantUml
                     var isInbound = ss.StateFragments.OfType<Transition>().Any(sd => sd.To == substate);
                     return isDefined || isSuperState || isOutbound || isInbound;
                 });
+            return superState?.Name != substate ? superState : null;
         }
 
         public string[] GetAllTriggers(StateFragment[] fragments)

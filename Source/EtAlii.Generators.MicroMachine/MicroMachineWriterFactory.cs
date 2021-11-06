@@ -31,7 +31,8 @@
             var stateFragmentHelper = new StateFragmentHelper(_lifetime);
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
-            var methodWriter = new MethodWriter(parameterConverter, transitionConverter, _lifetime, _stateFragmentHelper);
+            var methodChainBuilder = new MethodChainBuilder();
+            var methodWriter = new MethodWriter(parameterConverter, transitionConverter, _lifetime, _stateFragmentHelper, methodChainBuilder);
             var transitionClassWriter = new TransitionClassWriter();
             var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter, _stateFragmentHelper);
             var choicesWriter = new ChoicesWriter(methodWriter, stateFragmentHelper);
