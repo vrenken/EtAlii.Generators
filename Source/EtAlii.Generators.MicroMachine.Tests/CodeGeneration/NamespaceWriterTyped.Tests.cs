@@ -17,7 +17,8 @@
             var parameterConverter = new ParameterConverter();
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
-            var methodWriter = new MethodWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper);
+            var methodChainBuilder = new MethodChainBuilder();
+            var methodWriter = new MethodWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper, methodChainBuilder);
             var transitionClassWriter = new TransitionClassWriter();
             var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter, stateFragmentHelper);
             var choicesWriter = new ChoicesWriter(methodWriter, stateFragmentHelper);
@@ -39,7 +40,8 @@
             var parameterConverter = new ParameterConverter();
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
-            var methodWriter = new MethodWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper);
+            var methodChainBuilder = new MethodChainBuilder();
+            var methodWriter = new MethodWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper, methodChainBuilder);
             var transitionClassWriter = new TransitionClassWriter();
             var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter, stateFragmentHelper);
             var choicesWriter = new ChoicesWriter(methodWriter, stateFragmentHelper);
@@ -89,7 +91,8 @@
             var parameterConverter = new ParameterConverter();
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
-            var methodWriter = new MethodWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper);
+            var methodChainBuilder = new MethodChainBuilder();
+            var methodWriter = new MethodWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper, methodChainBuilder);
             var transitionClassWriter = new TransitionClassWriter();
             var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter, stateFragmentHelper);
             var choicesWriter = new ChoicesWriter(methodWriter, stateFragmentHelper);

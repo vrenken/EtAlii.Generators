@@ -1,53 +1,61 @@
-// namespace EtAlii.Generators.MicroMachine.Tests
-// {
-//     using System;
-//     using System.Threading.Tasks;
-//
-//     public class MyNestedStateMachine1 : MyNestedStateMachine1Base
-//     {
-//         protected override void OnState1Entered() => Console.WriteLine("State 1 entered");
-//         protected override void OnState1EnteredFromStartTrigger(string name)
-//         {
-//             Console.WriteLine($"Name: {name}");
-//             Continue();
-//         }
-//
-//         protected override void OnState1Exited(Trigger trigger) => Console.WriteLine("State 1 exited");
-//
-//         protected override void OnState2Entered() => Console.WriteLine("State 2 entered");
-//
-//         protected override void OnSubState2EnteredFromContinueTrigger()
-//         {
-//             Console.WriteLine("Inside State 2");
-//             Continue();
-//         }
-//
-//         protected override void OnState2Exited() => Console.WriteLine("State 2 exited");
-//
-//         protected override void OnState3Entered() => Console.WriteLine("State 3 entered");
-//
-//         protected override Task OnState3Exited() => Task.Run(() => Console.WriteLine("State 3 exited"));
-//
-//         protected override Task OnState4Entered()
-//         {
-//             Console.WriteLine("State 4 entered");
-//             return Task.CompletedTask;
-//         }
-//
-//         protected override void OnState4Exited() => Console.WriteLine("State 4 exited");
-//
-//         protected override void OnState2InternalCheckTrigger(string name) => Console.WriteLine($"State 2 internal Check triggered: {name}");
-//
-//         protected override void OnState3EnteredFromContinueTrigger() => Console.WriteLine("State 3 entered from continue trigger");
-//
-//         protected override Task OnState4EnteredFromContinueTrigger() => Task.Run(() => Console.WriteLine("State 4 entered from continue trigger"));
-//
-//         protected override void OnSubState1Entered() => Console.WriteLine("SubState 1 entered");
-//
-//         protected override void OnSubState1Exited() => Console.WriteLine("SubState 1 exited");
-//
-//         protected override void OnSubState2Entered() => Console.WriteLine("SubState 2 entered");
-//
-//         protected override void OnSubState2Exited() => Console.WriteLine("SubState 2 exited");
-//     }
-// }
+namespace EtAlii.Generators.MicroMachine.Tests
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Runtime.CompilerServices;
+    using System.Threading.Tasks;
+
+    public class MyNestedStateMachine1 : MyNestedStateMachine1Base
+    {
+        public List<string> Transitions { get; } = new();
+
+        private void LogTransition(Type triggerType, [CallerMemberName] string methodName = null) => Transitions.Add($"{methodName}({triggerType.Name} trigger)");
+
+        private void LogTransition(string parameters, Type triggerType, [CallerMemberName] string methodName = null) => Transitions.Add($"{methodName}({triggerType.Name}: {parameters})");
+
+        protected override void OnState1Entered(Trigger trigger, State1Choices choices) => LogTransition(typeof(Trigger));
+        protected override void OnState1Entered(StartTrigger trigger, State1Choices choices)
+        {
+            LogTransition($"{trigger.Name}", typeof(StartTrigger));
+            Continue();
+        }
+
+        protected override void OnState1Exited(Trigger trigger) => LogTransition(typeof(Trigger));
+
+        protected override void OnState2Entered(Trigger trigger, State2Choices choices) => LogTransition(typeof(Trigger));
+
+        protected override void OnSubState2Entered(ContinueTrigger trigger, SubState2Choices choices)
+        {
+            LogTransition(typeof(ContinueTrigger));
+            Continue();
+        }
+
+        protected override void OnState2Exited(Trigger trigger) => LogTransition(typeof(Trigger));
+
+        protected override void OnState3Entered(Trigger trigger, State3Choices choices) => LogTransition(typeof(Trigger));
+
+        protected override Task OnState3Exited(Trigger trigger) => Task.Run(() => LogTransition(typeof(Trigger)));
+
+        protected override Task OnState4Entered(Trigger trigger, State4Choices choices)
+        {
+            LogTransition(typeof(Trigger));
+            return Task.CompletedTask;
+        }
+
+        protected override void OnState4Exited(Trigger trigger) => LogTransition(typeof(Trigger));
+
+        protected override void OnState2Entered(CheckTrigger trigger, State2Choices choices) => LogTransition($"{trigger.Name}", typeof(CheckTrigger));
+
+        protected override void OnState3Entered(ContinueTrigger trigger, State3Choices choices) => LogTransition(typeof(ContinueTrigger));
+
+        protected override Task OnState4Entered(ContinueTrigger trigger, State4Choices choices) => Task.Run(() => LogTransition(typeof(ContinueTrigger)));
+
+        protected override void OnSubState1Entered(Trigger trigger, SubState1Choices choices) => LogTransition(typeof(Trigger));
+
+        protected override void OnSubState1Exited(Trigger trigger) => LogTransition(typeof(Trigger));
+
+        protected override void OnSubState2Entered(Trigger trigger, SubState2Choices choices) => LogTransition(typeof(Trigger));
+
+        protected override void OnSubState2Exited(Trigger trigger) => LogTransition(typeof(Trigger));
+    }
+}

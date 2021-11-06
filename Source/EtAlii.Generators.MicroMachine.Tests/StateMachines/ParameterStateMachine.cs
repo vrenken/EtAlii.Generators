@@ -13,7 +13,6 @@ namespace EtAlii.Generators.MicroMachine.Tests
 
         private void LogTransition(string parameters, Type triggerType, [CallerMemberName] string methodName = null) => Transitions.Add($"{methodName}({triggerType.Name}: {parameters})");
 
-
         protected override void OnState1Entered(Trigger trigger, State1Choices choices) => LogTransition(typeof(Trigger));
         protected override void OnState1Entered(Continue1Trigger trigger, State1Choices choices) => LogTransition(typeof(Continue1Trigger));
         protected override void OnState1Exited(Activate1Trigger trigger) => LogTransition($"{trigger.Title}, {trigger.Count}", typeof(Activate1Trigger));

@@ -19,6 +19,10 @@ namespace EtAlii.Generators.MicroMachine.Tests
 
         protected override Task OnState2Entered(Trigger trigger, State2Choices choices) => Task.Run(() => LogTransition(typeof(Trigger)));
 
+        protected override Task OnState2Entered(CheckTrigger trigger, State2Choices choices) => Task.Run(() => LogTransition(typeof(CheckTrigger)));
+
+        protected override Task OnState2Entered(ContinueTrigger trigger, State2Choices choices) => Task.Run(() => LogTransition(typeof(ContinueTrigger)));
+
         protected override void OnState2Exited(Trigger trigger) => LogTransition(typeof(Trigger));
 
         protected override Task OnState3Entered(Trigger trigger, State3Choices choices) => Task.Run(() => LogTransition(typeof(Trigger)));
@@ -28,10 +32,6 @@ namespace EtAlii.Generators.MicroMachine.Tests
             LogTransition(typeof(ContinueTrigger));
             await ContinueAsync().ConfigureAwait(false);
         }
-
-        protected override Task OnState2Entered(CheckTrigger trigger, State2Choices choices) => Task.Run(() => LogTransition(typeof(CheckTrigger)));
-
-        protected override Task OnState2Entered(ContinueTrigger trigger, State2Choices choices) => Task.Run(() => LogTransition(typeof(ContinueTrigger)));
 
         protected override void OnState3Exited(Trigger trigger) => LogTransition(typeof(Trigger));
 
