@@ -36,5 +36,15 @@ namespace EtAlii.Generators.MicroMachine.Tests
         private partial void OnState4Entered(Trigger trigger, State4Choices choices) => LogTransition(typeof(Trigger));
         private partial void OnState4Entered(ContinueTrigger trigger, State4Choices choices) => LogTransition(typeof(ContinueTrigger));
         private partial void OnState4Exited(Trigger trigger) => LogTransition(typeof(Trigger));
+
+        private partial void On_IdleEntered(ExitTrigger trigger, _IdleChoices choices) { }
+
+        private partial void On_IdleEntered(Trigger trigger, _IdleChoices choices) { }
+
+        private partial void On_IdleExited(Trigger trigger) { }
+
+        private partial void On_IdleExited(StartTrigger trigger) { }
+
+        private partial void OnState2Exited(ExitTrigger trigger) { }
     }
 }
