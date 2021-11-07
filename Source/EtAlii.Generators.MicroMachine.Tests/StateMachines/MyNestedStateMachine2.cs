@@ -17,7 +17,7 @@ namespace EtAlii.Generators.MicroMachine.Tests
         protected override void OnState1Entered(StartTrigger trigger, State1Choices choices)
         {
             LogTransition($"{trigger.Name}", typeof(StartTrigger));
-            Continue();
+            choices.Continue();
         }
 
         protected override void OnState1Exited(Trigger trigger) => LogTransition(typeof(Trigger));

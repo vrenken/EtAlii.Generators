@@ -322,7 +322,7 @@
 
             if (context.Instance.GeneratePartialClass)
             {
-                context.Writer.WriteLine($"partial {(writeAsyncExitMethod ? "Task" : "void")} {exitMethodName}({triggerName} trigger);");
+                context.Writer.WriteLine($"private partial {(writeAsyncExitMethod ? "Task" : "void")} {exitMethodName}({triggerName} trigger);");
             }
             else
             {
@@ -378,7 +378,7 @@
 
             if (context.Instance.GeneratePartialClass)
             {
-                context.Writer.WriteLine($"partial {(writeAsyncEntryMethod ? "Task" : "void")} {entryMethodName}({triggerName} trigger{choices});");
+                context.Writer.WriteLine($"private partial {(writeAsyncEntryMethod ? "Task" : "void")} {entryMethodName}({triggerName} trigger{choices});");
             }
             else
             {
