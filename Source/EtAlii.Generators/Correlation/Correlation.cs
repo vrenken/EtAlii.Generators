@@ -61,25 +61,21 @@
             Items = _bookmark;
         }
 
-        public static Correlation Begin(CorrelationType type, bool thrownIfExists = true)
+        public static Correlation Begin(string correlationKey, bool thrownIfExists = true)
         {
-            return Begin(type, ShortId.GetId(), thrownIfExists);
+            return Begin(correlationKey, ShortId.GetId(), thrownIfExists);
         }
+
+        public static Correlation Begin(string correlationKey, string value, bool thrownIfExists = true)
+        {
+            value ??= ShortId.GetId();
+            return new Correlation(correlationKey, value, thrownIfExists);
+        }
+
 
         public static Correlation Suspend()
         {
             return new Correlation();
-        }
-
-        public static Correlation Suspend(CorrelationType type, bool thrownIfNotExists = false)
-        {
-            return new Correlation(type.ToString(), thrownIfNotExists);
-        }
-
-        public static Correlation Begin(CorrelationType type, string value, bool thrownIfExists = true)
-        {
-            value ??= ShortId.GetId();
-            return new Correlation(type.ToString(), value, thrownIfExists);
         }
 
         public static IImmutableDictionary<string, string> GetKeyValuePairs()

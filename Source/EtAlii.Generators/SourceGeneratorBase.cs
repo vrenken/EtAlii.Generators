@@ -30,48 +30,49 @@ namespace EtAlii.Generators
             // For testing and troubleshooting we'll use localised Seq logging. This should become deactivated outside of the primary development system.
             SetupLogging();
 
-            using (Correlation.Begin(CorrelationType.SourceGeneration))
-            {
-                // For actual troubleshooting of the source diagrams we use the Roslyn specific Diagnostics pattern.
-                var diagnostics = new List<Diagnostic>();
+            // For actual troubleshooting of the source diagrams we use the Roslyn specific Diagnostics pattern.
+            var diagnostics = new List<Diagnostic>();
 
-                var extension = GetExtension();
-                var sourceItemGroup = GetSourceItemGroup();
-                var parsingExceptionRule = GetParsingExceptionRule();
+            var extension = GetExtension();
+            var sourceItemGroup = GetSourceItemGroup();
+            var parsingExceptionRule = GetParsingExceptionRule();
 
-                // This code generator is only able to understand and parse the designated files.
-                // Because of that we ignore everything except files with the configured extension.
-                var additionalFiles = context.AdditionalFiles
-                    .Where(file => Path.GetExtension(file.Path).Equals(extension, StringComparison.OrdinalIgnoreCase))
-                    .Where(f =>
+            // This code generator is only able to understand and parse the designated files.
+            // Because of that we ignore everything except files with the configured extension.
+            var additionalFiles = context.AdditionalFiles
+                .Where(file => Path.GetExtension(file.Path).Equals(extension, StringComparison.OrdinalIgnoreCase))
+                .Where(f =>
+                {
+                    try
                     {
-                        try
+                        var options = context.AnalyzerConfigOptions.GetOptions(f);
+                        if (options.TryGetValue(SourceItemGroupMetadata, out var sourceItemGroupMetadata))
                         {
-                            var options = context.AnalyzerConfigOptions.GetOptions(f);
-                            if (options.TryGetValue(SourceItemGroupMetadata, out var sourceItemGroupMetadata))
-                            {
-                                _log.Information("Found {SourceItemGroup} {SourceItemGroupMetadata}", Path.GetFileName(f.Path), sourceItemGroupMetadata);
-                                return sourceItemGroupMetadata.Equals(sourceItemGroup, StringComparison.OrdinalIgnoreCase);
-                            }
-                            else
-                            {
-                                _log.Error("Failed finding {SourceItemGroup}", Path.GetFileName(f.Path));
-                            }
+                            _log.Information("Found {SourceItemGroup} {SourceItemGroupMetadata}", Path.GetFileName(f.Path), sourceItemGroupMetadata);
+                            return sourceItemGroupMetadata.Equals(sourceItemGroup, StringComparison.OrdinalIgnoreCase);
                         }
-                        catch (Exception e)
+                        else
                         {
-                            _log.Fatal(e, "Exception while finding SourceItemGroup");
+                            _log.Error("Failed finding {SourceItemGroup}", Path.GetFileName(f.Path));
                         }
-                        return false;
-                    })
-                    .ToArray();
+                    }
+                    catch (Exception e)
+                    {
+                        _log.Fatal(e, "Exception while finding SourceItemGroup");
+                    }
+                    return false;
+                })
+                .ToArray();
 
-                var parser = CreateParser();
-                var writerFactory = CreateWriterFactory();
-                var writer = writerFactory.Create();
-                var validator = CreateValidator();
+            var parser = CreateParser();
+            var writerFactory = CreateWriterFactory();
+            var writer = writerFactory.Create();
+            var validator = CreateValidator();
 
-                foreach(var file in additionalFiles)
+            foreach(var file in additionalFiles)
+            {
+                using (Correlation.Begin("SourceGeneration"))
+                using (Correlation.Begin("SourceFile", file.Path))
                 {
                     // First thing to do is parse the file and build an in-memory model.
                     if (parser.TryParse(file, out var instance, out var parseDiagnostics))
@@ -92,6 +93,10 @@ namespace EtAlii.Generators
                             writer.Write(writeContext);
 
                             var content = stringWriter.ToString();
+
+                            _log
+                                .ForContext("FileContent", content)
+                                .Information("Finished generating file {File}", fileName);
                             context.AddSource(fileName, content);
                         }
                         catch (Exception e)
