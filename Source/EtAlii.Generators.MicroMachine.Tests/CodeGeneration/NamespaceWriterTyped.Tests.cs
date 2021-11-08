@@ -18,10 +18,11 @@
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
             var methodChainBuilder = new MethodChainBuilder();
-            var methodWriter = new MethodWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper, methodChainBuilder);
+            var triggerMethodWriter = new TriggerMethodWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper, methodChainBuilder);
+            var methodWriter = new MethodWriter(stateFragmentHelper);
             var transitionClassWriter = new TransitionClassWriter();
             var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter, stateFragmentHelper);
-            var choicesWriter = new ChoicesWriter(methodWriter, stateFragmentHelper);
+            var choicesWriter = new ChoicesWriter(triggerMethodWriter, stateFragmentHelper);
             var stateMachineClassWriter = new ClassWriter(enumWriter, methodWriter, triggerClassWriter, transitionClassWriter, stateFragmentHelper, parameterConverter, choicesWriter);
 
             // Act.
@@ -41,10 +42,11 @@
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
             var methodChainBuilder = new MethodChainBuilder();
-            var methodWriter = new MethodWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper, methodChainBuilder);
-            var transitionClassWriter = new TransitionClassWriter();
+            var triggerMethodWriter = new TriggerMethodWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper, methodChainBuilder);
             var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter, stateFragmentHelper);
-            var choicesWriter = new ChoicesWriter(methodWriter, stateFragmentHelper);
+            var methodWriter = new MethodWriter(stateFragmentHelper);
+            var transitionClassWriter = new TransitionClassWriter();
+            var choicesWriter = new ChoicesWriter(triggerMethodWriter, stateFragmentHelper);
             var stateMachineClassWriter = new ClassWriter(enumWriter, methodWriter, triggerClassWriter, transitionClassWriter, stateFragmentHelper, parameterConverter, choicesWriter);
             var writer = new NamespaceWriter<StateMachine>(context => stateMachineClassWriter.Write(context));
             var originalFileName = "Test.puml";
@@ -92,10 +94,11 @@
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
             var methodChainBuilder = new MethodChainBuilder();
-            var methodWriter = new MethodWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper, methodChainBuilder);
-            var transitionClassWriter = new TransitionClassWriter();
+            var triggerMethodWriter = new TriggerMethodWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper, methodChainBuilder);
             var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter, stateFragmentHelper);
-            var choicesWriter = new ChoicesWriter(methodWriter, stateFragmentHelper);
+            var methodWriter = new MethodWriter(stateFragmentHelper);
+            var transitionClassWriter = new TransitionClassWriter();
+            var choicesWriter = new ChoicesWriter(triggerMethodWriter, stateFragmentHelper);
             var stateMachineClassWriter = new ClassWriter(enumWriter, methodWriter, triggerClassWriter, transitionClassWriter, stateFragmentHelper, parameterConverter, choicesWriter);
             var writer = new NamespaceWriter<StateMachine>(context => stateMachineClassWriter.Write(context));
             var originalFileName = "Test.puml";

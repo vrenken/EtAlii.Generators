@@ -113,9 +113,7 @@ namespace EtAlii.Generators.PlantUml
 
         public SuperState[] GetAllSuperStates(StateMachine stateMachine, string substate)
         {
-#if DEBUG
             _log.Debug("Finding all super states for: {SubState}", substate);
-#endif
 
             var result = new List<SuperState>();
 
@@ -150,9 +148,7 @@ namespace EtAlii.Generators.PlantUml
 
         public SuperState GetSuperState(StateMachine stateMachine, string substate)
         {
-#if DEBUG
             _log.Debug("Finding super state for: {SubState}", substate);
-#endif
             if (substate == _lifetime.BeginStateName || substate == _lifetime.EndStateName)
             {
                 return null;

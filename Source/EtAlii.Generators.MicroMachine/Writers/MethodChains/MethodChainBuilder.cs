@@ -9,7 +9,7 @@
     {
         private readonly ILogger _log = Log.ForContext<MethodChainBuilder>();
 
-        public MethodChain Build(WriteContext<StateMachine> context, StateFragmentHelper stateFragmentHelper, string fromState, string trigger, string toState)
+        public MethodChain[] Build(WriteContext<StateMachine> context, StateFragmentHelper stateFragmentHelper, string fromState, string trigger, string toState)
         {
             _log.Information("Building method chain for transition from {FromState} by {Trigger} to {ToState}", fromState, trigger, toState);
 
@@ -20,7 +20,7 @@
             return BuildChainToDifferentState(context, stateFragmentHelper, fromState, toState);
         }
 
-        private MethodChain BuildChainToDifferentState(WriteContext<StateMachine> context, StateFragmentHelper stateFragmentHelper, string fromState, string toState)
+        private MethodChain[] BuildChainToDifferentState(WriteContext<StateMachine> context, StateFragmentHelper stateFragmentHelper, string fromState, string toState)
         {
             var exitCalls = new List<MethodCall>();
             var entryCalls = new List<MethodCall>();
@@ -37,31 +37,25 @@
 
             // 1. - Find the biggest shared superstate / or the complete state machine.
             var fromParents = stateFragmentHelper.GetAllSuperStates(context.Instance, fromState);
-#if DEBUG
             var parentStates = fromParents.Any()
                 ? string.Join(", ", fromParents.Select(s => s.Name).ToArray())
                 : "[NONE]";
             _log.Debug("Acquired all superstates for {FromState}: {ParentStates}", fromState, parentStates);
-#endif
+
             var toParents = stateFragmentHelper.GetAllSuperStates(context.Instance, toState);
-#if DEBUG
             parentStates = toParents.Any()
                 ? string.Join(", ", toParents.Select(s => s.Name).ToArray())
                 : "[NONE]";
             _log.Debug("Acquired all superstates for {ToState}: {ParentStates}", toState, parentStates);
-#endif
+
             var toIsChildOfFrom = toParents.Any(toParent => toParent.Name == fromState);
             var fromIsChildOfTo = fromParents.Any(fromParent => fromParent.Name == toState);
 
-#if DEBUG
             _log.Debug("Determined structure: {ToIsChildOfFrom} and {FromIsChildOfTo}", toIsChildOfFrom, fromIsChildOfTo);
-#endif
 
             if (!toIsChildOfFrom)
             {
-#if DEBUG
                 _log.Debug("{ToState} is a child of {FromState}", toState, fromState);
-#endif
 
                 // 2. - Pick the state itself.
                 exitCalls.Add(new MethodCall(fromState, false));
@@ -80,9 +74,7 @@
 
             if (!fromIsChildOfTo)
             {
-#if DEBUG
                 _log.Debug("{FromState} is a child of {ToState}", fromState, toState);
-#endif
 
                 // 4. - Pick the state itself.
                 entryCalls.Add(new MethodCall(toState, false));
@@ -102,10 +94,10 @@
                 entryCalls.Reverse();
             }
 
-            return new MethodChain { ExitCalls = exitCalls.ToArray(), EntryCalls = entryCalls.ToArray() };
+            return new [] { new MethodChain { ExitCalls = exitCalls.ToArray(), EntryCalls = entryCalls.ToArray() } };
         }
 
-        private MethodChain BuildChainToSameState(string state)
+        private MethodChain[] BuildChainToSameState(string state)
         {
             var exitCalls = new List<MethodCall>();
             var entryCalls = new List<MethodCall>();
@@ -117,7 +109,7 @@
             // Pick the state itself.
             entryCalls.Add(new MethodCall(state, false));
 
-            return new MethodChain { ExitCalls = exitCalls.ToArray(), EntryCalls = entryCalls.ToArray() };
+            return new [] { new MethodChain { ExitCalls = exitCalls.ToArray(), EntryCalls = entryCalls.ToArray() } };
         }
     }
 }
