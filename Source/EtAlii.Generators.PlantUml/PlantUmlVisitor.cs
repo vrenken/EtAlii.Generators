@@ -14,11 +14,13 @@
     {
         private readonly string _originalFileName;
         private readonly IStateMachineLifetime _lifetime;
+        private readonly StateHierarchyBuilder _stateHierarchyBuilder;
 
-        public PlantUmlVisitor(string originalFileName, IStateMachineLifetime lifetime)
+        public PlantUmlVisitor(string originalFileName, IStateMachineLifetime lifetime, StateHierarchyBuilder stateHierarchyBuilder)
         {
             _originalFileName = originalFileName;
             _lifetime = lifetime;
+            _stateHierarchyBuilder = stateHierarchyBuilder;
         }
 
         public override object VisitState_machine(PlantUmlParser.State_machineContext context)
@@ -47,7 +49,9 @@
                     .ToArray();
             }
 
-            return new StateMachine(realHeaders, settings, stateFragments);
+            var (hierarchicalStates, sequentialStates) = _stateHierarchyBuilder.Build(stateFragments);
+
+            return new StateMachine(realHeaders, settings, stateFragments, hierarchicalStates, sequentialStates);
         }
 
         public override object VisitId(PlantUmlParser.IdContext context) => context.GetText();

@@ -18,14 +18,16 @@
     {
         private readonly IStateMachineLifetime _lifetime;
         private readonly StateFragmentHelper _stateFragmentHelper;
+        private readonly StateHierarchyBuilder _stateHierarchyBuilder;
 
         public SourceGenerator()
         {
             _lifetime = new MicroStateMachineLifetime();
             _stateFragmentHelper = new StateFragmentHelper(_lifetime);
+            _stateHierarchyBuilder = new StateHierarchyBuilder(_stateFragmentHelper);
         }
 
-        protected override IParser<StateMachine> CreateParser() => new PlantUmlStateMachineParser(new MicroStateMachineLifetime());
+        protected override IParser<StateMachine> CreateParser() => new PlantUmlStateMachineParser(_lifetime, _stateHierarchyBuilder);
 
         protected override IWriterFactory<StateMachine> CreateWriterFactory() => new MicroMachineWriterFactory(_lifetime, _stateFragmentHelper);
 

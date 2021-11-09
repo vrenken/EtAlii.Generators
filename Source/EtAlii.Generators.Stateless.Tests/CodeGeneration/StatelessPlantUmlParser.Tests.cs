@@ -10,9 +10,11 @@
         {
             // Arrange.
             var lifetime = new StatelessMachineLifetime();
+            var stateFragmentHelper = new StateFragmentHelper(lifetime);
+            var stateHierarchyBuilder = new StateHierarchyBuilder(stateFragmentHelper);
 
             // Act.
-            var parser = new PlantUmlStateMachineParser(lifetime);
+            var parser = new PlantUmlStateMachineParser(lifetime, stateHierarchyBuilder);
 
             // Assert.
             Assert.NotNull(parser);
@@ -24,7 +26,9 @@
 
             // Arrange.
             var lifetime = new StatelessMachineLifetime();
-            var parser = new PlantUmlStateMachineParser(lifetime);
+            var stateFragmentHelper = new StateFragmentHelper(lifetime);
+            var stateHierarchyBuilder = new StateHierarchyBuilder(stateFragmentHelper);
+            var parser = new PlantUmlStateMachineParser(lifetime, stateHierarchyBuilder);
 
             var text = @"@startuml
 'namespace EtAlii.Generators.Stateless.Tests
@@ -63,7 +67,9 @@ State4 : This is the final state
         {
             // Arrange.
             var lifetime = new StatelessMachineLifetime();
-            var parser = new PlantUmlStateMachineParser(lifetime);
+            var stateFragmentHelper = new StateFragmentHelper(lifetime);
+            var stateHierarchyBuilder = new StateHierarchyBuilder(stateFragmentHelper);
+            var parser = new PlantUmlStateMachineParser(lifetime, stateHierarchyBuilder);
 
             var text = @"@startuml
 'namespace EtAlii.Generators.Stateless.Tests

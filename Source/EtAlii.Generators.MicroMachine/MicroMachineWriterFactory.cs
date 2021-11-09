@@ -31,13 +31,15 @@
             var stateFragmentHelper = new StateFragmentHelper(_lifetime);
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
-            var methodChainBuilder = new MethodChainBuilder();
-            var methodWriter = new MethodWriter(_stateFragmentHelper);
+            var toDifferentStateMethodChainBuilder = new ToDifferentStateMethodChainBuilder(stateFragmentHelper);
+            var toSameStateMethodChainBuilder = new ToSameStateMethodChainBuilder(stateFragmentHelper, toDifferentStateMethodChainBuilder);
+            var methodChainBuilder = new MethodChainBuilder(toDifferentStateMethodChainBuilder, toSameStateMethodChainBuilder, _stateFragmentHelper, _lifetime);
+            var transitionMethodWriter = new TransitionMethodWriter(_stateFragmentHelper);
             var transitionClassWriter = new TransitionClassWriter();
             var triggerMethodWriter = new TriggerMethodWriter(parameterConverter, transitionConverter, _lifetime, _stateFragmentHelper, methodChainBuilder);
             var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter, _stateFragmentHelper);
             var choicesWriter = new ChoicesWriter(triggerMethodWriter, stateFragmentHelper);
-            var stateMachineClassWriter = new ClassWriter(enumWriter, methodWriter, triggerClassWriter, transitionClassWriter, _stateFragmentHelper, parameterConverter, choicesWriter);
+            var stateMachineClassWriter = new ClassWriter(enumWriter, transitionMethodWriter, triggerMethodWriter, triggerClassWriter, transitionClassWriter, _stateFragmentHelper, parameterConverter, choicesWriter);
             return new NamespaceWriter<StateMachine>(context => stateMachineClassWriter.Write(context));
         }
     }

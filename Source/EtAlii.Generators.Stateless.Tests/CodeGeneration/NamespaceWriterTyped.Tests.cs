@@ -65,7 +65,9 @@
                 new Transition("Second", "Third", new TransitionDetails("Continue", true), new TriggerDetails(false, Array.Empty<Parameter>()), new SourcePosition(2,0, ""))
             };
 
-            var stateMachine = new StateMachine(headers, settings, fragments);
+            var states = Array.Empty<State>();
+
+            var stateMachine = new StateMachine(headers, settings, fragments, states, states);
 
             using var stringWriter = new StringWriter();
             using var indentedTextWriter = new IndentedTextWriter(stringWriter);
@@ -116,7 +118,9 @@
                 new Transition("Second", "Second", new TransitionDetails("Check", true), new TriggerDetails(true, new [] { new Parameter("string", "name", new SourcePosition(2,0, "")), new Parameter("Guid", "id", new SourcePosition(2,0, "")) }), new SourcePosition(2,0, ""))
             };
 
-            var stateMachine = new StateMachine(headers, settings, fragments);
+            var states = Array.Empty<State>();
+
+            var stateMachine = new StateMachine(headers, settings, fragments, states, states);
 
             using var stringWriter = new StringWriter();
             using var indentedTextWriter = new IndentedTextWriter(stringWriter);

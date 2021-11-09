@@ -16,11 +16,13 @@
     public class PlantUmlStateMachineParser : IParser<StateMachine>
     {
         private readonly IStateMachineLifetime _lifetime;
+        private readonly StateHierarchyBuilder _stateHierarchyBuilder;
         private readonly ILogger _log = Log.ForContext<PlantUmlStateMachineParser>();
 
-        public PlantUmlStateMachineParser(IStateMachineLifetime lifetime)
+        public PlantUmlStateMachineParser(IStateMachineLifetime lifetime, StateHierarchyBuilder stateHierarchyBuilder)
         {
             _lifetime = lifetime;
+            _stateHierarchyBuilder = stateHierarchyBuilder;
         }
 
         public bool TryParse(AdditionalText file, out StateMachine stateMachine, out Diagnostic[] diagnostics)
@@ -45,7 +47,7 @@
                 var parsingContext = parser.state_machine();
 
                 var originalFileName = Path.GetFileName(file.Path);
-                var visitor = new PlantUmlVisitor(originalFileName, _lifetime);
+                var visitor = new PlantUmlVisitor(originalFileName, _lifetime, _stateHierarchyBuilder);
 
                 stateMachine = visitor.VisitState_machine(parsingContext) as StateMachine;
 

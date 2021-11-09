@@ -44,11 +44,23 @@
         /// </summary>
         public StateFragment[] StateFragments { get; }
 
-        public StateMachine(Header[] headers, Setting[] settings, StateFragment[] stateFragments)
+        /// <summary>
+        /// The states that make up the state machine. In hierarchical form.
+        /// </summary>
+        public State[] HierarchicalStates { get; }
+
+        /// <summary>
+        /// The states that make up the state machine. In sequential form.
+        /// </summary>
+        public State[] SequentialStates { get; }
+
+        public StateMachine(Header[] headers, Setting[] settings, StateFragment[] stateFragments, State[] hierarchicalStates, State[] sequentialStates)
         {
             Headers = headers;
             Settings = settings;
             StateFragments = stateFragments;
+            HierarchicalStates = hierarchicalStates;
+            SequentialStates = sequentialStates;
 
             ClassName = Settings
                 .OfType<ClassNameSetting>()
