@@ -34,11 +34,11 @@
             var toDifferentStateMethodChainBuilder = new ToDifferentStateMethodChainBuilder(stateFragmentHelper);
             var toSameStateMethodChainBuilder = new ToSameStateMethodChainBuilder(stateFragmentHelper, toDifferentStateMethodChainBuilder);
             var methodChainBuilder = new MethodChainBuilder(toDifferentStateMethodChainBuilder, toSameStateMethodChainBuilder, _stateFragmentHelper, _lifetime);
-            var transitionMethodWriter = new TransitionMethodWriter(_stateFragmentHelper);
+            var transitionMethodWriter = new TransitionMethodWriter(_stateFragmentHelper, methodChainBuilder);
             var transitionClassWriter = new TransitionClassWriter();
             var triggerMethodWriter = new TriggerMethodWriter(parameterConverter, transitionConverter, _lifetime, _stateFragmentHelper, methodChainBuilder);
             var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter, _stateFragmentHelper);
-            var choicesWriter = new ChoicesWriter(triggerMethodWriter, stateFragmentHelper);
+            var choicesWriter = new ChoicesWriter(triggerMethodWriter);
             var stateMachineClassWriter = new ClassWriter(enumWriter, transitionMethodWriter, triggerMethodWriter, triggerClassWriter, transitionClassWriter, _stateFragmentHelper, parameterConverter, choicesWriter);
             return new NamespaceWriter<StateMachine>(context => stateMachineClassWriter.Write(context));
         }

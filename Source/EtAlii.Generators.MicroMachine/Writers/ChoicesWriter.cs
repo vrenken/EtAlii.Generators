@@ -1,23 +1,17 @@
 ﻿namespace EtAlii.Generators.MicroMachine
 {
     using System;
-    using System.Linq;
     using EtAlii.Generators.PlantUml;
     using Serilog;
 
     public class ChoicesWriter
     {
         private readonly TriggerMethodWriter _triggerMethodWriter;
-        private readonly StateFragmentHelper _stateFragmentHelper;
         private readonly ILogger _log = Log.ForContext<ChoicesWriter>();
 
-        public ChoicesWriter(
-            TriggerMethodWriter triggerMethodWriter,
-            StateFragmentHelper stateFragmentHelper
-            )
+        public ChoicesWriter(TriggerMethodWriter triggerMethodWriter)
         {
             _triggerMethodWriter = triggerMethodWriter;
-            _stateFragmentHelper = stateFragmentHelper;
         }
 
         public void WriteChoices(WriteContext<StateMachine> context)
@@ -29,18 +23,14 @@
                 context.Writer.WriteLine("// The classes below represent the choices as available to transition from one state to the other.");
                 context.Writer.WriteLine();
 
-                var states = _stateFragmentHelper
-                    .GetAllStates(context.Instance.StateFragments)
-                    .ToArray();
-
-                foreach (var state in states)
+                foreach (var state in context.Instance.SequentialStates)
                 {
-                    context.Writer.WriteLine($"protected class {state}Choices");
+                    context.Writer.WriteLine($"protected class {state.Name}Choices");
                     context.Writer.WriteLine("{");
                     context.Writer.Indent += 1;
                     context.Writer.WriteLine($"private readonly {context.Instance.ClassName} _stateMachine;");
                     context.Writer.WriteLine();
-                    context.Writer.WriteLine($"public {state}Choices({context.Instance.ClassName} stateMachine)");
+                    context.Writer.WriteLine($"public {state.Name}Choices({context.Instance.ClassName} stateMachine)");
                     context.Writer.WriteLine("{");
                     context.Writer.Indent += 1;
                     context.Writer.WriteLine($"_stateMachine = stateMachine;");
@@ -55,11 +45,9 @@
             }
         }
 
-        private void WriteMethods(WriteContext<StateMachine> context, string state)
+        private void WriteMethods(WriteContext<StateMachine> context, State state)
         {
-            var outboundTransitions = _stateFragmentHelper.GetOutboundTransitions(context.Instance, state);
-
-            foreach (var outboundTransition in outboundTransitions)
+            foreach (var outboundTransition in state.OutboundTransitions)
             {
                 var transitionSets = new [] { new [] { outboundTransition } };
                 if (outboundTransition.IsAsync)
@@ -74,9 +62,7 @@
                 }
             }
 
-            var internalTransitions = _stateFragmentHelper.GetInternalTransitions(context.Instance.StateFragments, state);
-
-            foreach (var internalTransition in internalTransitions)
+            foreach (var internalTransition in state.InternalTransitions)
             {
                 var transitionSets = new [] { new [] { internalTransition } };
                 if (internalTransition.IsAsync)

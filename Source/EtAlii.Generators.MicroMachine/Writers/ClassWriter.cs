@@ -7,7 +7,8 @@
     public class ClassWriter : IWriter<StateMachine>
     {
         private readonly EnumWriter<StateMachine> _enumWriter;
-        private readonly MethodWriter _methodWriter;
+        private readonly TransitionMethodWriter _transitionMethodWriter;
+        private readonly TriggerMethodWriter _triggerMethodWriter;
         private readonly TriggerClassWriter _triggerClassWriter;
         private readonly TransitionClassWriter _transitionClassWriter;
         private readonly StateFragmentHelper _stateFragmentHelper;
@@ -16,7 +17,8 @@
         private readonly ILogger _log = Log.ForContext<ClassWriter>();
 
         public ClassWriter(EnumWriter<StateMachine> enumWriter,
-            MethodWriter methodWriter,
+            TransitionMethodWriter transitionMethodWriter,
+            TriggerMethodWriter triggerMethodWriter,
             TriggerClassWriter triggerClassWriter,
             TransitionClassWriter transitionClassWriter,
             StateFragmentHelper stateFragmentHelper,
@@ -24,7 +26,8 @@
             ChoicesWriter choicesWriter)
         {
             _enumWriter = enumWriter;
-            _methodWriter = methodWriter;
+            _transitionMethodWriter = transitionMethodWriter;
+            _triggerMethodWriter = triggerMethodWriter;
             _triggerClassWriter = triggerClassWriter;
             _transitionClassWriter = transitionClassWriter;
             _stateFragmentHelper = stateFragmentHelper;
@@ -55,7 +58,7 @@
             WriteConstuctor(context);
             WriteRunOrQueueTransition(context);
 
-            _methodWriter.WriteTriggerMethods(context);
+            _triggerMethodWriter.WriteTriggerMethods(context);
             context.Writer.WriteLine();
 
             _choicesWriter.WriteChoices(context);
@@ -67,11 +70,13 @@
             _triggerClassWriter.WriteTriggerClasses(context);
             context.Writer.WriteLine();
 
-            var allStates = _stateFragmentHelper.GetAllStates(context.Instance.StateFragments);
+            var allStates = context.Instance
+                .SequentialStates.Select(s => s.Name)
+                .ToArray();
             _enumWriter.Write(context, new []{ "Of course each state machine needs a set of states."}, "State", allStates);
             context.Writer.WriteLine();
 
-            _methodWriter.WriteTransitionMethods(context);
+            _transitionMethodWriter.WriteTransitionMethods(context);
 
             context.Writer.Indent -= 1;
             context.Writer.WriteLine("}");
@@ -87,12 +92,9 @@
 
             if (context.Instance.GenerateTriggerChoices)
             {
-                var states = _stateFragmentHelper
-                    .GetAllStates(context.Instance.StateFragments)
-                    .ToArray();
-                foreach (var state in states)
+                foreach (var state in context.Instance.SequentialStates)
                 {
-                    context.Writer.WriteLine($"private readonly {context.Instance.ClassName}.{state}Choices _{_parameterConverter.ToCamelCase(state)}Choices;");
+                    context.Writer.WriteLine($"private readonly {context.Instance.ClassName}.{state.Name}Choices _{_parameterConverter.ToCamelCase(state)}Choices;");
                 }
             }
 
@@ -108,12 +110,9 @@
 
             if (context.Instance.GenerateTriggerChoices)
             {
-                var states = _stateFragmentHelper
-                    .GetAllStates(context.Instance.StateFragments)
-                    .ToArray();
-                foreach (var state in states)
+                foreach (var state in context.Instance.SequentialStates)
                 {
-                    context.Writer.WriteLine($"_{_parameterConverter.ToCamelCase(state)}Choices = new {context.Instance.ClassName}.{state}Choices(this);");
+                    context.Writer.WriteLine($"_{_parameterConverter.ToCamelCase(state.Name)}Choices = new {context.Instance.ClassName}.{state.Name}Choices(this);");
                 }
             }
 

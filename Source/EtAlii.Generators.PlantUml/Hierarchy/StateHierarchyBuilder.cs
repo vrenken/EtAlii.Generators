@@ -33,9 +33,11 @@ namespace EtAlii.Generators.PlantUml
             var state = new State
             {
                 Name = stateName,
-                Transitions = _stateFragmentHelper
-                    .GetAllTransitions(fragments).Where(t => t.From == stateName)
-                    .ToArray(),
+                AllTransitions = _stateFragmentHelper.GetAllTransitions(fragments, stateName),
+                InboundTransitions = _stateFragmentHelper.GetInboundTransitions(fragments, stateName),
+                OutboundTransitions = _stateFragmentHelper.GetOutboundTransitions(fragments, stateName),
+                InternalTransitions = _stateFragmentHelper.GetInternalTransitions(fragments, stateName),
+
                 Children = _stateFragmentHelper
                     .GetAllSubStates(fragments, stateName)
                     .Select(c => Build(fragments, sequentialStates, c))

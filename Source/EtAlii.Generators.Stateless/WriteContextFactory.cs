@@ -39,7 +39,9 @@ namespace EtAlii.Generators.Stateless
                 .Information("Found {TransitionCount} transitions", allTransitions.Length);
 
             // We want to dump all unique states defined in the diagram.
-            var allStates = _stateFragmentHelper.GetAllStates(stateMachine.StateFragments);
+            var allStates = stateMachine.SequentialStates
+                .Select(s => s.Name)
+                .ToArray();
             var statesAsText = string.Join(Environment.NewLine, allStates.Select(s => $"- {s}"));
             _log
                 .ForContext("States", statesAsText)

@@ -6,7 +6,7 @@ namespace EtAlii.Generators.PlantUml
     {
         public Transition[] GetOutboundTransitions(StateMachine stateMachine, string state) => GetOutboundTransitions(stateMachine.StateFragments, state);
 
-        private Transition[] GetOutboundTransitions(StateFragment[] fragments, string state)
+        public Transition[] GetOutboundTransitions(StateFragment[] fragments, string state)
         {
             var superState = GetSuperState(fragments, state);
             return superState != null
@@ -104,6 +104,13 @@ namespace EtAlii.Generators.PlantUml
         {
             return GetAllTransitions(fragments)
                 .Where(t => t.IsAsync)
+                .ToArray();
+        }
+
+        public Transition[] GetAllTransitions(StateFragment[] fragments, string state)
+        {
+            return GetAllTransitions(fragments)
+                .Where(t => t.From == state)
                 .ToArray();
         }
 
