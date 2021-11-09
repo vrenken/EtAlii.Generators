@@ -1,5 +1,6 @@
 ﻿namespace EtAlii.Generators.MicroMachine.Tests
 {
+    using System;
     using Xunit;
 
     public class SimpleStateMachineTests
@@ -42,7 +43,6 @@
 
             // Assert.
             var i = 0;
-            Assert.Equal(18, stateMachine.Transitions.Count);
             Assert.Equal("OnState1Entered(Trigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnState1Entered(StartTrigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnState1Exited(ContinueTrigger trigger)", stateMachine.Transitions[i++]);
@@ -60,7 +60,8 @@
             Assert.Equal("OnState3Exited(ContinueTrigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnState3Exited(Trigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnState4Entered(Trigger trigger)", stateMachine.Transitions[i++]);
-            Assert.Equal("OnState4Entered(ContinueTrigger trigger)", stateMachine.Transitions[i]);
+            Assert.Equal("OnState4Entered(ContinueTrigger trigger)", stateMachine.Transitions[i++]);
+            Assert.ThrowsAny<Exception>(() => stateMachine.Transitions[i++]);
         }
     }
 }

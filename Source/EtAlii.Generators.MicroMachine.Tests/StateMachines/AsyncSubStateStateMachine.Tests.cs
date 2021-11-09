@@ -1,5 +1,6 @@
 ﻿namespace EtAlii.Generators.MicroMachine.Tests
 {
+    using System;
     using System.Threading.Tasks;
     using Xunit;
 
@@ -34,8 +35,8 @@
             Assert.Equal("OnState1Exited(Trigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnSuperState1Entered(Trigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnSuperState1Entered(ContinueTrigger trigger)", stateMachine.Transitions[i++]);
-            Assert.Equal("OnSubState1Entered(Trigger trigger)", stateMachine.Transitions[i]);
-            Assert.Equal(6, stateMachine.Transitions.Count);
+            Assert.Equal("OnSubState1Entered(Trigger trigger)", stateMachine.Transitions[i++]);
+            Assert.ThrowsAny<Exception>(() => stateMachine.Transitions[i++]);
         }
 
         [Fact]
@@ -57,8 +58,8 @@
             Assert.Equal("OnSuperState2Entered(Trigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnSuperState2Entered(ContinueTrigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnSubState2Entered(Trigger trigger)", stateMachine.Transitions[i++]);
-            Assert.Equal("OnSubState2Entered(StartTrigger trigger)", stateMachine.Transitions[i]);
-            Assert.Equal(7, stateMachine.Transitions.Count);
+            Assert.Equal("OnSubState2Entered(StartTrigger trigger)", stateMachine.Transitions[i++]);
+            Assert.ThrowsAny<Exception>(() => stateMachine.Transitions[i++]);
         }
 
         [Fact]
@@ -78,8 +79,8 @@
             Assert.Equal("OnState3Exited(Trigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnSuperState3Entered(Trigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnSubState3Entered(Trigger trigger)", stateMachine.Transitions[i++]);
-            Assert.Equal("OnSubState3Entered(ContinueTrigger trigger)", stateMachine.Transitions[i]);
-            Assert.Equal(6, stateMachine.Transitions.Count);
+            Assert.Equal("OnSubState3Entered(ContinueTrigger trigger)", stateMachine.Transitions[i++]);
+            Assert.ThrowsAny<Exception>(() => stateMachine.Transitions[i++]);
         }
     }
 }

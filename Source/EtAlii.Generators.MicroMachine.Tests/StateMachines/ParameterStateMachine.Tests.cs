@@ -1,5 +1,6 @@
 ﻿namespace EtAlii.Generators.MicroMachine.Tests
 {
+    using System;
     using EtAlii.Generators.MicroMachine.Tests.Nested;
     using Xunit;
 
@@ -29,13 +30,13 @@
 
             // Assert.
             var i = 0;
-            Assert.Equal(6, stateMachine.Transitions.Count);
             Assert.Equal("OnState1Entered(Trigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnState1Entered(Continue1Trigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnState1Exited(Activate1Trigger: title 1, 42)", stateMachine.Transitions[i++]);
             Assert.Equal("OnState1Exited(Trigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnNextState1Entered(Trigger trigger)", stateMachine.Transitions[i++]);
-            Assert.Equal("OnNextState1Entered(Activate1Trigger: title 1, 42)", stateMachine.Transitions[i]);
+            Assert.Equal("OnNextState1Entered(Activate1Trigger: title 1, 42)", stateMachine.Transitions[i++]);
+            Assert.ThrowsAny<Exception>(() => stateMachine.Transitions[i++]);
         }
 
         [Fact]
@@ -50,13 +51,13 @@
 
             // Assert.
             var i = 0;
-            Assert.Equal(6, stateMachine.Transitions.Count);
             Assert.Equal("OnState2Entered(Trigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnState2Entered(Continue2Trigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnState2Exited(Activate2Trigger: My new string, 42, 2.3234)", stateMachine.Transitions[i++]);
             Assert.Equal("OnState2Exited(Trigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnNextState2Entered(Trigger trigger)", stateMachine.Transitions[i++]);
-            Assert.Equal("OnNextState2Entered(Activate2Trigger: My new string, 42, 2.3234)", stateMachine.Transitions[i]);
+            Assert.Equal("OnNextState2Entered(Activate2Trigger: My new string, 42, 2.3234)", stateMachine.Transitions[i++]);
+            Assert.ThrowsAny<Exception>(() => stateMachine.Transitions[i++]);
         }
 
         [Fact]
@@ -73,13 +74,13 @@
 
             // Assert.
             var i = 0;
-            Assert.Equal(6, stateMachine.Transitions.Count);
             Assert.Equal("OnState3Entered(Trigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnState3Entered(Continue3Trigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnState3Exited(Activate3Trigger: 12, 33)", stateMachine.Transitions[i++]);
             Assert.Equal("OnState3Exited(Trigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnNextState3Entered(Trigger trigger)", stateMachine.Transitions[i++]);
-            Assert.Equal("OnNextState3Entered(Activate3Trigger: 12, 33)", stateMachine.Transitions[i]);
+            Assert.Equal("OnNextState3Entered(Activate3Trigger: 12, 33)", stateMachine.Transitions[i++]);
+            Assert.ThrowsAny<Exception>(() => stateMachine.Transitions[i++]);
         }
     }
 }

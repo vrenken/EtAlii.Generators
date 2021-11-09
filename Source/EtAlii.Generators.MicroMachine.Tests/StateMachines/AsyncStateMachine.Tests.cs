@@ -1,5 +1,6 @@
 ﻿namespace EtAlii.Generators.MicroMachine.Tests
 {
+    using System;
     using System.Threading.Tasks;
     using Xunit;
 
@@ -57,8 +58,8 @@
             Assert.Equal("OnState3Entered(ContinueTrigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnState3Exited(Trigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnState4Entered(Trigger trigger)", stateMachine.Transitions[i++]);
-            Assert.Equal("OnState4Entered(ContinueTrigger trigger)", stateMachine.Transitions[i]);
-            Assert.Equal(14, stateMachine.Transitions.Count);
+            Assert.Equal("OnState4Entered(ContinueTrigger trigger)", stateMachine.Transitions[i++]);
+            Assert.ThrowsAny<Exception>(() => stateMachine.Transitions[i++]);
         }
     }
 }
