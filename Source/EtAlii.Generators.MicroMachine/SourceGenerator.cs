@@ -27,7 +27,7 @@
             _stateHierarchyBuilder = new StateHierarchyBuilder(_stateFragmentHelper);
         }
 
-        protected override IParser<StateMachine> CreateParser() => new PlantUmlStateMachineParser(_lifetime, _stateHierarchyBuilder);
+        protected override IParser<StateMachine> CreateParser() => new PlantUmlStateMachineParser(_lifetime, _stateHierarchyBuilder, _stateFragmentHelper);
 
         protected override IWriterFactory<StateMachine> CreateWriterFactory() => new MicroMachineWriterFactory(_lifetime, _stateFragmentHelper);
 
@@ -39,6 +39,6 @@
 
         protected override DiagnosticDescriptor GetParsingExceptionRule() => GeneratorRule.PlantUmlStateMachineProcessingThrowsException;
 
-        protected override WriteContext<StateMachine> CreateWriteContext(StateMachine instance, IndentedTextWriter writer, string originalFileName) =>  new WriteContextFactory(_stateFragmentHelper).Create(writer, originalFileName, instance);
+        protected override WriteContext<StateMachine> CreateWriteContext(StateMachine instance, IndentedTextWriter writer, string originalFileName) =>  new WriteContextFactory().Create(writer, originalFileName, instance);
     }
 }

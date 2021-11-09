@@ -44,11 +44,7 @@
             context.Writer.WriteLine("// and cause the state machine to transition to another state.");
             context.Writer.WriteLine();
 
-            var allTriggers = _stateFragmentHelper
-                .GetAllTriggers(context.Instance.StateFragments)
-                .Distinct()
-                .ToArray();
-            foreach (var trigger in allTriggers)
+            foreach (var trigger in context.Instance.AllTriggers)
             {
                 var syncTransitions = _stateFragmentHelper.GetSyncTransitions(context.Instance.StateFragments);
                 var syncTransitionSets = _transitionConverter.ToTransitionsSetsPerTriggerAndUniqueParameters(syncTransitions, trigger);
@@ -114,13 +110,15 @@
             context.Writer.WriteLine("{");
             context.Writer.Indent += 1;
 
-            var transitions = _stateFragmentHelper.GetAllTransitions(context.Instance.StateFragments)
+            var transitions = context.Instance.AllTransitions
                 .Where(t => t.Trigger == transition.Trigger)
                 .ToArray();
 
+            var writtenCases = new List<string>();
+
             foreach (var tr in transitions)
             {
-                WriteTransitionStateCase(context, tr, namedParameters, transition.IsAsync);
+                WriteTransitionStateCase(context, tr, namedParameters, transition.IsAsync, writtenCases);
             }
 
             context.Writer.WriteLine("default:");
@@ -133,46 +131,67 @@
             context.Writer.WriteLine("}");
         }
 
-
-        private void WriteTransitionStateCase(WriteContext<StateMachine> context, Transition transition, string namedParameters, bool isAsync)
+        private void WriteTransitionStateCase(WriteContext<StateMachine> context, Transition transition, string namedParameters, bool isAsync, List<string> writtenCases)
         {
             _log
                 .ForContext("Transition", transition, true)
                 .Information("Writing transition state case for transition from {FromState} by {Trigger} to {ToState}", transition.From, transition.Trigger, transition.To);
 
-            var parentSuperState = _stateFragmentHelper.GetSuperState(context.Instance, transition.To);
-            var stateName = parentSuperState != null && transition.From == _lifetime.BeginStateName
-                ? parentSuperState.Name
-                : transition.From;
-
-            var triggerVariableName = $"trigger{stateName}";
-            var triggerTypeName = $"{transition.Trigger}Trigger";
-
-            context.Writer.WriteLine($"case State.{stateName}:");
-            context.Writer.Indent += 1;
-            context.Writer.WriteLine($"_state = State.{transition.To};");
-            context.Writer.WriteLine($"Trigger {triggerVariableName} = new {triggerTypeName}({namedParameters});");
-
-            var methodChains = _methodChainBuilder.Build(context, _stateFragmentHelper, stateName, transition.Trigger, transition.To);
+            var methodChains = _methodChainBuilder.Build(context.Instance, transition);
 
             _log
                 .ForContext("Transition", transition, true)
-                .Information("Found {MethodChainCount} method chains for transition from {FromState} by {Trigger} to {ToState}", methodChains.Length, transition.From, transition.Trigger, transition.To);
+                .Information("Found {MethodChainCount} method chains alternatives for {Trigger} in {FromState}", methodChains.Length, transition.Trigger, transition.From);
 
-            for (var i = 0; i< methodChains.Length; i++)
+            foreach(var methodChain in methodChains)
             {
-                var methodChain = methodChains[i];
-                _log
-                    .ForContext("Transition", transition, true)
-                    .Information("Writing method chain {MethodChainCount} for transition from {FromState} by {Trigger} to {ToState}", i, transition.From, transition.Trigger, transition.To);
+                if (!writtenCases.Contains(methodChain.From))
+                {
+                    writtenCases.Add(methodChain.From);
 
-                WriteExitCalls(context, isAsync, methodChain, triggerTypeName, triggerVariableName);
-                WriteEntryCalls(context, isAsync, methodChain, triggerVariableName, triggerTypeName);
+                    _log
+                        .ForContext("Transition", transition, true)
+                        .Information("Writing method chain for transition from {FromState} by {Trigger} to {ToState}", methodChain.From, transition.Trigger, methodChain.To);
+
+                    var triggerVariableName = $"trigger{methodChain.From}";
+                    var triggerTypeName = $"{transition.Trigger}Trigger";
+
+                    WriteCaseHeader(context, methodChain, triggerVariableName, triggerTypeName, namedParameters);
+
+                    WriteExitCalls(context, isAsync, methodChain, triggerTypeName, triggerVariableName);
+                    WriteEntryCalls(context, isAsync, methodChain, triggerVariableName, triggerTypeName);
+
+                    WriteCaseTail(context, methodChain, isAsync, triggerVariableName);
+
+                }
+                else
+                {
+                    _log
+                        .ForContext("Transition", transition, true)
+                        .Information("Skipping method chain for transition from {FromState} by {Trigger} to {ToState}: Already written", methodChain.From, transition.Trigger, methodChain.To);
+                }
             }
+        }
 
+        private void WriteCaseHeader(
+            WriteContext<StateMachine> context,
+            MethodChain methodChain,
+            string triggerVariableName,
+            string triggerTypeName,
+            string namedParameters)
+        {
+            context.Writer.WriteLine($"case State.{methodChain.From}:");
+            context.Writer.Indent += 1;
+            context.Writer.WriteLine($"_state = State.{methodChain.To};");
+            context.Writer.WriteLine($"Trigger {triggerVariableName} = new {triggerTypeName}({namedParameters});");
+
+        }
+
+        private void WriteCaseTail(WriteContext<StateMachine> context, MethodChain methodChain, bool isAsync, string triggerVariableName)
+        {
             var toSuperState = _stateFragmentHelper
                 .GetAllSuperStates(context.Instance.StateFragments)
-                .SingleOrDefault(ss => ss.Name == transition.To);
+                .SingleOrDefault(ss => ss.Name == methodChain.To);
             if (toSuperState != null)
             {
                 var subTransitions = toSuperState.StateFragments
@@ -212,7 +231,6 @@
             context.Writer.WriteLine("break;");
             context.Writer.Indent -= 1;
         }
-
         private void WriteEntryCalls(WriteContext<StateMachine> context, bool isAsync, MethodChain methodChain, string triggerVariableName, string triggerTypeName)
         {
             foreach (var call in methodChain.EntryCalls)

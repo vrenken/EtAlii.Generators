@@ -15,12 +15,17 @@
         private readonly string _originalFileName;
         private readonly IStateMachineLifetime _lifetime;
         private readonly StateHierarchyBuilder _stateHierarchyBuilder;
+        private readonly StateFragmentHelper _stateFragmentHelper;
 
-        public PlantUmlVisitor(string originalFileName, IStateMachineLifetime lifetime, StateHierarchyBuilder stateHierarchyBuilder)
+        public PlantUmlVisitor(string originalFileName,
+            IStateMachineLifetime lifetime,
+            StateHierarchyBuilder stateHierarchyBuilder,
+            StateFragmentHelper stateFragmentHelper)
         {
             _originalFileName = originalFileName;
             _lifetime = lifetime;
             _stateHierarchyBuilder = stateHierarchyBuilder;
+            _stateFragmentHelper = stateFragmentHelper;
         }
 
         public override object VisitState_machine(PlantUmlParser.State_machineContext context)
@@ -51,7 +56,15 @@
 
             var (hierarchicalStates, sequentialStates) = _stateHierarchyBuilder.Build(stateFragments);
 
-            return new StateMachine(realHeaders, settings, stateFragments, hierarchicalStates, sequentialStates);
+            var allTransitions = _stateFragmentHelper.GetAllTransitions(stateFragments);
+
+            var allTriggers = allTransitions
+                .Select(t => t.Trigger)
+                .OrderBy(t => t)
+                .Distinct() // That is, of course without any doubles.
+                .ToArray();
+
+            return new StateMachine(realHeaders, settings, stateFragments, hierarchicalStates, sequentialStates, allTransitions, allTriggers);
         }
 
         public override object VisitId(PlantUmlParser.IdContext context) => context.GetText();

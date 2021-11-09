@@ -51,8 +51,13 @@
                 new Transition("Second", "Third", new TransitionDetails("Continue", true), new TriggerDetails(false, Array.Empty<Parameter>()), new SourcePosition(3,0, ""))
             };
 
+            var allTransitions = Array.Empty<Transition>();
+
             var states = Array.Empty<State>();
-            var stateMachine = new StateMachine(headers, settings, fragments, states, states);
+
+            var allTriggers = Array.Empty<string>();
+
+            var stateMachine = new StateMachine(headers, settings, fragments, states, states, allTransitions, allTriggers);
             using var stringWriter = new StringWriter();
             using var indentedTriter = new IndentedTextWriter(stringWriter);
             var diagnostics = new List<Diagnostic>();

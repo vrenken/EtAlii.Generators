@@ -21,10 +21,10 @@
             var toSameStateMethodChainBuilder = new ToSameStateMethodChainBuilder(stateFragmentHelper, toDifferentStateMethodChainBuilder);
             var methodChainBuilder = new MethodChainBuilder(toDifferentStateMethodChainBuilder, toSameStateMethodChainBuilder, stateFragmentHelper, lifetime);
             var triggerMethodWriter = new TriggerMethodWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper, methodChainBuilder);
-            var transitionMethodWriter = new TransitionMethodWriter(stateFragmentHelper);
+            var transitionMethodWriter = new TransitionMethodWriter(stateFragmentHelper, methodChainBuilder);
             var transitionClassWriter = new TransitionClassWriter();
-            var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter, stateFragmentHelper);
-            var choicesWriter = new ChoicesWriter(triggerMethodWriter, stateFragmentHelper);
+            var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter);
+            var choicesWriter = new ChoicesWriter(triggerMethodWriter);
             var stateMachineClassWriter = new ClassWriter(enumWriter, transitionMethodWriter, triggerMethodWriter, triggerClassWriter, transitionClassWriter, stateFragmentHelper, parameterConverter, choicesWriter);
 
             // Act.
@@ -47,10 +47,10 @@
             var toSameStateMethodChainBuilder = new ToSameStateMethodChainBuilder(stateFragmentHelper, toDifferentStateMethodChainBuilder);
             var methodChainBuilder = new MethodChainBuilder(toDifferentStateMethodChainBuilder, toSameStateMethodChainBuilder, stateFragmentHelper, lifetime);
             var triggerMethodWriter = new TriggerMethodWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper, methodChainBuilder);
-            var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter, stateFragmentHelper);
-            var transitionMethodWriter = new TransitionMethodWriter(stateFragmentHelper);
+            var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter);
+            var transitionMethodWriter = new TransitionMethodWriter(stateFragmentHelper, methodChainBuilder);
             var transitionClassWriter = new TransitionClassWriter();
-            var choicesWriter = new ChoicesWriter(triggerMethodWriter, stateFragmentHelper);
+            var choicesWriter = new ChoicesWriter(triggerMethodWriter);
             var stateMachineClassWriter = new ClassWriter(enumWriter, transitionMethodWriter, triggerMethodWriter, triggerClassWriter, transitionClassWriter, stateFragmentHelper, parameterConverter, choicesWriter);
             var writer = new NamespaceWriter<StateMachine>(context => stateMachineClassWriter.Write(context));
             var originalFileName = "Test.puml";
@@ -73,12 +73,17 @@
                 new Transition("Second", "Third", new TransitionDetails("Continue", true), new TriggerDetails(false, Array.Empty<Parameter>()), new SourcePosition(2,0, ""))
             };
 
+            var allTransitions = Array.Empty<Transition>();
+
             var states = Array.Empty<State>();
-            var stateMachine = new StateMachine(headers, settings, fragments, states, states);
+
+            var allTriggers = Array.Empty<string>();
+
+            var stateMachine = new StateMachine(headers, settings, fragments, states, states, allTransitions, allTriggers);
 
             using var stringWriter = new StringWriter();
             using var indentedTriter = new IndentedTextWriter(stringWriter);
-            var writeContext = new WriteContextFactory(stateFragmentHelper).Create(indentedTriter, originalFileName, stateMachine);
+            var writeContext = new WriteContextFactory().Create(indentedTriter, originalFileName, stateMachine);
 
             // Act.
             writer.Write(writeContext);
@@ -102,10 +107,10 @@
             var toSameStateMethodChainBuilder = new ToSameStateMethodChainBuilder(stateFragmentHelper, toDifferentStateMethodChainBuilder);
             var methodChainBuilder = new MethodChainBuilder(toDifferentStateMethodChainBuilder, toSameStateMethodChainBuilder, stateFragmentHelper, lifetime);
             var triggerMethodWriter = new TriggerMethodWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper, methodChainBuilder);
-            var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter, stateFragmentHelper);
-            var transitionMethodWriter = new TransitionMethodWriter(stateFragmentHelper);
+            var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter);
+            var transitionMethodWriter = new TransitionMethodWriter(stateFragmentHelper, methodChainBuilder);
             var transitionClassWriter = new TransitionClassWriter();
-            var choicesWriter = new ChoicesWriter(triggerMethodWriter, stateFragmentHelper);
+            var choicesWriter = new ChoicesWriter(triggerMethodWriter);
             var stateMachineClassWriter = new ClassWriter(enumWriter, transitionMethodWriter, triggerMethodWriter, triggerClassWriter, transitionClassWriter, stateFragmentHelper, parameterConverter, choicesWriter);
             var writer = new NamespaceWriter<StateMachine>(context => stateMachineClassWriter.Write(context));
             var originalFileName = "Test.puml";
@@ -129,12 +134,17 @@
                 new Transition("Second", "Second", new TransitionDetails("Check", true), new TriggerDetails(true, new [] { new Parameter("string", "name", new SourcePosition(2,0, "")), new Parameter("Guid", "id", new SourcePosition(2,0, "")) }), new SourcePosition(2,0, ""))
             };
 
+            var allTransitions = Array.Empty<Transition>();
+
             var states = Array.Empty<State>();
-            var stateMachine = new StateMachine(headers, settings, fragments, states, states);
+
+            var allTriggers = Array.Empty<string>();
+
+            var stateMachine = new StateMachine(headers, settings, fragments, states, states, allTransitions, allTriggers);
 
             using var stringWriter = new StringWriter();
             using var indentedTriter = new IndentedTextWriter(stringWriter);
-            var writeContext = new WriteContextFactory(stateFragmentHelper).Create(indentedTriter, originalFileName, stateMachine);
+            var writeContext = new WriteContextFactory().Create(indentedTriter, originalFileName, stateMachine);
 
             // Act.
             writer.Write(writeContext);

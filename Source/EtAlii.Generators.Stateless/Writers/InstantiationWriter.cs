@@ -57,22 +57,21 @@
         {
             context.Writer.WriteLine("// Then we need to configure the state machine.");
 
-            var allStates = _stateFragmentHelper.GetAllStates(context.Instance.StateFragments);
-            foreach (var state in allStates)
+            foreach (var state in context.Instance.SequentialStates)
             {
                 WriteStateConstruction(context, state);
             }
         }
-        private void WriteStateConstruction(WriteContext<StateMachine> context, string state)
+        private void WriteStateConstruction(WriteContext<StateMachine> context, State state)
         {
-            context.Writer.WriteLine($"_stateMachine.Configure(State.{state})");
+            context.Writer.WriteLine($"_stateMachine.Configure(State.{state.Name})");
 
             var stateConfiguration = new List<string>();
 
             WriteEntryAndExitConfiguration(context, state, stateConfiguration);
             WriteInboundTransitions(context, state, stateConfiguration);
-            WriteInternalTransitions(context, state, stateConfiguration);
-            WriteOutboundTransitions(context, state, stateConfiguration);
+            WriteInternalTransitions(state, stateConfiguration);
+            WriteOutboundTransitions(state, stateConfiguration);
             WriteSuperState(context, state, stateConfiguration);
             WriteSubstate(context, state, stateConfiguration);
 
@@ -89,20 +88,20 @@
             context.Writer.WriteLine();
         }
 
-        private void WriteSubstate(WriteContext<StateMachine> context, string state, List<string> stateConfiguration)
+        private void WriteSubstate(WriteContext<StateMachine> context, State state, List<string> stateConfiguration)
         {
-            var superState = _stateFragmentHelper.GetSuperState(context.Instance, state);
+            var superState = _stateFragmentHelper.GetSuperState(context.Instance, state.Name);
             if (superState != null)
             {
                 stateConfiguration.Add($"\t.SubstateOf(State.{superState.Name})");
             }
         }
 
-        private void WriteSuperState(WriteContext<StateMachine> context, string state, List<string> stateConfiguration)
+        private void WriteSuperState(WriteContext<StateMachine> context, State state, List<string> stateConfiguration)
         {
             var superState = _stateFragmentHelper
                 .GetAllSuperStates(context.Instance.StateFragments)
-                .SingleOrDefault(s => s.Name == state);
+                .SingleOrDefault(s => s.Name == state.Name);
 
             if (superState != null)
             {
@@ -126,39 +125,38 @@
             }
         }
 
-        private void WriteEntryAndExitConfiguration(WriteContext<StateMachine> context, string state, List<string> stateConfiguration)
+        private void WriteEntryAndExitConfiguration(WriteContext<StateMachine> context, State state, List<string> stateConfiguration)
         {
-            var writeAsyncEntryConfiguration = _stateFragmentHelper.HasOnlyAsyncInboundTransitions(context.Instance, state);
+            var writeAsyncEntryConfiguration = state.HasOnlyAsyncInboundTransitions;
             if (writeAsyncEntryConfiguration)
             {
                 var line = context.Instance.GenerateTriggerChoices
-                    ? $"\t.OnEntryAsync(() => On{state}Entered(new {state}EventArgs(this)))"
-                    : $"\t.OnEntryAsync(On{state}Entered)";
+                    ? $"\t.OnEntryAsync(() => On{state.Name}Entered(new {state.Name}EventArgs(this)))"
+                    : $"\t.OnEntryAsync(On{state.Name}Entered)";
                 stateConfiguration.Add(line);
             }
             else
             {
                 var line = context.Instance.GenerateTriggerChoices
-                    ? $"\t.OnEntry(() => On{state}Entered(new {state}EventArgs(this)))"
-                    : $"\t.OnEntry(On{state}Entered)";
+                    ? $"\t.OnEntry(() => On{state.Name}Entered(new {state.Name}EventArgs(this)))"
+                    : $"\t.OnEntry(On{state.Name}Entered)";
                 stateConfiguration.Add(line);
             }
 
-            var writeAsyncExitConfiguration = _stateFragmentHelper.HasOnlyAsyncOutboundTransitions(context.Instance, state);
+            var writeAsyncExitConfiguration = state.HasOnlyAsyncOutboundTransitions;
             if (writeAsyncExitConfiguration)
             {
-                stateConfiguration.Add($"\t.OnExitAsync(On{state}Exited)");
+                stateConfiguration.Add($"\t.OnExitAsync(On{state.Name}Exited)");
             }
             else
             {
-                stateConfiguration.Add($"\t.OnExit(On{state}Exited)");
+                stateConfiguration.Add($"\t.OnExit(On{state.Name}Exited)");
             }
         }
 
-        private void WriteInternalTransitions(WriteContext<StateMachine> context, string state, List<string> stateConfiguration)
+        private void WriteInternalTransitions(State state, List<string> stateConfiguration)
         {
-            var lines = _stateFragmentHelper
-                .GetInternalTransitions(context.Instance.StateFragments, state)
+            var lines = state.InternalTransitions
                 .GroupBy(t => t.Trigger)
                 .Select(g => g.First())
                 .Select(transition =>
@@ -176,19 +174,17 @@
                 .ToArray();
             stateConfiguration.AddRange(lines);
         }
-        private void WriteOutboundTransitions(WriteContext<StateMachine> context, string state, List<string> stateConfiguration)
+        private void WriteOutboundTransitions(State state, List<string> stateConfiguration)
         {
-            var lines = _stateFragmentHelper
-                .GetOutboundTransitions(context.Instance, state)
+            var lines = state.OutboundTransitions
                 .Select(transition => $"\t.Permit(Trigger.{transition.Trigger}, State.{transition.To})")
                 .ToArray();
             stateConfiguration.AddRange(lines);
         }
 
-        private void WriteInboundTransitions(WriteContext<StateMachine> context, string state, List<string> stateConfiguration)
+        private void WriteInboundTransitions(WriteContext<StateMachine> context, State state, List<string> stateConfiguration)
         {
-            var lines = _stateFragmentHelper
-                .GetInboundTransitions(context.Instance.StateFragments, state)
+            var lines = state.InboundTransitions
                 .Select(transition =>
                 {
                     var triggerParameter = _transitionConverter.ToTriggerParameter(transition);
@@ -197,7 +193,7 @@
                     var parameters = transition.Parameters;
                     if (context.Instance.GenerateTriggerChoices)
                     {
-                        parameters = new [] { new Parameter($"", $"new {state}EventArgs(this)", transition.Source) }
+                        parameters = new [] { new Parameter($"", $"new {state.Name}EventArgs(this)", transition.Source) }
                             .Concat(parameters)
                             .ToArray();
                     }

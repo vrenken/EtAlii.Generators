@@ -23,6 +23,11 @@ namespace EtAlii.Generators.PlantUml
                 .Select(s => Build(fragments, sequentialStates, s))
                 .ToArray();
 
+            // Weird patch. No idea why this is needed.
+            sequentialStates = sequentialStates
+                .GroupBy(s => s.Name)
+                .Select(g => g.First())
+                .ToList();
 
             return (rootStates, sequentialStates.ToArray());
         }
@@ -30,13 +35,20 @@ namespace EtAlii.Generators.PlantUml
         private State Build(StateFragment[] fragments, List<State> sequentialStates, string stateName)
         {
             var length = sequentialStates.Count;
+            var allTransitions = _stateFragmentHelper
+                .GetAllTransitions(fragments)
+                .Where(t => t.From == stateName)
+                .ToArray();
+
             var state = new State
             {
                 Name = stateName,
-                AllTransitions = _stateFragmentHelper.GetAllTransitions(fragments, stateName),
+                AllTransitions = allTransitions,
                 InboundTransitions = _stateFragmentHelper.GetInboundTransitions(fragments, stateName),
                 OutboundTransitions = _stateFragmentHelper.GetOutboundTransitions(fragments, stateName),
-                InternalTransitions = _stateFragmentHelper.GetInternalTransitions(fragments, stateName),
+                InternalTransitions = allTransitions
+                    .Where(t => t.To == stateName && t.To == t.From)
+                    .ToArray(),
 
                 Children = _stateFragmentHelper
                     .GetAllSubStates(fragments, stateName)

@@ -8,20 +8,14 @@ namespace EtAlii.Generators.MicroMachine
 
     public class WriteContextFactory : IWriteContextFactory<StateMachine>
     {
-        private readonly StateFragmentHelper _stateFragmentHelper;
         private readonly ILogger _log = Log.ForContext<WriteContextFactory>();
-
-        public WriteContextFactory(StateFragmentHelper stateFragmentHelper)
-        {
-            _stateFragmentHelper = stateFragmentHelper;
-        }
 
         /// <summary>
         /// Create a context with commonly used instances and data that we can easily pass through the whole writing callstack.
         /// </summary>
         public WriteContext<StateMachine> Create(IndentedTextWriter writer, string originalFileName, StateMachine stateMachine)
         {
-            var allTransitions = _stateFragmentHelper.GetAllTransitions(stateMachine.StateFragments);
+            var allTransitions = stateMachine.AllTransitions;
             var transitionsAsText = string.Join(Environment.NewLine, allTransitions.Select(t =>
             {
                 var parameters = t.Parameters.Any()
@@ -48,7 +42,7 @@ namespace EtAlii.Generators.MicroMachine
                 .Information("Found {StateCount} states", allStates.Length);
 
             // We want to also dump all unique triggers defined in the diagram.
-            var allTriggers = _stateFragmentHelper.GetAllTriggers(stateMachine.StateFragments);
+            var allTriggers = stateMachine.AllTriggers;
             var triggersAsText = string.Join(Environment.NewLine, allTriggers.Select(t => $"- {t}"));
             _log
                 .ForContext("Triggers", triggersAsText)

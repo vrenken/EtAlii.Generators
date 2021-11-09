@@ -86,12 +86,6 @@ namespace EtAlii.Generators.PlantUml
                 .ToArray();
         }
 
-        public Transition[] GetInternalTransitions(StateFragment[] fragments, string state)
-        {
-            return GetAllTransitions(fragments)
-                .Where(t => t.To == state && t.To == t.From)
-                .ToArray();
-        }
 
         public Transition[] GetSyncTransitions(StateFragment[] fragments)
         {
@@ -107,14 +101,7 @@ namespace EtAlii.Generators.PlantUml
                 .ToArray();
         }
 
-        public Transition[] GetAllTransitions(StateFragment[] fragments, string state)
-        {
-            return GetAllTransitions(fragments)
-                .Where(t => t.From == state)
-                .ToArray();
-        }
-
-        public Transition[] GetAllTransitions(StateFragment[] fragments)
+        internal Transition[] GetAllTransitions(StateFragment[] fragments)
         {
             var transitions = fragments
                 .OfType<Transition>()

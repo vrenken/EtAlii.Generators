@@ -34,7 +34,7 @@
             var eventArgsWriter = new EventArgsWriter(methodWriter, _stateFragmentHelper);
             var fieldWriter = new FieldWriter(parameterConverter, transitionConverter, _stateFragmentHelper);
             var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter, _lifetime, _stateFragmentHelper);
-            var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter, _stateFragmentHelper);
+            var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter);
             return new NamespaceWriter<StateMachine>(context => classWriter.Write(context));
         }
     }

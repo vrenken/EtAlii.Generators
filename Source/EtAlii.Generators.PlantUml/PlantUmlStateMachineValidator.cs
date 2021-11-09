@@ -37,8 +37,7 @@ namespace EtAlii.Generators.PlantUml
 
         private void CheckForDuplicateTriggers(StateMachine stateMachine, string fullPathToFile, List<Diagnostic> diagnostics)
         {
-            var transitionsWithDuplicateTriggers = _stateFragmentHelper
-                .GetAllTransitions(stateMachine.StateFragments)
+            var transitionsWithDuplicateTriggers = stateMachine.AllTransitions
                 .GroupBy(t => t.From)
                 .SelectMany(sg =>
                 {
@@ -66,7 +65,7 @@ namespace EtAlii.Generators.PlantUml
             foreach (var superState in superStates)
             {
                 var allSubstates = _stateFragmentHelper.GetAllSubStates(superState);
-                var allTransitions = _stateFragmentHelper.GetAllTransitions(stateMachine.StateFragments);
+                var allTransitions = stateMachine.AllTransitions;
 
                 var directTransitionsToSubState = allTransitions
                     .Where(
@@ -125,8 +124,7 @@ namespace EtAlii.Generators.PlantUml
 
         private void CheckForUnnamedTriggers(StateMachine stateMachine, string fullPathToFile, List<Diagnostic> diagnostics)
         {
-            var allTransitions = _stateFragmentHelper.GetAllTransitions(stateMachine.StateFragments);
-            var transitionsWithUnnamedTrigger = allTransitions
+            var transitionsWithUnnamedTrigger = stateMachine.AllTransitions
                 .Where(t => !t.HasConcreteTriggerName)
                 .ToArray();
 
@@ -141,8 +139,7 @@ namespace EtAlii.Generators.PlantUml
 
         private void CheckForUnnamedParameters(StateMachine stateMachine, string fullPathToFile, List<Diagnostic> diagnostics)
         {
-            var allTransitions = _stateFragmentHelper.GetAllTransitions(stateMachine.StateFragments);
-            var unnamedParameters = allTransitions
+            var unnamedParameters = stateMachine.AllTransitions
                 .Where(t => t.Parameters.Any(p => !p.HasName))
                 .Select(t => t.Parameters.First(p => !p.HasName))
                 .ToArray();
@@ -158,8 +155,7 @@ namespace EtAlii.Generators.PlantUml
 
         private void CheckForStartStates(StateMachine stateMachine, string fullPathToFile, List<Diagnostic> diagnostics)
         {
-            var allTransitions = _stateFragmentHelper.GetAllTransitions(stateMachine.StateFragments);
-            var startStates = allTransitions
+            var startStates = stateMachine.AllTransitions
                 .Where(t => t.From == _lifetime.BeginStateName)
                 .ToArray();
             if (startStates.Length == 0)

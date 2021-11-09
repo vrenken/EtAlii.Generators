@@ -103,7 +103,7 @@ namespace EtAlii.Generators.PlantUml
             return allStates;
         }
 
-        public string[] GetAllStates(StateFragment[] fragments)
+        internal string[] GetAllStates(StateFragment[] fragments)
         {
             var transitionStates = GetAllTransitions(fragments)
                 .SelectMany(t => new[] { t.From, t.To })

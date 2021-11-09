@@ -22,9 +22,9 @@
 
             if(context.Instance.GenerateTriggerChoices)
             {
-                var allStates = _stateFragmentHelper
-                    .GetAllStates(context.Instance.StateFragments)
-                    .ToArray();
+                var allStates = context.Instance.SequentialStates
+                        .Select(s => s.Name)
+                        .ToArray();
 
                 foreach (var state in allStates)
                 {

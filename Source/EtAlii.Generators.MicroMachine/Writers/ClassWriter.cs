@@ -70,8 +70,8 @@
             _triggerClassWriter.WriteTriggerClasses(context);
             context.Writer.WriteLine();
 
-            var allStates = context.Instance
-                .SequentialStates.Select(s => s.Name)
+            var allStates = context.Instance.SequentialStates
+                .Select(s => s.Name)
                 .ToArray();
             _enumWriter.Write(context, new []{ "Of course each state machine needs a set of states."}, "State", allStates);
             context.Writer.WriteLine();
@@ -94,12 +94,12 @@
             {
                 foreach (var state in context.Instance.SequentialStates)
                 {
-                    context.Writer.WriteLine($"private readonly {context.Instance.ClassName}.{state.Name}Choices _{_parameterConverter.ToCamelCase(state)}Choices;");
+                    context.Writer.WriteLine($"private readonly {context.Instance.ClassName}.{state.Name}Choices _{_parameterConverter.ToCamelCase(state.Name)}Choices;");
                 }
             }
-
             context.Writer.WriteLine();
         }
+
         private void WriteConstuctor(WriteContext<StateMachine> context)
         {
             _log.Information("Writing constructor for {ClassName}", context.Instance.ClassName);

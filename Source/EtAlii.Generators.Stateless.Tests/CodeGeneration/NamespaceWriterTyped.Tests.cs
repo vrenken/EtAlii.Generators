@@ -21,7 +21,7 @@
             var eventArgsWriter = new EventArgsWriter(methodWriter, stateFragmentHelper);
             var fieldWriter = new FieldWriter(parameterConverter, transitionConverter, stateFragmentHelper);
             var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper);
-            var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter, stateFragmentHelper);
+            var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter);
 
             // Act.
             var writer = new NamespaceWriter<StateMachine>(context => classWriter.Write(context));
@@ -43,7 +43,7 @@
             var eventArgsWriter = new EventArgsWriter(methodWriter, stateFragmentHelper);
             var fieldWriter = new FieldWriter(parameterConverter, transitionConverter, stateFragmentHelper);
             var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper);
-            var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter, stateFragmentHelper);
+            var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter);
             var writer = new NamespaceWriter<StateMachine>(context => classWriter.Write(context));
             var originalFileName = "Test.puml";
 
@@ -65,13 +65,17 @@
                 new Transition("Second", "Third", new TransitionDetails("Continue", true), new TriggerDetails(false, Array.Empty<Parameter>()), new SourcePosition(2,0, ""))
             };
 
+            var allTransitions = Array.Empty<Transition>();
+
             var states = Array.Empty<State>();
 
-            var stateMachine = new StateMachine(headers, settings, fragments, states, states);
+            var allTriggers = Array.Empty<string>();
+
+            var stateMachine = new StateMachine(headers, settings, fragments, states, states, allTransitions, allTriggers);
 
             using var stringWriter = new StringWriter();
             using var indentedTextWriter = new IndentedTextWriter(stringWriter);
-            var writeContext = new WriteContextFactory(stateFragmentHelper).Create(indentedTextWriter, originalFileName, stateMachine);
+            var writeContext = new WriteContextFactory().Create(indentedTextWriter, originalFileName, stateMachine);
 
             // Act.
             writer.Write(writeContext);
@@ -95,7 +99,7 @@
             var eventArgsWriter = new EventArgsWriter(methodWriter, stateFragmentHelper);
             var fieldWriter = new FieldWriter(parameterConverter, transitionConverter, stateFragmentHelper);
             var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper);
-            var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter, stateFragmentHelper);
+            var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter);
             var writer = new NamespaceWriter<StateMachine>(context => classWriter.Write(context));
             var originalFileName = "Test.puml";
 
@@ -118,13 +122,17 @@
                 new Transition("Second", "Second", new TransitionDetails("Check", true), new TriggerDetails(true, new [] { new Parameter("string", "name", new SourcePosition(2,0, "")), new Parameter("Guid", "id", new SourcePosition(2,0, "")) }), new SourcePosition(2,0, ""))
             };
 
+            var allTransitions = Array.Empty<Transition>();
+
             var states = Array.Empty<State>();
 
-            var stateMachine = new StateMachine(headers, settings, fragments, states, states);
+            var allTriggers = Array.Empty<string>();
+
+            var stateMachine = new StateMachine(headers, settings, fragments, states, states, allTransitions, allTriggers);
 
             using var stringWriter = new StringWriter();
             using var indentedTextWriter = new IndentedTextWriter(stringWriter);
-            var writeContext = new WriteContextFactory(stateFragmentHelper).Create(indentedTextWriter, originalFileName, stateMachine);
+            var writeContext = new WriteContextFactory().Create(indentedTextWriter, originalFileName, stateMachine);
 
             // Act.
             writer.Write(writeContext);

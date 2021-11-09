@@ -54,13 +54,26 @@
         /// </summary>
         public State[] SequentialStates { get; }
 
-        public StateMachine(Header[] headers, Setting[] settings, StateFragment[] stateFragments, State[] hierarchicalStates, State[] sequentialStates)
+        public Transition[] AllTransitions { get; }
+
+        public string[] AllTriggers { get; }
+
+        public StateMachine(
+            Header[] headers,
+            Setting[] settings,
+            StateFragment[] stateFragments,
+            State[] hierarchicalStates,
+            State[] sequentialStates,
+            Transition[] allTransitions,
+            string[] allTriggers)
         {
             Headers = headers;
             Settings = settings;
             StateFragments = stateFragments;
             HierarchicalStates = hierarchicalStates;
             SequentialStates = sequentialStates;
+            AllTransitions = allTransitions;
+            AllTriggers = allTriggers;
 
             ClassName = Settings
                 .OfType<ClassNameSetting>()
