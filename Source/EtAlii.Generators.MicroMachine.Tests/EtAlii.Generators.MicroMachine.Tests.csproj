@@ -5,8 +5,8 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <ProjectGuid>b64c238d-208e-453b-84eb-ce4ffa058d12</ProjectGuid>
-    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-    <CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)\$(Configuration)\.etalii</CompilerGeneratedFilesOutputPath>
+<!--    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>-->
+<!--    <CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)\$(Configuration)\.etalii</CompilerGeneratedFilesOutputPath>-->
     <NoWarn>SL1006,SL1004</NoWarn>
   </PropertyGroup>
 
