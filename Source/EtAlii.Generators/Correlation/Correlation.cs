@@ -28,21 +28,6 @@
             Items = Items.SetItem(key, value);
         }
 
-        private Correlation(string key, bool thrownIfNotExists)
-        {
-            _bookmark = Items;
-            if (thrownIfNotExists && !Items.ContainsKey(key))
-            {
-                throw new InvalidOperationException($"{key} is not being correlated - can't remove key from current scope");
-            }
-            _relatedDisposables.Push(LogContext.Suspend());
-            Items = Items.Remove(key);
-            foreach(var pair in Items)
-            {
-                _relatedDisposables.Push(LogContext.PushProperty(pair.Key, pair.Value));
-            }
-        }
-
         //Used for suspension
         private Correlation()
         {
@@ -63,7 +48,7 @@
 
         public static Correlation Begin(string correlationKey, bool thrownIfExists = true)
         {
-            return Begin(correlationKey, ShortId.GetId(), thrownIfExists);
+            return Begin(correlationKey, null, thrownIfExists);
         }
 
         public static Correlation Begin(string correlationKey, string value, bool thrownIfExists = true)
