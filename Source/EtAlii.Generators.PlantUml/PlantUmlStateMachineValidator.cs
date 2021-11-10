@@ -61,8 +61,7 @@ namespace EtAlii.Generators.PlantUml
 
         private void CheckSubstatesEntryTransition(StateMachine stateMachine, string fullPathToFile, List<Diagnostic> diagnostics)
         {
-            var superStates = _stateFragmentHelper.GetAllSuperStates(stateMachine.StateFragments);
-            foreach (var superState in superStates)
+            foreach (var superState in stateMachine.AllSuperStates)
             {
                 var allSubstates = _stateFragmentHelper.GetAllSubStates(superState);
                 var allTransitions = stateMachine.AllTransitions;

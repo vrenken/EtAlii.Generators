@@ -57,7 +57,9 @@
 
             var allTriggers = Array.Empty<string>();
 
-            var stateMachine = new StateMachine(headers, settings, fragments, states, states, allTransitions, allTriggers);
+            var allSuperStates = Array.Empty<SuperState>();
+
+            var stateMachine = new StateMachine(headers, settings, fragments, states, states, allTransitions, allTriggers, allSuperStates);
             using var stringWriter = new StringWriter();
             using var indentedTriter = new IndentedTextWriter(stringWriter);
             var diagnostics = new List<Diagnostic>();

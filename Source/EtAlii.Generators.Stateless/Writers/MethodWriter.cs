@@ -9,12 +9,10 @@
     {
         private readonly ParameterConverter _parameterConverter;
         private readonly TransitionConverter _transitionConverter;
-        private readonly StateFragmentHelper _stateFragmentHelper;
 
-        public MethodWriter(ParameterConverter parameterConverter, TransitionConverter transitionConverter, StateFragmentHelper stateFragmentHelper)
+        public MethodWriter(ParameterConverter parameterConverter, TransitionConverter transitionConverter)
         {
             _transitionConverter = transitionConverter;
-            _stateFragmentHelper = stateFragmentHelper;
             _parameterConverter = parameterConverter;
         }
 
@@ -33,13 +31,11 @@
 
             foreach (var trigger in context.Instance.AllTriggers)
             {
-                var syncTransitions = _stateFragmentHelper.GetSyncTransitions(context.Instance.StateFragments);
-                var syncTransitionSets = _transitionConverter.ToTransitionsSetsPerTriggerAndUniqueParameters(syncTransitions, trigger);
+                var syncTransitionSets = _transitionConverter.ToTransitionsSetsPerTriggerAndUniqueParameters(context.Instance.SyncTransitions, trigger);
                 var syncWrite = new Func<string, string, string, string, string, string>((triggerName, typedParameters, genericParameters, triggerParameter, namedParameters) => $"public void {triggerName}({typedParameters}) => _stateMachine.Fire{genericParameters}({triggerParameter}{namedParameters});");
                 WriteTriggerMethods(context, syncTransitionSets, "sync", syncWrite);
 
-                var asyncTransitions = _stateFragmentHelper.GetAsyncTransitions(context.Instance.StateFragments);
-                var asyncTransitionSets = _transitionConverter.ToTransitionsSetsPerTriggerAndUniqueParameters(asyncTransitions, trigger);
+                var asyncTransitionSets = _transitionConverter.ToTransitionsSetsPerTriggerAndUniqueParameters(context.Instance.AsyncTransitions, trigger);
                 var asyncWrite = new Func<string, string, string, string, string, string>((triggerName, typedParameters, genericParameters, triggerParameter, namedParameters) => $"public Task {triggerName}Async({typedParameters}) => _stateMachine.FireAsync{genericParameters}({triggerParameter}{namedParameters});");
                 WriteTriggerMethods(context, asyncTransitionSets, "async", asyncWrite);
             }

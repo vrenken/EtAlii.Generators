@@ -51,6 +51,5 @@ namespace EtAlii.Generators.MicroMachine.Tests
         protected override void OnSubState2Entered(ContinueTrigger trigger, SubState2Choices choices) => LogTransition(typeof(ContinueTrigger));
 
         protected override void OnSubState2Exited(Trigger trigger) => LogTransition(typeof(Trigger));
-
     }
 }

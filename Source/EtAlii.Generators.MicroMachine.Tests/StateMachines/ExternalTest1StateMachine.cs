@@ -168,5 +168,59 @@ namespace EtAlii.Generators.MicroMachine.Tests
         private partial void OnWaitUntilCoinSoldInUsdtTransferEntered(ContinueTrigger trigger, WaitUntilCoinSoldInUsdtTransferChoices choices) => LogTransition(typeof(ContinueTrigger));
 
         private partial void OnWaitUntilCoinSoldInUsdtTransferExited(WaitUntilCoinSoldInUsdtTransferTo_IdleTrigger trigger) => LogTransition(typeof(WaitUntilCoinSoldInUsdtTransferTo_IdleTrigger));
+
+        private partial void On_IdleExited(ContinueTrigger trigger) => LogTransition(typeof(Trigger));
+
+        private partial void On_IdleExited(_IdleToSellCurrentCoinInUsdtTransferTrigger trigger) => LogTransition(typeof(_IdleToSellCurrentCoinInUsdtTransferTrigger));
+
+        private partial void On_IdleExited(_IdleToBuyCurrentCoinInUsdtTransferTrigger trigger) => LogTransition(typeof(_IdleToBuyCurrentCoinInUsdtTransferTrigger));
+
+        private partial void On_IdleExited(_IdleToDetermineSymbolPairTrigger trigger) => LogTransition(typeof(_IdleToDetermineSymbolPairTrigger));
+
+        private partial void OnBuyOtherCoinExited(_IdleToDetermineSymbolPairTrigger trigger) => LogTransition(typeof(_IdleToDetermineSymbolPairTrigger));
+
+        private partial void OnDetermineSymbolPairExited(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
+
+        private partial void OnDetermineSymbolPairExited(_IdleToDetermineSymbolPairTrigger trigger) => LogTransition(typeof(_IdleToDetermineSymbolPairTrigger));
+
+        private partial void OnSellCurrentCoinExited(_IdleToDetermineSymbolPairTrigger trigger) => LogTransition(typeof(_IdleToDetermineSymbolPairTrigger));
+
+        private partial void OnSellAsSymbolPairExited(_IdleToDetermineSymbolPairTrigger trigger) => LogTransition(typeof(_IdleToDetermineSymbolPairTrigger));
+
+        private partial void OnWaitUntilCoinBoughtExited(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
+
+        private partial void OnWaitUntilCoinBoughtExited(_IdleToDetermineSymbolPairTrigger trigger) => LogTransition(typeof(_IdleToDetermineSymbolPairTrigger));
+
+        private partial void OnWaitUntilCoinSoldExited(_IdleToDetermineSymbolPairTrigger trigger) => LogTransition(typeof(_IdleToDetermineSymbolPairTrigger));
+
+        private partial void OnBuyCurrentCoinInUsdtTransferExited(_IdleToBuyCurrentCoinInUsdtTransferTrigger trigger) => LogTransition(typeof(_IdleToBuyCurrentCoinInUsdtTransferTrigger));
+
+        private partial void OnSellCurrentCoinInUsdtTransferExited(_IdleToSellCurrentCoinInUsdtTransferTrigger trigger) => LogTransition(typeof(_IdleToSellCurrentCoinInUsdtTransferTrigger));
+
+        private partial void OnWaitUntilCoinBoughtInUsdtTransferExited(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
+
+        private partial void OnWaitUntilCoinBoughtInUsdtTransferExited(_IdleToBuyCurrentCoinInUsdtTransferTrigger trigger) => LogTransition(typeof(_IdleToBuyCurrentCoinInUsdtTransferTrigger));
+
+        private partial void OnWaitUntilCoinSoldAsSymbolPairExited(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
+
+        private partial void OnWaitUntilCoinSoldAsSymbolPairExited(_IdleToDetermineSymbolPairTrigger trigger) => LogTransition(typeof(_IdleToDetermineSymbolPairTrigger));
+
+        private partial void OnWaitUntilCoinSoldInUsdtTransferExited(ContinueTrigger trigger) => LogTransition(typeof(ContinueTrigger));
+
+        private partial void OnWaitUntilCoinSoldInUsdtTransferExited(_IdleToSellCurrentCoinInUsdtTransferTrigger trigger) => LogTransition(typeof(_IdleToSellCurrentCoinInUsdtTransferTrigger));
+
+        private partial void OnTransferFromUsdtEntered(_IdleToBuyCurrentCoinInUsdtTransferTrigger trigger, TransferFromUsdtChoices choices) => LogTransition(typeof(_IdleToBuyCurrentCoinInUsdtTransferTrigger));
+
+        private partial void OnTransferFromUsdtExited(WaitUntilCoinBoughtInUsdtTransferTo_IdleTrigger trigger) => LogTransition(typeof(WaitUntilCoinBoughtInUsdtTransferTo_IdleTrigger));
+
+        private partial void OnTransferToUsdtEntered(_IdleToSellCurrentCoinInUsdtTransferTrigger trigger, TransferToUsdtChoices choices) => LogTransition(typeof(_IdleToSellCurrentCoinInUsdtTransferTrigger));
+
+        private partial void OnTransferToUsdtExited(WaitUntilCoinSoldInUsdtTransferTo_IdleTrigger trigger) => LogTransition(typeof(WaitUntilCoinSoldInUsdtTransferTo_IdleTrigger));
+
+        private partial void OnTransferToOtherCoinEntered(_IdleToDetermineSymbolPairTrigger trigger, TransferToOtherCoinChoices choices) => LogTransition(typeof(_IdleToDetermineSymbolPairTrigger));
+
+        private partial void OnTransferToOtherCoinExited(WaitUntilCoinBoughtTo_IdleTrigger trigger) => LogTransition(typeof(WaitUntilCoinBoughtTo_IdleTrigger));
+
+        private partial void OnTransferToOtherCoinExited(WaitUntilCoinSoldAsSymbolPairTo_IdleTrigger trigger) => LogTransition(typeof(WaitUntilCoinSoldAsSymbolPairTo_IdleTrigger));
     }
 }

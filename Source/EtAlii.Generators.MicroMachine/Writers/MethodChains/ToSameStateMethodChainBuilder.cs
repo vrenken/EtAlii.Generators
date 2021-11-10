@@ -7,34 +7,30 @@ namespace EtAlii.Generators.MicroMachine
 
     public class ToSameStateMethodChainBuilder
     {
-        private readonly StateFragmentHelper _stateFragmentHelper;
         private readonly ToDifferentStateMethodChainBuilder _toDifferentStateMethodChainBuilder;
 
-        public ToSameStateMethodChainBuilder(StateFragmentHelper stateFragmentHelper, ToDifferentStateMethodChainBuilder toDifferentStateMethodChainBuilder)
+        public ToSameStateMethodChainBuilder(ToDifferentStateMethodChainBuilder toDifferentStateMethodChainBuilder)
         {
-            _stateFragmentHelper = stateFragmentHelper;
             _toDifferentStateMethodChainBuilder = toDifferentStateMethodChainBuilder;
         }
 
-        public MethodChain[] Build(StateMachine stateMachine, string state)
+        public MethodChain[] Build(StateMachine stateMachine, State state)
         {
             var result = new List<MethodChain>();
 
             var methodChain = BuildForSameState(state);
             result.Add(methodChain);
 
-            var allSubFromStates = _stateFragmentHelper.GetAllSubStates(stateMachine, state);
-
-            foreach (var subFromState in allSubFromStates)
+            foreach (var childState in state.AllChildren)
             {
-                var subMethodChain = _toDifferentStateMethodChainBuilder.BuildForOneSingleSourceState(stateMachine, subFromState, state);
+                var subMethodChain = _toDifferentStateMethodChainBuilder.BuildForOneSingleSourceState(stateMachine, childState, state);
                 result.Add(subMethodChain);
             }
 
             return result.ToArray();
         }
 
-        private MethodChain BuildForSameState(string state)
+        private MethodChain BuildForSameState(State state)
         {
             var exitCalls = new List<MethodCall>();
             var entryCalls = new List<MethodCall>();

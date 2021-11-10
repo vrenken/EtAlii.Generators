@@ -18,9 +18,9 @@
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
             var toDifferentStateMethodChainBuilder = new ToDifferentStateMethodChainBuilder(stateFragmentHelper);
-            var toSameStateMethodChainBuilder = new ToSameStateMethodChainBuilder(stateFragmentHelper, toDifferentStateMethodChainBuilder);
+            var toSameStateMethodChainBuilder = new ToSameStateMethodChainBuilder(toDifferentStateMethodChainBuilder);
             var methodChainBuilder = new MethodChainBuilder(toDifferentStateMethodChainBuilder, toSameStateMethodChainBuilder, stateFragmentHelper, lifetime);
-            var triggerMethodWriter = new TriggerMethodWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper, methodChainBuilder);
+            var triggerMethodWriter = new TriggerMethodWriter(parameterConverter, transitionConverter, lifetime, methodChainBuilder);
             var transitionMethodWriter = new TransitionMethodWriter(methodChainBuilder);
             var transitionClassWriter = new TransitionClassWriter();
             var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter);
@@ -44,9 +44,9 @@
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
             var toDifferentStateMethodChainBuilder = new ToDifferentStateMethodChainBuilder(stateFragmentHelper);
-            var toSameStateMethodChainBuilder = new ToSameStateMethodChainBuilder(stateFragmentHelper, toDifferentStateMethodChainBuilder);
+            var toSameStateMethodChainBuilder = new ToSameStateMethodChainBuilder(toDifferentStateMethodChainBuilder);
             var methodChainBuilder = new MethodChainBuilder(toDifferentStateMethodChainBuilder, toSameStateMethodChainBuilder, stateFragmentHelper, lifetime);
-            var triggerMethodWriter = new TriggerMethodWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper, methodChainBuilder);
+            var triggerMethodWriter = new TriggerMethodWriter(parameterConverter, transitionConverter, lifetime, methodChainBuilder);
             var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter);
             var transitionMethodWriter = new TransitionMethodWriter(methodChainBuilder);
             var transitionClassWriter = new TransitionClassWriter();
@@ -79,7 +79,9 @@
 
             var allTriggers = Array.Empty<string>();
 
-            var stateMachine = new StateMachine(headers, settings, fragments, states, states, allTransitions, allTriggers);
+            var allSuperStates = Array.Empty<SuperState>();
+
+            var stateMachine = new StateMachine(headers, settings, fragments, states, states, allTransitions, allTriggers, allSuperStates);
 
             using var stringWriter = new StringWriter();
             using var indentedTriter = new IndentedTextWriter(stringWriter);
@@ -104,9 +106,9 @@
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
             var toDifferentStateMethodChainBuilder = new ToDifferentStateMethodChainBuilder(stateFragmentHelper);
-            var toSameStateMethodChainBuilder = new ToSameStateMethodChainBuilder(stateFragmentHelper, toDifferentStateMethodChainBuilder);
+            var toSameStateMethodChainBuilder = new ToSameStateMethodChainBuilder(toDifferentStateMethodChainBuilder);
             var methodChainBuilder = new MethodChainBuilder(toDifferentStateMethodChainBuilder, toSameStateMethodChainBuilder, stateFragmentHelper, lifetime);
-            var triggerMethodWriter = new TriggerMethodWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper, methodChainBuilder);
+            var triggerMethodWriter = new TriggerMethodWriter(parameterConverter, transitionConverter, lifetime, methodChainBuilder);
             var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter);
             var transitionMethodWriter = new TransitionMethodWriter(methodChainBuilder);
             var transitionClassWriter = new TransitionClassWriter();
@@ -140,7 +142,9 @@
 
             var allTriggers = Array.Empty<string>();
 
-            var stateMachine = new StateMachine(headers, settings, fragments, states, states, allTransitions, allTriggers);
+            var allSuperStates = Array.Empty<SuperState>();
+
+            var stateMachine = new StateMachine(headers, settings, fragments, states, states, allTransitions, allTriggers, allSuperStates);
 
             using var stringWriter = new StringWriter();
             using var indentedTriter = new IndentedTextWriter(stringWriter);

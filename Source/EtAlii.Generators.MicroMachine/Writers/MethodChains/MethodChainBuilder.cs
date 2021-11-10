@@ -1,6 +1,7 @@
 ﻿namespace EtAlii.Generators.MicroMachine
 {
     using System.Collections.Generic;
+    using System.Linq;
     using EtAlii.Generators.PlantUml;
     using Serilog;
 
@@ -32,11 +33,12 @@
             if (!_methodChains.TryGetValue(transition, out var methodChains))
             {
                 var parentSuperState = _stateFragmentHelper.GetSuperState(stateMachine, transition.To);
-                var fromState = parentSuperState != null && transition.From == _lifetime.BeginStateName
+                var fromStateName = parentSuperState != null && transition.From == _lifetime.BeginStateName
                     ? parentSuperState.Name
                     : transition.From;
                 var trigger = transition.Trigger;
-                var toState = transition.To;
+                var fromState = stateMachine.SequentialStates.Single(s => s.Name == fromStateName);
+                var toState = stateMachine.SequentialStates.Single(s => s.Name == transition.To);
 
                 _log.Information("Building method chain for transition from {FromState} by {Trigger} to {ToState}", fromState, trigger, toState);
 

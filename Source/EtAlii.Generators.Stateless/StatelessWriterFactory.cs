@@ -30,7 +30,7 @@
             var parameterConverter = new ParameterConverter();
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
-            var methodWriter = new MethodWriter(parameterConverter, transitionConverter, _stateFragmentHelper);
+            var methodWriter = new MethodWriter(parameterConverter, transitionConverter);
             var eventArgsWriter = new EventArgsWriter(methodWriter);
             var fieldWriter = new FieldWriter(parameterConverter, transitionConverter, _stateFragmentHelper);
             var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter, _lifetime, _stateFragmentHelper);

@@ -17,7 +17,7 @@
             var parameterConverter = new ParameterConverter();
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
-            var methodWriter = new MethodWriter(parameterConverter, transitionConverter, stateFragmentHelper);
+            var methodWriter = new MethodWriter(parameterConverter, transitionConverter);
             var eventArgsWriter = new EventArgsWriter(methodWriter);
             var fieldWriter = new FieldWriter(parameterConverter, transitionConverter, stateFragmentHelper);
             var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper);
@@ -39,7 +39,7 @@
             var parameterConverter = new ParameterConverter();
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
-            var methodWriter = new MethodWriter(parameterConverter, transitionConverter, stateFragmentHelper);
+            var methodWriter = new MethodWriter(parameterConverter, transitionConverter);
             var eventArgsWriter = new EventArgsWriter(methodWriter);
             var fieldWriter = new FieldWriter(parameterConverter, transitionConverter, stateFragmentHelper);
             var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper);
@@ -71,7 +71,9 @@
 
             var allTriggers = Array.Empty<string>();
 
-            var stateMachine = new StateMachine(headers, settings, fragments, states, states, allTransitions, allTriggers);
+            var allSuperStates = Array.Empty<SuperState>();
+
+            var stateMachine = new StateMachine(headers, settings, fragments, states, states, allTransitions, allTriggers, allSuperStates);
 
             using var stringWriter = new StringWriter();
             using var indentedTextWriter = new IndentedTextWriter(stringWriter);
@@ -95,7 +97,7 @@
             var parameterConverter = new ParameterConverter();
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
-            var methodWriter = new MethodWriter(parameterConverter, transitionConverter, stateFragmentHelper);
+            var methodWriter = new MethodWriter(parameterConverter, transitionConverter);
             var eventArgsWriter = new EventArgsWriter(methodWriter);
             var fieldWriter = new FieldWriter(parameterConverter, transitionConverter, stateFragmentHelper);
             var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper);
@@ -128,7 +130,9 @@
 
             var allTriggers = Array.Empty<string>();
 
-            var stateMachine = new StateMachine(headers, settings, fragments, states, states, allTransitions, allTriggers);
+            var allSuperStates = Array.Empty<SuperState>();
+
+            var stateMachine = new StateMachine(headers, settings, fragments, states, states, allTransitions, allTriggers, allSuperStates);
 
             using var stringWriter = new StringWriter();
             using var indentedTextWriter = new IndentedTextWriter(stringWriter);

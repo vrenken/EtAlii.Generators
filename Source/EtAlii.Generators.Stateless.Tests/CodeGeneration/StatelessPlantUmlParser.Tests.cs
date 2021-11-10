@@ -11,7 +11,7 @@
             // Arrange.
             var lifetime = new StatelessMachineLifetime();
             var stateFragmentHelper = new StateFragmentHelper(lifetime);
-            var stateHierarchyBuilder = new StateHierarchyBuilder(stateFragmentHelper);
+            var stateHierarchyBuilder = new StateHierarchyBuilder(stateFragmentHelper, lifetime);
 
             // Act.
             var parser = new PlantUmlStateMachineParser(lifetime, stateHierarchyBuilder, stateFragmentHelper);
@@ -27,7 +27,7 @@
             // Arrange.
             var lifetime = new StatelessMachineLifetime();
             var stateFragmentHelper = new StateFragmentHelper(lifetime);
-            var stateHierarchyBuilder = new StateHierarchyBuilder(stateFragmentHelper);
+            var stateHierarchyBuilder = new StateHierarchyBuilder(stateFragmentHelper, lifetime);
             var parser = new PlantUmlStateMachineParser(lifetime, stateHierarchyBuilder, stateFragmentHelper);
 
             var text = @"@startuml
@@ -68,7 +68,7 @@ State4 : This is the final state
             // Arrange.
             var lifetime = new StatelessMachineLifetime();
             var stateFragmentHelper = new StateFragmentHelper(lifetime);
-            var stateHierarchyBuilder = new StateHierarchyBuilder(stateFragmentHelper);
+            var stateHierarchyBuilder = new StateHierarchyBuilder(stateFragmentHelper, lifetime);
             var parser = new PlantUmlStateMachineParser(lifetime, stateHierarchyBuilder, stateFragmentHelper);
 
             var text = @"@startuml

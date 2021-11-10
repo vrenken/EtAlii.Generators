@@ -99,8 +99,7 @@
 
         private void WriteSuperState(WriteContext<StateMachine> context, State state, List<string> stateConfiguration)
         {
-            var superState = _stateFragmentHelper
-                .GetAllSuperStates(context.Instance.StateFragments)
+            var superState = context.Instance.AllSuperStates
                 .SingleOrDefault(s => s.Name == state.Name);
 
             if (superState != null)

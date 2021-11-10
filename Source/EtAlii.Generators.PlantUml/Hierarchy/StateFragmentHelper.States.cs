@@ -1,6 +1,5 @@
 namespace EtAlii.Generators.PlantUml
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -27,23 +26,9 @@ namespace EtAlii.Generators.PlantUml
             return result.ToArray();
         }
 
-        private readonly Dictionary<StateFragment[], SuperState[]> _allSuperStates = new ();
-        public SuperState[] GetAllSuperStates(StateFragment[] fragments)
-        {
-            if(!_allSuperStates.TryGetValue(fragments, out var superStates))
-            {
-                _allSuperStates[fragments] = superStates = fragments
-                    .OfType<SuperState>()
-                    .SelectMany(ss => GetAllSuperStates(ss.StateFragments).Concat(new[] {ss}))
-                    .ToArray();
+        public SuperState GetSuperState(StateMachine stateMachine, string substate) => GetSuperState(stateMachine.AllSuperStates, substate);
 
-            }
-            return superStates;
-        }
-
-        public SuperState GetSuperState(StateMachine stateMachine, string substate) => GetSuperState(stateMachine.StateFragments, substate);
-
-        internal SuperState GetSuperState(StateFragment[] fragments, string substate)
+        internal SuperState GetSuperState(SuperState[] allSuperStates, string substate)
         {
             _log.Debug("Finding super state for: {SubState}", substate);
             if (substate == _lifetime.BeginStateName || substate == _lifetime.EndStateName)
@@ -51,7 +36,7 @@ namespace EtAlii.Generators.PlantUml
                 return null;
             }
 
-            var superState = GetAllSuperStates(fragments)
+            var superState = allSuperStates
                 .SingleOrDefault(ss =>
                 {
                     var isDefined = ss.StateFragments.OfType<StateDescription>().Any(sd => sd.State == substate);
@@ -61,17 +46,6 @@ namespace EtAlii.Generators.PlantUml
                     return isDefined || isSuperState || isOutbound || isInbound;
                 });
             return superState?.Name != substate ? superState : null;
-        }
-
-        public string[] GetAllSubStates(StateMachine stateMachine, string stateName) => GetAllSubStates(stateMachine.StateFragments, stateName);
-
-        internal string[] GetAllSubStates(StateFragment[] fragments, string stateName)
-        {
-            var superState = GetAllSuperStates(fragments)
-                .SingleOrDefault(ss => ss.Name == stateName);
-            return superState != null
-                ? GetAllSubStates(superState).Except(new [] { stateName }).ToArray()
-                : Array.Empty<string>();
         }
 
         public string[] GetAllSubStates(SuperState superState)

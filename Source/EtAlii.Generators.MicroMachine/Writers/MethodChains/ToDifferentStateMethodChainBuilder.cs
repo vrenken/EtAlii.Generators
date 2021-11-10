@@ -16,7 +16,7 @@
             _stateFragmentHelper = stateFragmentHelper;
         }
 
-        public MethodChain[] Build(StateMachine stateMachine, string fromState, string toState)
+        public MethodChain[] Build(StateMachine stateMachine, State fromState, State toState)
         {
             var result = new List<MethodChain>();
 
@@ -24,17 +24,16 @@
             var methodChain = BuildForOneSingleSourceState(stateMachine, fromState, toState);
             result.Add(methodChain);
 
-            var allSubFromStates = _stateFragmentHelper.GetAllSubStates(stateMachine, fromState);
-
-            foreach (var subFromStates in allSubFromStates)
+            foreach (var childState in fromState.AllChildren)
             {
-                var subMethodChain = BuildForOneSingleSourceState(stateMachine, subFromStates, toState);
+                var subMethodChain = BuildForOneSingleSourceState(stateMachine, childState, toState);
                 result.Add(subMethodChain);
             }
+
             return result.ToArray();
         }
 
-        public MethodChain BuildForOneSingleSourceState(StateMachine stateMachine, string fromState, string toState)
+        public MethodChain BuildForOneSingleSourceState(StateMachine stateMachine, State fromState, State toState)
         {
             var exitCalls = new List<MethodCall>();
             var entryCalls = new List<MethodCall>();
@@ -49,21 +48,23 @@
             // 6. - Reverse the order.
 
             // 1. - Find the biggest shared superstate / or the complete state machine.
-            var fromParents = _stateFragmentHelper.GetAllSuperStates(stateMachine, fromState);
+            var fromParents = _stateFragmentHelper.GetAllSuperStates(stateMachine, fromState.Name);
 
             var parentStates = fromParents.Any()
                 ? string.Join(", ", fromParents.Select(s => s.Name).ToArray())
                 : "[NONE]";
             _log.Debug("Acquired all superstates for {FromState}: {ParentStates}", fromState, parentStates);
 
-            var toParents = _stateFragmentHelper.GetAllSuperStates(stateMachine, toState);
+            var toParents = _stateFragmentHelper.GetAllSuperStates(stateMachine, toState.Name);
             parentStates = toParents.Any()
                 ? string.Join(", ", toParents.Select(s => s.Name).ToArray())
                 : "[NONE]";
             _log.Debug("Acquired all superstates for {ToState}: {ParentStates}", toState, parentStates);
 
-            var toIsChildOfFrom = toParents.Any(toParent => toParent.Name == fromState);
-            var fromIsChildOfTo = fromParents.Any(fromParent => fromParent.Name == toState);
+            var toIsChildOfFrom = toParents.Any(toParent => toParent.Name == fromState.Name);
+            var fromIsChildOfTo = fromParents.Any(fromParent => fromParent.Name == toState.Name);
+
+            var sharedParent = GetSharedParent(toParents, fromParents);
 
             _log.Debug("Determined structure: {ToIsChildOfFrom} and {FromIsChildOfTo}", toIsChildOfFrom, fromIsChildOfTo);
 
@@ -76,13 +77,14 @@
                 // 3. - Pick any state except beyond the shared superstate.
                 foreach (var fromParent in fromParents)
                 {
-                    var shouldWriteExitState = fromParent.Name != toState;
+                    var shouldWriteExitState = fromParent.Name != toState.Name && fromParent.Name != sharedParent?.Name;
 
                     if (!shouldWriteExitState)
                     {
                         break;
                     }
-                    exitCalls.Add(new MethodCall(fromParent.Name, true));
+                    var fromParentState = stateMachine.SequentialStates.Single(s => s.Name == fromParent.Name);
+                    exitCalls.Add(new MethodCall(fromParentState, true));
                 }
             }
 
@@ -95,20 +97,36 @@
                 // 5. - Pick any state except the shared superstate.
                 foreach (var toParent in toParents)
                 {
-                    var shouldWriteEntryState = toParent.Name != fromState;
+                    var shouldWriteEntryState = toParent.Name != fromState.Name && toParent.Name != sharedParent?.Name;
 
                     if (!shouldWriteEntryState)
                     {
                         break;
                     }
 
-                    entryCalls.Add(new MethodCall(toParent.Name, true));
+                    var toParentState = stateMachine.SequentialStates.Single(s => s.Name == toParent.Name);
+                    entryCalls.Add(new MethodCall(toParentState, true));
                 }
                 // 6. - Reverse the order.
                 entryCalls.Reverse();
             }
 
             return new MethodChain { From = fromState, To = toState, ExitCalls = exitCalls.ToArray(), EntryCalls = entryCalls.ToArray() };
+        }
+
+        private SuperState GetSharedParent(SuperState[] toParents, SuperState[] fromParents)
+        {
+            foreach (var toParent in toParents)
+            {
+                foreach (var fromParent in fromParents)
+                {
+                    if (toParent.Name == fromParent.Name)
+                    {
+                        return toParent;
+                    }
+                }
+            }
+            return null;
         }
     }
 }

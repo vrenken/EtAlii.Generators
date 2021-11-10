@@ -1,11 +1,13 @@
 ﻿namespace EtAlii.Generators.MicroMachine
 {
+    using EtAlii.Generators.PlantUml;
+
     public class MethodCall
     {
-        public string State { get; }
+        public State State { get; }
         public bool IsSuperState { get; }
 
-        public MethodCall(string state, bool isSuperState)
+        public MethodCall(State state, bool isSuperState)
         {
             State = state;
             IsSuperState = isSuperState;

@@ -56,8 +56,13 @@
 
         public Transition[] AllTransitions { get; }
 
+        public Transition[] SyncTransitions { get; }
+
+        public Transition[] AsyncTransitions { get; }
+
         public string[] AllTriggers { get; }
 
+        public SuperState[] AllSuperStates { get; }
         public StateMachine(
             Header[] headers,
             Setting[] settings,
@@ -65,15 +70,24 @@
             State[] hierarchicalStates,
             State[] sequentialStates,
             Transition[] allTransitions,
-            string[] allTriggers)
+            string[] allTriggers,
+            SuperState[] allSuperStates)
         {
             Headers = headers;
             Settings = settings;
             StateFragments = stateFragments;
             HierarchicalStates = hierarchicalStates;
             SequentialStates = sequentialStates;
-            AllTransitions = allTransitions;
             AllTriggers = allTriggers;
+            AllSuperStates = allSuperStates;
+
+            AllTransitions = allTransitions;
+            SyncTransitions = allTransitions
+                .Where(t => !t.IsAsync)
+                .ToArray();
+            AsyncTransitions = allTransitions
+                .Where(t => t.IsAsync)
+                .ToArray();
 
             ClassName = Settings
                 .OfType<ClassNameSetting>()

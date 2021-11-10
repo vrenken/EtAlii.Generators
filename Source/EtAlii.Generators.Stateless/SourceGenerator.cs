@@ -24,7 +24,7 @@
         {
             _lifetime = new StatelessMachineLifetime();
             _stateFragmentHelper = new StateFragmentHelper(_lifetime);
-            _stateHierarchyBuilder = new StateHierarchyBuilder(_stateFragmentHelper);
+            _stateHierarchyBuilder = new StateHierarchyBuilder(_stateFragmentHelper, _lifetime);
         }
 
         protected override IParser<StateMachine> CreateParser() => new PlantUmlStateMachineParser(_lifetime, _stateHierarchyBuilder, _stateFragmentHelper);

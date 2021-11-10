@@ -1,17 +1,18 @@
 ﻿namespace EtAlii.Generators.MicroMachine
 {
     using System.Collections.Generic;
+    using System.Linq;
     using EtAlii.Generators.PlantUml;
     using Serilog;
 
-    public class MethodWriter
+    public class TransitionMethodWriter
     {
-        private readonly StateFragmentHelper _stateFragmentHelper;
-        private readonly ILogger _log = Log.ForContext<MethodWriter>();
+        private readonly MethodChainBuilder _methodChainBuilder;
+        private readonly ILogger _log = Log.ForContext<TransitionMethodWriter>();
 
-        public MethodWriter(StateFragmentHelper stateFragmentHelper)
+        public TransitionMethodWriter(MethodChainBuilder methodChainBuilder)
         {
-            _stateFragmentHelper = stateFragmentHelper;
+            _methodChainBuilder = methodChainBuilder;
         }
 
         /// <summary>
@@ -24,42 +25,53 @@
 
             var writtenMethods = new List<string>();
 
-            var allStates = _stateFragmentHelper.GetAllStates(context.Instance.StateFragments);
-            foreach (var state in allStates)
+            foreach (var state in context.Instance.SequentialStates)
             {
-                // var isChoiceState = StateFragment.GetAllSuperStates(context.Instance.StateFragments)
-                //     .Any(ss egt ss.Name eq state and ss.StereoType eq StereoType.Choice)
+                var writeAsyncEntryMethod = state.HasOnlyAsyncInboundTransitions;
+                var writeAsyncExitMethod = state.HasOnlyAsyncOutboundTransitions;
 
-                var writeAsyncEntryMethod = _stateFragmentHelper.HasOnlyAsyncInboundTransitions(context.Instance, state);
-                var writeAsyncExitMethod = _stateFragmentHelper.HasOnlyAsyncOutboundTransitions(context.Instance, state);
-
-                WriteEntryMethod(context, state, null, writeAsyncEntryMethod, writtenMethods);
                 WriteExitMethod(context, state, null, writeAsyncExitMethod, writtenMethods);
+                WriteEntryMethod(context, state, null, writeAsyncEntryMethod, writtenMethods);
+            }
+            WriteMethodsBasedOnTriggers(context, writtenMethods);
+        }
 
-                var inboundTransitions = _stateFragmentHelper.GetInboundTransitions(context.Instance.StateFragments, state);
-                foreach (var inboundTransition in inboundTransitions)
+        private void WriteMethodsBasedOnTriggers(WriteContext<StateMachine> context, List<string> writtenMethods)
+        {
+            foreach (var trigger in context.Instance.AllTriggers)
+            {
+                var transitions = context.Instance.AllTransitions
+                    .Where(t => t.Trigger == trigger)
+                    .ToArray();
+
+                foreach (var transition in transitions)
                 {
-                    WriteEntryMethod(context, state, inboundTransition.Trigger, writeAsyncEntryMethod, writtenMethods);
-                }
-                var outboundTransitions = _stateFragmentHelper.GetOutboundTransitions(context.Instance, state);
-                foreach (var outboundTransition in outboundTransitions)
-                {
-                    WriteExitMethod(context, state, outboundTransition.Trigger, writeAsyncExitMethod, writtenMethods);
-                }
-                var internalTransitions = _stateFragmentHelper.GetInternalTransitions(context.Instance.StateFragments, state);
-                foreach (var internalTransition in internalTransitions)
-                {
-                    WriteEntryMethod(context, state, internalTransition.Trigger, writeAsyncEntryMethod, writtenMethods);
-                    WriteExitMethod(context, state, internalTransition.Trigger, writeAsyncExitMethod, writtenMethods);
+                    var methodChains = _methodChainBuilder.Build(context.Instance, transition);
+                    foreach (var methodChain in methodChains)
+                    {
+                        foreach (var exitCall in methodChain.ExitCalls)
+                        {
+                            var fromState = context.Instance.SequentialStates.Single(s => s.Name == exitCall.State.Name);
+                            var writeAsyncExitMethod = fromState.HasOnlyAsyncOutboundTransitions;
+                            WriteExitMethod(context, fromState, trigger, writeAsyncExitMethod, writtenMethods);
+                        }
+
+                        foreach (var entryCall in methodChain.EntryCalls)
+                        {
+                            var toState = context.Instance.SequentialStates.Single(s => s.Name == entryCall.State.Name);
+                            var writeAsyncEntryMethod = toState.HasOnlyAsyncInboundTransitions;
+                            WriteEntryMethod(context, toState, trigger, writeAsyncEntryMethod, writtenMethods);
+                        }
+                    }
                 }
             }
         }
 
-        private void WriteExitMethod(WriteContext<StateMachine> context, string state, string trigger, bool writeAsyncEntryMethod, List<string> writtenMethods)
+        private void WriteExitMethod(WriteContext<StateMachine> context, State state, string trigger, bool writeAsyncEntryMethod, List<string> writtenMethods)
         {
-            var writeAsyncExitMethod = _stateFragmentHelper.HasOnlyAsyncOutboundTransitions(context.Instance, state);
-            var exitMethodName = $"On{state}Exited";
-            var triggerName = trigger == null ? $"Trigger" : $"{trigger}Trigger";
+            var writeAsyncExitMethod = state.HasOnlyAsyncOutboundTransitions;
+            var exitMethodName = $"On{state.Name}Exited";
+            var triggerName = trigger == null ? "Trigger" : $"{trigger}Trigger";
 
             var key = $"{exitMethodName}({triggerName} trigger)";
             if (writtenMethods.Contains(key))
@@ -71,11 +83,11 @@
             context.Writer.WriteLine("/// <summary>");
             if (trigger == null)
             {
-                context.Writer.WriteLine($"/// Implement this method to handle the exit of the '{state}' state.");
+                context.Writer.WriteLine($"/// Implement this method to handle the exit of the '{state.Name}' state.");
             }
             else
             {
-                context.Writer.WriteLine($"/// Implement this method to handle the exit of the '{state}' state by the '{trigger}' trigger.");
+                context.Writer.WriteLine($"/// Implement this method to handle the exit of the '{state.Name}' state by the '{trigger}' trigger.");
             }
             if (writeAsyncEntryMethod)
             {
@@ -106,9 +118,9 @@
             context.Writer.WriteLine();
         }
 
-        private void WriteEntryMethod(WriteContext<StateMachine> context, string state, string trigger, bool writeAsyncEntryMethod, List<string> writtenMethods)
+        private void WriteEntryMethod(WriteContext<StateMachine> context, State state, string trigger, bool writeAsyncEntryMethod, List<string> writtenMethods)
         {
-            var entryMethodName = $"On{state}Entered";
+            var entryMethodName = $"On{state.Name}Entered";
             var triggerName = trigger == null ? "Trigger" : $"{trigger}Trigger";
 
             var key = $"{entryMethodName}({triggerName} trigger)";
@@ -121,11 +133,11 @@
             context.Writer.WriteLine("/// <summary>");
             if (trigger == null)
             {
-                context.Writer.WriteLine($"/// Implement this method to handle the entry of the '{state}' state.");
+                context.Writer.WriteLine($"/// Implement this method to handle the entry of the '{state.Name}' state.");
             }
             else
             {
-                context.Writer.WriteLine($"/// Implement this method to handle the entry of the '{state}' state by the '{trigger}' trigger.");
+                context.Writer.WriteLine($"/// Implement this method to handle the entry of the '{state.Name}' state by the '{trigger}' trigger.");
             }
             if (writeAsyncEntryMethod)
             {
@@ -138,7 +150,7 @@
 
 
             var choices = context.Instance.GenerateTriggerChoices
-                ? $", {state}Choices choices"
+                ? $", {state.Name}Choices choices"
                 : "";
 
             if (context.Instance.GeneratePartialClass)

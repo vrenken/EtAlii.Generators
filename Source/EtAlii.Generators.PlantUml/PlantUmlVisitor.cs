@@ -54,7 +54,9 @@
                     .ToArray();
             }
 
-            var (hierarchicalStates, sequentialStates) = _stateHierarchyBuilder.Build(stateFragments);
+            var allSuperStates = GetAllSuperStates(stateFragments);
+
+            var (hierarchicalStates, sequentialStates) = _stateHierarchyBuilder.Build(stateFragments, allSuperStates);
 
             var allTransitions = _stateFragmentHelper.GetAllTransitions(stateFragments);
 
@@ -64,7 +66,15 @@
                 .Distinct() // That is, of course without any doubles.
                 .ToArray();
 
-            return new StateMachine(realHeaders, settings, stateFragments, hierarchicalStates, sequentialStates, allTransitions, allTriggers);
+            return new StateMachine(realHeaders, settings, stateFragments, hierarchicalStates, sequentialStates, allTransitions, allTriggers, allSuperStates);
+        }
+
+        private SuperState[] GetAllSuperStates(StateFragment[] fragments)
+        {
+            return fragments
+                .OfType<SuperState>()
+                .SelectMany(ss => GetAllSuperStates(ss.StateFragments).Concat(new[] {ss}))
+                .ToArray();
         }
 
         public override object VisitId(PlantUmlParser.IdContext context) => context.GetText();
