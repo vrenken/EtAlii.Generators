@@ -43,7 +43,7 @@ namespace EtAlii.Generators.PlantUml
 
         public SuperState GetSuperState(StateMachine stateMachine, string substate) => GetSuperState(stateMachine.StateFragments, substate);
 
-        public SuperState GetSuperState(StateFragment[] fragments, string substate)
+        internal SuperState GetSuperState(StateFragment[] fragments, string substate)
         {
             _log.Debug("Finding super state for: {SubState}", substate);
             if (substate == _lifetime.BeginStateName || substate == _lifetime.EndStateName)
@@ -65,7 +65,7 @@ namespace EtAlii.Generators.PlantUml
 
         public string[] GetAllSubStates(StateMachine stateMachine, string stateName) => GetAllSubStates(stateMachine.StateFragments, stateName);
 
-        public string[] GetAllSubStates(StateFragment[] fragments, string stateName)
+        internal string[] GetAllSubStates(StateFragment[] fragments, string stateName)
         {
             var superState = GetAllSuperStates(fragments)
                 .SingleOrDefault(ss => ss.Name == stateName);

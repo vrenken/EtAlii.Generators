@@ -7,12 +7,10 @@
     public class EventArgsWriter
     {
         private readonly MethodWriter _methodWriter;
-        private readonly StateFragmentHelper _stateFragmentHelper;
 
-        public EventArgsWriter(MethodWriter methodWriter, StateFragmentHelper stateFragmentHelper)
+        public EventArgsWriter(MethodWriter methodWriter)
         {
             _methodWriter = methodWriter;
-            _stateFragmentHelper = stateFragmentHelper;
         }
 
         public void WriteEventArgs(WriteContext<StateMachine> context)
@@ -22,18 +20,14 @@
 
             if(context.Instance.GenerateTriggerChoices)
             {
-                var allStates = context.Instance.SequentialStates
-                        .Select(s => s.Name)
-                        .ToArray();
-
-                foreach (var state in allStates)
+                foreach (var state in context.Instance.SequentialStates)
                 {
-                    context.Writer.WriteLine($"protected class {state}EventArgs");
+                    context.Writer.WriteLine($"protected class {state.Name}EventArgs");
                     context.Writer.WriteLine("{");
                     context.Writer.Indent += 1;
                     context.Writer.WriteLine($"private readonly {context.Instance.ClassName} _stateMachine;");
                     context.Writer.WriteLine();
-                    context.Writer.WriteLine($"public {state}EventArgs({context.Instance.ClassName} stateMachine)");
+                    context.Writer.WriteLine($"public {state.Name}EventArgs({context.Instance.ClassName} stateMachine)");
                     context.Writer.WriteLine("{");
                     context.Writer.Indent += 1;
                     context.Writer.WriteLine($"_stateMachine = stateMachine;");
@@ -48,11 +42,9 @@
             }
         }
 
-        private void WriteMethods(WriteContext<StateMachine> context, string state)
+        private void WriteMethods(WriteContext<StateMachine> context, State state)
         {
-            var outboundTransitions = _stateFragmentHelper.GetOutboundTransitions(context.Instance, state);
-
-            foreach (var outboundTransition in outboundTransitions)
+            foreach (var outboundTransition in state.OutboundTransitions)
             {
                 var transitionSets = new [] { new [] { outboundTransition } };
                 if (outboundTransition.IsAsync)

@@ -4,9 +4,7 @@ namespace EtAlii.Generators.PlantUml
 
     public partial class StateFragmentHelper
     {
-        public Transition[] GetOutboundTransitions(StateMachine stateMachine, string state) => GetOutboundTransitions(stateMachine.StateFragments, state);
-
-        public Transition[] GetOutboundTransitions(StateFragment[] fragments, string state)
+        internal Transition[] GetOutboundTransitions(StateFragment[] fragments, string state)
         {
             var superState = GetSuperState(fragments, state);
             return superState != null

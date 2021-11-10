@@ -18,7 +18,7 @@
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
             var methodWriter = new MethodWriter(parameterConverter, transitionConverter, stateFragmentHelper);
-            var eventArgsWriter = new EventArgsWriter(methodWriter, stateFragmentHelper);
+            var eventArgsWriter = new EventArgsWriter(methodWriter);
             var fieldWriter = new FieldWriter(parameterConverter, transitionConverter, stateFragmentHelper);
             var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper);
             var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter);
@@ -40,7 +40,7 @@
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
             var methodWriter = new MethodWriter(parameterConverter, transitionConverter, stateFragmentHelper);
-            var eventArgsWriter = new EventArgsWriter(methodWriter, stateFragmentHelper);
+            var eventArgsWriter = new EventArgsWriter(methodWriter);
             var fieldWriter = new FieldWriter(parameterConverter, transitionConverter, stateFragmentHelper);
             var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper);
             var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter);
@@ -96,7 +96,7 @@
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
             var methodWriter = new MethodWriter(parameterConverter, transitionConverter, stateFragmentHelper);
-            var eventArgsWriter = new EventArgsWriter(methodWriter, stateFragmentHelper);
+            var eventArgsWriter = new EventArgsWriter(methodWriter);
             var fieldWriter = new FieldWriter(parameterConverter, transitionConverter, stateFragmentHelper);
             var instantiationWriter = new InstantiationWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper);
             var classWriter = new ClassWriter(enumWriter, fieldWriter, methodWriter, eventArgsWriter, instantiationWriter);

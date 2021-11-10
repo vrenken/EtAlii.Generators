@@ -21,7 +21,7 @@
             var toSameStateMethodChainBuilder = new ToSameStateMethodChainBuilder(stateFragmentHelper, toDifferentStateMethodChainBuilder);
             var methodChainBuilder = new MethodChainBuilder(toDifferentStateMethodChainBuilder, toSameStateMethodChainBuilder, stateFragmentHelper, lifetime);
             var triggerMethodWriter = new TriggerMethodWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper, methodChainBuilder);
-            var transitionMethodWriter = new TransitionMethodWriter(stateFragmentHelper, methodChainBuilder);
+            var transitionMethodWriter = new TransitionMethodWriter(methodChainBuilder);
             var transitionClassWriter = new TransitionClassWriter();
             var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter);
             var choicesWriter = new ChoicesWriter(triggerMethodWriter);
@@ -48,7 +48,7 @@
             var methodChainBuilder = new MethodChainBuilder(toDifferentStateMethodChainBuilder, toSameStateMethodChainBuilder, stateFragmentHelper, lifetime);
             var triggerMethodWriter = new TriggerMethodWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper, methodChainBuilder);
             var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter);
-            var transitionMethodWriter = new TransitionMethodWriter(stateFragmentHelper, methodChainBuilder);
+            var transitionMethodWriter = new TransitionMethodWriter(methodChainBuilder);
             var transitionClassWriter = new TransitionClassWriter();
             var choicesWriter = new ChoicesWriter(triggerMethodWriter);
             var stateMachineClassWriter = new ClassWriter(enumWriter, transitionMethodWriter, triggerMethodWriter, triggerClassWriter, transitionClassWriter, stateFragmentHelper, parameterConverter, choicesWriter);
@@ -108,7 +108,7 @@
             var methodChainBuilder = new MethodChainBuilder(toDifferentStateMethodChainBuilder, toSameStateMethodChainBuilder, stateFragmentHelper, lifetime);
             var triggerMethodWriter = new TriggerMethodWriter(parameterConverter, transitionConverter, lifetime, stateFragmentHelper, methodChainBuilder);
             var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter);
-            var transitionMethodWriter = new TransitionMethodWriter(stateFragmentHelper, methodChainBuilder);
+            var transitionMethodWriter = new TransitionMethodWriter(methodChainBuilder);
             var transitionClassWriter = new TransitionClassWriter();
             var choicesWriter = new ChoicesWriter(triggerMethodWriter);
             var stateMachineClassWriter = new ClassWriter(enumWriter, transitionMethodWriter, triggerMethodWriter, triggerClassWriter, transitionClassWriter, stateFragmentHelper, parameterConverter, choicesWriter);
