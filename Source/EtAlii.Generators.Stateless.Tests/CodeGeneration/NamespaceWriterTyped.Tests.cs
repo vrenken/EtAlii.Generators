@@ -13,7 +13,7 @@
         {
             // Arrange.
             var lifetime = new StatelessMachineLifetime();
-            var stateFragmentHelper = new StateFragmentHelper(lifetime);
+            var stateFragmentHelper = new StateFragmentHelper();
             var parameterConverter = new ParameterConverter();
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
@@ -35,7 +35,7 @@
         {
             // Arrange.
             var lifetime = new StatelessMachineLifetime();
-            var stateFragmentHelper = new StateFragmentHelper(lifetime);
+            var stateFragmentHelper = new StateFragmentHelper();
             var parameterConverter = new ParameterConverter();
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
@@ -93,7 +93,7 @@
         {
             // Arrange.
             var lifetime = new StatelessMachineLifetime();
-            var stateFragmentHelper = new StateFragmentHelper(lifetime);
+            var stateFragmentHelper = new StateFragmentHelper();
             var parameterConverter = new ParameterConverter();
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();

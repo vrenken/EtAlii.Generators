@@ -5,7 +5,12 @@ namespace EtAlii.Generators.PlantUml
         public string Name { get; init; }
         public State[] Children { get; init; }
         public State[] AllChildren { get; init; }
+
+        public string[] AllSubStates { get; init; }
         public Transition[] AllTransitions { get; init; }
+
+        public SuperState Parent { get; init; }
+        public SuperState[] AllParents { get; init; }
 
         public Transition[] InboundTransitions { get; init; }
         public Transition[] OutboundTransitions { get; init; }

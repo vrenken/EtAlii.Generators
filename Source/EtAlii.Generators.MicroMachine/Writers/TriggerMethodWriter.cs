@@ -153,8 +153,8 @@
 
                     WriteCaseHeader(context, methodChain, triggerVariableName, triggerTypeName, namedParameters);
 
-                    WriteExitCalls(context, isAsync, methodChain, triggerTypeName, triggerVariableName);
-                    WriteEntryCalls(context, isAsync, methodChain, triggerVariableName, triggerTypeName);
+                    WriteExitCalls(context, methodChain, triggerTypeName, triggerVariableName);
+                    WriteEntryCalls(context, methodChain, triggerVariableName, triggerTypeName);
 
                     WriteCaseTail(context, methodChain, isAsync, triggerVariableName);
 
@@ -226,14 +226,14 @@
             context.Writer.WriteLine("break;");
             context.Writer.Indent -= 1;
         }
-        private void WriteEntryCalls(WriteContext<StateMachine> context, bool isAsync, MethodChain methodChain, string triggerVariableName, string triggerTypeName)
+        private void WriteEntryCalls(WriteContext<StateMachine> context, MethodChain methodChain, string triggerVariableName, string triggerTypeName)
         {
             foreach (var call in methodChain.EntryCalls)
             {
                 var writeAsync = call.State.HasOnlyAsyncInboundTransitions;
 
                 string prefix, postFix;
-                if (isAsync)
+                if (call.IsAsync)
                 {
                     prefix = writeAsync ? "await " : "";
                     postFix = writeAsync ? ".ConfigureAwait(false)" : "";
@@ -255,14 +255,14 @@
             }
         }
 
-        private void WriteExitCalls(WriteContext<StateMachine> context, bool isAsync, MethodChain methodChain, string triggerTypeName, string triggerVariableName)
+        private void WriteExitCalls(WriteContext<StateMachine> context, MethodChain methodChain, string triggerTypeName, string triggerVariableName)
         {
             foreach (var call in methodChain.ExitCalls)
             {
                 var writeAsync = call.State.HasOnlyAsyncOutboundTransitions;
 
                 string prefix, postFix;
-                if (isAsync)
+                if (call.IsAsync)
                 {
                     prefix = writeAsync ? "await " : "";
                     postFix = writeAsync ? ".ConfigureAwait(false)" : "";

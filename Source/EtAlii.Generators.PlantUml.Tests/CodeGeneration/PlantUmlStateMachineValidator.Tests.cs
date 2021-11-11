@@ -15,10 +15,9 @@
         {
             // Arrange.
             var lifetime = new PlantUmlTestMachineLifetime();
-            var stateFragmentHelper = new StateFragmentHelper(lifetime);
 
             // Act.
-            var parser = new PlantUmlStateMachineValidator(lifetime, stateFragmentHelper);
+            var parser = new PlantUmlStateMachineValidator(lifetime);
 
             // Assert.
             Assert.NotNull(parser);
@@ -29,9 +28,8 @@
         {
             // Arrange.
             var lifetime = new PlantUmlTestMachineLifetime();
-            var stateFragmentHelper = new StateFragmentHelper(lifetime);
             var fullPathToFile =  "Test.puml";
-            var parser = new PlantUmlStateMachineValidator(lifetime, stateFragmentHelper);
+            var parser = new PlantUmlStateMachineValidator(lifetime);
             var headers = new[]
             {
                 new Header("This is a stub header")

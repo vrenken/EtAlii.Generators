@@ -24,7 +24,7 @@
         public void WriteAllTriggerFields(WriteContext<StateMachine> context)
         {
             // We only need to write a trigger member for all relations that have parameters.
-            var uniqueTransitionsWithParameters = _stateFragmentHelper.GetUniqueParameterTransitions(context.Instance.StateFragments)
+            var uniqueTransitionsWithParameters = _stateFragmentHelper.GetUniqueParameterTransitions(context.Instance)
                 .Where(t => t.Parameters.Any())
                 .ToArray();
 

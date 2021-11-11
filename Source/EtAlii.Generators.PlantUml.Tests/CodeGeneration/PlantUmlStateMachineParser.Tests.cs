@@ -10,7 +10,7 @@
         {
             // Arrange.
             var lifetime = new PlantUmlTestMachineLifetime();
-            var stateFragmentHelper = new StateFragmentHelper(lifetime);
+            var stateFragmentHelper = new StateFragmentHelper();
             var stateHierarchyBuilder = new StateHierarchyBuilder(stateFragmentHelper, lifetime);
 
             // Act.
@@ -26,7 +26,7 @@
 
             // Arrange.
             var lifetime = new PlantUmlTestMachineLifetime();
-            var stateFragmentHelper = new StateFragmentHelper(lifetime);
+            var stateFragmentHelper = new StateFragmentHelper();
             var stateHierarchyBuilder = new StateHierarchyBuilder(stateFragmentHelper, lifetime);
             var parser = new PlantUmlStateMachineParser(lifetime, stateHierarchyBuilder, stateFragmentHelper);
 
@@ -67,7 +67,7 @@ State4 : This is the final state
         {
             // Arrange.
             var lifetime = new PlantUmlTestMachineLifetime();
-            var stateFragmentHelper = new StateFragmentHelper(lifetime);
+            var stateFragmentHelper = new StateFragmentHelper();
             var stateHierarchyBuilder = new StateHierarchyBuilder(stateFragmentHelper, lifetime);
             var parser = new PlantUmlStateMachineParser(lifetime, stateHierarchyBuilder, stateFragmentHelper);
 

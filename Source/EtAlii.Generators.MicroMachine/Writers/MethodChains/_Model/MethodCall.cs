@@ -7,10 +7,13 @@
         public State State { get; }
         public bool IsSuperState { get; }
 
-        public MethodCall(State state, bool isSuperState)
+        public bool IsAsync { get; }
+
+        public MethodCall(State state, bool isSuperState, bool isAsync)
         {
             State = state;
             IsSuperState = isSuperState;
+            IsAsync = isAsync;
         }
     }
 }

@@ -55,10 +55,9 @@
             }
 
             var allSuperStates = GetAllSuperStates(stateFragments);
-
-            var (hierarchicalStates, sequentialStates) = _stateHierarchyBuilder.Build(stateFragments, allSuperStates);
-
             var allTransitions = _stateFragmentHelper.GetAllTransitions(stateFragments);
+
+            var (hierarchicalStates, sequentialStates) = _stateHierarchyBuilder.Build(stateFragments, allSuperStates, allTransitions);
 
             var allTriggers = allTransitions
                 .Select(t => t.Trigger)

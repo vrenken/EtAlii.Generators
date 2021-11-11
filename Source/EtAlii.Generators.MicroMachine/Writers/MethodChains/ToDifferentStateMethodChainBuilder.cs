@@ -9,31 +9,24 @@
     {
         private readonly ILogger _log = Log.ForContext<ToDifferentStateMethodChainBuilder>();
 
-        private readonly StateFragmentHelper _stateFragmentHelper;
-
-        public ToDifferentStateMethodChainBuilder(StateFragmentHelper stateFragmentHelper)
-        {
-            _stateFragmentHelper = stateFragmentHelper;
-        }
-
-        public MethodChain[] Build(StateMachine stateMachine, State fromState, State toState)
+        public MethodChain[] Build(StateMachine stateMachine, State fromState, State toState, bool isAsync)
         {
             var result = new List<MethodChain>();
 
             // First let's write the transition for the from state to the to state.
-            var methodChain = BuildForOneSingleSourceState(stateMachine, fromState, toState);
+            var methodChain = BuildForOneSingleSourceState(stateMachine, fromState, toState, isAsync);
             result.Add(methodChain);
 
             foreach (var childState in fromState.AllChildren)
             {
-                var subMethodChain = BuildForOneSingleSourceState(stateMachine, childState, toState);
+                var subMethodChain = BuildForOneSingleSourceState(stateMachine, childState, toState, isAsync);
                 result.Add(subMethodChain);
             }
 
             return result.ToArray();
         }
 
-        public MethodChain BuildForOneSingleSourceState(StateMachine stateMachine, State fromState, State toState)
+        public MethodChain BuildForOneSingleSourceState(StateMachine stateMachine, State fromState, State toState, bool isAsync)
         {
             var exitCalls = new List<MethodCall>();
             var entryCalls = new List<MethodCall>();
@@ -48,14 +41,14 @@
             // 6. - Reverse the order.
 
             // 1. - Find the biggest shared superstate / or the complete state machine.
-            var fromParents = _stateFragmentHelper.GetAllSuperStates(stateMachine, fromState.Name);
+            var fromParents = fromState.AllParents;
 
             var parentStates = fromParents.Any()
                 ? string.Join(", ", fromParents.Select(s => s.Name).ToArray())
                 : "[NONE]";
             _log.Debug("Acquired all superstates for {FromState}: {ParentStates}", fromState, parentStates);
 
-            var toParents = _stateFragmentHelper.GetAllSuperStates(stateMachine, toState.Name);
+            var toParents = toState.AllParents;
             parentStates = toParents.Any()
                 ? string.Join(", ", toParents.Select(s => s.Name).ToArray())
                 : "[NONE]";
@@ -73,7 +66,7 @@
                 _log.Debug("{ToState} is a child of {FromState}", toState, fromState);
 
                 // 2. - Pick the state itself.
-                exitCalls.Add(new MethodCall(fromState, false));
+                exitCalls.Add(new MethodCall(fromState, false, isAsync));
                 // 3. - Pick any state except beyond the shared superstate.
                 foreach (var fromParent in fromParents)
                 {
@@ -84,7 +77,7 @@
                         break;
                     }
                     var fromParentState = stateMachine.SequentialStates.Single(s => s.Name == fromParent.Name);
-                    exitCalls.Add(new MethodCall(fromParentState, true));
+                    exitCalls.Add(new MethodCall(fromParentState, true, isAsync));
                 }
             }
 
@@ -93,7 +86,7 @@
                 _log.Debug("{FromState} is a child of {ToState}", fromState, toState);
 
                 // 4. - Pick the state itself.
-                entryCalls.Add(new MethodCall(toState, false));
+                entryCalls.Add(new MethodCall(toState, false, isAsync));
                 // 5. - Pick any state except the shared superstate.
                 foreach (var toParent in toParents)
                 {
@@ -105,7 +98,7 @@
                     }
 
                     var toParentState = stateMachine.SequentialStates.Single(s => s.Name == toParent.Name);
-                    entryCalls.Add(new MethodCall(toParentState, true));
+                    entryCalls.Add(new MethodCall(toParentState, true, isAsync));
                 }
                 // 6. - Reverse the order.
                 entryCalls.Reverse();

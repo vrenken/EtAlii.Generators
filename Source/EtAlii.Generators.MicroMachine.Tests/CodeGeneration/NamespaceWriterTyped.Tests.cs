@@ -13,13 +13,13 @@
         {
             // Arrange.
             var lifetime = new MicroStateMachineLifetime();
-            var stateFragmentHelper = new StateFragmentHelper(lifetime);
+            var stateFragmentHelper = new StateFragmentHelper();
             var parameterConverter = new ParameterConverter();
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
-            var toDifferentStateMethodChainBuilder = new ToDifferentStateMethodChainBuilder(stateFragmentHelper);
+            var toDifferentStateMethodChainBuilder = new ToDifferentStateMethodChainBuilder();
             var toSameStateMethodChainBuilder = new ToSameStateMethodChainBuilder(toDifferentStateMethodChainBuilder);
-            var methodChainBuilder = new MethodChainBuilder(toDifferentStateMethodChainBuilder, toSameStateMethodChainBuilder, stateFragmentHelper, lifetime);
+            var methodChainBuilder = new MethodChainBuilder(toDifferentStateMethodChainBuilder, toSameStateMethodChainBuilder, lifetime);
             var triggerMethodWriter = new TriggerMethodWriter(parameterConverter, transitionConverter, lifetime, methodChainBuilder);
             var transitionMethodWriter = new TransitionMethodWriter(methodChainBuilder);
             var transitionClassWriter = new TransitionClassWriter();
@@ -39,13 +39,13 @@
         {
             // Arrange.
             var lifetime = new MicroStateMachineLifetime();
-            var stateFragmentHelper = new StateFragmentHelper(lifetime);
+            var stateFragmentHelper = new StateFragmentHelper();
             var parameterConverter = new ParameterConverter();
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
-            var toDifferentStateMethodChainBuilder = new ToDifferentStateMethodChainBuilder(stateFragmentHelper);
+            var toDifferentStateMethodChainBuilder = new ToDifferentStateMethodChainBuilder();
             var toSameStateMethodChainBuilder = new ToSameStateMethodChainBuilder(toDifferentStateMethodChainBuilder);
-            var methodChainBuilder = new MethodChainBuilder(toDifferentStateMethodChainBuilder, toSameStateMethodChainBuilder, stateFragmentHelper, lifetime);
+            var methodChainBuilder = new MethodChainBuilder(toDifferentStateMethodChainBuilder, toSameStateMethodChainBuilder, lifetime);
             var triggerMethodWriter = new TriggerMethodWriter(parameterConverter, transitionConverter, lifetime, methodChainBuilder);
             var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter);
             var transitionMethodWriter = new TransitionMethodWriter(methodChainBuilder);
@@ -101,13 +101,13 @@
         {
             // Arrange.
             var lifetime = new MicroStateMachineLifetime();
-            var stateFragmentHelper = new StateFragmentHelper(lifetime);
+            var stateFragmentHelper = new StateFragmentHelper();
             var parameterConverter = new ParameterConverter();
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
-            var toDifferentStateMethodChainBuilder = new ToDifferentStateMethodChainBuilder(stateFragmentHelper);
+            var toDifferentStateMethodChainBuilder = new ToDifferentStateMethodChainBuilder();
             var toSameStateMethodChainBuilder = new ToSameStateMethodChainBuilder(toDifferentStateMethodChainBuilder);
-            var methodChainBuilder = new MethodChainBuilder(toDifferentStateMethodChainBuilder, toSameStateMethodChainBuilder, stateFragmentHelper, lifetime);
+            var methodChainBuilder = new MethodChainBuilder(toDifferentStateMethodChainBuilder, toSameStateMethodChainBuilder, lifetime);
             var triggerMethodWriter = new TriggerMethodWriter(parameterConverter, transitionConverter, lifetime, methodChainBuilder);
             var triggerClassWriter = new TriggerClassWriter(parameterConverter, transitionConverter);
             var transitionMethodWriter = new TransitionMethodWriter(methodChainBuilder);

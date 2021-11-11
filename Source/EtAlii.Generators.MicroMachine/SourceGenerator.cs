@@ -23,7 +23,7 @@
         public SourceGenerator()
         {
             _lifetime = new MicroStateMachineLifetime();
-            _stateFragmentHelper = new StateFragmentHelper(_lifetime);
+            _stateFragmentHelper = new StateFragmentHelper();
             _stateHierarchyBuilder = new StateHierarchyBuilder(_stateFragmentHelper, _lifetime);
         }
 
@@ -31,7 +31,7 @@
 
         protected override IWriterFactory<StateMachine> CreateWriterFactory() => new MicroMachineWriterFactory(_lifetime, _stateFragmentHelper);
 
-        protected override IValidator<StateMachine> CreateValidator() => new PlantUmlStateMachineValidator(_lifetime, _stateFragmentHelper);
+        protected override IValidator<StateMachine> CreateValidator() => new PlantUmlStateMachineValidator(_lifetime);
 
         protected override string GetExtension() => ".puml";
 

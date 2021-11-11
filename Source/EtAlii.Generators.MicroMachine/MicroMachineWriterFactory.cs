@@ -28,12 +28,11 @@
             // No need to introduce a whole new package here as it'll only make the analyzer more bloated.
             // For now the simple composition below also works absolutely fine.
             var parameterConverter = new ParameterConverter();
-            var stateFragmentHelper = new StateFragmentHelper(_lifetime);
             var transitionConverter = new TransitionConverter(parameterConverter);
             var enumWriter = new EnumWriter<StateMachine>();
-            var toDifferentStateMethodChainBuilder = new ToDifferentStateMethodChainBuilder(stateFragmentHelper);
+            var toDifferentStateMethodChainBuilder = new ToDifferentStateMethodChainBuilder();
             var toSameStateMethodChainBuilder = new ToSameStateMethodChainBuilder(toDifferentStateMethodChainBuilder);
-            var methodChainBuilder = new MethodChainBuilder(toDifferentStateMethodChainBuilder, toSameStateMethodChainBuilder, _stateFragmentHelper, _lifetime);
+            var methodChainBuilder = new MethodChainBuilder(toDifferentStateMethodChainBuilder, toSameStateMethodChainBuilder, _lifetime);
             var transitionMethodWriter = new TransitionMethodWriter(methodChainBuilder);
             var transitionClassWriter = new TransitionClassWriter();
             var triggerMethodWriter = new TriggerMethodWriter(parameterConverter, transitionConverter, _lifetime, methodChainBuilder);

@@ -14,12 +14,10 @@ namespace EtAlii.Generators.PlantUml
     public class PlantUmlStateMachineValidator : IValidator<StateMachine>
     {
         private readonly IStateMachineLifetime _lifetime;
-        private readonly StateFragmentHelper _stateFragmentHelper;
 
-        public PlantUmlStateMachineValidator(IStateMachineLifetime lifetime, StateFragmentHelper stateFragmentHelper)
+        public PlantUmlStateMachineValidator(IStateMachineLifetime lifetime)
         {
             _lifetime = lifetime;
-            _stateFragmentHelper = stateFragmentHelper;
         }
 
         public void Validate(StateMachine instance, string fullPathToFile, List<Diagnostic> diagnostics)
@@ -63,19 +61,18 @@ namespace EtAlii.Generators.PlantUml
         {
             foreach (var superState in stateMachine.AllSuperStates)
             {
-                var allSubstates = _stateFragmentHelper.GetAllSubStates(superState);
-                var allTransitions = stateMachine.AllTransitions;
-
-                var directTransitionsToSubState = allTransitions
+                var state = stateMachine.SequentialStates.Single(s => s.Name == superState.Name);
+                var directTransitionsToSubState = stateMachine.AllTransitions
                     .Where(
-                        t => t.From != superState.Name &&
-                        allSubstates.Contains(t.To) &&
-                        !allSubstates.Contains(t.From) &&
-                        t.To != _lifetime.BeginStateName &&
-                        t.To != _lifetime.EndStateName)
+                        t =>
+                            t.From != superState.Name &&
+                            state.AllSubStates.Contains(t.To) &&
+                            !state.AllSubStates.Contains(t.From) &&
+                            t.To != _lifetime.BeginStateName &&
+                            t.To != _lifetime.EndStateName)
                     .ToArray();
 
-                var transitionsToSuperState = allTransitions
+                var transitionsToSuperState = stateMachine.AllTransitions
                     .Where(t => t.To == superState.Name)
                     .ToArray();
 

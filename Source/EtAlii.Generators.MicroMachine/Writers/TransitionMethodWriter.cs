@@ -27,11 +27,11 @@
 
             foreach (var state in context.Instance.SequentialStates)
             {
-                var writeAsyncEntryMethod = state.HasOnlyAsyncInboundTransitions;
-                var writeAsyncExitMethod = state.HasOnlyAsyncOutboundTransitions;
-
-                WriteExitMethod(context, state, null, writeAsyncExitMethod, writtenMethods);
-                WriteEntryMethod(context, state, null, writeAsyncEntryMethod, writtenMethods);
+                _log.Information("Writing default entry methods for {StateName}: OnEntry async = {OnEntryAsync}, OnExit async = {OnExitAsync}", state.Name, state.HasOnlyAsyncInboundTransitions, state.HasOnlyAsyncOutboundTransitions);
+                var entryCall = new MethodCall(state, true, state.HasOnlyAsyncInboundTransitions);
+                var exitCall = new MethodCall(state, true, state.HasOnlyAsyncOutboundTransitions);
+                WriteEntryMethod(context, null, entryCall, writtenMethods);
+                WriteExitMethod(context, null, exitCall, writtenMethods);
             }
             WriteMethodsBasedOnTriggers(context, writtenMethods);
         }
@@ -51,26 +51,22 @@
                     {
                         foreach (var exitCall in methodChain.ExitCalls)
                         {
-                            var fromState = context.Instance.SequentialStates.Single(s => s.Name == exitCall.State.Name);
-                            var writeAsyncExitMethod = fromState.HasOnlyAsyncOutboundTransitions;
-                            WriteExitMethod(context, fromState, trigger, writeAsyncExitMethod, writtenMethods);
+                            WriteExitMethod(context, trigger, exitCall, writtenMethods);
                         }
 
                         foreach (var entryCall in methodChain.EntryCalls)
                         {
-                            var toState = context.Instance.SequentialStates.Single(s => s.Name == entryCall.State.Name);
-                            var writeAsyncEntryMethod = toState.HasOnlyAsyncInboundTransitions;
-                            WriteEntryMethod(context, toState, trigger, writeAsyncEntryMethod, writtenMethods);
+                            WriteEntryMethod(context, trigger, entryCall, writtenMethods);
                         }
                     }
                 }
             }
         }
 
-        private void WriteExitMethod(WriteContext<StateMachine> context, State state, string trigger, bool writeAsyncEntryMethod, List<string> writtenMethods)
+        private void WriteExitMethod(WriteContext<StateMachine> context, string trigger, MethodCall methodCall, List<string> writtenMethods)
         {
-            var writeAsyncExitMethod = state.HasOnlyAsyncOutboundTransitions;
-            var exitMethodName = $"On{state.Name}Exited";
+            var writeAsyncExitMethod = methodCall.State.HasOnlyAsyncOutboundTransitions;
+            var exitMethodName = $"On{methodCall.State.Name}Exited";
             var triggerName = trigger == null ? "Trigger" : $"{trigger}Trigger";
 
             var key = $"{exitMethodName}({triggerName} trigger)";
@@ -83,13 +79,15 @@
             context.Writer.WriteLine("/// <summary>");
             if (trigger == null)
             {
-                context.Writer.WriteLine($"/// Implement this method to handle the exit of the '{state.Name}' state.");
+                context.Writer.WriteLine($"/// Implement this method to handle the exit of the '{methodCall.State.Name}' state.");
             }
             else
             {
-                context.Writer.WriteLine($"/// Implement this method to handle the exit of the '{state.Name}' state by the '{trigger}' trigger.");
+                context.Writer.WriteLine($"/// Implement this method to handle the exit of the '{methodCall.State.Name}' state by the '{trigger}' trigger.");
             }
-            if (writeAsyncEntryMethod)
+
+            var writeAsync = methodCall.IsAsync;
+            if (writeAsync)
             {
                 context.Writer.WriteLine("/// <remark>");
                 context.Writer.WriteLine("/// This method is configured to return a task because all transitions are marked to be called asynchronous.");
@@ -118,9 +116,9 @@
             context.Writer.WriteLine();
         }
 
-        private void WriteEntryMethod(WriteContext<StateMachine> context, State state, string trigger, bool writeAsyncEntryMethod, List<string> writtenMethods)
+        private void WriteEntryMethod(WriteContext<StateMachine> context, string trigger, MethodCall methodCall, List<string> writtenMethods)
         {
-            var entryMethodName = $"On{state.Name}Entered";
+            var entryMethodName = $"On{methodCall.State.Name}Entered";
             var triggerName = trigger == null ? "Trigger" : $"{trigger}Trigger";
 
             var key = $"{entryMethodName}({triggerName} trigger)";
@@ -133,13 +131,15 @@
             context.Writer.WriteLine("/// <summary>");
             if (trigger == null)
             {
-                context.Writer.WriteLine($"/// Implement this method to handle the entry of the '{state.Name}' state.");
+                context.Writer.WriteLine($"/// Implement this method to handle the entry of the '{methodCall.State.Name}' state.");
             }
             else
             {
-                context.Writer.WriteLine($"/// Implement this method to handle the entry of the '{state.Name}' state by the '{trigger}' trigger.");
+                context.Writer.WriteLine($"/// Implement this method to handle the entry of the '{methodCall.State.Name}' state by the '{trigger}' trigger.");
             }
-            if (writeAsyncEntryMethod)
+
+            var writeAsync = methodCall.IsAsync;
+            if (writeAsync)
             {
                 context.Writer.WriteLine("/// <remark>");
                 context.Writer.WriteLine("/// This method is configured to return a task because all transitions are marked to be called asynchronous.");
@@ -150,19 +150,19 @@
 
 
             var choices = context.Instance.GenerateTriggerChoices
-                ? $", {state.Name}Choices choices"
+                ? $", {methodCall.State.Name}Choices choices"
                 : "";
 
             if (context.Instance.GeneratePartialClass)
             {
-                context.Writer.WriteLine($"private partial {(writeAsyncEntryMethod ? "Task" : "void")} {entryMethodName}({triggerName} trigger{choices});");
+                context.Writer.WriteLine($"private partial {(writeAsync ? "Task" : "void")} {entryMethodName}({triggerName} trigger{choices});");
             }
             else
             {
-                context.Writer.WriteLine($"protected virtual {(writeAsyncEntryMethod ? "Task" : "void")} {entryMethodName}({triggerName} trigger{choices})");
+                context.Writer.WriteLine($"protected virtual {(writeAsync ? "Task" : "void")} {entryMethodName}({triggerName} trigger{choices})");
                 context.Writer.WriteLine("{");
                 context.Writer.Indent += 1;
-                if (writeAsyncEntryMethod)
+                if (writeAsync)
                 {
                     context.Writer.WriteLine("return Task.CompletedTask;");
                 }

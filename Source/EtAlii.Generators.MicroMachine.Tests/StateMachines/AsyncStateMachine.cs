@@ -19,7 +19,7 @@ namespace EtAlii.Generators.MicroMachine.Tests
 
         protected override Task OnState2Entered(Trigger trigger, State2Choices choices) => Task.Run(() => LogTransition(typeof(Trigger)));
 
-        protected override Task OnState2Entered(CheckTrigger trigger, State2Choices choices) => Task.Run(() => LogTransition(typeof(CheckTrigger)));
+        protected override void OnState2Entered(CheckTrigger trigger, State2Choices choices) => LogTransition(typeof(CheckTrigger));
 
         protected override Task OnState2Entered(ContinueTrigger trigger, State2Choices choices) => Task.Run(() => LogTransition(typeof(ContinueTrigger)));
 

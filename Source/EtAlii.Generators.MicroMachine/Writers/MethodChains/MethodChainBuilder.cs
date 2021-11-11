@@ -11,18 +11,15 @@
 
         private readonly ToDifferentStateMethodChainBuilder _toDifferentStateMethodChainBuilder;
         private readonly ToSameStateMethodChainBuilder _toSameStateMethodChainBuilder;
-        private readonly StateFragmentHelper _stateFragmentHelper;
         private readonly IStateMachineLifetime _lifetime;
 
         public MethodChainBuilder(
             ToDifferentStateMethodChainBuilder toDifferentStateMethodChainBuilder,
             ToSameStateMethodChainBuilder toSameStateMethodChainBuilder,
-            StateFragmentHelper stateFragmentHelper,
             IStateMachineLifetime lifetime)
         {
             _toDifferentStateMethodChainBuilder = toDifferentStateMethodChainBuilder;
             _toSameStateMethodChainBuilder = toSameStateMethodChainBuilder;
-            _stateFragmentHelper = stateFragmentHelper;
             _lifetime = lifetime;
         }
 
@@ -32,21 +29,21 @@
         {
             if (!_methodChains.TryGetValue(transition, out var methodChains))
             {
-                var parentSuperState = _stateFragmentHelper.GetSuperState(stateMachine, transition.To);
-                var fromStateName = parentSuperState != null && transition.From == _lifetime.BeginStateName
-                    ? parentSuperState.Name
+                var toState = stateMachine.SequentialStates.Single(s => s.Name == transition.To);
+                var toParentState = toState.Parent;
+                var fromStateName = toParentState != null && transition.From == _lifetime.BeginStateName
+                    ? toParentState.Name
                     : transition.From;
                 var trigger = transition.Trigger;
                 var fromState = stateMachine.SequentialStates.Single(s => s.Name == fromStateName);
-                var toState = stateMachine.SequentialStates.Single(s => s.Name == transition.To);
 
                 _log.Information("Building method chain for transition from {FromState} by {Trigger} to {ToState}", fromState, trigger, toState);
 
                 if (fromState == toState)
                 {
-                    return _toSameStateMethodChainBuilder.Build(stateMachine, fromState);
+                    return _toSameStateMethodChainBuilder.Build(stateMachine, fromState, transition.IsAsync);
                 }
-                _methodChains[transition] = methodChains = _toDifferentStateMethodChainBuilder.Build(stateMachine, fromState, toState);
+                _methodChains[transition] = methodChains = _toDifferentStateMethodChainBuilder.Build(stateMachine, fromState, toState, transition.IsAsync);
             }
 
             return methodChains;

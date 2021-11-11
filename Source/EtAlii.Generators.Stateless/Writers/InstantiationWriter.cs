@@ -33,7 +33,7 @@
         private void WriteTriggerInstantiations(WriteContext<StateMachine> context)
         {
             // We only need to write a trigger construction calls for all relations that have parameters.
-            var uniqueTransitionsWithParameters = _stateFragmentHelper.GetUniqueParameterTransitions(context.Instance.StateFragments)
+            var uniqueTransitionsWithParameters = _stateFragmentHelper.GetUniqueParameterTransitions(context.Instance)
                 .Where(t => t.Parameters.Any())
                 .ToArray();
 
@@ -73,7 +73,7 @@
             WriteInternalTransitions(state, stateConfiguration);
             WriteOutboundTransitions(state, stateConfiguration);
             WriteSuperState(context, state, stateConfiguration);
-            WriteSubstate(context, state, stateConfiguration);
+            WriteSubstate(state, stateConfiguration);
 
             stateConfiguration = stateConfiguration.OrderBy(l => l).ToList();
             // ReSharper disable UseIndexFromEndExpression - Roslyn generators need an old version of C# that does not support index from end.
@@ -88,12 +88,11 @@
             context.Writer.WriteLine();
         }
 
-        private void WriteSubstate(WriteContext<StateMachine> context, State state, List<string> stateConfiguration)
+        private void WriteSubstate(State state, List<string> stateConfiguration)
         {
-            var superState = _stateFragmentHelper.GetSuperState(context.Instance, state.Name);
-            if (superState != null)
+            if (state.Parent != null)
             {
-                stateConfiguration.Add($"\t.SubstateOf(State.{superState.Name})");
+                stateConfiguration.Add($"\t.SubstateOf(State.{state.Parent.Name})");
             }
         }
 
