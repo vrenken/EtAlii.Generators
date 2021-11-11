@@ -50,9 +50,11 @@
             Assert.Equal("OnState1Exited(Trigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnState2Entered(Trigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnState2Entered(ContinueTrigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnState2Exited(CheckTrigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnState2Exited(Trigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnState2Entered(Trigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnState2Entered(CheckTrigger trigger)", stateMachine.Transitions[i++]);
+            Assert.Equal("OnState2Exited(ContinueTrigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnState2Exited(Trigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnState3Entered(Trigger trigger)", stateMachine.Transitions[i++]);
             Assert.Equal("OnState3Entered(ContinueTrigger trigger)", stateMachine.Transitions[i++]);
