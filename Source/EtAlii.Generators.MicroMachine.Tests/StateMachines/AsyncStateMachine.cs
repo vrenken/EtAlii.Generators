@@ -25,6 +25,8 @@ namespace EtAlii.Generators.MicroMachine.Tests
 
         protected override void OnState2Exited(Trigger trigger) => LogTransition(typeof(Trigger));
 
+        protected override Task OnState2Exited(ContinueTrigger trigger) => Task.Run(() => LogTransition(typeof(Trigger)));
+
         protected override Task OnState3Entered(Trigger trigger, State3Choices choices) => Task.Run(() => LogTransition(typeof(Trigger)));
 
         protected override async Task OnState3Entered(ContinueTrigger trigger, State3Choices choices)

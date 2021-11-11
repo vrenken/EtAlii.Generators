@@ -153,8 +153,8 @@
 
                     WriteCaseHeader(context, methodChain, triggerVariableName, triggerTypeName, namedParameters);
 
-                    WriteExitCalls(context, methodChain, triggerTypeName, triggerVariableName);
-                    WriteEntryCalls(context, methodChain, triggerVariableName, triggerTypeName);
+                    WriteExitCalls(context, methodChain, triggerTypeName, triggerVariableName, isAsync);
+                    WriteEntryCalls(context, methodChain, triggerVariableName, triggerTypeName, isAsync);
 
                     WriteCaseTail(context, methodChain, isAsync, triggerVariableName);
 
@@ -226,22 +226,20 @@
             context.Writer.WriteLine("break;");
             context.Writer.Indent -= 1;
         }
-        private void WriteEntryCalls(WriteContext<StateMachine> context, MethodChain methodChain, string triggerVariableName, string triggerTypeName)
+        private void WriteEntryCalls(WriteContext<StateMachine> context, MethodChain methodChain, string triggerVariableName, string triggerTypeName, bool isUsedInAsyncMethod)
         {
             foreach (var call in methodChain.EntryCalls)
             {
-                var writeAsync = call.State.HasOnlyAsyncInboundTransitions;
-
                 string prefix, postFix;
                 if (call.IsAsync)
                 {
-                    prefix = writeAsync ? "await " : "";
-                    postFix = writeAsync ? ".ConfigureAwait(false)" : "";
+                    prefix = isUsedInAsyncMethod ? "await " : "";
+                    postFix = isUsedInAsyncMethod ? ".ConfigureAwait(false)" : "";
                 }
                 else
                 {
-                    prefix = writeAsync ? "Task.Run(() => " : "";
-                    postFix = writeAsync ? ").Wait()" : "";
+                    prefix = isUsedInAsyncMethod ? "Task.Run(() => " : "";
+                    postFix = isUsedInAsyncMethod ? ").Wait()" : "";
                 }
 
                 var choice = context.Instance.GenerateTriggerChoices
@@ -250,32 +248,51 @@
                 context.Writer.WriteLine($"{prefix}On{call.State.Name}Entered({triggerVariableName}{choice}){postFix};");
                 if (!call.IsSuperState)
                 {
+                    if (methodChain.To.HasOnlyAsyncInboundTransitions)
+                    {
+                        prefix = isUsedInAsyncMethod ? "await " : "";
+                        postFix = isUsedInAsyncMethod ? ".ConfigureAwait(false)" : "";
+                    }
+                    else
+                    {
+                        prefix = isUsedInAsyncMethod ? "Task.Run(() => " : "";
+                        postFix = isUsedInAsyncMethod ? ").Wait()" : "";
+                    }
                     context.Writer.WriteLine($"{prefix}On{call.State.Name}Entered(({triggerTypeName}){triggerVariableName}{choice}){postFix};");
                 }
             }
         }
 
-        private void WriteExitCalls(WriteContext<StateMachine> context, MethodChain methodChain, string triggerTypeName, string triggerVariableName)
+        private void WriteExitCalls(WriteContext<StateMachine> context, MethodChain methodChain, string triggerTypeName, string triggerVariableName, bool isUsedInAsyncMethod)
         {
             foreach (var call in methodChain.ExitCalls)
             {
-                var writeAsync = call.State.HasOnlyAsyncOutboundTransitions;
-
                 string prefix, postFix;
                 if (call.IsAsync)
                 {
-                    prefix = writeAsync ? "await " : "";
-                    postFix = writeAsync ? ".ConfigureAwait(false)" : "";
+                    prefix = isUsedInAsyncMethod ? "await " : "";
+                    postFix = isUsedInAsyncMethod ? ".ConfigureAwait(false)" : "";
                 }
                 else
                 {
-                    prefix = writeAsync ? "Task.Run(() => " : "";
-                    postFix = writeAsync ? ").Wait()" : "";
+                    prefix = isUsedInAsyncMethod ? "Task.Run(() => " : "";
+                    postFix = isUsedInAsyncMethod ? ").Wait()" : "";
                 }
 
                 if (!call.IsSuperState)
                 {
                     context.Writer.WriteLine($"{prefix}On{call.State.Name}Exited(({triggerTypeName}){triggerVariableName}){postFix};");
+                }
+
+                if (methodChain.From.HasOnlyAsyncOutboundTransitions)
+                {
+                    prefix = isUsedInAsyncMethod ? "await " : "";
+                    postFix = isUsedInAsyncMethod ? ".ConfigureAwait(false)" : "";
+                }
+                else
+                {
+                    prefix = isUsedInAsyncMethod ? "Task.Run(() => " : "";
+                    postFix = isUsedInAsyncMethod ? ").Wait()" : "";
                 }
 
                 context.Writer.WriteLine($"{prefix}On{call.State.Name}Exited({triggerVariableName}){postFix};");

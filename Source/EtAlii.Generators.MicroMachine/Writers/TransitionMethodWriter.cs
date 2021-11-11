@@ -65,7 +65,6 @@
 
         private void WriteExitMethod(WriteContext<StateMachine> context, string trigger, MethodCall methodCall, List<string> writtenMethods)
         {
-            var writeAsyncExitMethod = methodCall.State.HasOnlyAsyncOutboundTransitions;
             var exitMethodName = $"On{methodCall.State.Name}Exited";
             var triggerName = trigger == null ? "Trigger" : $"{trigger}Trigger";
 
@@ -86,8 +85,7 @@
                 context.Writer.WriteLine($"/// Implement this method to handle the exit of the '{methodCall.State.Name}' state by the '{trigger}' trigger.");
             }
 
-            var writeAsync = methodCall.IsAsync;
-            if (writeAsync)
+            if (methodCall.IsAsync)
             {
                 context.Writer.WriteLine("/// <remark>");
                 context.Writer.WriteLine("/// This method is configured to return a task because all transitions are marked to be called asynchronous.");
@@ -97,14 +95,14 @@
 
             if (context.Instance.GeneratePartialClass)
             {
-                context.Writer.WriteLine($"private partial {(writeAsyncExitMethod ? "Task" : "void")} {exitMethodName}({triggerName} trigger);");
+                context.Writer.WriteLine($"private partial {(methodCall.IsAsync ? "Task" : "void")} {exitMethodName}({triggerName} trigger);");
             }
             else
             {
-                context.Writer.WriteLine($"protected virtual {(writeAsyncExitMethod ? "Task" : "void")} {exitMethodName}({triggerName} trigger)");
+                context.Writer.WriteLine($"protected virtual {(methodCall.IsAsync ? "Task" : "void")} {exitMethodName}({triggerName} trigger)");
                 context.Writer.WriteLine("{");
                 context.Writer.Indent += 1;
-                if (writeAsyncExitMethod)
+                if (methodCall.IsAsync)
                 {
                     context.Writer.WriteLine("return Task.CompletedTask;");
                 }
@@ -138,8 +136,7 @@
                 context.Writer.WriteLine($"/// Implement this method to handle the entry of the '{methodCall.State.Name}' state by the '{trigger}' trigger.");
             }
 
-            var writeAsync = methodCall.IsAsync;
-            if (writeAsync)
+            if (methodCall.IsAsync)
             {
                 context.Writer.WriteLine("/// <remark>");
                 context.Writer.WriteLine("/// This method is configured to return a task because all transitions are marked to be called asynchronous.");
@@ -155,14 +152,14 @@
 
             if (context.Instance.GeneratePartialClass)
             {
-                context.Writer.WriteLine($"private partial {(writeAsync ? "Task" : "void")} {entryMethodName}({triggerName} trigger{choices});");
+                context.Writer.WriteLine($"private partial {(methodCall.IsAsync ? "Task" : "void")} {entryMethodName}({triggerName} trigger{choices});");
             }
             else
             {
-                context.Writer.WriteLine($"protected virtual {(writeAsync ? "Task" : "void")} {entryMethodName}({triggerName} trigger{choices})");
+                context.Writer.WriteLine($"protected virtual {(methodCall.IsAsync ? "Task" : "void")} {entryMethodName}({triggerName} trigger{choices})");
                 context.Writer.WriteLine("{");
                 context.Writer.Indent += 1;
-                if (writeAsync)
+                if (methodCall.IsAsync)
                 {
                     context.Writer.WriteLine("return Task.CompletedTask;");
                 }
